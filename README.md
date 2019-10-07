@@ -20,24 +20,35 @@ StateMachine stateMachine = new StateMachine<States, Actions>(States.NotReady);
 The 'TransitionAcceptanceResult' returned by the function defined in each transition determines the next state.
 
 ```
-stateMachine.Define(new InvalidTransition<States, Actions>(States.NotReady, Actions.Start, "Must be Ready to Start"));
+stateMachine.Define(
+      new InvalidTransition<States, Actions>(
+            States.NotReady, 
+            Actions.Start, 
+            "Must be Ready to Start"));
 
-stateMachine.Define(new UnaryTransition<States, Actions>(
-States.NotReady, 
-Actions.Setup, 
-States.Ready,
-new Func<UnaryTransitionAcceptanceResult>(() => {
-      return new UnaryTransitionAcceptanceResult("Setup successful");
-  }), "Setup"));
-  
-stateMachine.Define(new BinaryTransition<States, Actions>(States.Running, Actions.Pause, States.Paused, States.NotReady, new Func<BinaryTransitionAcceptanceResult>(() => {
+stateMachine.Define(
+      new UnaryTransition<States, Actions>(
+            States.NotReady, 
+            Actions.Setup, 
+            States.Ready,
+            new Func<UnaryTransitionAcceptanceResult>(() => {
+                  return new UnaryTransitionAcceptanceResult("Setup successful");
+            }),
+            "Setup"));
 
-  if(canPause)
-    return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Pause successful");
-  else
-    return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not Pause");
-
-  }), "Pause"));
+stateMachine.Define(
+      new BinaryTransition<States, Actions>(
+            States.Running, 
+            Actions.Pause, 
+            States.Paused, 
+            States.NotReady, 
+            new Func<BinaryTransitionAcceptanceResult>(() => {
+                  if(canPause)
+                        return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Pause successful");
+                  else
+                        return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not Pause");
+            }),
+            "Pause"));
 ```
 
 ### Apply transitions
