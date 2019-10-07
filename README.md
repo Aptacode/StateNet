@@ -56,3 +56,6 @@ stateMachine.Define(
 stateMachine.Apply(Actions.Setup);
 stateMachine.Apply(Actions.Start);
 ```
+
+## License
+MIT License
