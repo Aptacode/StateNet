@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aptacode_StateMachine", "Aptacode_StateMachine.csproj", "{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateMachine_Tests", "..\StateMachine_Tests\StateMachine_Tests.csproj", "{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB33CEE6-5D6E-4C2E-A020-433C5B26A297}
+	EndGlobalSection
+EndGlobal
