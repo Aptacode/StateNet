@@ -1,21 +1,34 @@
 # Aptacode_StateMachine
 
-A small .Net Standard library used to model simple Finite State Machines.
-Usage: 
-Define two enums:
-States:  'public enum States { NotReady, Ready, Running, Paused };'
-Actions: 'public enum Actions { Setup, Start, Pause, Resume, Stop };'
+## A small .Net Standard library used to model simple Finite State Machines.
 
-Instantiate the StateMachine given the initial state:
-'StateMachine stateMachine = new StateMachine<States, Actions>(States.NotReady);'
+## Usage: 
 
-Then define each transition for example
 
+### Define two enums:
+```
+public enum States { NotReady, Ready, Running, Paused };
+public enum Actions { Setup, Start, Pause, Resume, Stop };
+```
+
+### Instantiate the StateMachine given the initial state:
+```
+StateMachine stateMachine = new StateMachine<States, Actions>(States.NotReady);
+```
+
+### Define each transition
+The 'TransitionAcceptanceResult' returned by the function defined in each transition determines the next state.
+
+```
 stateMachine.Define(new InvalidTransition<States, Actions>(States.NotReady, Actions.Start, "Must be Ready to Start"));
 
-stateMachine.Define(new UnaryTransition<States, Actions>(States.NotReady, Actions.Setup, States.Ready, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Setup successful");
-            }), "Setup"));
+stateMachine.Define(new UnaryTransition<States, Actions>(
+States.NotReady, 
+Actions.Setup, 
+States.Ready,
+new Func<UnaryTransitionAcceptanceResult>(() => {
+      return new UnaryTransitionAcceptanceResult("Setup successful");
+  }), "Setup"));
   
 stateMachine.Define(new BinaryTransition<States, Actions>(States.Running, Actions.Pause, States.Paused, States.NotReady, new Func<BinaryTransitionAcceptanceResult>(() => {
 
@@ -25,8 +38,10 @@ stateMachine.Define(new BinaryTransition<States, Actions>(States.Running, Action
     return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not Pause");
 
   }), "Pause"));
-  
-  To run the machine simply apply the actions:
-  stateMachine.Apply(Actions.Play);
-  
-  The 'TransitionAcceptanceResult' returned by the function defined in each transition determines the next state.
+```
+
+### Apply transitions
+```
+stateMachine.Apply(Actions.Setup);
+stateMachine.Apply(Actions.Start);
+```
