@@ -1,4 +1,4 @@
-﻿namespace Aptacode_StateMachine
+﻿namespace Aptacode_StateMachine.StateNet.Core
 {
     /// <summary>
     /// information given back to a transition relating to the execution of the action to determine which state to move to

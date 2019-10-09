@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode_StateMachine
+namespace Aptacode_StateMachine.StateNet.Core
 {
     public class StateMachine<States, Actions> where States : struct, Enum where Actions : struct, Enum
     {

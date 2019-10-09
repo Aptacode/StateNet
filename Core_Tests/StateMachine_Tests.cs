@@ -1,9 +1,9 @@
-using Aptacode_StateMachine;
+using Aptacode_StateMachine.StateNet.Core;
 using NUnit.Framework;
 using System;
-using static Aptacode_StateMachine.BinaryTransitionAcceptanceResult;
+using static Aptacode_StateMachine.StateNet.Core.BinaryTransitionAcceptanceResult;
 
-namespace Tests
+namespace Aptacode.StateNet.Core_Tests
 {
     public class StateMachine_Tests
     {

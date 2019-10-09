@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode_StateMachine
+namespace Aptacode_StateMachine.StateNet.Core
 {
     /// <summary>
     /// An abstract generic class which represents a transition from 'State' With 'Action'
