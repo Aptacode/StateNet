@@ -6,14 +6,9 @@
 ### Overview
 
 The state machine is configured using two generic type parameters: 'States' & 'Actions' both are user defined enums.
-- States each possible state that the machine can be in at a given time.
-- Actions all of the actions which an be applied to the state machine to induce a transitions between states.
 
-There are three types of transition (*Note the user can define their own.):
-- InvalidTransition when an action cannot be applied to a state.
-- UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
-- BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
-on some user defined criteria.
+- Each possible state that the machine can be in at a given time is defined in the 'States' enum.
+- All of the actions that can an be applied to the state machine to induce a transitions between states are defined in the 'Actions' enum.
 
 The state machine takes its initial state as a constructor parameter.
 
@@ -21,6 +16,13 @@ Once initialised all possible transitions between states must be defined.
 A transition is triggered based on which state the machine is currently in and the action which was applied.
 Depending on the type of transition the user can define their own logic and result for the transition which is used to
 determine which state the state machine will enter.
+
+There are three types of transition (*Note the user can define their own.):
+
+- InvalidTransition when an action cannot be applied to a state.
+- UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
+- BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
+on some user defined criteria.
 
 
 ### Written Example
