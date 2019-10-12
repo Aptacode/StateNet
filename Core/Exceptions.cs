@@ -35,9 +35,12 @@ namespace Aptacode_StateMachine.StateNet.Core
 
     public class AcceptanceCallbackFailedException<States, Actions> : Exception where States : struct, Enum where Actions : struct, Enum
     {
-        public AcceptanceCallbackFailedException()
+        public States State { get; set; }
+        public Actions Action { get; set; }
+        public AcceptanceCallbackFailedException(States state, Actions action)
         {
-
+            State = state;
+            Action = action;
         }
     }
 }

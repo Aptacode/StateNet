@@ -1,14 +1,15 @@
 # AptacodeStateNet
 
-## A small .Net Standard library used to model simple Finite State Machines.
+## A small .Net Standard library used to model simple Finite State Machines
 
 
 ### Overview
 
+
 The state machine is configured using two generic type parameters: 'States' & 'Actions' both are user defined enums.
 
-- Each possible state that the machine can be in at a given time is defined in the 'States' enum.
-- All of the actions that can an be applied to the state machine to induce a transitions between states are defined in the 'Actions' enum.
+-  Each possible state that the machine can be in at a given time is defined in the 'States' enum.
+-  All of the actions that can an be applied to the state machine to induce a transitions between states are defined in the 'Actions' enum.
 
 The state machine takes its initial state as a constructor parameter.
 
@@ -19,13 +20,14 @@ determine which state the state machine will enter.
 
 There are three types of transition (*Note the user can define their own.):
 
-- InvalidTransition when an action cannot be applied to a state.
-- UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
-- BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
+-  InvalidTransition when an action cannot be applied to a state.
+-  UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
+-  BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
 on some user defined criteria.
 
 
 ### Written Example
+
 
 A state machine of a video playback application is in 'States.Playing'.
 
@@ -39,6 +41,7 @@ Since the current state is 'States.Playing' the above transition will be applied
 
 
 ### Usage
+
 
 ```
 //Define all possible states and actions
@@ -96,5 +99,8 @@ stateMachine.Apply(Actions.Start);
 
 
 ```
+
+
 ## License
+
 MIT License

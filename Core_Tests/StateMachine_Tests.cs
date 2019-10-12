@@ -20,10 +20,14 @@ namespace Aptacode.StateNet.Core_Tests
             stateMachine = new StateMachine<States, Actions>(States.Begin);
             stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionAcceptanceResult>(() => {
 
-                if(canPlay)
+                if (canPlay)
+                {
                     return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Started Playing");
+                }
                 else
+                {
                     return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not start playing");
+                }
 
             }), "Start Playing"));
 

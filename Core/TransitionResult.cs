@@ -9,7 +9,7 @@
         public string Message { get; set; }
         //The State returned from the transition
         public bool Failed { get; set; }
-        public TransitionAcceptanceResult(string message, bool failed)
+        protected TransitionAcceptanceResult(string message, bool failed)
         {
             Message = message;
             Failed = failed;
@@ -19,6 +19,11 @@
     public class UnaryTransitionAcceptanceResult : TransitionAcceptanceResult
     {
         public UnaryTransitionAcceptanceResult(string message, bool failed = false) : base(message, failed)
+        {
+
+        }
+
+        public UnaryTransitionAcceptanceResult(string message) : base(message, false)
         {
 
         }
@@ -32,9 +37,14 @@
         }
         public BinaryChoice Choice { get; set; }
 
-        public BinaryTransitionAcceptanceResult(BinaryChoice choice, string message, bool failed = false) : base(message, failed)
+        public BinaryTransitionAcceptanceResult(BinaryChoice choice, string message, bool failed) : base(message, failed)
         {
             Choice = choice;
+        }
+
+        public BinaryTransitionAcceptanceResult(BinaryChoice choice, string message) : this(choice, message, false)
+        {
+
         }
     }
 }

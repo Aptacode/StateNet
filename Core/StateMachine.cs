@@ -10,7 +10,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         public Actions LastAction { get; private set; }
         public States State { get; private set; }
         public event EventHandler<StateTransitionArgs<States, Actions>> OnTransition;
-        private List<Transition<States, Actions>> transitions;
+        private readonly List<Transition<States, Actions>> transitions;
         public StateMachine(States initialState)
         {
             State = initialState;
@@ -38,11 +38,15 @@ namespace Aptacode_StateMachine.StateNet.Core
             var transition = GetTransition(action);
 
             if (transition == null)
+            {
                 throw new UndefinedTransitionException<States, Actions>(State, action);
+            }
 
             var validTransition = transition as ValidTransition<States, Actions>;
             if (validTransition == null)
+            {
                 throw new InvalidTransitionException<States, Actions>(State, action);
+            }
 
             LastAction = action;
 

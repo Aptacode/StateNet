@@ -13,7 +13,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         public Actions Action { get; private set; }
         public string Message { get; set; }
 
-        public Transition(States state, Actions action, string message = "")
+        protected Transition(States state, Actions action, string message = "")
         {
             State = state;
             Action = action;
@@ -32,7 +32,7 @@ namespace Aptacode_StateMachine.StateNet.Core
     /// <typeparam name="Actions">an Enum containing the available actions</typeparam>
     public class InvalidTransition<States, Actions> : Transition<States, Actions> where States : struct, Enum where Actions : struct, Enum
     {
-        public InvalidTransition(States state, Actions action, string message = "Invalid Transition") : base(state, action, message)
+        public InvalidTransition(States state, Actions action, string message) : base(state, action, message)
         {
 
         }
@@ -55,7 +55,7 @@ namespace Aptacode_StateMachine.StateNet.Core
     /// <typeparam name="Action"></typeparam>
     public abstract class ValidTransition<States, Actions> : Transition<States, Actions> where States : struct, Enum where Actions : struct, Enum
     {
-        public ValidTransition(States state, Actions action, string message = "Valid Transition") : base(state, action, message)
+        protected ValidTransition(States state, Actions action, string message) : base(state, action, message)
         {
 
         }
@@ -71,7 +71,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         public States NextState { get; private set; }
         protected Func<UnaryTransitionAcceptanceResult> AcceptanceCallback { get; set; }
 
-        public UnaryTransition(States state, Actions action, States nextState, Func<UnaryTransitionAcceptanceResult> acceptanceCallback, string message = "Unary Transition") : base(state, action, message)
+        public UnaryTransition(States state, Actions action, States nextState, Func<UnaryTransitionAcceptanceResult> acceptanceCallback, string message) : base(state, action, message)
         {
             NextState = nextState;
             AcceptanceCallback = acceptanceCallback;
@@ -81,7 +81,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         {
             var result = AcceptanceCallback?.Invoke();
             if (result == null || result.Failed)
-                throw new AcceptanceCallbackFailedException<States, Actions>();
+                throw new AcceptanceCallbackFailedException<States, Actions>(State, Action);
 
             return NextState;
         }
@@ -103,7 +103,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         public States RightState { get; private set; }
         protected Func<BinaryTransitionAcceptanceResult> AcceptanceCallback { get; set; }
 
-        public BinaryTransition(States state, Actions action, States leftState, States rightState, Func<BinaryTransitionAcceptanceResult> acceptanceCallback, string p_Message = "Binary Transition") : base(state, action, p_Message)
+        public BinaryTransition(States state, Actions action, States leftState, States rightState, Func<BinaryTransitionAcceptanceResult> acceptanceCallback, string p_Message) : base(state, action, p_Message)
         {
             LeftState = leftState;
             RightState = rightState;
@@ -114,7 +114,7 @@ namespace Aptacode_StateMachine.StateNet.Core
         {
             var result = AcceptanceCallback?.Invoke();
             if (result == null || result.Failed)
-                throw new AcceptanceCallbackFailedException<States, Actions>();
+                throw new AcceptanceCallbackFailedException<States, Actions>(State, Action);
 
             switch (result.Choice)
             {
