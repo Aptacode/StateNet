@@ -26,12 +26,14 @@ determine which state the state machine will enter.
 ### Written Example
 
 A state machine of a video playback application is in 'States.Playing'.
-There is a BinaryTransition defined for 'States.Playing' with a trigger of 'Actions.Pause'
-and destinations: 'States.Paused' and 'States.Stopped'. The user will have defined a function which returns either BinaryChoice.Left or BinaryChoice.Right depending on if the application could pause the video.
 
-when a user presses the pause button 'Actions.Pause' will be applied. Since the current state is 'States.Playing' the 
-above transition will be applied, if the application could not pause, the funciton would return BinaryChoice.Right hence moving
-into 'States.Stopped'
+There is a BinaryTransition defined for 'States.Playing' with a trigger of 'Actions.Pause' and destinations: 'States.Paused' & 'States.Stopped'. 
+
+The user defined a function which returns either BinaryChoice.Left or BinaryChoice.Right depending on if the application could pause the video.
+
+when a user presses the pause button 'Actions.Pause' will be applied. 
+
+Since the current state is 'States.Playing' the above transition will be applied, if the application could not pause, the funciton returns BinaryChoice.Right hence moving into 'States.Stopped'.
 
 
 ### Usage
