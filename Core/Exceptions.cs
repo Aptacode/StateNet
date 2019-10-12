@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
+using System;
 
 namespace Aptacode_StateMachine.StateNet.Core
 {

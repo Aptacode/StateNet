@@ -13,5 +13,10 @@ namespace Aptacode_StateMachine.StateNet.Core
             Action = action;
             NewState = newState;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}({1})->{2}", Enum.GetName(typeof(States), OldState), Enum.GetName(typeof(Actions), Action), Enum.GetName(typeof(States), NewState));
+        }
     }
 }

@@ -1,25 +1,30 @@
-﻿using System;
+﻿using Aptacode.StateNet.Core.Transitions;
+using Aptacode_StateMachine.StateNet.Core.Transitions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Aptacode_StateMachine.StateNet.Core
 {
+
     public class StateMachine<States, Actions> where States : struct, Enum where Actions : struct, Enum
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        public Actions LastAction { get; private set; }
-        public States State { get; private set; }
         public event EventHandler<StateTransitionArgs<States, Actions>> OnTransition;
         private readonly List<Transition<States, Actions>> transitions;
+        private static readonly Object mutex = new Object();
+
+        public States State { get; private set; }
+        public Actions LastAction { get; private set; }
+
         public StateMachine(States initialState)
         {
-            State = initialState;
             transitions = new List<Transition<States, Actions>>();
+            State = initialState;
         }
 
         public void Define(Transition<States, Actions> transition)
         {
-            //Add a transition for the given state and action if one is not already defined
             if (GetTransition(transition.State, transition.Action) == null)
             {
                 transitions.Add(transition);
@@ -34,8 +39,18 @@ namespace Aptacode_StateMachine.StateNet.Core
 
         public void Apply(Actions action)
         {
-            //Get the transition defined for the current state and applied action
-            var transition = GetTransition(action);
+            lock (mutex)
+            {
+                var transition = GetValidTransition(State, action);
+                var nextState = transition.Apply();
+                LastAction = action;
+                UpdateState(nextState);
+            }
+        }
+
+        private Transition<States, Actions> GetValidTransition(States state, Actions action)
+        {
+            var transition = GetTransition(state, action);
 
             if (transition == null)
             {
@@ -48,35 +63,19 @@ namespace Aptacode_StateMachine.StateNet.Core
                 throw new InvalidTransitionException<States, Actions>(State, action);
             }
 
-            LastAction = action;
+            return transition;
+        }
 
-            //Get the next state by applying the transition
-            var nextState = transition.Apply();
-
+        private Transition<States, Actions> GetTransition(States state, Actions action)
+        {
+            return transitions.Where(p => p.State.Equals(state) && p.Action.Equals(action)).FirstOrDefault();
+        }
+        private void UpdateState(States nextState)
+        {
             var oldState = State;
             State = nextState;
             OnTransition?.Invoke(this, new StateTransitionArgs<States, Actions>(oldState, LastAction, nextState));
         }
 
-
-        /// <summary>
-        /// Get the Transition associated with the specified Action
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns>Returns the state transition associated with the current state and a given Action. Returns Null if the transition does not exist</returns>
-        private Transition<States, Actions> GetTransition(Actions action)
-        {
-            return transitions.Where(p => p.State.Equals(State) && p.Action.Equals(action)).FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Get the Transition associated with the specified State and Action
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns>Returns the state transition associated with the given state and Action. Returns Null if the transition does not exist</returns>
-        private Transition<States, Actions> GetTransition(States state, Actions action)
-        {
-            return transitions.Where(p => p.State.Equals(state) && p.Action.Equals(action)).FirstOrDefault();
-        }
     }
 }

@@ -1,6 +1,10 @@
+using Aptacode.StateNet.Core.Transitions;
 using Aptacode_StateMachine.StateNet.Core;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using static Aptacode_StateMachine.StateNet.Core.BinaryTransitionAcceptanceResult;
 
 namespace Aptacode.StateNet.Core_Tests
@@ -28,7 +32,6 @@ namespace Aptacode.StateNet.Core_Tests
                 {
                     return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not start playing");
                 }
-
             }), "Start Playing"));
 
             stateMachine.Define(new InvalidTransition<States, Actions>(States.Begin, Actions.Pause, "Must be Playing to Pause"));
@@ -164,6 +167,40 @@ namespace Aptacode.StateNet.Core_Tests
             Assert.AreEqual(States.End, stateMachine.State, "should have remained in the 'End' state");
         }
 
+        [Test]
+        public void MultithreadedTransitions()
+        {
+            stateMachine.Apply(Actions.Play);
 
+            List<Actions> actions = new List<Actions>();
+            stateMachine.OnTransition += (s, e) =>
+            {
+                actions.Add(e.Action);
+            };
+
+            var task1 = new TaskFactory().StartNew(() =>
+            {
+                for(int i = 0; i < 10; i++)
+                {
+                    stateMachine.Apply(Actions.Play);
+                    Task.Delay(1).Wait();
+                }
+            });
+
+            var task2 = new TaskFactory().StartNew(() =>
+            {
+                for(int i = 0; i < 10; i++)
+                {
+                    stateMachine.Apply(Actions.Pause);
+                    Task.Delay(1).Wait();
+                }
+            });
+
+            task1.Wait();
+            task2.Wait();
+
+            Assert.AreEqual(10, actions.Where(a => a == Actions.Pause).Count());
+            Assert.AreEqual(10, actions.Where(a => a == Actions.Play).Count());
+        }
     }
 }
