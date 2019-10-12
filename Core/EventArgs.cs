@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode_StateMachine.StateNet.Core
+namespace Aptacode.StateNet.Core
 {
     public class StateTransitionArgs<States, Actions> : EventArgs
     {

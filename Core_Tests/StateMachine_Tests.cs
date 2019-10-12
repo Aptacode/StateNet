@@ -1,11 +1,11 @@
+using Aptacode.StateNet.Core;
+using Aptacode.StateNet.Core.TransitionResult;
 using Aptacode.StateNet.Core.Transitions;
-using Aptacode_StateMachine.StateNet.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Aptacode_StateMachine.StateNet.Core.BinaryTransitionAcceptanceResult;
 
 namespace Aptacode.StateNet.Core_Tests
 {
@@ -22,51 +22,51 @@ namespace Aptacode.StateNet.Core_Tests
         {
             canPlay = true;
             stateMachine = new StateMachine<States, Actions>(States.Begin);
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionAcceptanceResult>(() => {
+            stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionResult>(() => {
 
                 if (canPlay)
                 {
-                    return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Started Playing");
+                    return new BinaryTransitionResult(BinaryChoice.Left, "Started Playing");
                 }
                 else
                 {
-                    return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not start playing");
+                    return new BinaryTransitionResult(BinaryChoice.Right, "Could not start playing");
                 }
             }), "Start Playing"));
 
             stateMachine.Define(new InvalidTransition<States, Actions>(States.Begin, Actions.Pause, "Must be Playing to Pause"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Stop, States.End, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Stopped");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Stopped");
             }), "Stop before playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Play, States.Playing, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Kept playing");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Play, States.Playing, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Kept playing");
             }), "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Pause, States.Paused, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Paused playback");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Paused playback");
             }), "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Stop, States.End, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Stopped");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Stopped");
             }), "Stopped"));
 
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Paused, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionAcceptanceResult>(() => {
+            stateMachine.Define(new BinaryTransition<States, Actions>(States.Paused, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionResult>(() => {
 
                 if (canPlay)
-                    return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Resumed Playback");
+                    return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
                 else
-                    return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not Resumed Playback");
+                    return new BinaryTransitionResult(BinaryChoice.Right, "Could not Resumed Playback");
 
             }), "Resume Playback"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Pause, States.Paused, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Already Paused");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Already Paused");
             }), "Already Paused"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Stop, States.End, new Func<UnaryTransitionAcceptanceResult>(() => {
-                return new UnaryTransitionAcceptanceResult("Stopped");
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+                return new UnaryTransitionResult("Stopped");
             }), "Stopped"));
 
 
@@ -108,8 +108,8 @@ namespace Aptacode.StateNet.Core_Tests
         public void DuplicateUnaryTransition()
         {
             Assert.Throws<DuplicateTransitionException<States,Actions>>(() => {
-                stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Pause, States.Paused, new Func<UnaryTransitionAcceptanceResult>(() => {
-                    return new UnaryTransitionAcceptanceResult("Paused");
+                stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+                    return new UnaryTransitionResult("Paused");
                 }), "Paused before playing"));
             });
         }
@@ -183,7 +183,6 @@ namespace Aptacode.StateNet.Core_Tests
                 for(int i = 0; i < 10; i++)
                 {
                     stateMachine.Apply(Actions.Play);
-                    Task.Delay(1).Wait();
                 }
             });
 
@@ -192,7 +191,6 @@ namespace Aptacode.StateNet.Core_Tests
                 for(int i = 0; i < 10; i++)
                 {
                     stateMachine.Apply(Actions.Pause);
-                    Task.Delay(1).Wait();
                 }
             });
 

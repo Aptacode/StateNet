@@ -1,4 +1,5 @@
-﻿using Aptacode_StateMachine.StateNet.Core;
+﻿using Aptacode.StateNet.Core.TransitionResult;
+using Aptacode_StateMachine.StateNet.Core;
 using System;
 
 namespace Aptacode.StateNet.Core.Transitions
@@ -11,9 +12,9 @@ namespace Aptacode.StateNet.Core.Transitions
     public class UnaryTransition<States, Actions> : ValidTransition<States, Actions> where States : struct, Enum where Actions : struct, Enum
     {
         public States NextState { get; private set; }
-        protected Func<UnaryTransitionAcceptanceResult> AcceptanceCallback { get; set; }
+        protected Func<UnaryTransitionResult> AcceptanceCallback { get; set; }
 
-        public UnaryTransition(States state, Actions action, States nextState, Func<UnaryTransitionAcceptanceResult> acceptanceCallback, string message) : base(state, action, message)
+        public UnaryTransition(States state, Actions action, States nextState, Func<UnaryTransitionResult> acceptanceCallback, string message) : base(state, action, message)
         {
             NextState = nextState;
             AcceptanceCallback = acceptanceCallback;
@@ -22,7 +23,7 @@ namespace Aptacode.StateNet.Core.Transitions
         public override States Apply()
         {
             var result = AcceptanceCallback?.Invoke();
-            if (result == null || result.Failed)
+            if (result == null || !result.Success)
                 throw new AcceptanceCallbackFailedException<States, Actions>(State, Action);
 
             return NextState;

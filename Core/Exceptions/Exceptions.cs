@@ -1,7 +1,7 @@
 ﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
 using System;
 
-namespace Aptacode_StateMachine.StateNet.Core
+namespace Aptacode.StateNet.Core
 {
     public class DuplicateTransitionException<States, Actions> : Exception where States : struct, Enum where Actions : struct, Enum
     {

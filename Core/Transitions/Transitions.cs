@@ -13,7 +13,7 @@ namespace Aptacode_StateMachine.StateNet.Core.Transitions
         public Actions Action { get; private set; }
         public string Message { get; set; }
 
-        protected Transition(States state, Actions action, string message = "")
+        protected Transition(States state, Actions action, string message)
         {
             State = state;
             Action = action;

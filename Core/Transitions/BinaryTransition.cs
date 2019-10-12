@@ -1,4 +1,5 @@
-﻿using Aptacode_StateMachine.StateNet.Core;
+﻿using Aptacode.StateNet.Core.TransitionResult;
+using Aptacode_StateMachine.StateNet.Core;
 using System;
 
 namespace Aptacode.StateNet.Core.Transitions
@@ -13,9 +14,9 @@ namespace Aptacode.StateNet.Core.Transitions
     {
         public States LeftState { get; private set; }
         public States RightState { get; private set; }
-        protected Func<BinaryTransitionAcceptanceResult> AcceptanceCallback { get; set; }
+        protected Func<BinaryTransitionResult> AcceptanceCallback { get; set; }
 
-        public BinaryTransition(States state, Actions action, States leftState, States rightState, Func<BinaryTransitionAcceptanceResult> acceptanceCallback, string p_Message) : base(state, action, p_Message)
+        public BinaryTransition(States state, Actions action, States leftState, States rightState, Func<BinaryTransitionResult> acceptanceCallback, string message) : base(state, action, message)
         {
             LeftState = leftState;
             RightState = rightState;
@@ -25,14 +26,14 @@ namespace Aptacode.StateNet.Core.Transitions
         public override States Apply()
         {
             var result = AcceptanceCallback?.Invoke();
-            if (result == null || result.Failed)
+            if (result == null || !result.Success)
                 throw new AcceptanceCallbackFailedException<States, Actions>(State, Action);
 
             switch (result.Choice)
             {
-                case BinaryTransitionAcceptanceResult.BinaryChoice.Right:
+                case BinaryChoice.Right:
                     return RightState;
-                case BinaryTransitionAcceptanceResult.BinaryChoice.Left:
+                case BinaryChoice.Left:
                 default:
                     return LeftState;
             }
