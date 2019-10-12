@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.Core_Tests
         {
             canPlay = true;
             stateMachine = new StateMachine<States, Actions>(States.Begin);
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionResult>(() => {
+            stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End,()=>{
 
                 if (canPlay)
                 {
@@ -32,42 +32,42 @@ namespace Aptacode.StateNet.Core_Tests
                 {
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not start playing");
                 }
-            }), "Start Playing"));
+            }, "Start Playing"));
 
             stateMachine.Define(new InvalidTransition<States, Actions>(States.Begin, Actions.Pause, "Must be Playing to Pause"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Stop, States.End, () => {
                 return new UnaryTransitionResult("Stopped");
-            }), "Stop before playing"));
+            }, "Stop before playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Play, States.Playing, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Play, States.Playing, () => {
                 return new UnaryTransitionResult("Kept playing");
-            }), "Already Playing"));
+            }, "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Pause, States.Paused, () => {
                 return new UnaryTransitionResult("Paused playback");
-            }), "Already Playing"));
+            }, "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Stop, States.End, () => {
                 return new UnaryTransitionResult("Stopped");
-            }), "Stopped"));
+            }, "Stopped"));
 
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Paused, Actions.Play, States.Playing, States.End, new Func<BinaryTransitionResult>(() => {
+            stateMachine.Define(new BinaryTransition<States, Actions>(States.Paused, Actions.Play, States.Playing, States.End, () => {
 
                 if (canPlay)
                     return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
                 else
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not Resumed Playback");
 
-            }), "Resume Playback"));
+            }, "Resume Playback"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Pause, States.Paused, () => {
                 return new UnaryTransitionResult("Already Paused");
-            }), "Already Paused"));
+            }, "Already Paused"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Stop, States.End, new Func<UnaryTransitionResult>(() => {
+            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Stop, States.End,() => {
                 return new UnaryTransitionResult("Stopped");
-            }), "Stopped"));
+            }, "Stopped"));
 
 
             stateMachine.Define(new InvalidTransition<States, Actions>(States.End, Actions.Play, "Cannot play from end state"));
