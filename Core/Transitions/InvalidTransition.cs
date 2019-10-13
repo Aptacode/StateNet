@@ -9,21 +9,21 @@ namespace Aptacode.StateNet.Core.Transitions
     /// </summary>
     /// <typeparam name="States">an Enum containing the available States</typeparam>
     /// <typeparam name="Actions">an Enum containing the available actions</typeparam>
-    public class InvalidTransition<States, Actions> : Transition<States, Actions> where States : struct, Enum where Actions : struct, Enum
+    public class InvalidTransition : Transition
     {
-        public InvalidTransition(States state, Actions action, string message) : base(state, action, message)
+        public InvalidTransition(string state, string input, string message) : base(state, input, message)
         {
 
         }
 
-        public override States Apply()
+        public override string Apply()
         {
-            throw new InvalidTransitionException<States, Actions>(State, Action);
+            throw new InvalidTransitionException(State, Input);
         }
 
         public override string ToString()
         {
-            return string.Format("Invalid Transition: {0}({1})", Enum.GetName(typeof(States), State), Enum.GetName(typeof(Actions), Action));
+            return string.Format("Invalid Transition: {0}({1})", State, Input);
         }
     }
 }

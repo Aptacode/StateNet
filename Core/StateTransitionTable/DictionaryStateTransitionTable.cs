@@ -1,46 +1,48 @@
 ﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aptacode.StateNet.Core.StateTransitionTable
 {
-    public class DictionaryStateTransitionTable<States, Actions> : IStateTransitionTable<States,Actions> where States : struct, Enum where Actions : struct, Enum
+    public class DictionaryStateTransitionTable : IStateTransitionTable
     {
-        private readonly Dictionary<States, Dictionary<Actions, Transition<States, Actions>>> transitions;
+        private readonly Dictionary<string, Dictionary<string, Transition>> Transitions;
 
         public DictionaryStateTransitionTable()
         {
-            transitions = new Dictionary<States, Dictionary<Actions, Transition<States, Actions>>>();
+            Transitions = new Dictionary<string, Dictionary<string, Transition>>();
 
-            CreateTransitionTable();
         }
-        private void CreateTransitionTable()
+        public void Setup(StateCollection stateCollection, InputCollection inputCollection)
         {
-            foreach (States state in (States[])Enum.GetValues(typeof(States)))
+            foreach (string state in stateCollection.GetStates())
             {
-                var stateDictionary = new Dictionary<Actions, Transition<States, Actions>>();
+                var stateDictionary = new Dictionary<string, Transition>();
 
-                foreach (Actions action in (Actions[])Enum.GetValues(typeof(Actions)))
+                foreach (string input in inputCollection.GetInputs())
                 {
-                    stateDictionary.Add(action, null);
+                    stateDictionary.Add(input, null);
                 }
-                transitions.Add(state, stateDictionary);
+                Transitions.Add(state, stateDictionary);
             }
         }
 
-        public void Set(Transition<States, Actions> transition)
+        public void Set(Transition transition)
         {
-            transitions[transition.State][transition.Action] = transition;
+            Transitions[transition.State][transition.Input] = transition;
         }
 
-        public Transition<States, Actions> Get(States state, Actions action)
+        public Transition Get(string state, string input)
         {
-            return transitions[state][action];
+            return Transitions[state][input];
         }
 
-        public void Clear(Transition<States, Actions> transition)
+        public void Clear(Transition transition)
         {
-            transitions[transition.State][transition.Action] = null;
+            Transitions[transition.State][transition.Input] = null;
         }
+
+
     }
 }

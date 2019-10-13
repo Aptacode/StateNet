@@ -1,4 +1,5 @@
 using Aptacode.StateNet.Core;
+using Aptacode.StateNet.Core.StateTransitionTable;
 using Aptacode.StateNet.Core.TransitionResult;
 using Aptacode.StateNet.Core.Transitions;
 using NUnit.Framework;
@@ -12,17 +13,20 @@ namespace Aptacode.StateNet.Core_Tests
     public class StateMachineTests
     {
         public enum States { Begin, Playing, Paused, End };
-        public enum Actions { Play, Pause, Stop };
+        public enum Input { Play, Pause, Stop };
 
-        private StateMachine<States, Actions> stateMachine;
+        private StateMachine stateMachine;
         private bool canPlay;
 
         [SetUp]
         public void Setup()
         {
             canPlay = true;
-            stateMachine = new StateMachine<States, Actions>(States.Begin);
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Begin, Actions.Play, States.Playing, States.End,()=>{
+
+            stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(), new DictionaryStateTransitionTable(), States.Begin.ToString());
+
+            stateMachine.Define(new BinaryTransition(States.Begin.ToString(), Input.Play.ToString(), States.Playing.ToString(), States.End.ToString(), () =>
+            {
 
                 if (canPlay)
                 {
@@ -34,25 +38,30 @@ namespace Aptacode.StateNet.Core_Tests
                 }
             }, "Start Playing"));
 
-            stateMachine.Define(new InvalidTransition<States, Actions>(States.Begin, Actions.Pause, "Must be Playing to Pause"));
+            stateMachine.Define(new InvalidTransition(States.Begin.ToString(), Input.Pause.ToString(), "Must be Playing to Pause"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Stop, States.End, () => {
+            stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Stop.ToString(), States.End.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Stopped");
             }, "Stop before playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Play, States.Playing, () => {
+            stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Play.ToString(), States.Playing.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Kept playing");
             }, "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Pause, States.Paused, () => {
+            stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Pause.ToString(), States.Paused.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Paused playback");
             }, "Already Playing"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Playing, Actions.Stop, States.End, () => {
+            stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Stop.ToString(), States.End.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Stopped");
             }, "Stopped"));
 
-            stateMachine.Define(new BinaryTransition<States, Actions>(States.Paused, Actions.Play, States.Playing, States.End, () => {
+            stateMachine.Define(new BinaryTransition(States.Paused.ToString(), Input.Play.ToString(), States.Playing.ToString(), States.End.ToString(), () =>
+            {
 
                 if (canPlay)
                     return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
@@ -61,25 +70,27 @@ namespace Aptacode.StateNet.Core_Tests
 
             }, "Resume Playback"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Pause, States.Paused, () => {
+            stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Pause.ToString(), States.Paused.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Already Paused");
             }, "Already Paused"));
 
-            stateMachine.Define(new UnaryTransition<States, Actions>(States.Paused, Actions.Stop, States.End,() => {
+            stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Stop.ToString(), States.End.ToString(), () =>
+            {
                 return new UnaryTransitionResult("Stopped");
             }, "Stopped"));
 
 
-            stateMachine.Define(new InvalidTransition<States, Actions>(States.End, Actions.Play, "Cannot play from end state"));
-            stateMachine.Define(new InvalidTransition<States, Actions>(States.End, Actions.Pause, "Cannot pause from end state"));
-            stateMachine.Define(new InvalidTransition<States, Actions>(States.End, Actions.Stop, "Cannot stop from end state"));
+            stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Play.ToString(), "Cannot play from end state"));
+            stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Pause.ToString(), "Cannot pause from end state"));
+            stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Stop.ToString(), "Cannot stop from end state"));
 
         }
 
         [Test]
         public void InitialState()
         {
-            Assert.AreEqual(States.Begin, stateMachine.State, "Initial state should be 'Begin'");
+            Assert.AreEqual(States.Begin.ToString(), stateMachine.State, "Initial state should be 'Begin'");
         }
 
         [Test]
@@ -87,28 +98,30 @@ namespace Aptacode.StateNet.Core_Tests
         {
             stateMachine.OnTransition += (s, e) =>
             {
-                Assert.AreEqual(States.Begin, e.OldState, "Should have been in the 'Begin' state");
-                Assert.AreEqual(Actions.Play, e.Action, "Action should have been 'Play'");
-                Assert.AreEqual(States.Playing, e.NewState, "Should have been in the 'Begin' state");
-                Assert.AreEqual(States.Playing, stateMachine.State, "StateMachine state should be updated");
+                Assert.AreEqual(States.Begin.ToString(), e.OldState, "Should have been in the 'Begin' state");
+                Assert.AreEqual(Input.Play.ToString(), e.Input, "Action should have been 'Play'");
+                Assert.AreEqual(States.Playing.ToString(), e.NewState, "Should have been in the 'Begin' state");
+                Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "StateMachine state should be updated");
             };
 
-            stateMachine.Apply(Actions.Play);
+            stateMachine.Apply(Input.Play.ToString());
         }
 
         [Test]
         public void ValidUnaryTransition()
         {
-            Assert.AreEqual(States.Begin, stateMachine.State, "Initial state should be 'Begin'");
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.Playing, stateMachine.State, "should have moved into 'Playing' state");
+            Assert.AreEqual(States.Begin.ToString(), stateMachine.State, "Initial state should be 'Begin'");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "should have moved into 'Playing' state");
         }
 
         [Test]
         public void DuplicateUnaryTransition()
         {
-            Assert.Throws<DuplicateTransitionException<States,Actions>>(() => {
-                stateMachine.Define(new UnaryTransition<States, Actions>(States.Begin, Actions.Pause, States.Paused, new Func<UnaryTransitionResult>(() => {
+            Assert.Throws<DuplicateTransitionException>(() =>
+            {
+                stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Pause.ToString(), States.Paused.ToString(), new Func<UnaryTransitionResult>(() =>
+                {
                     return new UnaryTransitionResult("Paused");
                 }), "Paused before playing"));
             });
@@ -118,87 +131,88 @@ namespace Aptacode.StateNet.Core_Tests
         [Test]
         public void MultipleTransitions()
         {
-            Assert.AreEqual(States.Begin, stateMachine.State, "Initial state should be 'Begin'");
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.Playing, stateMachine.State, "should have moved into 'Playing' state");
-            stateMachine.Apply(Actions.Pause);
-            Assert.AreEqual(States.Paused, stateMachine.State, "should have moved into 'Paused' state");
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.Playing, stateMachine.State, "should have moved into 'Playing' state");
-            stateMachine.Apply(Actions.Pause);
-            Assert.AreEqual(States.Paused, stateMachine.State, "should have moved into 'Paused' state");
-            stateMachine.Apply(Actions.Stop);
-            Assert.AreEqual(States.End, stateMachine.State, "should have moved into 'End' state");
+            Assert.AreEqual(States.Begin.ToString(), stateMachine.State, "Initial state should be 'Begin'");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "should have moved into 'Playing' state");
+            stateMachine.Apply(Input.Pause.ToString());
+            Assert.AreEqual(States.Paused.ToString(), stateMachine.State, "should have moved into 'Paused' state");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "should have moved into 'Playing' state");
+            stateMachine.Apply(Input.Pause.ToString());
+            Assert.AreEqual(States.Paused.ToString(), stateMachine.State, "should have moved into 'Paused' state");
+            stateMachine.Apply(Input.Stop.ToString());
+            Assert.AreEqual(States.End.ToString(), stateMachine.State, "should have moved into 'End' state");
         }
 
         [Test]
         public void BinaryTransition()
         {
-            Assert.AreEqual(States.Begin, stateMachine.State, "Initial state should be 'Begin'");
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.Playing, stateMachine.State, "should have moved into 'Playing' state");
-            stateMachine.Apply(Actions.Pause);
-            Assert.AreEqual(States.Paused, stateMachine.State, "should have moved into 'Paused' state");
+            Assert.AreEqual(States.Begin.ToString(), stateMachine.State, "Initial state should be 'Begin'");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "should have moved into 'Playing' state");
+            stateMachine.Apply(Input.Pause.ToString());
+            Assert.AreEqual(States.Paused.ToString(), stateMachine.State, "should have moved into 'Paused' state");
 
             canPlay = false;
 
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.End, stateMachine.State, "should have moved into 'End' state");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.End.ToString(), stateMachine.State, "should have moved into 'End' state");
         }
 
         [Test]
         public void InvalidTransition()
         {
-            Assert.AreEqual(States.Begin, stateMachine.State, "Initial state should be 'Begin'");
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.Playing, stateMachine.State, "should have moved into 'Playing' state");
-            stateMachine.Apply(Actions.Pause);
-            Assert.AreEqual(States.Paused, stateMachine.State, "should have moved into 'Paused' state");
+            Assert.AreEqual(States.Begin.ToString(), stateMachine.State, "Initial state should be 'Begin'");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.Playing.ToString(), stateMachine.State, "should have moved into 'Playing' state");
+            stateMachine.Apply(Input.Pause.ToString());
+            Assert.AreEqual(States.Paused.ToString(), stateMachine.State, "should have moved into 'Paused' state");
 
             canPlay = false;
 
-            stateMachine.Apply(Actions.Play);
-            Assert.AreEqual(States.End, stateMachine.State, "should have moved into 'End' state");
+            stateMachine.Apply(Input.Play.ToString());
+            Assert.AreEqual(States.End.ToString(), stateMachine.State, "should have moved into 'End' state");
 
-            Assert.Throws<InvalidTransitionException<States, Actions>>(() => {
-                stateMachine.Apply(Actions.Play);
+            Assert.Throws<InvalidTransitionException>(() =>
+            {
+                stateMachine.Apply(Input.Play.ToString());
             });
 
-            Assert.AreEqual(States.End, stateMachine.State, "should have remained in the 'End' state");
+            Assert.AreEqual(States.End.ToString(), stateMachine.State, "should have remained in the 'End' state");
         }
 
         [Test]
         public void MultithreadedTransitions()
         {
-            stateMachine.Apply(Actions.Play);
+            stateMachine.Apply(Input.Play.ToString());
 
-            List<Actions> actions = new List<Actions>();
+            List<string> actions = new List<string>();
             stateMachine.OnTransition += (s, e) =>
             {
-                actions.Add(e.Action);
+                actions.Add(e.Input);
             };
 
             var task1 = new TaskFactory().StartNew(() =>
             {
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    stateMachine.Apply(Actions.Play);
+                    stateMachine.Apply(Input.Play.ToString());
                 }
             });
 
             var task2 = new TaskFactory().StartNew(() =>
             {
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    stateMachine.Apply(Actions.Pause);
+                    stateMachine.Apply(Input.Pause.ToString());
                 }
             });
 
             task1.Wait();
             task2.Wait();
 
-            Assert.AreEqual(10, actions.Where(a => a == Actions.Pause).Count());
-            Assert.AreEqual(10, actions.Where(a => a == Actions.Play).Count());
+            Assert.AreEqual(10, actions.Where(a => a == Input.Pause.ToString()).Count());
+            Assert.AreEqual(10, actions.Where(a => a == Input.Play.ToString()).Count());
         }
     }
 }

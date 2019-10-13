@@ -8,9 +8,9 @@ namespace Aptacode.StateNet.Core.Transitions
     /// </summary>
     /// <typeparam name="State"></typeparam>
     /// <typeparam name="Action"></typeparam>
-    public abstract class ValidTransition<States, Actions> : Transition<States, Actions> where States : struct, Enum where Actions : struct, Enum
+    public abstract class ValidTransition : Transition
     {
-        protected ValidTransition(States state, Actions action, string message) : base(state, action, message)
+        protected ValidTransition(string state, string input, string message) : base(state, input, message)
         {
 
         }

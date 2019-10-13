@@ -5,75 +5,83 @@ using System;
 
 namespace Aptacode.StateNet.Core
 {
-    public class StateMachine<States, Actions> where States : struct, Enum where Actions : struct, Enum
+    public class StateMachine
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        public event EventHandler<StateTransitionArgs<States, Actions>> OnTransition;
+        public event EventHandler<StateTransitionArgs> OnTransition;
         private static readonly Object mutex = new Object();
-        private readonly IStateTransitionTable<States, Actions> stateTransitionTable;
 
-        public States State { get; private set; }
-        public Actions LastAction { get; private set; }
+        private readonly IStateTransitionTable StateTransitionTable;
+        private readonly StateCollection StateCollection;
+        private readonly InputCollection InputCollection;
 
-        public StateMachine(States initialState)
+        public string State { get; private set; }
+        public string LastInput { get; private set; }
+
+        public StateMachine(StateCollection stateCollection, InputCollection inputCollection, IStateTransitionTable stateTransitionTable, string initialState)
         {
+            StateCollection = stateCollection;
+            InputCollection = inputCollection;
+            StateTransitionTable = stateTransitionTable;
+
+            StateTransitionTable.Setup(stateCollection, inputCollection);
+
             State = initialState;
-            stateTransitionTable = new DictionaryStateTransitionTable<States, Actions>();
         }
 
-        public void Define(Transition<States, Actions> transition)
+        public void Define(Transition transition)
         {
-            if (stateTransitionTable.Get(transition.State, transition.Action) == null)
+            if (StateTransitionTable.Get(transition.State, transition.Input) == null)
             {
-                stateTransitionTable.Set(transition);
+                StateTransitionTable.Set(transition);
                 Logger.Trace("Registered {0}", transition.ToString());
             }
             else
             {
                 Logger.Debug("Duplicate transition, could not register {0}", transition.ToString());
-                throw new DuplicateTransitionException<States, Actions>(transition);
+                throw new DuplicateTransitionException(transition);
             }
         }
 
-        public void Clear(Transition<States, Actions> transition)
+        public void Clear(Transition transition)
         {
-            stateTransitionTable.Clear(transition);
+            StateTransitionTable.Clear(transition);
         }
 
-        public void Apply(Actions action)
+        public void Apply(string input)
         {
             lock (mutex)
             {
-                var transition = GetValidTransition(State, action);
+                var transition = GetValidTransition(State, input);
                 var nextState = transition.Apply();
-                LastAction = action;
+                LastInput = input;
                 UpdateState(nextState);
             }
         }
 
-        private Transition<States, Actions> GetValidTransition(States state, Actions action)
+        private Transition GetValidTransition(string state, string input)
         {
-            var transition = stateTransitionTable.Get(state, action);
+            var transition = StateTransitionTable.Get(state, input);
 
             if (transition == null)
             {
-                throw new UndefinedTransitionException<States, Actions>(State, action);
+                throw new UndefinedTransitionException(State, input);
             }
 
-            var validTransition = transition as ValidTransition<States, Actions>;
+            var validTransition = transition as ValidTransition;
             if (validTransition == null)
             {
-                throw new InvalidTransitionException<States, Actions>(State, action);
+                throw new InvalidTransitionException(State, input);
             }
 
             return transition;
         }
 
-        private void UpdateState(States nextState)
+        private void UpdateState(string nextState)
         {
             var oldState = State;
             State = nextState;
-            OnTransition?.Invoke(this, new StateTransitionArgs<States, Actions>(oldState, LastAction, nextState));
+            OnTransition?.Invoke(this, new StateTransitionArgs(oldState, LastInput, nextState));
         }
 
     }

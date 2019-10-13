@@ -4,13 +4,14 @@ using System.Linq;
 
 namespace Aptacode.StateNet.Core.StateTransitionTable
 {
-
-    public interface IStateTransitionTable<States, Actions> where States : struct, Enum where Actions : struct, Enum
+    public interface IStateTransitionTable
     {
-        void Set(Transition<States, Actions> transition);
+        void Setup(StateCollection stateCollection, InputCollection inputCollection);
 
-        Transition<States, Actions> Get(States state, Actions action);
+        void Set(Transition transition);
 
-        void Clear(Transition<States, Actions> transition);
+        Transition Get(string state, string input);
+
+        void Clear(Transition transition);
     }
 }
