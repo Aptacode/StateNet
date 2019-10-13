@@ -1,4 +1,5 @@
-﻿using Aptacode.StateNet.Core.Transitions;
+﻿using Aptacode.StateNet.Core.StateTransitionTable;
+using Aptacode.StateNet.Core.Transitions;
 using Aptacode_StateMachine.StateNet.Core.Transitions;
 using System;
 
@@ -9,7 +10,7 @@ namespace Aptacode.StateNet.Core
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         public event EventHandler<StateTransitionArgs<States, Actions>> OnTransition;
         private static readonly Object mutex = new Object();
-        private readonly StateTransitionTable<States, Actions> stateTransitionTable;
+        private readonly IStateTransitionTable<States, Actions> stateTransitionTable;
 
         public States State { get; private set; }
         public Actions LastAction { get; private set; }
@@ -17,7 +18,7 @@ namespace Aptacode.StateNet.Core
         public StateMachine(States initialState)
         {
             State = initialState;
-            stateTransitionTable = new StateTransitionTable<States, Actions>();
+            stateTransitionTable = new DictionaryStateTransitionTable<States, Actions>();
         }
 
         public void Define(Transition<States, Actions> transition)

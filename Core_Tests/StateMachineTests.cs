@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Aptacode.StateNet.Core_Tests
 {
-    public class StateMachine_Tests
+    public class StateMachineTests
     {
         public enum States { Begin, Playing, Paused, End };
         public enum Actions { Play, Pause, Stop };
 
-        StateMachine<States, Actions> stateMachine;
-        bool canPlay;
+        private StateMachine<States, Actions> stateMachine;
+        private bool canPlay;
 
         [SetUp]
         public void Setup()

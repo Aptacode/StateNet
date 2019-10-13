@@ -2,14 +2,14 @@
 using System;
 using System.Linq;
 
-namespace Aptacode.StateNet.Core
+namespace Aptacode.StateNet.Core.StateTransitionTable
 {
-    public class StateTransitionTable<States, Actions> where States : struct, Enum where Actions : struct, Enum
+    public class ArrayStateTransitionTable<States, Actions> : IStateTransitionTable<States,Actions> where States : struct, Enum where Actions : struct, Enum
     {
         private readonly Transition<States, Actions>[][] transitions;
         private readonly int lowestStateValue, highestStateValue;
         private readonly int lowestActionValue, highestActionValue;
-        public StateTransitionTable()
+        public ArrayStateTransitionTable()
         {
             lowestStateValue = Convert.ToInt32(Enum.GetValues(typeof(States)).Cast<States>().Min());
             highestStateValue = Convert.ToInt32(Enum.GetValues(typeof(States)).Cast<States>().Max());
@@ -42,7 +42,7 @@ namespace Aptacode.StateNet.Core
             return transitions[Convert.ToInt32(state) - lowestStateValue][Convert.ToInt32(action) - lowestActionValue];
         }
 
-        internal void Clear(Transition<States, Actions> transition)
+        public void Clear(Transition<States, Actions> transition)
         {
             transitions[Convert.ToInt32(transition.State) - lowestStateValue][Convert.ToInt32(transition.Action) - lowestActionValue] = null;
         }
