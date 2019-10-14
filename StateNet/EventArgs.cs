@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode.StateNet.Core
+namespace Aptacode.StateNet
 {
     public class StateTransitionArgs : EventArgs
     {
@@ -16,7 +16,7 @@ namespace Aptacode.StateNet.Core
 
         public override string ToString()
         {
-            return string.Format("{0}({1})->{2}", OldState, Input, NewState);
+            return $"{OldState}({Input})->{NewState}";
         }
     }
 }

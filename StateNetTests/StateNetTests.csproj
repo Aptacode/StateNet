@@ -5,7 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>Aptacode.StateNet.Core_Tests</RootNamespace>
+    <RootNamespace>Aptacode.StateNet.Tests</RootNamespace>
+
+    <AssemblyName>StateNetTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\StateNet\StateNet.csproj" />
   </ItemGroup>
 
 </Project>

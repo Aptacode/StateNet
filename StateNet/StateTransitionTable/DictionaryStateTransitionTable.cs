@@ -1,17 +1,15 @@
-﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Aptacode.StateNet.Transitions;
 
-namespace Aptacode.StateNet.Core.StateTransitionTable
+namespace Aptacode.StateNet.StateTransitionTable
 {
     public class DictionaryStateTransitionTable : IStateTransitionTable
     {
-        private readonly Dictionary<string, Dictionary<string, Transition>> Transitions;
+        private readonly Dictionary<string, Dictionary<string, Transition>> _transitions;
 
         public DictionaryStateTransitionTable()
         {
-            Transitions = new Dictionary<string, Dictionary<string, Transition>>();
+            _transitions = new Dictionary<string, Dictionary<string, Transition>>();
 
         }
         public void Setup(StateCollection stateCollection, InputCollection inputCollection)
@@ -24,23 +22,23 @@ namespace Aptacode.StateNet.Core.StateTransitionTable
                 {
                     stateDictionary.Add(input, null);
                 }
-                Transitions.Add(state, stateDictionary);
+                _transitions.Add(state, stateDictionary);
             }
         }
 
         public void Set(Transition transition)
         {
-            Transitions[transition.State][transition.Input] = transition;
+            _transitions[transition.State][transition.Input] = transition;
         }
 
         public Transition Get(string state, string input)
         {
-            return Transitions[state][input];
+            return _transitions[state][input];
         }
 
         public void Clear(Transition transition)
         {
-            Transitions[transition.State][transition.Input] = null;
+            _transitions[transition.State][transition.Input] = null;
         }
 
 

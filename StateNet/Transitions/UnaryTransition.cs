@@ -1,14 +1,9 @@
-﻿using Aptacode.StateNet.Core.TransitionResult;
-using Aptacode_StateMachine.StateNet.Core;
-using System;
+﻿using System;
+using Aptacode.StateNet.Exceptions;
+using Aptacode.StateNet.TransitionResult;
 
-namespace Aptacode.StateNet.Core.Transitions
+namespace Aptacode.StateNet.Transitions
 {
-    /// <summary>
-    /// Represents a transition to exactly one state
-    /// </summary>
-    /// <typeparam name="State"></typeparam>
-    /// <typeparam name="Action"></typeparam>
     public class UnaryTransition : ValidTransition
     {
         public string NextState { get; private set; }
@@ -31,7 +26,7 @@ namespace Aptacode.StateNet.Core.Transitions
 
         public override string ToString()
         {
-            return string.Format("Unary Transition: {0}({1})->{2}", State, Input, NextState);
+            return $"Unary Transition: {State}({Input})->{NextState}";
         }
     }
 

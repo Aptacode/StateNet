@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Aptacode.StateNet.Core</RootNamespace>
-    <AssemblyName>Aptacode_StateNet_Core</AssemblyName>
+    <RootNamespace>Aptacode.StateNet</RootNamespace>
+    <AssemblyName>StateNet</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

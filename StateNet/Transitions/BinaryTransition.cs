@@ -1,19 +1,13 @@
-﻿using Aptacode.StateNet.Core.TransitionResult;
-using Aptacode_StateMachine.StateNet.Core;
-using System;
+﻿using System;
+using Aptacode.StateNet.Exceptions;
+using Aptacode.StateNet.TransitionResult;
 
-namespace Aptacode.StateNet.Core.Transitions
+namespace Aptacode.StateNet.Transitions
 {
-
-    /// <summary>
-    /// Represents a transition to one of two states depending on the output of the transition
-    /// </summary>
-    /// <typeparam name="State"></typeparam>
-    /// <typeparam name="Action"></typeparam>
     public class BinaryTransition : ValidTransition
     {
-        public string LeftState { get; private set; }
-        public string RightState { get; private set; }
+        public string LeftState { get; }
+        public string RightState { get; }
         protected Func<BinaryTransitionResult> AcceptanceCallback { get; set; }
 
         public BinaryTransition(string state, string input, string leftState, string rightState, Func<BinaryTransitionResult> acceptanceCallback, string message) : base(state, input, message)
@@ -33,7 +27,6 @@ namespace Aptacode.StateNet.Core.Transitions
             {
                 case BinaryChoice.Right:
                     return RightState;
-                case BinaryChoice.Left:
                 default:
                     return LeftState;
             }
@@ -41,7 +34,7 @@ namespace Aptacode.StateNet.Core.Transitions
 
         public override string ToString()
         {
-            return string.Format("Binary Transition: {0}({1})->{2}|{3}", State, Input, LeftState, RightState);
+            return $"Binary Transition: {State}({Input})->{LeftState}|{RightState}";
         }
     }
 }

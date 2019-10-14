@@ -1,7 +1,7 @@
-﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
-using System;
+﻿using System;
+using Aptacode.StateNet.Transitions;
 
-namespace Aptacode.StateNet.Core
+namespace Aptacode.StateNet.Exceptions
 {
     public class DuplicateTransitionException : Exception
     {

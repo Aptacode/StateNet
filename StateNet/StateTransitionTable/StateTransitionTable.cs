@@ -1,8 +1,6 @@
-﻿using Aptacode_StateMachine.StateNet.Core.Transitions;
-using System;
-using System.Linq;
+﻿using Aptacode.StateNet.Transitions;
 
-namespace Aptacode.StateNet.Core.StateTransitionTable
+namespace Aptacode.StateNet.StateTransitionTable
 {
     public interface IStateTransitionTable
     {

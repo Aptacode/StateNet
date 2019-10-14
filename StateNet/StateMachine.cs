@@ -1,39 +1,39 @@
-﻿using Aptacode.StateNet.Core.StateTransitionTable;
-using Aptacode.StateNet.Core.Transitions;
-using Aptacode_StateMachine.StateNet.Core.Transitions;
-using System;
+﻿using System;
+using Aptacode.StateNet.Exceptions;
+using Aptacode.StateNet.StateTransitionTable;
+using Aptacode.StateNet.Transitions;
 
-namespace Aptacode.StateNet.Core
+namespace Aptacode.StateNet
 {
     public class StateMachine
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         public event EventHandler<StateTransitionArgs> OnTransition;
-        private static readonly Object mutex = new Object();
+        private readonly object _mutex = new object();
 
-        private readonly IStateTransitionTable StateTransitionTable;
-        private readonly StateCollection StateCollection;
-        private readonly InputCollection InputCollection;
+        private readonly IStateTransitionTable _stateTransitionTable;
+        private readonly StateCollection _stateCollection;
+        private readonly InputCollection _inputCollection;
 
         public string State { get; private set; }
         public string LastInput { get; private set; }
 
         public StateMachine(StateCollection stateCollection, InputCollection inputCollection, IStateTransitionTable stateTransitionTable, string initialState)
         {
-            StateCollection = stateCollection;
-            InputCollection = inputCollection;
-            StateTransitionTable = stateTransitionTable;
+            _stateCollection = stateCollection;
+            _inputCollection = inputCollection;
+            _stateTransitionTable = stateTransitionTable;
 
-            StateTransitionTable.Setup(stateCollection, inputCollection);
+            _stateTransitionTable.Setup(stateCollection, inputCollection);
 
             State = initialState;
         }
 
         public void Define(Transition transition)
         {
-            if (StateTransitionTable.Get(transition.State, transition.Input) == null)
+            if (_stateTransitionTable.Get(transition.State, transition.Input) == null)
             {
-                StateTransitionTable.Set(transition);
+                _stateTransitionTable.Set(transition);
                 Logger.Trace("Registered {0}", transition.ToString());
             }
             else
@@ -45,12 +45,12 @@ namespace Aptacode.StateNet.Core
 
         public void Clear(Transition transition)
         {
-            StateTransitionTable.Clear(transition);
+            _stateTransitionTable.Clear(transition);
         }
 
         public void Apply(string input)
         {
-            lock (mutex)
+            lock (_mutex)
             {
                 var transition = GetValidTransition(State, input);
                 var nextState = transition.Apply();
@@ -61,7 +61,7 @@ namespace Aptacode.StateNet.Core
 
         private Transition GetValidTransition(string state, string input)
         {
-            var transition = StateTransitionTable.Get(state, input);
+            var transition = _stateTransitionTable.Get(state, input);
 
             if (transition == null)
             {

@@ -1,4 +1,4 @@
-﻿namespace Aptacode.StateNet.Core.TransitionResult
+﻿namespace Aptacode.StateNet.TransitionResult
 {
     public class UnaryTransitionResult : TransitionResult
     {

@@ -1,7 +1,4 @@
-﻿using Aptacode.StateNet.Core;
-using System;
-
-namespace Aptacode_StateMachine.StateNet.Core.Transitions
+﻿namespace Aptacode.StateNet.Transitions
 {
     public abstract class Transition
     {
