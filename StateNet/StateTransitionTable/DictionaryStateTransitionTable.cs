@@ -10,18 +10,15 @@ namespace Aptacode.StateNet.StateTransitionTable
         public DictionaryStateTransitionTable()
         {
             _transitions = new Dictionary<string, Dictionary<string, Transition>>();
-
         }
+
         public void Setup(StateCollection stateCollection, InputCollection inputCollection)
         {
-            foreach (string state in stateCollection.GetStates())
+            foreach (var state in stateCollection.GetStates())
             {
                 var stateDictionary = new Dictionary<string, Transition>();
 
-                foreach (string input in inputCollection.GetInputs())
-                {
-                    stateDictionary.Add(input, null);
-                }
+                foreach (var input in inputCollection.GetInputs()) stateDictionary.Add(input, null);
                 _transitions.Add(state, stateDictionary);
             }
         }
@@ -40,7 +37,5 @@ namespace Aptacode.StateNet.StateTransitionTable
         {
             _transitions[transition.State][transition.Input] = null;
         }
-
-
     }
 }

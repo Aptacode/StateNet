@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,73 +11,78 @@ namespace Aptacode.StateNet.Tests
 {
     public class StateMachineTests
     {
-        public enum States { Begin, Playing, Paused, End };
-        public enum Input { Play, Pause, Stop };
+        public enum Input
+        {
+            Play,
+            Pause,
+            Stop
+        }
+
+        public enum States
+        {
+            Begin,
+            Playing,
+            Paused,
+            End
+        }
+
+        private bool _canPlay;
 
         private StateMachine _stateMachine;
-        private bool _canPlay;
 
         [SetUp]
         public void Setup()
         {
             _canPlay = true;
 
-            _stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(), new DictionaryStateTransitionTable(), States.Begin.ToString());
+            _stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(),
+                new DictionaryStateTransitionTable(), States.Begin.ToString());
 
-            _stateMachine.Define(new BinaryTransition(States.Begin.ToString(), Input.Play.ToString(), States.Playing.ToString(), States.End.ToString(), () =>
-            { 
-                if (_canPlay)
+            _stateMachine.Define(new BinaryTransition(States.Begin.ToString(), Input.Play.ToString(),
+                States.Playing.ToString(), States.End.ToString(), () =>
                 {
-                    return new BinaryTransitionResult(BinaryChoice.Left, "Started Playing");
-                }
-                else
-                {
+                    if (_canPlay)
+                        return new BinaryTransitionResult(BinaryChoice.Left, "Started Playing");
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not start playing");
-                }
-            }, "Start Playing"));
+                }, "Start Playing"));
 
-            _stateMachine.Define(new InvalidTransition(States.Begin.ToString(), Input.Pause.ToString(), "Must be Playing to Pause"));
+            _stateMachine.Define(new InvalidTransition(States.Begin.ToString(), Input.Pause.ToString(),
+                "Must be Playing to Pause"));
 
-            _stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Stop.ToString(), States.End.ToString(), () => new UnaryTransitionResult("Stopped"), "Stop before playing"));
+            _stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Stop.ToString(),
+                States.End.ToString(), () => new UnaryTransitionResult("Stopped"), "Stop before playing"));
 
-            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Play.ToString(), States.Playing.ToString(), () => new UnaryTransitionResult("Kept playing"), "Already Playing"));
+            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Play.ToString(),
+                States.Playing.ToString(), () => new UnaryTransitionResult("Kept playing"), "Already Playing"));
 
-            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Pause.ToString(), States.Paused.ToString(), () => new UnaryTransitionResult("Paused playback"), "Already Playing"));
+            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Pause.ToString(),
+                States.Paused.ToString(), () => new UnaryTransitionResult("Paused playback"), "Already Playing"));
 
-            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Stop.ToString(), States.End.ToString(), () =>
-            {
-                return new UnaryTransitionResult("Stopped");
-            }, "Stopped"));
+            _stateMachine.Define(new UnaryTransition(States.Playing.ToString(), Input.Stop.ToString(),
+                States.End.ToString(), () => { return new UnaryTransitionResult("Stopped"); }, "Stopped"));
 
-            _stateMachine.Define(new BinaryTransition(States.Paused.ToString(), Input.Play.ToString(), States.Playing.ToString(), States.End.ToString(), () =>
-            {
-
-                if (_canPlay)
+            _stateMachine.Define(new BinaryTransition(States.Paused.ToString(), Input.Play.ToString(),
+                States.Playing.ToString(), States.End.ToString(), () =>
                 {
-                    return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
-                }
-                else
-                {
+                    if (_canPlay)
+                        return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not Resumed Playback");
-                }
+                }, "Resume Playback"));
 
-            }, "Resume Playback"));
+            _stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Pause.ToString(),
+                States.Paused.ToString(), () => { return new UnaryTransitionResult("Already Paused"); },
+                "Already Paused"));
 
-            _stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Pause.ToString(), States.Paused.ToString(), () =>
-            {
-                return new UnaryTransitionResult("Already Paused");
-            }, "Already Paused"));
-
-            _stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Stop.ToString(), States.End.ToString(), () =>
-            {
-                return new UnaryTransitionResult("Stopped");
-            }, "Stopped"));
+            _stateMachine.Define(new UnaryTransition(States.Paused.ToString(), Input.Stop.ToString(),
+                States.End.ToString(), () => { return new UnaryTransitionResult("Stopped"); }, "Stopped"));
 
 
-            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Play.ToString(), "Cannot play from end state"));
-            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Pause.ToString(), "Cannot pause from end state"));
-            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Stop.ToString(), "Cannot stop from end state"));
-
+            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Play.ToString(),
+                "Cannot play from end state"));
+            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Pause.ToString(),
+                "Cannot pause from end state"));
+            _stateMachine.Define(new InvalidTransition(States.End.ToString(), Input.Stop.ToString(),
+                "Cannot stop from end state"));
         }
 
         [Test]
@@ -114,10 +118,9 @@ namespace Aptacode.StateNet.Tests
         {
             Assert.Throws<DuplicateTransitionException>(() =>
             {
-                _stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Pause.ToString(), States.Paused.ToString(), new Func<UnaryTransitionResult>(() =>
-                {
-                    return new UnaryTransitionResult("Paused");
-                }), "Paused before playing"));
+                _stateMachine.Define(new UnaryTransition(States.Begin.ToString(), Input.Pause.ToString(),
+                    States.Paused.ToString(), () => { return new UnaryTransitionResult("Paused"); },
+                    "Paused before playing"));
             });
         }
 
@@ -167,10 +170,7 @@ namespace Aptacode.StateNet.Tests
             _stateMachine.Apply(Input.Play.ToString());
             Assert.AreEqual(States.End.ToString(), _stateMachine.State, "should have moved into 'End' state");
 
-            Assert.Throws<InvalidTransitionException>(() =>
-            {
-                _stateMachine.Apply(Input.Play.ToString());
-            });
+            Assert.Throws<InvalidTransitionException>(() => { _stateMachine.Apply(Input.Play.ToString()); });
 
             Assert.AreEqual(States.End.ToString(), _stateMachine.State, "should have remained in the 'End' state");
         }
@@ -180,26 +180,17 @@ namespace Aptacode.StateNet.Tests
         {
             _stateMachine.Apply(Input.Play.ToString());
 
-            List<string> actions = new List<string>();
-            _stateMachine.OnTransition += (s, e) =>
-            {
-                actions.Add(e.Input);
-            };
+            var actions = new List<string>();
+            _stateMachine.OnTransition += (s, e) => { actions.Add(e.Input); };
 
             var task1 = new TaskFactory().StartNew(() =>
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    _stateMachine.Apply(Input.Play.ToString());
-                }
+                for (var i = 0; i < 10; i++) _stateMachine.Apply(Input.Play.ToString());
             });
 
             var task2 = new TaskFactory().StartNew(() =>
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    _stateMachine.Apply(Input.Pause.ToString());
-                }
+                for (var i = 0; i < 10; i++) _stateMachine.Apply(Input.Pause.ToString());
             });
 
             task1.Wait();

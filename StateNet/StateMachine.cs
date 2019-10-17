@@ -2,21 +2,19 @@
 using Aptacode.StateNet.Exceptions;
 using Aptacode.StateNet.StateTransitionTable;
 using Aptacode.StateNet.Transitions;
+using NLog;
 
 namespace Aptacode.StateNet
 {
     public class StateMachine
     {
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        public event EventHandler<StateTransitionArgs> OnTransition;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly object _mutex = new object();
 
         private readonly IStateTransitionTable _stateTransitionTable;
 
-        public string State { get; private set; }
-        public string LastInput { get; private set; }
-
-        public StateMachine(StateCollection stateCollection, InputCollection inputCollection, IStateTransitionTable stateTransitionTable, string initialState)
+        public StateMachine(StateCollection stateCollection, InputCollection inputCollection,
+            IStateTransitionTable stateTransitionTable, string initialState)
         {
             _stateTransitionTable = stateTransitionTable;
 
@@ -24,6 +22,10 @@ namespace Aptacode.StateNet
 
             State = initialState;
         }
+
+        public string State { get; private set; }
+        public string LastInput { get; private set; }
+        public event EventHandler<StateTransitionArgs> OnTransition;
 
         public void Define(Transition transition)
         {
@@ -59,16 +61,10 @@ namespace Aptacode.StateNet
         {
             var transition = _stateTransitionTable.Get(state, input);
 
-            if (transition == null)
-            {
-                throw new UndefinedTransitionException(State, input);
-            }
+            if (transition == null) throw new UndefinedTransitionException(State, input);
 
             var validTransition = transition as ValidTransition;
-            if (validTransition == null)
-            {
-                throw new InvalidTransitionException(State, input);
-            }
+            if (validTransition == null) throw new InvalidTransitionException(State, input);
 
             return transition;
         }
@@ -79,6 +75,5 @@ namespace Aptacode.StateNet
             State = nextState;
             OnTransition?.Invoke(this, new StateTransitionArgs(oldState, LastInput, nextState));
         }
-
     }
 }
