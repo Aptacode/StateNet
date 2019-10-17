@@ -7,6 +7,7 @@ namespace Aptacode.StateNet
     public class StateCollection
     {
         private readonly List<string> _states;
+
         public StateCollection(IEnumerable<string> states)
         {
             _states = new List<string>(states);

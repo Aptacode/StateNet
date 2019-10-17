@@ -26,8 +26,7 @@ namespace Aptacode.StateNet.Tests
             _stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(), new DictionaryStateTransitionTable(), States.Begin.ToString());
 
             _stateMachine.Define(new BinaryTransition(States.Begin.ToString(), Input.Play.ToString(), States.Playing.ToString(), States.End.ToString(), () =>
-            {
-
+            { 
                 if (_canPlay)
                 {
                     return new BinaryTransitionResult(BinaryChoice.Left, "Started Playing");
@@ -55,9 +54,13 @@ namespace Aptacode.StateNet.Tests
             {
 
                 if (_canPlay)
+                {
                     return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
+                }
                 else
+                {
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not Resumed Playback");
+                }
 
             }, "Resume Playback"));
 

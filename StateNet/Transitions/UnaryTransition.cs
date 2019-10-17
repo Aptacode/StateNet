@@ -6,14 +6,15 @@ namespace Aptacode.StateNet.Transitions
 {
     public class UnaryTransition : ValidTransition
     {
-        public string NextState { get; private set; }
-        protected Func<UnaryTransitionResult> AcceptanceCallback { get; set; }
-
-        public UnaryTransition(string state, string input, string nextState, Func<UnaryTransitionResult> acceptanceCallback, string message) : base(state, input, message)
+        public UnaryTransition(string state, string input, string nextState,
+            Func<UnaryTransitionResult> acceptanceCallback, string message) : base(state, input, message)
         {
             NextState = nextState;
             AcceptanceCallback = acceptanceCallback;
         }
+
+        public string NextState { get; }
+        protected Func<UnaryTransitionResult> AcceptanceCallback { get; set; }
 
         public override string Apply()
         {
@@ -29,5 +30,4 @@ namespace Aptacode.StateNet.Transitions
             return $"Unary Transition: {State}({Input})->{NextState}";
         }
     }
-
 }

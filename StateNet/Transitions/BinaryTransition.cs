@@ -21,14 +21,17 @@ namespace Aptacode.StateNet.Transitions
         {
             var result = AcceptanceCallback?.Invoke();
             if (result == null || !result.Success)
-                throw new AcceptanceCallbackFailedException(State, Input);
-
-            switch (result.Choice)
             {
-                case BinaryChoice.Right:
-                    return RightState;
-                default:
-                    return LeftState;
+                throw new AcceptanceCallbackFailedException(State, Input);
+            }
+
+            if (result.Choice == BinaryChoice.Left)
+            {
+                return LeftState;
+            }
+            else
+            {
+                return RightState;
             }
         }
 

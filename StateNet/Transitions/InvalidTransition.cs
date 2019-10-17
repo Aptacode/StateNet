@@ -6,7 +6,6 @@ namespace Aptacode.StateNet.Transitions
     {
         public InvalidTransition(string state, string input, string message) : base(state, input, message)
         {
-
         }
 
         public override string Apply()

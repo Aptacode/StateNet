@@ -4,7 +4,6 @@
     {
         protected ValidTransition(string state, string input, string message) : base(state, input, message)
         {
-
         }
     }
 }

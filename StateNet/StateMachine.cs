@@ -12,16 +12,12 @@ namespace Aptacode.StateNet
         private readonly object _mutex = new object();
 
         private readonly IStateTransitionTable _stateTransitionTable;
-        private readonly StateCollection _stateCollection;
-        private readonly InputCollection _inputCollection;
 
         public string State { get; private set; }
         public string LastInput { get; private set; }
 
         public StateMachine(StateCollection stateCollection, InputCollection inputCollection, IStateTransitionTable stateTransitionTable, string initialState)
         {
-            _stateCollection = stateCollection;
-            _inputCollection = inputCollection;
             _stateTransitionTable = stateTransitionTable;
 
             _stateTransitionTable.Setup(stateCollection, inputCollection);

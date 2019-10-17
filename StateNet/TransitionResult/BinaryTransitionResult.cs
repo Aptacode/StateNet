@@ -2,13 +2,12 @@
 {
     public enum BinaryChoice
     {
-        Left, Right
+        Left,
+        Right
     }
 
     public class BinaryTransitionResult : TransitionResult
     {
-        public BinaryChoice Choice { get; set; }
-
         public BinaryTransitionResult(BinaryChoice choice, string message, bool success) : base(message, success)
         {
             Choice = choice;
@@ -16,7 +15,8 @@
 
         public BinaryTransitionResult(BinaryChoice choice, string message) : this(choice, message, true)
         {
-
         }
+
+        public BinaryChoice Choice { get; set; }
     }
 }

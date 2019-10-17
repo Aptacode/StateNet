@@ -12,6 +12,7 @@ namespace Aptacode.StateNet
         {
             _inputs = new List<string>(inputs);
         }
+
         public IEnumerable<string> GetInputs()
         {
             return _inputs;
