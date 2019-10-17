@@ -6,10 +6,11 @@
 
 ### Overview
 
-
 The state machine is configured using two generic type parameters: 'States' & 'Actions' both are user defined enums.
 
+
 -  Each possible state that the machine can be in at a given time is defined in the 'States' enum.
+
 -  All of the actions that can an be applied to the state machine to induce a transitions between states are defined in the 'Actions' enum.
 
 The state machine takes its initial state as a constructor parameter.
@@ -22,13 +23,14 @@ determine which state the state machine will enter.
 There are three types of transition (*Note the user can define their own.):
 
 -  InvalidTransition when an action cannot be applied to a state.
+
 -  UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
+
 -  BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
+
 on some user defined criteria.
 
-
 ### Written Example
-
 
 A state machine of a video playback application is in 'States.Playing'.
 
@@ -40,11 +42,9 @@ when a user presses the pause button 'Actions.Pause' will be applied.
 
 Since the current state is 'States.Playing' the above transition will be applied, if the application could not pause, the funciton returns BinaryChoice.Right hence moving into 'States.Stopped'.
 
-
 ### Usage
 
-
-```
+```csharp
 //Define all possible states and actions
 public enum States { NotReady, Ready, Running, Paused };
 public enum Actions { Setup, Start, Pause, Resume, Stop };
@@ -100,7 +100,6 @@ stateMachine.Apply(Actions.Start);
 
 
 ```
-
 
 ## License
 
