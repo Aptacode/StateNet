@@ -8,16 +8,19 @@
             Input = input;
             Message = message;
         }
+
         /// <summary>
-        /// The starting state which the transition is relating to
+        ///     The starting state which the transition is relating to
         /// </summary>
         public string State { get; }
+
         /// <summary>
-        /// The Input which when applied to the 'State' causes the transition
+        ///     The Input which when applied to the 'State' causes the transition
         /// </summary>
         public string Input { get; }
+
         /// <summary>
-        /// A message describing the transition
+        ///     A message describing the transition
         /// </summary>
         public string Message { get; set; }
 

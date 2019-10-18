@@ -8,22 +8,12 @@ namespace Aptacode.StateNet
 {
     public class StateMachine
     {
-        /// <summary>
-        /// Returns the current State
-        /// </summary>
-        public string State { get; private set; }
-        /// <summary>
-        /// Returns the last input
-        /// </summary>
-        public string LastInput { get; private set; }
-        public event EventHandler<StateTransitionArgs> OnTransition;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly object _mutex = new object();
         private readonly IStateTransitionTable _stateTransitionTable;
 
         /// <summary>
-        /// Governs the transitions between states based on the inputs it receives
+        ///     Governs the transitions between states based on the inputs it receives
         /// </summary>
         /// <param name="stateCollection"></param>
         /// <param name="inputCollection"></param>
@@ -40,7 +30,19 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Define a new transition
+        ///     Returns the current State
+        /// </summary>
+        public string State { get; private set; }
+
+        /// <summary>
+        ///     Returns the last input
+        /// </summary>
+        public string LastInput { get; private set; }
+
+        public event EventHandler<StateTransitionArgs> OnTransition;
+
+        /// <summary>
+        ///     Define a new transition
         /// </summary>
         /// <param name="transition"></param>
         public void Define(Transition transition)
@@ -58,7 +60,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Set a transition to 'Undefined'
+        ///     Set a transition to 'Undefined'
         /// </summary>
         /// <param name="transition"></param>
         public void Clear(Transition transition)
@@ -67,7 +69,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Apply the transition which relates to the given input on the current state
+        ///     Apply the transition which relates to the given input on the current state
         /// </summary>
         /// <param name="input"></param>
         public void Apply(string input)
@@ -85,10 +87,16 @@ namespace Aptacode.StateNet
         {
             var transition = _stateTransitionTable.Get(state, input);
 
-            if (transition == null) throw new UndefinedTransitionException(State, input);
+            if (transition == null)
+            {
+                throw new UndefinedTransitionException(State, input);
+            }
 
             var validTransition = transition as ValidTransition;
-            if (validTransition == null) throw new InvalidTransitionException(State, input);
+            if (validTransition == null)
+            {
+                throw new InvalidTransitionException(State, input);
+            }
 
             return transition;
         }

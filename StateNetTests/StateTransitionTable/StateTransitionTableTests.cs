@@ -39,7 +39,9 @@ namespace Aptacode.StateNet.Tests.StateTransitionTable
         {
             foreach (var state in (States[]) Enum.GetValues(typeof(States)))
             foreach (var action in (Actions[]) Enum.GetValues(typeof(Actions)))
+            {
                 Assert.IsNull(_stateTransitionTable.Get(state.ToString(), action.ToString()));
+            }
         }
 
         [Test]

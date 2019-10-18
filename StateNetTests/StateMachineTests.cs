@@ -42,7 +42,10 @@ namespace Aptacode.StateNet.Tests
                 States.Playing.ToString(), States.End.ToString(), () =>
                 {
                     if (_canPlay)
+                    {
                         return new BinaryTransitionResult(BinaryChoice.Left, "Started Playing");
+                    }
+
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not start playing");
                 }, "Start Playing"));
 
@@ -65,7 +68,10 @@ namespace Aptacode.StateNet.Tests
                 States.Playing.ToString(), States.End.ToString(), () =>
                 {
                     if (_canPlay)
+                    {
                         return new BinaryTransitionResult(BinaryChoice.Left, "Resumed Playback");
+                    }
+
                     return new BinaryTransitionResult(BinaryChoice.Right, "Could not Resumed Playback");
                 }, "Resume Playback"));
 
@@ -185,12 +191,18 @@ namespace Aptacode.StateNet.Tests
 
             var task1 = new TaskFactory().StartNew(() =>
             {
-                for (var i = 0; i < 10; i++) _stateMachine.Apply(Input.Play.ToString());
+                for (var i = 0; i < 10; i++)
+                {
+                    _stateMachine.Apply(Input.Play.ToString());
+                }
             });
 
             var task2 = new TaskFactory().StartNew(() =>
             {
-                for (var i = 0; i < 10; i++) _stateMachine.Apply(Input.Pause.ToString());
+                for (var i = 0; i < 10; i++)
+                {
+                    _stateMachine.Apply(Input.Pause.ToString());
+                }
             });
 
             task1.Wait();

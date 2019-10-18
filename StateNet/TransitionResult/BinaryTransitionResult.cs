@@ -1,9 +1,9 @@
 ﻿namespace Aptacode.StateNet.TransitionResult
 {
     public class BinaryTransitionResult : TransitionResult
-    {        
+    {
         /// <summary>
-        /// Tells a UnaryTransition if the Transition was successful and if so whether to move into the left or right state
+        ///     Tells a UnaryTransition if the Transition was successful and if so whether to move into the left or right state
         /// </summary>
         /// <param name="message"></param>
         /// <param name="success"></param>
@@ -11,8 +11,9 @@
         {
             Choice = choice;
         }
+
         /// <summary>
-        /// Tells a UnaryTransition if the Transition was successful and if so whether to move into the left or right state
+        ///     Tells a UnaryTransition if the Transition was successful and if so whether to move into the left or right state
         /// </summary>
         /// <param name="message"></param>
         /// <param name="success"></param>

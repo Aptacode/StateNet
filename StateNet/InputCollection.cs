@@ -12,8 +12,9 @@ namespace Aptacode.StateNet
         {
             _inputs = new List<string>(inputs);
         }
+
         /// <summary>
-        /// Returns a the list of available inputs
+        ///     Returns a the list of available inputs
         /// </summary>
         /// <returns></returns>
         public IEnumerable<string> GetInputs()
@@ -22,7 +23,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Converts an Enum into a InputCollection
+        ///     Converts an Enum into a InputCollection
         /// </summary>
         /// <typeparam name="TInputs"></typeparam>
         /// <returns></returns>

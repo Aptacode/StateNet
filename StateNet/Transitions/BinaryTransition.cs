@@ -7,8 +7,8 @@ namespace Aptacode.StateNet.Transitions
     public class BinaryTransition : ValidTransition
     {
         /// <summary>
-        /// Defines a transition to either the 'Left' or 'Right' State when the 'input' is applied to the current state
-        /// The choice of 'Left' or 'Right' is determined by the result of invoking the user defined AcceptanceCallback
+        ///     Defines a transition to either the 'Left' or 'Right' State when the 'input' is applied to the current state
+        ///     The choice of 'Left' or 'Right' is determined by the result of invoking the user defined AcceptanceCallback
         /// </summary>
         /// <param name="state"></param>
         /// <param name="input"></param>
@@ -31,10 +31,16 @@ namespace Aptacode.StateNet.Transitions
         public override string Apply()
         {
             var result = AcceptanceCallback?.Invoke();
-            if (result == null || !result.Success) throw new AcceptanceCallbackFailedException(State, Input);
+            if (result == null || !result.Success)
+            {
+                throw new AcceptanceCallbackFailedException(State, Input);
+            }
 
             if (result.Choice == BinaryChoice.Left)
+            {
                 return LeftState;
+            }
+
             return RightState;
         }
 

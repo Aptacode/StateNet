@@ -7,14 +7,14 @@ namespace Aptacode.StateNet
     public class StateCollection
     {
         private readonly List<string> _states;
-        
+
         public StateCollection(IEnumerable<string> states)
         {
             _states = new List<string>(states);
         }
 
         /// <summary>
-        /// Get a list of all possible states
+        ///     Get a list of all possible states
         /// </summary>
         /// <returns></returns>
         public IEnumerable<string> GetStates()
@@ -23,7 +23,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Convert an Enum into a StateCollection
+        ///     Convert an Enum into a StateCollection
         /// </summary>
         /// <typeparam name="TStates"></typeparam>
         /// <returns></returns>
