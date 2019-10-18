@@ -8,11 +8,27 @@ namespace Aptacode.StateNet
 {
     public class StateMachine
     {
+        /// <summary>
+        /// Returns the current State
+        /// </summary>
+        public string State { get; private set; }
+        /// <summary>
+        /// Returns the last input
+        /// </summary>
+        public string LastInput { get; private set; }
+        public event EventHandler<StateTransitionArgs> OnTransition;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly object _mutex = new object();
-
         private readonly IStateTransitionTable _stateTransitionTable;
 
+        /// <summary>
+        /// Governs the transitions between states based on the inputs it receives
+        /// </summary>
+        /// <param name="stateCollection"></param>
+        /// <param name="inputCollection"></param>
+        /// <param name="stateTransitionTable"></param>
+        /// <param name="initialState"></param>
         public StateMachine(StateCollection stateCollection, InputCollection inputCollection,
             IStateTransitionTable stateTransitionTable, string initialState)
         {
@@ -23,10 +39,10 @@ namespace Aptacode.StateNet
             State = initialState;
         }
 
-        public string State { get; private set; }
-        public string LastInput { get; private set; }
-        public event EventHandler<StateTransitionArgs> OnTransition;
-
+        /// <summary>
+        /// Define a new transition
+        /// </summary>
+        /// <param name="transition"></param>
         public void Define(Transition transition)
         {
             if (_stateTransitionTable.Get(transition.State, transition.Input) == null)
@@ -41,11 +57,19 @@ namespace Aptacode.StateNet
             }
         }
 
+        /// <summary>
+        /// Set a transition to 'Undefined'
+        /// </summary>
+        /// <param name="transition"></param>
         public void Clear(Transition transition)
         {
             _stateTransitionTable.Clear(transition);
         }
 
+        /// <summary>
+        /// Apply the transition which relates to the given input on the current state
+        /// </summary>
+        /// <param name="input"></param>
         public void Apply(string input)
         {
             lock (_mutex)
