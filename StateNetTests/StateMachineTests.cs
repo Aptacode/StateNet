@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.StateTransitionTable;
 using Aptacode.StateNet.TransitionResult;
 using Aptacode.StateNet.Transitions;
 using NUnit.Framework;
@@ -35,8 +34,7 @@ namespace Aptacode.StateNet.Tests
         {
             _canPlay = true;
 
-            _stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(),
-                new DictionaryStateTransitionTable(), States.Begin.ToString());
+            _stateMachine = new StateMachine(StateCollection.FromEnum<States>(), InputCollection.FromEnum<Input>(), States.Begin.ToString());
 
             _stateMachine.Define(new BinaryTransition(States.Begin.ToString(), Input.Play.ToString(),
                 States.Playing.ToString(), States.End.ToString(), () =>

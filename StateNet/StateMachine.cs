@@ -1,58 +1,63 @@
-﻿using System;
-using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.StateTransitionTable;
+﻿using Aptacode.StateNet.Exceptions;
 using Aptacode.StateNet.Transitions;
 using NLog;
+using System;
+using System.Linq;
 
 namespace Aptacode.StateNet
 {
     public class StateMachine
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly object _mutex = new object();
-        private readonly IStateTransitionTable _stateTransitionTable;
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        readonly StateTransitionTable _stateTransitionTable;
+        readonly StateCollection _states;
+        readonly InputCollection _inputs;
 
         /// <summary>
-        ///     Governs the transitions between states based on the inputs it receives
+        /// Governs the transitions between states based on the inputs it receives
         /// </summary>
-        /// <param name="stateCollection"></param>
-        /// <param name="inputCollection"></param>
-        /// <param name="stateTransitionTable"></param>
-        /// <param name="initialState"></param>
-        public StateMachine(StateCollection stateCollection, InputCollection inputCollection,
-            IStateTransitionTable stateTransitionTable, string initialState)
+        public StateMachine(StateCollection states, InputCollection inputs, string initialState)
         {
-            _stateTransitionTable = stateTransitionTable;
+            _states = states;
+            _inputs = inputs;
+            _stateTransitionTable = new StateTransitionTable(_states, _inputs);
+            SetInitialState(initialState);
+        }
 
-            _stateTransitionTable.Setup(stateCollection, inputCollection);
-
-            State = initialState;
+        void SetInitialState(string initialState)
+        {
+            if(_states.Contains(initialState))
+            {
+                State = initialState;
+            } else
+            {
+                State = _states.First();
+            }
         }
 
         /// <summary>
-        ///     Returns the current State
+        /// Returns the current State
         /// </summary>
         public string State { get; private set; }
 
         /// <summary>
-        ///     Returns the last input
+        /// Returns the last input
         /// </summary>
         public string LastInput { get; private set; }
 
         public event EventHandler<StateTransitionArgs> OnTransition;
 
         /// <summary>
-        ///     Define a new transition
+        /// Define a new transition
         /// </summary>
         /// <param name="transition"></param>
         public void Define(Transition transition)
         {
-            if (_stateTransitionTable.Get(transition.State, transition.Input) == null)
+            if(_stateTransitionTable.Get(transition.State, transition.Input) == null)
             {
                 _stateTransitionTable.Set(transition);
                 Logger.Trace("Registered {0}", transition.ToString());
-            }
-            else
+            } else
             {
                 Logger.Debug("Duplicate transition, could not register {0}", transition.ToString());
                 throw new DuplicateTransitionException(transition);
@@ -60,48 +65,41 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        ///     Set a transition to 'Undefined'
+        /// Set a transition to 'Undefined'
         /// </summary>
         /// <param name="transition"></param>
-        public void Clear(Transition transition)
-        {
-            _stateTransitionTable.Clear(transition);
-        }
+        public void Clear(Transition transition) => _stateTransitionTable.Clear(transition) ;
 
         /// <summary>
-        ///     Apply the transition which relates to the given input on the current state
+        /// Apply the transition which relates to the given input on the current state
         /// </summary>
         /// <param name="input"></param>
         public void Apply(string input)
         {
-            lock (_mutex)
-            {
-                var transition = GetValidTransition(State, input);
-                var nextState = transition.Apply();
-                LastInput = input;
-                UpdateState(nextState);
-            }
+            var transition = GetValidTransition(State, input);
+            var nextState = transition.Apply();
+            LastInput = input;
+            UpdateState(nextState);
         }
 
-        private Transition GetValidTransition(string state, string input)
+        ValidTransition GetValidTransition(string state, string input)
         {
             var transition = _stateTransitionTable.Get(state, input);
 
-            if (transition == null)
+            if(transition == null)
             {
                 throw new UndefinedTransitionException(State, input);
             }
 
-            var validTransition = transition as ValidTransition;
-            if (validTransition == null)
+            if(transition is ValidTransition validTransition)
             {
-                throw new InvalidTransitionException(State, input);
+                return validTransition;
             }
 
-            return transition;
+            throw new InvalidTransitionException(State, input);
         }
 
-        private void UpdateState(string nextState)
+        void UpdateState(string nextState)
         {
             var oldState = State;
             State = nextState;

@@ -1,10 +1,9 @@
 using System;
-using Aptacode.StateNet.StateTransitionTable;
 using Aptacode.StateNet.TransitionResult;
 using Aptacode.StateNet.Transitions;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests.StateTransitionTable
+namespace Aptacode.StateNet.Tests.StateTransitionTableTests
 {
     public class StateTransitionTableTests
     {
@@ -23,19 +22,18 @@ namespace Aptacode.StateNet.Tests.StateTransitionTable
             End
         }
 
-        private IStateTransitionTable _stateTransitionTable;
+        private StateTransitionTable _stateTransitionTable;
 
         [SetUp]
         public void Setup()
         {
             var stateCollection = StateCollection.FromEnum<States>();
             var inputCollection = InputCollection.FromEnum<Actions>();
-            _stateTransitionTable = new DictionaryStateTransitionTable();
-            _stateTransitionTable.Setup(stateCollection, inputCollection);
+            _stateTransitionTable = new StateTransitionTable(stateCollection, inputCollection);
         }
 
         [Test]
-        public void InitialiseToNull()
+        public void InitializeToNull()
         {
             foreach (var state in (States[]) Enum.GetValues(typeof(States)))
             foreach (var action in (Actions[]) Enum.GetValues(typeof(Actions)))

@@ -4,32 +4,16 @@ using System.Linq;
 
 namespace Aptacode.StateNet
 {
-    public class StateCollection
+    public class StateCollection : HashSet<string>
     {
-        private readonly List<string> _states;
-
-        public StateCollection(IEnumerable<string> states)
-        {
-            _states = new List<string>(states);
-        }
+        public StateCollection(IEnumerable<string> states) : base(states) { }
 
         /// <summary>
-        ///     Get a list of all possible states
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<string> GetStates()
-        {
-            return _states;
-        }
-
-        /// <summary>
-        ///     Convert an Enum into a StateCollection
+        /// Convert an Enum into a StateCollection
         /// </summary>
         /// <typeparam name="TStates"></typeparam>
         /// <returns></returns>
-        public static StateCollection FromEnum<TStates>() where TStates : Enum
-        {
-            return new StateCollection(Enum.GetNames(typeof(TStates)).ToList());
-        }
+        public static StateCollection FromEnum<TStates>()
+            where TStates : Enum => new StateCollection(Enum.GetNames(typeof(TStates)).ToList()) ;
     }
 }

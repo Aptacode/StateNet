@@ -12,12 +12,11 @@ namespace Aptacode.StateNet
         }
 
         public string OldState { get; set; }
+
         public string NewState { get; set; }
+
         public string Input { get; set; }
 
-        public override string ToString()
-        {
-            return $"{OldState}({Input})->{NewState}";
-        }
+        public override string ToString() => $"{OldState}({Input})->{NewState}" ;
     }
 }
