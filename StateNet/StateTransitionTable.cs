@@ -18,19 +18,19 @@ namespace Aptacode.StateNet
 
             foreach(var state in states)
             {
-                transitionDictionary.TryAdd(state, CreateEmptyInputDictionary(inputs));
+                transitionDictionary.TryAdd(state, CreateEmptyInputDictionary(state, inputs));
             }
 
             return transitionDictionary;
         }
 
-        ConcurrentDictionary<string, Transition> CreateEmptyInputDictionary(InputCollection inputs)
+        ConcurrentDictionary<string, Transition> CreateEmptyInputDictionary(string state, InputCollection inputs)
         {
             var stateDictionary = new ConcurrentDictionary<string, Transition>();
 
             foreach(var input in inputs)
             {
-                stateDictionary.TryAdd(input, null);
+                stateDictionary.TryAdd(input, new InvalidTransition(state, input, "Undefined"));
             }
 
             return stateDictionary;
@@ -83,7 +83,7 @@ namespace Aptacode.StateNet
         {
             if(_transitions.TryGetValue(oldTransition.State, out var inputDictionary))
             {
-                if(inputDictionary.TryUpdate(oldTransition.Input, null, oldTransition))
+                if(inputDictionary.TryUpdate(oldTransition.Input, new InvalidTransition(oldTransition.State, oldTransition.Input, "Undefined"), oldTransition))
                 {
                     return true;
                 }

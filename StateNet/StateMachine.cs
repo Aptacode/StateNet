@@ -2,12 +2,17 @@
 using Aptacode.StateNet.Transitions;
 using NLog;
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aptacode.StateNet
 {
-    public class StateMachine
+    public class StateMachine : IDisposable
     {
+        private readonly ConcurrentQueue<string> inputQueue;
+        private bool _isRunning;
+
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         readonly StateTransitionTable _stateTransitionTable;
         readonly StateCollection _states;
@@ -21,7 +26,26 @@ namespace Aptacode.StateNet
             _states = states;
             _inputs = inputs;
             _stateTransitionTable = new StateTransitionTable(_states, _inputs);
+            inputQueue = new ConcurrentQueue<string>();
             SetInitialState(initialState);
+        }
+
+        public void Start()
+        {
+            new TaskFactory().StartNew(() =>
+            {
+                _isRunning = true;
+                while (_isRunning)
+                {
+                    NextTransition();
+                    Task.Delay(1).ConfigureAwait(false);
+                }
+            });
+        }
+
+        public void Stop()
+        {
+            _isRunning = false;
         }
 
         void SetInitialState(string initialState)
@@ -46,6 +70,7 @@ namespace Aptacode.StateNet
         public string LastInput { get; private set; }
 
         public event EventHandler<StateTransitionArgs> OnTransition;
+        public event EventHandler<InvalidStateTransitionArgs> OnInvalidTransition;
 
         /// <summary>
         /// Define a new transition
@@ -53,15 +78,7 @@ namespace Aptacode.StateNet
         /// <param name="transition"></param>
         public void Define(Transition transition)
         {
-            if(_stateTransitionTable.Get(transition.State, transition.Input) == null)
-            {
-                _stateTransitionTable.Set(transition);
-                Logger.Trace("Registered {0}", transition.ToString());
-            } else
-            {
-                Logger.Debug("Duplicate transition, could not register {0}", transition.ToString());
-                throw new DuplicateTransitionException(transition);
-            }
+            _stateTransitionTable.Set(transition);
         }
 
         /// <summary>
@@ -76,22 +93,29 @@ namespace Aptacode.StateNet
         /// <param name="input"></param>
         public void Apply(string input)
         {
-            var transition = GetValidTransition(State, input);
-            var nextState = transition.Apply();
-            LastInput = input;
-            UpdateState(nextState);
+            inputQueue.Enqueue(input);
+        }
+
+        private void NextTransition()
+        {
+            if(inputQueue.TryDequeue(out var input)){
+                try
+                {
+                    var transition = GetValidTransition(State, input);
+                    var nextState = transition.Apply();
+                    LastInput = input;
+                    UpdateState(nextState);
+                }
+                catch
+                {
+                    OnInvalidTransition?.Invoke(this, new InvalidStateTransitionArgs(State, input));
+                }
+            }
         }
 
         ValidTransition GetValidTransition(string state, string input)
         {
-            var transition = _stateTransitionTable.Get(state, input);
-
-            if(transition == null)
-            {
-                throw new UndefinedTransitionException(State, input);
-            }
-
-            if(transition is ValidTransition validTransition)
+            if(_stateTransitionTable.Get(state, input) is ValidTransition validTransition)
             {
                 return validTransition;
             }
@@ -104,6 +128,11 @@ namespace Aptacode.StateNet
             var oldState = State;
             State = nextState;
             OnTransition?.Invoke(this, new StateTransitionArgs(oldState, LastInput, nextState));
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }

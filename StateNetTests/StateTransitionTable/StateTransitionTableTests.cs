@@ -38,8 +38,9 @@ namespace Aptacode.StateNet.Tests.StateTransitionTableTests
             foreach (var state in (States[]) Enum.GetValues(typeof(States)))
             foreach (var action in (Actions[]) Enum.GetValues(typeof(Actions)))
             {
-                Assert.IsNull(_stateTransitionTable.Get(state.ToString(), action.ToString()));
-            }
+                    Assert.That(_stateTransitionTable.Get(state.ToString(), action.ToString()) is InvalidTransition);
+
+                }
         }
 
         [Test]
@@ -59,7 +60,7 @@ namespace Aptacode.StateNet.Tests.StateTransitionTableTests
                 States.Paused.ToString(), () => new UnaryTransitionResult("Paused"), "Pause"));
             var transition = _stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString());
             _stateTransitionTable.Clear(transition);
-            Assert.IsNull(_stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString()));
+            Assert.That(_stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString()) is InvalidTransition);
         }
 
         [Test]
