@@ -13,13 +13,13 @@ namespace Aptacode.StateNet.TransitionTables
                                                  InputCollection.FromEnum<TInputs>())
         { }
 
-        public void Set(TStates fromState, TInputs input, string message = "Invalid")
+        public void Set(TStates fromState, TInputs input, string message)
         {
             var transition = new InvalidTransition(fromState.ToString(), input.ToString(), message);
             this.Set(transition);
         }
 
-        public void Set(TStates fromState, TInputs input, TStates toState, string message = "Unary")
+        public void Set(TStates fromState, TInputs input, TStates toState, string message)
         {
             var transition = new UnaryTransition(fromState.ToString(), input.ToString(), toState.ToString(), message);
             this.Set(transition);
@@ -28,7 +28,7 @@ namespace Aptacode.StateNet.TransitionTables
         public void Set(TStates fromState,
                         TInputs input,
                         Func<int> transitionChoice,
-                        string message = "Nary",
+                        string message,
                         params TStates[] toStates)
         {
             var transition = new NaryTransition(fromState.ToString(),
@@ -44,7 +44,7 @@ namespace Aptacode.StateNet.TransitionTables
                         TStates toState1,
                         TStates toState2,
                         Func<BinaryChoice> transitionChoice,
-                        string message = "Binary")
+                        string message)
         {
             var transition = new BinaryTransition(fromState.ToString(),
                                                   input.ToString(),

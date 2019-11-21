@@ -64,8 +64,6 @@ namespace Aptacode.StateNet.Tests
         [Test]
         public void MultithreadedTransitions()
         {
-            var actions = new List<string>();
-
             var playCount = 0;
             var pauseCount = 0;
             _stateMachine.OnTransition += (s, e) =>
@@ -121,14 +119,14 @@ namespace Aptacode.StateNet.Tests
                 }
 
                 return BinaryChoice.Right;
-            });
+            }, "");
 
-            enumTransitionTable.Set(States.Begin, Inputs.Pause);
-            enumTransitionTable.Set(States.Begin, Inputs.Stop, States.End);
+            enumTransitionTable.Set(States.Begin, Inputs.Pause, "");
+            enumTransitionTable.Set(States.Begin, Inputs.Stop, States.End, "");
 
-            enumTransitionTable.Set(States.Playing, Inputs.Play, States.Playing);
-            enumTransitionTable.Set(States.Playing, Inputs.Pause, States.Paused);
-            enumTransitionTable.Set(States.Playing, Inputs.Stop, States.End);
+            enumTransitionTable.Set(States.Playing, Inputs.Play, States.Playing, "");
+            enumTransitionTable.Set(States.Playing, Inputs.Pause, States.Paused, "");
+            enumTransitionTable.Set(States.Playing, Inputs.Stop, States.End, "");
 
             enumTransitionTable.Set(States.Paused,
                                     Inputs.Play,
@@ -142,15 +140,15 @@ namespace Aptacode.StateNet.Tests
                 }
 
                 return BinaryChoice.Right;
-            });
+            }, "");
 
 
-            enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused);
-            enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End);
+            enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused, "");
+            enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End, "");
 
-            enumTransitionTable.Set(States.End, Inputs.Play);
-            enumTransitionTable.Set(States.End, Inputs.Pause);
-            enumTransitionTable.Set(States.End, Inputs.Stop);
+            enumTransitionTable.Set(States.End, Inputs.Play, "");
+            enumTransitionTable.Set(States.End, Inputs.Pause, "");
+            enumTransitionTable.Set(States.End, Inputs.Stop, "");
 
             _stateMachine = new StateMachine(enumTransitionTable, States.Begin.ToString());
             _stateMachine.Start();

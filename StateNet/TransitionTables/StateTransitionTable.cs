@@ -7,8 +7,8 @@ namespace Aptacode.StateNet.TransitionTables
     public abstract class StateTransitionTable
     {
         protected readonly ConcurrentDictionary<string, ConcurrentDictionary<string, Transition>> _transitions;
-        public readonly InputCollection Inputs;
-        public readonly StateCollection States;
+        public InputCollection Inputs { get; }
+        public StateCollection States { get; }
 
         protected StateTransitionTable(StateCollection states, InputCollection inputs)
         {

@@ -57,6 +57,7 @@ namespace Aptacode.StateNet
                     UpdateState(nextState);
                 } catch
                 {
+                    Logger.Error("Queued transition was invalid");
                     OnInvalidTransition?.Invoke(this, new InvalidStateTransitionArgs(State, input));
                 }
             }
@@ -110,7 +111,8 @@ namespace Aptacode.StateNet
         public void Start() => new TaskFactory().StartNew(async() =>
         {
             _isRunning = true;
-            while(_isRunning)
+
+            while (_isRunning)
             {
                 NextTransition();
                 await Task.Delay(1).ConfigureAwait(false);
