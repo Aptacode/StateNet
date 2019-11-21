@@ -14,7 +14,6 @@ namespace Aptacode.StateNet.Transitions
         /// <param name="input"></param>
         /// <param name="leftState"></param>
         /// <param name="rightState"></param>
-        /// <param name="acceptanceCallback"></param>
         /// <param name="message"></param>
         public BinaryTransition(string state,
                                 string input,

@@ -37,7 +37,7 @@ namespace Aptacode.StateNet.Transitions
                 return NextStates[choice.Value];
             }
 
-            throw new AcceptanceCallbackFailedException(State, Input);
+            throw new InvalidChoiceException(State, Input);
         }
 
         public override string ToString() => $"Nary Transition: {State}({Input})->{{ {string.Join("| ", NextStates)} }}" ;

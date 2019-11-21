@@ -144,6 +144,7 @@ namespace Aptacode.StateNet.Tests
                 return BinaryChoice.Right;
             });
 
+
             enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused);
             enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End);
 

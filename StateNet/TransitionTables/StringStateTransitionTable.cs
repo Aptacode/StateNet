@@ -12,13 +12,13 @@ namespace Aptacode.StateNet.TransitionTables
 
         public void Set(string fromState, string input, string message)
         {
-            var transition = new InvalidTransition(fromState.ToString(), input.ToString(), message);
+            var transition = new InvalidTransition(fromState, input, message);
             this.Set(transition);
         }
 
         public void Set(string fromState, string input, string toState, string message)
         {
-            var transition = new UnaryTransition(fromState.ToString(), input.ToString(), toState.ToString(), message);
+            var transition = new UnaryTransition(fromState, input, toState, message);
             this.Set(transition);
         }
 
@@ -28,9 +28,9 @@ namespace Aptacode.StateNet.TransitionTables
                         string message,
                         params string[] toStates)
         {
-            var transition = new NaryTransition(fromState.ToString(),
-                                                input.ToString(),
-                                                toStates.Select(state => state.ToString()).ToList(),
+            var transition = new NaryTransition(fromState,
+                                                input,
+                                                toStates.Select(state => state).ToList(),
                                                 transitionChoice,
                                                 message);
             this.Set(transition);
@@ -43,10 +43,10 @@ namespace Aptacode.StateNet.TransitionTables
                         Func<BinaryChoice> transitionChoice,
                         string message = "Binary")
         {
-            var transition = new BinaryTransition(fromState.ToString(),
-                                                  input.ToString(),
-                                                  toState1.ToString(),
-                                                  toState2.ToString(),
+            var transition = new BinaryTransition(fromState,
+                                                  input,
+                                                  toState1,
+                                                  toState2,
                                                   transitionChoice,
                                                   message);
             this.Set(transition);
