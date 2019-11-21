@@ -6,29 +6,26 @@
 
 ### Overview
 
-The state machine is configured using two generic type parameters: 'States' & 'Actions' both are user defined enums.
+The state machine is configured using a StateTransitionTable which in turn takes a set of 'States' & 'Inputs' which can be either user defined enums, or string lists.
 
 
--  Each possible state that the machine can be in at a given time is defined in the 'States' enum.
+-  States: Each possible state that the machine can be in at a given time.
 
--  All of the actions that can an be applied to the state machine to induce a transitions between states are defined in the 'Actions' enum.
+-  Inputs: All of the actions that can an be applied to the state machine to induce a transitions between states.
 
 The state machine takes its initial state as a constructor parameter.
 
-Once initialised all possible transitions between states must be defined.
-A transition is triggered based on which state the machine is currently in and the action which was applied.
-Depending on the type of transition the user can define their own logic and result for the transition which is used to
-determine which state the state machine will enter.
+Once an instance of StateTransitionTable is initialised, all possible transitions between states must be defined (Note* all transitions  default to an 'InvalidTransition')
+A transition is triggered based on which state the machine is currently in and the input which was applied.
+Depending on the type of transition the user can define their own logic to determine which of the transition's possible destination states is entered. For example: the BinaryTransition takes a function callback which returns either BinaryChoice.Left or BinaryChoice.Right to determine which state to enter.
 
-There are three types of transition (*Note the user can define their own.):
+There are four types of transition:
 
--  InvalidTransition when an action cannot be applied to a state.
-
--  UnaryTransition when an action being applied to a state results the state machine moving to exactly one state.
-
--  BinaryTransition when an action being applied to a state can cause the state machine to move to multiple states depending 
-
-on some user defined criteria.
+-  InvalidTransition an input which cannot be applied to a state.
+-  UnaryTransition when an input being applied to a state always results in a transition to exactly one state.
+-  BinaryTransition when an input being applied to a state can cause the state machine to move to one of two states states depending 
+on some user defined function callback.
+-  NaryTransition when an input causes a transition to one of many possible states chosen by a user defined function callback.
 
 ### Written Example
 
@@ -48,44 +45,42 @@ Since the current state is 'States.Playing' the above transition will be applied
 //Define all possible states and actions
 public enum States { NotReady, Ready, Running, Paused };
 public enum Actions { Setup, Start, Pause, Resume, Stop };
+var transitionTable = new EnumStateTransitionTable<States, Inputs>();
 
 //Create an instance set to an initial state
-StateMachine stateMachine = new StateMachine<States, Actions>(States.NotReady);
+var stateMachine = new StateMachine(transitionTable, States.NotReady);
 
 //Define all possible transitions
 
 //Invalid Transition
-stateMachine.Define(
-      new InvalidTransition<States, Actions>(
+transitionTable.Define(
             States.NotReady, 
             Actions.Start, 
             "Must be Ready to Start"));
             
 //Unary Transition
-stateMachine.Define(
-      new UnaryTransition<States, Actions>(
+transitionTable.Define(
             States.NotReady, 
             Actions.Setup, 
             States.Ready,
-            new Func<UnaryTransitionAcceptanceResult>(() => {
-                  return new UnaryTransitionAcceptanceResult("Setup successful");
-            }),
             "Setup"));
 
 //Binary Transition
-stateMachine.Define(
-      new BinaryTransition<States, Actions>(
+transitionTable.Define(
             States.Running, 
             Actions.Pause, 
             States.Paused, 
-            States.NotReady, 
-            new Func<BinaryTransitionAcceptanceResult>(() => {
-                  if(canPause)
-                        return new BinaryTransitionAcceptanceResult(BinaryChoice.Left, "Pause successful");
-                  else
-                        return new BinaryTransitionAcceptanceResult(BinaryChoice.Right, "Could not Pause");
-            }),
-            "Pause"));
+            States.NotReady,
+            () =>
+            {
+                if(_canPlay)
+                {
+                    return BinaryChoice.Left;
+                }
+
+                return BinaryChoice.Right;
+            });
+            "Try Pause"));
 
 //When a transition is applied
 stateMachine.OnTransition += (s, e) => 
