@@ -1,5 +1,4 @@
 ﻿using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.TransitionResult;
 using System;
 using System.Collections.Generic;
 
@@ -12,25 +11,18 @@ namespace Aptacode.StateNet.Transitions
         /// </summary>
         /// <param name="state"></param>
         /// <param name="input"></param>
-        /// <param name="nextState"></param>
-        /// <param name="acceptanceCallback"></param>
         /// <param name="message"></param>
         public NaryTransition(string state,
                               string input,
                               List<string> nextStates,
-                              Func<NaryTransitionResult> acceptanceCallback,
+                              Func<int> choiceCallback,
                               string message) : base(state, input, message)
         {
             NextStates = nextStates;
-            AcceptanceCallback = acceptanceCallback;
+            ChoiceCallback = choiceCallback;
         }
 
-        /// <summary>
-        /// The output state of the unary transition
-        /// </summary>
-        public List<string> NextStates { get; }
-
-        protected Func<NaryTransitionResult> AcceptanceCallback { get; set; }
+        protected Func<int> ChoiceCallback { get; set; }
 
         /// <summary>
         /// Apply the transition
@@ -38,16 +30,21 @@ namespace Aptacode.StateNet.Transitions
         /// <returns></returns>
         public override string Apply()
         {
-            if((AcceptanceCallback?.Invoke() != null) &&
-                (AcceptanceCallback?.Invoke()).Success &&
-                NextStates.Contains((AcceptanceCallback?.Invoke()).Choice))
+            var choice = ChoiceCallback?.Invoke();
+
+            if(choice.HasValue && (choice.Value < NextStates.Count))
             {
-                return (AcceptanceCallback?.Invoke()).Choice;
+                return NextStates[choice.Value];
             }
 
             throw new AcceptanceCallbackFailedException(State, Input);
         }
 
-        public override string ToString() => $"Unary Transition: {State}({Input})->{{ {string.Join("| ", NextStates)} }}" ;
+        public override string ToString() => $"Nary Transition: {State}({Input})->{{ {string.Join("| ", NextStates)} }}" ;
+
+        /// <summary>
+        /// The output state of the unary transition
+        /// </summary>
+        public List<string> NextStates { get; }
     }
 }

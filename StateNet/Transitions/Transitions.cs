@@ -9,10 +9,9 @@
             Message = message;
         }
 
-        /// <summary>
-        /// The starting state which the transition is relating to
-        /// </summary>
-        public string State { get; }
+        public abstract string Apply();
+
+        public abstract override string ToString();
 
         /// <summary>
         /// The Input which when applied to the 'State' causes the transition
@@ -24,8 +23,9 @@
         /// </summary>
         public string Message { get; set; }
 
-        public abstract string Apply();
-
-        public abstract override string ToString();
+        /// <summary>
+        /// The starting state which the transition is relating to
+        /// </summary>
+        public string State { get; }
     }
 }

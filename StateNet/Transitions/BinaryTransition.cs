@@ -1,5 +1,4 @@
-﻿using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.TransitionResult;
+﻿using Aptacode.StateNet.TransitionResults;
 using System;
 
 namespace Aptacode.StateNet.Transitions
@@ -21,28 +20,19 @@ namespace Aptacode.StateNet.Transitions
                                 string input,
                                 string leftState,
                                 string rightState,
-                                Func<BinaryTransitionResult> acceptanceCallback,
+                                Func<BinaryChoice> choiceCallback,
                                 string message) : base(state, input, message)
         {
             LeftState = leftState;
             RightState = rightState;
-            AcceptanceCallback = acceptanceCallback;
+            ChoiceCallback = choiceCallback;
         }
 
-        public string LeftState { get; }
-
-        public string RightState { get; }
-
-        protected Func<BinaryTransitionResult> AcceptanceCallback { get; set; }
+        protected Func<BinaryChoice> ChoiceCallback { get; set; }
 
         public override string Apply()
         {
-            if(AcceptanceCallback?.Invoke()?.Success != true)
-            {
-                throw new AcceptanceCallbackFailedException(State, Input);
-            }
-
-            if((AcceptanceCallback?.Invoke()).Choice == BinaryChoice.Left)
+            if((ChoiceCallback?.Invoke()) == BinaryChoice.Left)
             {
                 return LeftState;
             }
@@ -51,5 +41,9 @@ namespace Aptacode.StateNet.Transitions
         }
 
         public override string ToString() => $"Binary Transition: {State}({Input})->{LeftState}|{RightState}" ;
+
+        public string LeftState { get; }
+
+        public string RightState { get; }
     }
 }

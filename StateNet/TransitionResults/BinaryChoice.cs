@@ -1,4 +1,4 @@
-﻿namespace Aptacode.StateNet.TransitionResult
+﻿namespace Aptacode.StateNet.TransitionResults
 {
     public enum BinaryChoice
     {

@@ -9,11 +9,12 @@ namespace Aptacode.StateNet
             State = state;
             Input = input;
         }
-        public string State { get; set; }
-
-        public string Input { get; set; }
 
 
         public override string ToString() => $"{State}({Input})->Invalid";
+
+        public string Input { get; set; }
+
+        public string State { get; set; }
     }
 }
