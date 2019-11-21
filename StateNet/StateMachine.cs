@@ -4,6 +4,7 @@ using Aptacode.StateNet.TransitionTables;
 using NLog;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@ namespace Aptacode.StateNet
         private readonly StateTransitionTable _stateTransitionTable;
         private readonly ConcurrentQueue<string> inputQueue;
 
+        private readonly Dictionary<string, List<Action>> _callbackDictionary;
+
         /// <summary>
         /// Governs the transitions between states based on the inputs it receives
         /// </summary>
@@ -24,6 +27,8 @@ namespace Aptacode.StateNet
             _stateTransitionTable = stateTransitionTable;
             inputQueue = new ConcurrentQueue<string>();
             SetInitialState(initialState);
+
+            _callbackDictionary = new Dictionary<string, List<Action>>();
         }
 
         public event EventHandler<InvalidStateTransitionArgs> OnInvalidTransition;
@@ -73,6 +78,7 @@ namespace Aptacode.StateNet
             var oldState = State;
             State = nextState;
             OnTransition?.Invoke(this, new StateTransitionArgs(oldState, LastInput, nextState));
+            _callbackDictionary[nextState].ForEach(callback => callback?.Invoke());
         }
 
         /// <summary>
@@ -122,5 +128,24 @@ namespace Aptacode.StateNet
         /// Returns the current State
         /// </summary>
         public string State { get; private set; }
+
+        public void Subscribe(string state, Action callback)
+        {
+            if(!_callbackDictionary.TryGetValue(state, out var listeners))
+            {
+                listeners = new List<Action> { callback };
+                _callbackDictionary.Add(state, listeners);
+            }
+
+            listeners.Add(callback);
+        }
+
+        public void UnSubscribe(string state, Action callback)
+        {
+            if (_callbackDictionary.TryGetValue(state, out var listeners))
+            {
+                listeners.Remove(callback);
+            }
+        }
     }
 }
