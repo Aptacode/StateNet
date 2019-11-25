@@ -1,5 +1,4 @@
-﻿using Aptacode.StateNet.TransitionResults;
-using Aptacode.StateNet.Transitions;
+﻿using Aptacode.StateNet.Transitions;
 using System;
 using System.Linq;
 
@@ -18,21 +17,11 @@ namespace Aptacode.StateNet.TransitionTables
 
         public void Set(string fromState, string input, string toState, string message)
         {
-            var transition = new UnaryTransition(fromState, input, toState, message);
-            this.Set(transition);
-        }
-
-        public void Set(string fromState,
-                        string input,
-                        Func<int> transitionChoice,
-                        string message,
-                        params string[] toStates)
-        {
-            var transition = new NaryTransition(fromState,
-                                                input,
-                                                toStates.Select(state => state).ToList(),
-                                                transitionChoice,
-                                                message);
+            var transition = new Transition<Tuple<string>>(fromState,
+                                                           input,
+                                                           new Tuple<string>(toState),
+                                                           (states) => states.Item1,
+                                                           message);
             this.Set(transition);
         }
 
@@ -40,15 +29,52 @@ namespace Aptacode.StateNet.TransitionTables
                         string input,
                         string toState1,
                         string toState2,
-                        Func<BinaryChoice> transitionChoice,
-                        string message = "Binary")
+                        Func<Tuple<string, string>, string> choiceFunction,
+                        string message)
         {
-            var transition = new BinaryTransition(fromState,
-                                                  input,
-                                                  toState1,
-                                                  toState2,
-                                                  transitionChoice,
-                                                  message);
+            var transition = new Transition<Tuple<string, string>>(fromState,
+                                                                   input,
+                                                                   new Tuple<string, string>(toState1, toState2),
+                                                                   choiceFunction,
+                                                                   message);
+            this.Set(transition);
+        }
+
+        public void Set(string fromState,
+                        string input,
+                        string toState1,
+                        string toState2,
+                        string toState3,
+                        Func<Tuple<string, string, string>, string> choiceFunction,
+                        string message)
+        {
+            var transition = new Transition<Tuple<string, string, string>>(fromState,
+                                                                           input,
+                                                                           new Tuple<string, string, string>(toState1,
+                                                                                                             toState2,
+                                                                                                             toState3),
+                                                                           choiceFunction,
+                                                                           message);
+            this.Set(transition);
+        }
+
+        public void Set(string fromState,
+                        string input,
+                        string toState1,
+                        string toState2,
+                        string toState3,
+                        string toState4,
+                        Func<Tuple<string, string, string, string>, string> choiceFunction,
+                        string message)
+        {
+            var transition = new Transition<Tuple<string, string, string, string>>(fromState,
+                                                                                   input,
+                                                                                   new Tuple<string, string, string, string>(toState1,
+                                                                                                                             toState2,
+                                                                                                                             toState3,
+                                                                                                                             toState4),
+                                                                                   choiceFunction,
+                                                                                   message);
             this.Set(transition);
         }
     }

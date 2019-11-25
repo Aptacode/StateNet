@@ -14,9 +14,7 @@ namespace Aptacode.StateNet.Exceptions
             Input = input;
         }
 
-        public InvalidChoiceException(string message, Exception innerException) : base(message,
-                                                                                                  innerException)
-        { }
+        public InvalidChoiceException(string message, Exception innerException) : base(message, innerException) { }
 
         public string Input { get; set; }
 

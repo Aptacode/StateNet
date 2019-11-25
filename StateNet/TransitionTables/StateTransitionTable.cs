@@ -6,9 +6,7 @@ namespace Aptacode.StateNet.TransitionTables
 {
     public abstract class StateTransitionTable
     {
-        protected readonly ConcurrentDictionary<string, ConcurrentDictionary<string, Transition>> _transitions;
-        public InputCollection Inputs { get; }
-        public StateCollection States { get; }
+        protected readonly ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>> _transitions;
 
         protected StateTransitionTable(StateCollection states, InputCollection inputs)
         {
@@ -17,9 +15,9 @@ namespace Aptacode.StateNet.TransitionTables
             _transitions = CreateEmptyTransitionTable();
         }
 
-        private ConcurrentDictionary<string, Transition> CreateEmptyInputDictionary(string state)
+        private ConcurrentDictionary<string, BaseTransition> CreateEmptyInputDictionary(string state)
         {
-            var stateDictionary = new ConcurrentDictionary<string, Transition>();
+            var stateDictionary = new ConcurrentDictionary<string, BaseTransition>();
 
             foreach(var input in Inputs)
             {
@@ -29,9 +27,9 @@ namespace Aptacode.StateNet.TransitionTables
             return stateDictionary;
         }
 
-        private ConcurrentDictionary<string, ConcurrentDictionary<string, Transition>> CreateEmptyTransitionTable()
+        private ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>> CreateEmptyTransitionTable()
         {
-            var transitionDictionary = new ConcurrentDictionary<string, ConcurrentDictionary<string, Transition>>();
+            var transitionDictionary = new ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>>();
 
             foreach(var state in States)
             {
@@ -45,12 +43,12 @@ namespace Aptacode.StateNet.TransitionTables
         /// Remove the transition setting the transition at its State and Input to null
         /// </summary>
         /// <param name="transition"></param>
-        public bool Clear(Transition oldTransition)
+        public bool Clear(BaseTransition oldTransition)
         {
-            if(_transitions.TryGetValue(oldTransition.State, out var inputDictionary))
+            if(_transitions.TryGetValue(oldTransition.Origin, out var inputDictionary))
             {
                 if(inputDictionary.TryUpdate(oldTransition.Input,
-                                             new InvalidTransition(oldTransition.State,
+                                             new InvalidTransition(oldTransition.Origin,
                                                                    oldTransition.Input,
                                                                    "Undefined"),
                                              oldTransition))
@@ -68,9 +66,9 @@ namespace Aptacode.StateNet.TransitionTables
         /// <param name="state"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public Transition Get(string state, string input)
+        public BaseTransition Get(string state, string input)
         {
-            Transition transition = null;
+            BaseTransition transition = null;
             if(_transitions.TryGetValue(state, out var inputDictionary))
             {
                 inputDictionary.TryGetValue(input, out transition);
@@ -83,14 +81,14 @@ namespace Aptacode.StateNet.TransitionTables
         /// Define a transition
         /// </summary>
         /// <param name="transition"></param>
-        public bool Set(Transition newTransition)
+        public bool Set(BaseTransition newTransition)
         {
             if(newTransition == null)
             {
                 return false;
             }
 
-            if(_transitions.TryGetValue(newTransition.State, out var inputDictionary))
+            if(_transitions.TryGetValue(newTransition.Origin, out var inputDictionary))
             {
                 inputDictionary.TryGetValue(newTransition.Input, out var oldTransition);
                 if(inputDictionary.TryUpdate(newTransition.Input, newTransition, oldTransition))
@@ -100,5 +98,9 @@ namespace Aptacode.StateNet.TransitionTables
             }
             return false;
         }
+
+        public InputCollection Inputs { get; }
+
+        public StateCollection States { get; }
     }
 }

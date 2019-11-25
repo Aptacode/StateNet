@@ -13,11 +13,11 @@ namespace Aptacode.StateNet
     public class StateMachine : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private readonly Dictionary<string, List<Action>> _callbackDictionary;
         private bool _isRunning;
         private readonly StateTransitionTable _stateTransitionTable;
         private readonly ConcurrentQueue<string> inputQueue;
-
-        private readonly Dictionary<string, List<Action>> _callbackDictionary;
 
         /// <summary>
         /// Governs the transitions between states based on the inputs it receives
@@ -35,23 +35,13 @@ namespace Aptacode.StateNet
 
         public event EventHandler<StateTransitionArgs> OnTransition;
 
-        private ValidTransition GetValidTransition(string state, string input)
-        {
-            if(_stateTransitionTable.Get(state, input) is ValidTransition validTransition)
-            {
-                return validTransition;
-            }
-
-            throw new InvalidTransitionException(State, input);
-        }
-
         private void NextTransition()
         {
             if(inputQueue.TryDequeue(out var input))
             {
                 try
                 {
-                    var transition = GetValidTransition(State, input);
+                    var transition = _stateTransitionTable.Get(State, input);
                     var nextState = transition.Apply();
                     LastInput = input;
                     UpdateState(nextState);
@@ -92,17 +82,17 @@ namespace Aptacode.StateNet
         /// Set a transition to 'Undefined'
         /// </summary>
         /// <param name="transition"></param>
-        public void Clear(Transition transition) => _stateTransitionTable.Clear(transition) ;
+        public void Clear(BaseTransition transition) => _stateTransitionTable.Clear(transition) ;
 
         /// <summary>
         /// Define a new transition
         /// </summary>
         /// <param name="transition"></param>
-        public void Define(Transition transition)
+        public void Define(BaseTransition transition)
         {
             if(!_stateTransitionTable.Set(transition))
             {
-                throw new InvalidTransitionException(transition.State, transition.Input);
+                throw new InvalidTransitionException(transition.Origin, transition.Input);
             }
         }
 
@@ -112,7 +102,7 @@ namespace Aptacode.StateNet
         {
             _isRunning = true;
 
-            while (_isRunning)
+            while(_isRunning)
             {
                 NextTransition();
                 await Task.Delay(1).ConfigureAwait(false);
@@ -120,16 +110,6 @@ namespace Aptacode.StateNet
         }) ;
 
         public void Stop() => _isRunning = false ;
-
-        /// <summary>
-        /// Returns the last input
-        /// </summary>
-        public string LastInput { get; private set; }
-
-        /// <summary>
-        /// Returns the current State
-        /// </summary>
-        public string State { get; private set; }
 
         public void Subscribe(string state, Action callback)
         {
@@ -144,10 +124,20 @@ namespace Aptacode.StateNet
 
         public void UnSubscribe(string state, Action callback)
         {
-            if (_callbackDictionary.TryGetValue(state, out var listeners))
+            if(_callbackDictionary.TryGetValue(state, out var listeners))
             {
                 listeners.Remove(callback);
             }
         }
+
+        /// <summary>
+        /// Returns the last input
+        /// </summary>
+        public string LastInput { get; private set; }
+
+        /// <summary>
+        /// Returns the current State
+        /// </summary>
+        public string State { get; private set; }
     }
 }

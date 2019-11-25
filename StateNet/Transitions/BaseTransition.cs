@@ -1,10 +1,13 @@
-﻿namespace Aptacode.StateNet.Transitions
+﻿using System;
+using System.Linq;
+
+namespace Aptacode.StateNet.Transitions
 {
-    public abstract class Transition
+    public abstract class BaseTransition
     {
-        protected Transition(string state, string input, string message)
+        protected BaseTransition(string origin, string input, string message)
         {
-            State = state;
+            Origin = origin;
             Input = input;
             Message = message;
         }
@@ -26,6 +29,6 @@
         /// <summary>
         /// The starting state which the transition is relating to
         /// </summary>
-        public string State { get; }
+        public string Origin { get; }
     }
 }

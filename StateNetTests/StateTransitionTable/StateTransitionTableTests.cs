@@ -13,7 +13,11 @@ namespace Aptacode.StateNet.Tests.StateTransitionTable
         [Test]
         public void ClearTransition()
         {
-            _stateTransitionTable.Set(States.Playing.ToString(), Actions.Pause.ToString(), States.Paused.ToString(), "Pause Playback");
+            _stateTransitionTable.Set(new Transition<Tuple<string>>(States.Playing.ToString(),
+                                                                    Actions.Pause.ToString(),
+                                                                    new Tuple<string>(States.Paused.ToString()),
+                                                                    (states) => states.Item1,
+                                                                    "Pause Playback"));
             var transition = _stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString());
             _stateTransitionTable.Clear(transition);
             Assert.That(_stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString()) is InvalidTransition);
@@ -34,8 +38,16 @@ namespace Aptacode.StateNet.Tests.StateTransitionTable
         [Test]
         public void OverwriteTransition()
         {
-            _stateTransitionTable.Set(States.Playing.ToString(), Actions.Pause.ToString(), States.Paused.ToString(), "Pause Playback");
-            _stateTransitionTable.Set(States.Playing.ToString(), Actions.Pause.ToString(), States.End.ToString(), "Stop Playback");
+            _stateTransitionTable.Set(new Transition<Tuple<string>>(States.Playing.ToString(),
+                                                                    Actions.Pause.ToString(),
+                                                                    new Tuple<string>(States.Paused.ToString()),
+                                                                    (states) => states.Item1,
+                                                                    "Pause Playback"));
+            _stateTransitionTable.Set(new Transition<Tuple<string>>(States.Playing.ToString(),
+                                                                    Actions.Pause.ToString(),
+                                                                    new Tuple<string>(States.End.ToString()),
+                                                                    (states) => states.Item1,
+                                                                    "Stop Playback"));
 
             var transition = _stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString());
             _stateTransitionTable.Clear(transition);
@@ -45,7 +57,11 @@ namespace Aptacode.StateNet.Tests.StateTransitionTable
         [Test]
         public void SetTransition()
         {
-            _stateTransitionTable.Set(States.Playing.ToString(), Actions.Pause.ToString(), States.Paused.ToString(), "Pause Playback");
+            _stateTransitionTable.Set(new Transition<Tuple<string>>(States.Playing.ToString(),
+                                                                    Actions.Pause.ToString(),
+                                                                    new Tuple<string>(States.Paused.ToString()),
+                                                                    (states) => states.Item1,
+                                                                    "Pause Playback"));
             var transition = _stateTransitionTable.Get(States.Playing.ToString(), Actions.Pause.ToString());
             Assert.NotNull(transition);
         }

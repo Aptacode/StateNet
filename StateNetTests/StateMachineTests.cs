@@ -1,4 +1,3 @@
-using Aptacode.StateNet.TransitionResults;
 using Aptacode.StateNet.TransitionTables;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -36,7 +35,7 @@ namespace Aptacode.StateNet.Tests
         [Test]
         public void InitialState() => Assert.AreEqual(States.Begin.ToString(),
                                                       _stateMachine.State,
-                                                      "Initial state should be 'Begin'") ;
+                                                      "Initial state should be 'Begin'");
 
         [Test]
         public void InvalidTransition()
@@ -77,7 +76,7 @@ namespace Aptacode.StateNet.Tests
                 }
             };
 
-            var task1 = new TaskFactory().StartNew(async() =>
+            var task1 = new TaskFactory().StartNew(() =>
             {
                 for(var i = 0; i < 10; i++)
                 {
@@ -85,7 +84,7 @@ namespace Aptacode.StateNet.Tests
                 }
             });
 
-            var task2 = new TaskFactory().StartNew(async() =>
+            var task2 = new TaskFactory().StartNew(() =>
             {
                 for(var i = 0; i < 10; i++)
                 {
@@ -111,44 +110,46 @@ namespace Aptacode.StateNet.Tests
                                     Inputs.Play,
                                     States.Playing,
                                     States.End,
-                                    () =>
+                                    (states) =>
             {
                 if(_canPlay)
                 {
-                    return BinaryChoice.Left;
+                    return states.Item1;
                 }
 
-                return BinaryChoice.Right;
-            }, "");
+                return states.Item2;
+            },
+                                    string.Empty);
 
-            enumTransitionTable.Set(States.Begin, Inputs.Pause, "");
-            enumTransitionTable.Set(States.Begin, Inputs.Stop, States.End, "");
+            enumTransitionTable.Set(States.Begin, Inputs.Pause, string.Empty);
+            enumTransitionTable.Set(States.Begin, Inputs.Stop, States.End, string.Empty);
 
-            enumTransitionTable.Set(States.Playing, Inputs.Play, States.Playing, "");
-            enumTransitionTable.Set(States.Playing, Inputs.Pause, States.Paused, "");
-            enumTransitionTable.Set(States.Playing, Inputs.Stop, States.End, "");
+            enumTransitionTable.Set(States.Playing, Inputs.Play, States.Playing, string.Empty);
+            enumTransitionTable.Set(States.Playing, Inputs.Pause, States.Paused, string.Empty);
+            enumTransitionTable.Set(States.Playing, Inputs.Stop, States.End, string.Empty);
 
             enumTransitionTable.Set(States.Paused,
                                     Inputs.Play,
                                     States.Playing,
                                     States.End,
-                                    () =>
+                                    (states) =>
             {
                 if(_canPlay)
                 {
-                    return BinaryChoice.Left;
+                    return states.Item1;
                 }
 
-                return BinaryChoice.Right;
-            }, "");
+                return states.Item2;
+            },
+                                    string.Empty);
 
 
-            enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused, "");
-            enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End, "");
+            enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused, string.Empty);
+            enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End, string.Empty);
 
-            enumTransitionTable.Set(States.End, Inputs.Play, "");
-            enumTransitionTable.Set(States.End, Inputs.Pause, "");
-            enumTransitionTable.Set(States.End, Inputs.Stop, "");
+            enumTransitionTable.Set(States.End, Inputs.Play, string.Empty);
+            enumTransitionTable.Set(States.End, Inputs.Pause, string.Empty);
+            enumTransitionTable.Set(States.End, Inputs.Stop, string.Empty);
 
             _stateMachine = new StateMachine(enumTransitionTable, States.Begin.ToString());
             _stateMachine.Start();
