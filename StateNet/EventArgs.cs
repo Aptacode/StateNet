@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
+using System;
 
 namespace Aptacode.StateNet
 {
     public class StateTransitionArgs : EventArgs
     {
-        public StateTransitionArgs(string oldState, string action, string newState)
+        public StateTransitionArgs(State oldState, Input action, State newState)
         {
             OldState = oldState;
             Input = action;
@@ -13,10 +15,10 @@ namespace Aptacode.StateNet
 
         public override string ToString() => $"{OldState}({Input})->{NewState}" ;
 
-        public string Input { get; set; }
+        public Input Input { get; set; }
 
-        public string NewState { get; set; }
+        public State NewState { get; set; }
 
-        public string OldState { get; set; }
+        public State OldState { get; set; }
     }
 }

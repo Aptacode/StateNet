@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
+using System;
 
 namespace Aptacode.StateNet
 {
     public class InvalidStateTransitionArgs : EventArgs
     {
-        public InvalidStateTransitionArgs(string state, string input)
+        public InvalidStateTransitionArgs(State state, Input input)
         {
             State = state;
             Input = input;
@@ -13,8 +15,8 @@ namespace Aptacode.StateNet
 
         public override string ToString() => $"{State}({Input})->Invalid";
 
-        public string Input { get; set; }
+        public Input Input { get; set; }
 
-        public string State { get; set; }
+        public State State { get; set; }
     }
 }

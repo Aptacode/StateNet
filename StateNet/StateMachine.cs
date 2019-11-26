@@ -1,4 +1,6 @@
 ﻿using Aptacode.StateNet.Exceptions;
+using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
 using Aptacode.StateNet.Transitions;
 using Aptacode.StateNet.TransitionTables;
 using NLog;
@@ -14,21 +16,19 @@ namespace Aptacode.StateNet
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly Dictionary<string, List<Action>> _callbackDictionary;
+        private readonly Dictionary<State, List<Action>> _callbackDictionary;
         private bool _isRunning;
         private readonly StateTransitionTable _stateTransitionTable;
-        private readonly ConcurrentQueue<string> inputQueue;
+        private readonly ConcurrentQueue<Input> inputQueue;
 
         /// <summary>
         /// Governs the transitions between states based on the inputs it receives
         /// </summary>
-        public StateMachine(StateTransitionTable stateTransitionTable, string initialState)
+        public StateMachine(StateTransitionTable stateTransitionTable)
         {
             _stateTransitionTable = stateTransitionTable;
-            inputQueue = new ConcurrentQueue<string>();
-            SetInitialState(initialState);
-
-            _callbackDictionary = new Dictionary<string, List<Action>>();
+            inputQueue = new ConcurrentQueue<Input>();
+            _callbackDictionary = new Dictionary<State, List<Action>>();
         }
 
         public event EventHandler<InvalidStateTransitionArgs> OnInvalidTransition;
@@ -53,7 +53,7 @@ namespace Aptacode.StateNet
             }
         }
 
-        private void SetInitialState(string initialState)
+        private void SetInitialState(State initialState)
         {
             if(_stateTransitionTable.States.Contains(initialState))
             {
@@ -64,7 +64,7 @@ namespace Aptacode.StateNet
             }
         }
 
-        private void UpdateState(string nextState)
+        private void UpdateState(State nextState)
         {
             var oldState = State;
             State = nextState;
@@ -76,7 +76,7 @@ namespace Aptacode.StateNet
         /// Apply the transition which relates to the given input on the current state
         /// </summary>
         /// <param name="input"></param>
-        public void Apply(string input) => inputQueue.Enqueue(input) ;
+        public void Apply(Input input) => inputQueue.Enqueue(input) ;
 
         /// <summary>
         /// Set a transition to 'Undefined'
@@ -98,20 +98,25 @@ namespace Aptacode.StateNet
 
         public void Dispose() => Stop() ;
 
-        public void Start() => new TaskFactory().StartNew(async() =>
+        public void Start(State initialState)
         {
-            _isRunning = true;
+            SetInitialState(initialState);
 
-            while(_isRunning)
+            new TaskFactory().StartNew(async() =>
             {
-                NextTransition();
-                await Task.Delay(1).ConfigureAwait(false);
-            }
-        }) ;
+                _isRunning = true;
+
+                while(_isRunning)
+                {
+                    NextTransition();
+                    await Task.Delay(1).ConfigureAwait(false);
+                }
+            });
+        }
 
         public void Stop() => _isRunning = false ;
 
-        public void Subscribe(string state, Action callback)
+        public void Subscribe(State state, Action callback)
         {
             if(!_callbackDictionary.TryGetValue(state, out var listeners))
             {
@@ -122,7 +127,7 @@ namespace Aptacode.StateNet
             listeners.Add(callback);
         }
 
-        public void UnSubscribe(string state, Action callback)
+        public void UnSubscribe(State state, Action callback)
         {
             if(_callbackDictionary.TryGetValue(state, out var listeners))
             {
@@ -133,11 +138,11 @@ namespace Aptacode.StateNet
         /// <summary>
         /// Returns the last input
         /// </summary>
-        public string LastInput { get; private set; }
+        public Input LastInput { get; private set; }
 
         /// <summary>
         /// Returns the current State
         /// </summary>
-        public string State { get; private set; }
+        public State State { get; private set; }
     }
 }

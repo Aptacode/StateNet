@@ -1,3 +1,5 @@
+using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
 using Aptacode.StateNet.TransitionTables;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -10,22 +12,25 @@ namespace Aptacode.StateNet.Tests
     {
         private bool _canPlay;
 
+        private EnumInputCollection<Inputs> _inputCollection;
+        private EnumStateCollection<States> _stateCollection;
         private StateMachine _stateMachine;
+        private StateTransitionTable _stateTransitionTable;
 
         [Test]
         public void BinaryTransition()
         {
-            var actualStateLog = new List<string>();
-            var expectedStateLog = new List<string> { "Playing", "Paused", "End" };
+            var actualStateLog = new List<State>();
+            var expectedStateLog = new List<State> { new State("Playing"), new State("Paused"), new State("End") };
 
             _stateMachine.OnTransition += (s, e) =>
             {
                 actualStateLog.Add(e.NewState);
             };
 
-            _stateMachine.Apply(Inputs.Play.ToString());
-            _stateMachine.Apply(Inputs.Pause.ToString());
-            _stateMachine.Apply(Inputs.Stop.ToString());
+            _stateMachine.Apply(_inputCollection[Inputs.Play]);
+            _stateMachine.Apply(_inputCollection[Inputs.Pause]);
+            _stateMachine.Apply(_inputCollection[Inputs.Stop]);
 
             Assert.That(() => actualStateLog,
                         Is.EquivalentTo(expectedStateLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
@@ -33,30 +38,33 @@ namespace Aptacode.StateNet.Tests
 
 
         [Test]
-        public void InitialState() => Assert.AreEqual(States.Begin.ToString(),
-                                                      _stateMachine.State,
-                                                      "Initial state should be 'Begin'");
+        public void InitialState() => Assert.That(() => _stateCollection[States.Begin],
+                                                  Is.EqualTo(_stateMachine.State).After(100).MilliSeconds.PollEvery(1)
+            .MilliSeconds,
+                                                  "Initial state should be 'Begin'") ;
+
 
         [Test]
         public void InvalidTransition()
         {
-            var expectedInvalidState = string.Empty;
-            var expectedInvalidInput = string.Empty;
+            var expectedInvalidState = _stateCollection[States.End];
+            var expectedInvalidInput = _inputCollection[Inputs.Play];
 
-            var actualInvalidState = string.Empty;
-            var actualInvalidInput = string.Empty;
+            var actualInvalidState = _stateCollection[States.Begin];
+            var actualInvalidInput = _inputCollection[Inputs.Play];
+
             _stateMachine.OnInvalidTransition += (s, e) =>
             {
                 actualInvalidState = e.State;
                 actualInvalidInput = e.Input;
             };
 
-            _stateMachine.Apply(Inputs.Play.ToString());
-            _stateMachine.Apply(Inputs.Stop.ToString());
-            _stateMachine.Apply(Inputs.Play.ToString());
+            _stateMachine.Apply(_inputCollection[Inputs.Play]);
+            _stateMachine.Apply(_inputCollection[Inputs.Stop]);
+            _stateMachine.Apply(_inputCollection[Inputs.Play]);
 
-            Assert.That(() => (expectedInvalidState, expectedInvalidInput),
-                        Is.EqualTo((actualInvalidState, actualInvalidInput)).After(100).MilliSeconds.PollEvery(1)
+            Assert.That(() => (actualInvalidState, actualInvalidInput),
+                        Is.EqualTo((expectedInvalidState, expectedInvalidInput)).After(100).MilliSeconds.PollEvery(1)
                 .MilliSeconds);
         }
 
@@ -67,10 +75,10 @@ namespace Aptacode.StateNet.Tests
             var pauseCount = 0;
             _stateMachine.OnTransition += (s, e) =>
             {
-                if(e.Input == "Play")
+                if(e.Input.Name == "Play")
                 {
                     playCount++;
-                } else if(e.Input == "Pause")
+                } else if(e.Input.Name == "Pause")
                 {
                     pauseCount++;
                 }
@@ -80,7 +88,7 @@ namespace Aptacode.StateNet.Tests
             {
                 for(var i = 0; i < 10; i++)
                 {
-                    _stateMachine.Apply(Inputs.Play.ToString());
+                    _stateMachine.Apply(_inputCollection[Inputs.Play]);
                 }
             });
 
@@ -88,7 +96,7 @@ namespace Aptacode.StateNet.Tests
             {
                 for(var i = 0; i < 10; i++)
                 {
-                    _stateMachine.Apply(Inputs.Pause.ToString());
+                    _stateMachine.Apply(_inputCollection[Inputs.Pause]);
                 }
             });
 
@@ -104,13 +112,16 @@ namespace Aptacode.StateNet.Tests
         public void Setup()
         {
             _canPlay = true;
-            var enumTransitionTable = new EnumStateTransitionTable<States, Inputs>();
+            _inputCollection = new EnumInputCollection<Inputs>();
+            _stateCollection = new EnumStateCollection<States>();
+            _stateTransitionTable = new StateTransitionTable(_stateCollection, _inputCollection);
 
-            enumTransitionTable.Set(States.Begin,
-                                    Inputs.Play,
-                                    States.Playing,
-                                    States.End,
-                                    (states) =>
+            _stateTransitionTable.Set(_stateCollection[States.Begin],
+                                      _inputCollection[Inputs.Play],
+                                      _stateCollection[States.Playing],
+                                      _stateCollection[States.End],
+
+                                      (states) =>
             {
                 if(_canPlay)
                 {
@@ -119,20 +130,32 @@ namespace Aptacode.StateNet.Tests
 
                 return states.Item2;
             },
-                                    string.Empty);
+                                      string.Empty);
 
-            enumTransitionTable.Set(States.Begin, Inputs.Pause, string.Empty);
-            enumTransitionTable.Set(States.Begin, Inputs.Stop, States.End, string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Begin], _inputCollection[Inputs.Pause], string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Begin],
+                                      _inputCollection[Inputs.Stop],
+                                      _stateCollection[States.End],
+                                      string.Empty);
 
-            enumTransitionTable.Set(States.Playing, Inputs.Play, States.Playing, string.Empty);
-            enumTransitionTable.Set(States.Playing, Inputs.Pause, States.Paused, string.Empty);
-            enumTransitionTable.Set(States.Playing, Inputs.Stop, States.End, string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Playing],
+                                      _inputCollection[Inputs.Play],
+                                      _stateCollection[States.Playing],
+                                      string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Playing],
+                                      _inputCollection[Inputs.Pause],
+                                      _stateCollection[States.Paused],
+                                      string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Playing],
+                                      _inputCollection[Inputs.Stop],
+                                      _stateCollection[States.End],
+                                      string.Empty);
 
-            enumTransitionTable.Set(States.Paused,
-                                    Inputs.Play,
-                                    States.Playing,
-                                    States.End,
-                                    (states) =>
+            _stateTransitionTable.Set(_stateCollection[States.Paused],
+                                      _inputCollection[Inputs.Play],
+                                      _stateCollection[States.Playing],
+                                      _stateCollection[States.End],
+                                      (states) =>
             {
                 if(_canPlay)
                 {
@@ -141,18 +164,25 @@ namespace Aptacode.StateNet.Tests
 
                 return states.Item2;
             },
-                                    string.Empty);
+                                      string.Empty);
 
 
-            enumTransitionTable.Set(States.Paused, Inputs.Pause, States.Paused, string.Empty);
-            enumTransitionTable.Set(States.Paused, Inputs.Stop, States.End, string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Paused],
+                                      _inputCollection[Inputs.Pause],
+                                      _stateCollection[States.Paused],
+                                      string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.Paused],
+                                      _inputCollection[Inputs.Stop],
+                                      _stateCollection[States.End],
+                                      string.Empty);
 
-            enumTransitionTable.Set(States.End, Inputs.Play, string.Empty);
-            enumTransitionTable.Set(States.End, Inputs.Pause, string.Empty);
-            enumTransitionTable.Set(States.End, Inputs.Stop, string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.End], _inputCollection[Inputs.Play], string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.End], _inputCollection[Inputs.Pause], string.Empty);
+            _stateTransitionTable.Set(_stateCollection[States.End], _inputCollection[Inputs.Stop], string.Empty);
 
-            _stateMachine = new StateMachine(enumTransitionTable, States.Begin.ToString());
-            _stateMachine.Start();
+            _stateMachine = new StateMachine(_stateTransitionTable);
+
+            _stateMachine.Start(_stateCollection[States.Begin]);
         }
 
         [Test]
@@ -166,7 +196,7 @@ namespace Aptacode.StateNet.Tests
                 Assert.AreEqual(States.Playing.ToString(), _stateMachine.State, "StateMachine state should be updated");
             };
 
-            _stateMachine.Apply(Inputs.Play.ToString());
+            _stateMachine.Apply(_inputCollection[Inputs.Play]);
         }
 
         public enum Inputs

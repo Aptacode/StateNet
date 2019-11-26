@@ -1,23 +1,26 @@
-﻿using Aptacode.StateNet.Transitions;
+﻿using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
+using Aptacode.StateNet.Transitions;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 
 namespace Aptacode.StateNet.TransitionTables
 {
-    public abstract class StateTransitionTable
+    public class StateTransitionTable
     {
-        protected readonly ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>> _transitions;
+        protected readonly ConcurrentDictionary<State, ConcurrentDictionary<Input, BaseTransition>> _transitions;
 
-        protected StateTransitionTable(StateCollection states, InputCollection inputs)
+        public StateTransitionTable(StateCollection states, InputCollection inputs)
         {
             States = states;
             Inputs = inputs;
             _transitions = CreateEmptyTransitionTable();
         }
 
-        private ConcurrentDictionary<string, BaseTransition> CreateEmptyInputDictionary(string state)
+        private ConcurrentDictionary<Input, BaseTransition> CreateEmptyInputDictionary(State state)
         {
-            var stateDictionary = new ConcurrentDictionary<string, BaseTransition>();
+            var stateDictionary = new ConcurrentDictionary<Input, BaseTransition>();
 
             foreach(var input in Inputs)
             {
@@ -27,9 +30,9 @@ namespace Aptacode.StateNet.TransitionTables
             return stateDictionary;
         }
 
-        private ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>> CreateEmptyTransitionTable()
+        private ConcurrentDictionary<State, ConcurrentDictionary<Input, BaseTransition>> CreateEmptyTransitionTable()
         {
-            var transitionDictionary = new ConcurrentDictionary<string, ConcurrentDictionary<string, BaseTransition>>();
+            var transitionDictionary = new ConcurrentDictionary<State, ConcurrentDictionary<Input, BaseTransition>>();
 
             foreach(var state in States)
             {
@@ -66,7 +69,7 @@ namespace Aptacode.StateNet.TransitionTables
         /// <param name="state"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public BaseTransition Get(string state, string input)
+        public BaseTransition Get(State state, Input input)
         {
             BaseTransition transition = null;
             if(_transitions.TryGetValue(state, out var inputDictionary))
@@ -97,6 +100,71 @@ namespace Aptacode.StateNet.TransitionTables
                 }
             }
             return false;
+        }
+
+        public void Set(State fromState, Input input, string message)
+        {
+            var transition = new InvalidTransition(fromState, input, message);
+            this.Set(transition);
+        }
+
+        public void Set(State fromState, Input input, State toState, string message)
+        {
+            var transition = new Transition(fromState, input, toState, message);
+            this.Set(transition);
+        }
+
+        public void Set(State fromState,
+                        Input input,
+                        State toState1,
+                        State toState2,
+                        Func<(State, State), State> choiceFunction,
+                        string message)
+        {
+            var transition = new Transition<(State, State)>(fromState,
+                                                            input,
+                                                            (toState1, toState2),
+                                                            choiceFunction,
+                                                            message);
+            this.Set(transition);
+        }
+
+        public void Set(State fromState,
+                        Input input,
+                        State toState1,
+                        State toState2,
+                        State toState3,
+                        Func<(State, State, State), State> choiceFunction,
+                        string message)
+        {
+            var transition = new Transition<(State, State, State)>(fromState,
+                                                                   input,
+                                                                   (toState1,
+                                                                                                             toState2,
+                                                                                                             toState3),
+                                                                   choiceFunction,
+                                                                   message);
+            this.Set(transition);
+        }
+
+        public void Set(State fromState,
+                        Input input,
+                        State toState1,
+                        State toState2,
+                        State toState3,
+                        State toState4,
+                        Func<(State, State, State, State), State> choiceFunction,
+                        string message)
+        {
+            var transition = new Transition<(State, State, State, State)>(fromState,
+                                                                          input,
+                                                                          (toState1,
+                                                                                    toState2,
+                                                                                    toState3,
+                                                                                    toState4),
+                                                                          choiceFunction,
+                                                                          message);
+            this.Set(transition);
         }
 
         public InputCollection Inputs { get; }

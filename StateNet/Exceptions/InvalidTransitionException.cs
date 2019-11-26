@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Aptacode.StateNet.Inputs;
+using Aptacode.StateNet.States;
+using System;
 
 namespace Aptacode.StateNet.Exceptions
 {
@@ -8,7 +10,7 @@ namespace Aptacode.StateNet.Exceptions
 
         public InvalidTransitionException(string message) : base(message) { }
 
-        public InvalidTransitionException(string state, string input)
+        public InvalidTransitionException(State state, Input input)
         {
             State = state;
             Input = input;
@@ -16,8 +18,8 @@ namespace Aptacode.StateNet.Exceptions
 
         public InvalidTransitionException(string message, Exception innerException) : base(message, innerException) { }
 
-        public string Input { get; set; }
+        public Input Input { get; set; }
 
-        public string State { get; set; }
+        public State State { get; set; }
     }
 }

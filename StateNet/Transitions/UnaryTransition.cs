@@ -1,11 +1,10 @@
-﻿using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.Inputs;
+﻿using Aptacode.StateNet.Inputs;
 using Aptacode.StateNet.States;
 using System;
 
 namespace Aptacode.StateNet.Transitions
 {
-    public class InvalidTransition : BaseTransition
+    public class Transition : BaseTransition
     {
         /// <summary>
         /// A transition which CAN NOT exist
@@ -13,14 +12,17 @@ namespace Aptacode.StateNet.Transitions
         /// <param name="state"></param>
         /// <param name="input"></param>
         /// <param name="message"></param>
-        public InvalidTransition(State state, Input input, string message) : base(state, input, message) { }
+        public Transition(State state, Input input, State destination, string message) : base(state, input, message) => Destination =
+            destination;
 
         /// <summary>
         /// Throws an exception as an invalidTransition cannot be applied.
         /// </summary>
         /// <returns></returns>
-        public override State Apply() => throw new InvalidTransitionException(Origin, Input);
+        public override State Apply() => Destination;
 
-        public override string ToString() => $"Invalid Transition: {Origin}({Input})";
+        public override string ToString() => $"Unary Transition: {Origin}({Input})->{{ {Destination} }}";
+
+        public State Destination { get; }
     }
 }
