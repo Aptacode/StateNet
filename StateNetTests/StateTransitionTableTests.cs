@@ -1,7 +1,6 @@
 using Aptacode.StateNet.Inputs;
 using Aptacode.StateNet.States;
 using Aptacode.StateNet.Transitions;
-using Aptacode.StateNet.TransitionTables;
 using NUnit.Framework;
 using System;
 
@@ -11,7 +10,7 @@ namespace Aptacode.StateNet.Tests
     {
         private EnumInputCollection<Inputs> _inputCollection;
         private EnumStateCollection<States> _stateCollection;
-        private StateTransitionTable _stateTransitionTable;
+        private TransitionTable _stateTransitionTable;
 
 
         [Test]
@@ -73,7 +72,7 @@ namespace Aptacode.StateNet.Tests
             _inputCollection = new EnumInputCollection<Inputs>();
             _stateCollection = new EnumStateCollection<States>();
 
-            _stateTransitionTable = new StateTransitionTable(_stateCollection, _inputCollection);
+            _stateTransitionTable = new TransitionTable(_stateCollection, _inputCollection);
         }
 
         public enum Inputs

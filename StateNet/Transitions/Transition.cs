@@ -36,6 +36,7 @@ namespace Aptacode.StateNet.Transitions
             .Select(property => new State(property.GetValue(Destinations).ToString()))
             .ToList();
 
+
         public override State Apply()
         {
             var choice = _choiceFunction?.Invoke(Destinations);

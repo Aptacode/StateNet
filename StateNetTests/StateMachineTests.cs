@@ -1,6 +1,5 @@
 using Aptacode.StateNet.Inputs;
 using Aptacode.StateNet.States;
-using Aptacode.StateNet.TransitionTables;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace Aptacode.StateNet.Tests
         private EnumInputCollection<Inputs> _inputCollection;
         private EnumStateCollection<States> _stateCollection;
         private StateMachine _stateMachine;
-        private StateTransitionTable _stateTransitionTable;
+        private TransitionTable _stateTransitionTable;
 
         [Test]
         public void BinaryTransition()
@@ -114,7 +113,7 @@ namespace Aptacode.StateNet.Tests
             _canPlay = true;
             _inputCollection = new EnumInputCollection<Inputs>();
             _stateCollection = new EnumStateCollection<States>();
-            _stateTransitionTable = new StateTransitionTable(_stateCollection, _inputCollection);
+            _stateTransitionTable = new TransitionTable(_stateCollection, _inputCollection);
 
             _stateTransitionTable.Set(_stateCollection[States.Begin],
                                       _inputCollection[Inputs.Play],
@@ -131,6 +130,17 @@ namespace Aptacode.StateNet.Tests
                 return states.Item2;
             },
                                       string.Empty);
+
+            //_stateTransitionTable.Set(_stateCollection[States.Begin],
+            //              _inputCollection[Inputs.Play],
+            //              _stateCollection[States.Playing],
+            //              _stateCollection[States.End],
+            //              (states, weights) =>
+            //              {
+            //                  weights[states.Item1] = 2;
+            //                  weights[states.Item2] = 1;
+            //              },
+            //              string.Empty);
 
             _stateTransitionTable.Set(_stateCollection[States.Begin], _inputCollection[Inputs.Pause], string.Empty);
             _stateTransitionTable.Set(_stateCollection[States.Begin],

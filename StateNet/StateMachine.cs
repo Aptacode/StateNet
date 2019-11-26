@@ -2,7 +2,6 @@
 using Aptacode.StateNet.Inputs;
 using Aptacode.StateNet.States;
 using Aptacode.StateNet.Transitions;
-using Aptacode.StateNet.TransitionTables;
 using NLog;
 using System;
 using System.Collections.Concurrent;
@@ -18,13 +17,13 @@ namespace Aptacode.StateNet
 
         private readonly Dictionary<State, List<Action>> _callbackDictionary;
         private bool _isRunning;
-        private readonly StateTransitionTable _stateTransitionTable;
+        private readonly TransitionTable _stateTransitionTable;
         private readonly ConcurrentQueue<Input> inputQueue;
 
         /// <summary>
         /// Governs the transitions between states based on the inputs it receives
         /// </summary>
-        public StateMachine(StateTransitionTable stateTransitionTable)
+        public StateMachine(TransitionTable stateTransitionTable)
         {
             _stateTransitionTable = stateTransitionTable;
             inputQueue = new ConcurrentQueue<Input>();

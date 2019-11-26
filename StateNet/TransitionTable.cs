@@ -3,15 +3,16 @@ using Aptacode.StateNet.States;
 using Aptacode.StateNet.Transitions;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.TransitionTables
+namespace Aptacode.StateNet
 {
-    public class StateTransitionTable
+    public class TransitionTable
     {
         protected readonly ConcurrentDictionary<State, ConcurrentDictionary<Input, BaseTransition>> _transitions;
 
-        public StateTransitionTable(StateCollection states, InputCollection inputs)
+        public TransitionTable(StateCollection states, InputCollection inputs)
         {
             States = states;
             Inputs = inputs;
@@ -126,6 +127,21 @@ namespace Aptacode.StateNet.TransitionTables
                                                             (toState1, toState2),
                                                             choiceFunction,
                                                             message);
+            this.Set(transition);
+        }
+
+        public void Set(State fromState,
+                        Input input,
+                        State toState1,
+                        State toState2,
+                        Action<(State, State), Dictionary<State, int>> choiceFunction,
+                        string message)
+        {
+            var transition = new ProbabilityTransition<(State, State)>(fromState,
+                                                                       input,
+                                                                       (toState1, toState2),
+                                                                       choiceFunction,
+                                                                       message);
             this.Set(transition);
         }
 
