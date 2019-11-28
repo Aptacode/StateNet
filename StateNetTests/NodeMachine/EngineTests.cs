@@ -9,7 +9,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 {
     public class Tests
     {
-        private Engine _engine;
+        private NodeEngine _engine;
         private BinaryNode B1;
         private EndNode End1;
         private TernaryNode T1;
@@ -26,7 +26,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
             U1.Visits(U2);
             U2.Visits(U1);
 
-            Assert.IsFalse(new Engine(U1).IsValid());
+            Assert.IsFalse(new NodeEngine(U1).IsValid());
         }
 
 
@@ -44,7 +44,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         [Test, MaxTime(200)]
         public void TernaryBinaryDistribution()
         {
-            var engine = new Engine(T1);
+            var engine = new NodeEngine(T1);
 
             var distribution = new TernaryDistribution(1, 1, 1);
 
@@ -70,7 +70,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         [Test, MaxTime(200)]
         public void UnaryTransitionLog()
         {
-            var engine = new Engine(U1);
+            var engine = new NodeEngine(U1);
 
             U1.Visits(U2);
             U2.Visits(End1);
@@ -89,7 +89,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         public void ValidEngine()
         {
             U1.Visits(End1);
-            Assert.IsTrue(new Engine(U1).IsValid());
+            Assert.IsTrue(new NodeEngine(U1).IsValid());
         }
     }
 }

@@ -5,13 +5,11 @@ using System.Linq;
 
 namespace Aptacode.StateNet.NodeMachine
 {
-    public delegate void EngineEvent(Engine sender);
-
-    public class Engine
+    public class NodeEngine
     {
         private List<Node> _visitLog;
 
-        public Engine(Node startNode)
+        public NodeEngine(Node startNode)
         {
             StartNode = startNode;
             _visitLog = new List<Node>();
