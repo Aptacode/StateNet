@@ -1,6 +1,7 @@
-using Aptacode.StateNet.FiniteStateMachine;
-using Aptacode.StateNet.FiniteStateMachine.Inputs;
-using Aptacode.StateNet.FiniteStateMachine.States;
+using Aptacode.StateNet.TableMachine;
+using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
+using Aptacode.StateNet.TableMachine.Tables;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
 
         private EnumInputCollection<Inputs> _inputCollection;
         private EnumStateCollection<States> _stateCollection;
-        private StateMachine _stateMachine;
-        private TransitionTable _stateTransitionTable;
+        private TableEngine _stateMachine;
+        private NonDeterministicTransitionTable _stateTransitionTable;
 
         [Test]
         public void BinaryTransition()
@@ -55,7 +56,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
 
             _stateMachine.OnInvalidTransition += (s, e) =>
             {
-                actualInvalidState = e.State;
+                actualInvalidState = e.OldState;
                 actualInvalidInput = e.Input;
             };
 
@@ -114,7 +115,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
             _canPlay = true;
             _inputCollection = new EnumInputCollection<Inputs>();
             _stateCollection = new EnumStateCollection<States>();
-            _stateTransitionTable = new TransitionTable(_stateCollection, _inputCollection);
+            _stateTransitionTable = new NonDeterministicTransitionTable(_stateCollection, _inputCollection);
 
             _stateTransitionTable.Set(_stateCollection[States.Begin],
                                       _inputCollection[Inputs.Play],
@@ -131,17 +132,6 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
                 return states.Item2;
             },
                                       string.Empty);
-
-            //_stateTransitionTable.Set(_stateCollection[States.Begin],
-            //              _inputCollection[Inputs.Play],
-            //              _stateCollection[States.Playing],
-            //              _stateCollection[States.End],
-            //              (states, weights) =>
-            //              {
-            //                  weights[states.Item1] = 2;
-            //                  weights[states.Item2] = 1;
-            //              },
-            //              string.Empty);
 
             _stateTransitionTable.Set(_stateCollection[States.Begin], _inputCollection[Inputs.Pause], string.Empty);
             _stateTransitionTable.Set(_stateCollection[States.Begin],
@@ -191,7 +181,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
             _stateTransitionTable.Set(_stateCollection[States.End], _inputCollection[Inputs.Pause], string.Empty);
             _stateTransitionTable.Set(_stateCollection[States.End], _inputCollection[Inputs.Stop], string.Empty);
 
-            _stateMachine = new StateMachine(_stateTransitionTable);
+            _stateMachine = new TableEngine(_stateTransitionTable);
 
             _stateMachine.Start(_stateCollection[States.Begin]);
         }

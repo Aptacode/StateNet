@@ -10,34 +10,15 @@ namespace Aptacode.StateNet.Tests.NodeMachine
     public class Tests
     {
         private Engine _engine;
+        private BinaryNode B1;
+        private EndNode End1;
+        private TernaryNode T1;
 
         private UnaryNode U1;
         private UnaryNode U2;
         private UnaryNode U3;
-        private BinaryNode B1;
-        private TernaryNode T1;
-        private EndNode End1;
-
-
-        [SetUp]
-        public void Setup()
-        {
-            U1 = new UnaryNode("U1");
-            U2 = new UnaryNode("U2");
-            U3 = new UnaryNode("U3");
-            B1 = new BinaryNode("B1");
-            T1 = new TernaryNode("T1");
-            End1 = new EndNode("End1");
-        }
 
         private void InstantTransition(Node sender) => sender.Exit();
-
-        [Test]
-        public void ValidEngine()
-        {
-            U1.Visits(End1);
-            Assert.IsTrue(new Engine(U1).IsValid());
-        }
 
         [Test]
         public void InvalidEngine()
@@ -48,22 +29,16 @@ namespace Aptacode.StateNet.Tests.NodeMachine
             Assert.IsFalse(new Engine(U1).IsValid());
         }
 
-        [Test, MaxTime(200)]
-        public void UnaryTransitionLog()
+
+        [SetUp]
+        public void Setup()
         {
-            var engine = new Engine(U1);
-
-            U1.Visits(U2);
-            U2.Visits(End1);
-            U1.OnVisited += InstantTransition;
-            U2.OnVisited += InstantTransition;
-
-            engine.Start();
-
-            engine.OnFinished += (s) =>
-            {
-                Assert.That(engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End1 }));
-            };
+            U1 = new UnaryNode(nameof(U1));
+            U2 = new UnaryNode(nameof(U2));
+            U3 = new UnaryNode(nameof(U3));
+            B1 = new BinaryNode(nameof(B1));
+            T1 = new TernaryNode(nameof(T1));
+            End1 = new EndNode(nameof(End1));
         }
 
         [Test, MaxTime(200)]
@@ -90,6 +65,31 @@ namespace Aptacode.StateNet.Tests.NodeMachine
                 var log = engine.GetVisitLog();
                 Assert.Pass();
             };
+        }
+
+        [Test, MaxTime(200)]
+        public void UnaryTransitionLog()
+        {
+            var engine = new Engine(U1);
+
+            U1.Visits(U2);
+            U2.Visits(End1);
+            U1.OnVisited += InstantTransition;
+            U2.OnVisited += InstantTransition;
+
+            engine.Start();
+
+            engine.OnFinished += (s) =>
+            {
+                Assert.That(engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End1 }));
+            };
+        }
+
+        [Test]
+        public void ValidEngine()
+        {
+            U1.Visits(End1);
+            Assert.IsTrue(new Engine(U1).IsValid());
         }
     }
 }

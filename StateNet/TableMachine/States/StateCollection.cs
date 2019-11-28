@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.FiniteStateMachine.States
+namespace Aptacode.StateNet.TableMachine.States
 {
     public class StateCollection : HashSet<State>
     {

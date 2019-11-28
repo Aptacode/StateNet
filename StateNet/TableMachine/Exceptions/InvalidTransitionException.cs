@@ -1,8 +1,8 @@
-﻿using Aptacode.StateNet.FiniteStateMachine.Inputs;
-using Aptacode.StateNet.FiniteStateMachine.States;
+﻿using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
 using System;
 
-namespace Aptacode.StateNet.FiniteStateMachine.Exceptions
+namespace Aptacode.StateNet.TableMachine.Exceptions
 {
     public class InvalidTransitionException : Exception
     {

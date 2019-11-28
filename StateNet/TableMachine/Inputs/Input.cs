@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode.StateNet.FiniteStateMachine.Inputs
+namespace Aptacode.StateNet.TableMachine.Inputs
 {
     public struct Input : IEquatable<Input>
     {

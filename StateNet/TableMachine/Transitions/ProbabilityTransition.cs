@@ -1,12 +1,11 @@
-﻿using Aptacode.StateNet.FiniteStateMachine.Exceptions;
-using Aptacode.StateNet.FiniteStateMachine.Inputs;
-using Aptacode.StateNet.FiniteStateMachine.States;
+﻿using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.FiniteStateMachine.Transitions
+namespace Aptacode.StateNet.TableMachine.Transitions
 {
     public class ProbabilityTransition<TKey> : BaseTransition
         where TKey : IStructuralEquatable, IStructuralComparable, IComparable
@@ -63,7 +62,7 @@ namespace Aptacode.StateNet.FiniteStateMachine.Transitions
                 }
             }
 
-            throw new InvalidChoiceException();
+            throw new Exception();
         }
 
         public override string ToString() => $"Transition: {Origin}({Input})->{{ {string.Join("| ", DestinationsToList())} }}";

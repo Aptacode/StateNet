@@ -1,7 +1,8 @@
-﻿using Aptacode.StateNet.FiniteStateMachine.Exceptions;
-using Aptacode.StateNet.FiniteStateMachine.Inputs;
-using Aptacode.StateNet.FiniteStateMachine.States;
-using Aptacode.StateNet.FiniteStateMachine.Transitions;
+﻿using Aptacode.StateNet.TableMachine.Events;
+using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
+using Aptacode.StateNet.TableMachine.Tables;
+using Aptacode.StateNet.TableMachine.Transitions;
 using NLog;
 using System;
 using System.Collections.Concurrent;
@@ -9,9 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aptacode.StateNet.FiniteStateMachine
+namespace Aptacode.StateNet.TableMachine
 {
-    public class StateMachine : IDisposable
+    public class TableEngine : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -23,16 +24,16 @@ namespace Aptacode.StateNet.FiniteStateMachine
         /// <summary>
         /// Governs the transitions between states based on the inputs it receives
         /// </summary>
-        public StateMachine(TransitionTable stateTransitionTable)
+        public TableEngine(TransitionTable stateTransitionTable)
         {
             _stateTransitionTable = stateTransitionTable;
             inputQueue = new ConcurrentQueue<Input>();
             _callbackDictionary = new Dictionary<State, List<Action>>();
         }
 
-        public event EventHandler<InvalidStateTransitionArgs> OnInvalidTransition;
+        public event TableEngineEvent OnInvalidTransition;
 
-        public event EventHandler<StateTransitionArgs> OnTransition;
+        public event TableEngineEvent OnTransition;
 
         private void NextTransition()
         {
@@ -47,7 +48,7 @@ namespace Aptacode.StateNet.FiniteStateMachine
                 } catch
                 {
                     Logger.Error("Queued transition was invalid");
-                    OnInvalidTransition?.Invoke(this, new InvalidStateTransitionArgs(State, input));
+                    OnInvalidTransition?.Invoke(this, new StateTransitionArgs(State, input, State));
                 }
             }
         }
@@ -82,18 +83,6 @@ namespace Aptacode.StateNet.FiniteStateMachine
         /// </summary>
         /// <param name="transition"></param>
         public void Clear(BaseTransition transition) => _stateTransitionTable.Clear(transition) ;
-
-        /// <summary>
-        /// Define a new transition
-        /// </summary>
-        /// <param name="transition"></param>
-        public void Define(BaseTransition transition)
-        {
-            if(!_stateTransitionTable.Set(transition))
-            {
-                throw new InvalidTransitionException(transition.Origin, transition.Input);
-            }
-        }
 
         public void Dispose() => Stop() ;
 

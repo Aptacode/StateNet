@@ -1,7 +1,7 @@
-using Aptacode.StateNet.FiniteStateMachine;
-using Aptacode.StateNet.FiniteStateMachine.Inputs;
-using Aptacode.StateNet.FiniteStateMachine.States;
-using Aptacode.StateNet.FiniteStateMachine.Transitions;
+using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
+using Aptacode.StateNet.TableMachine.Tables;
+using Aptacode.StateNet.TableMachine.Transitions;
 using NUnit.Framework;
 using System;
 
@@ -11,7 +11,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
     {
         private EnumInputCollection<Inputs> _inputCollection;
         private EnumStateCollection<States> _stateCollection;
-        private TransitionTable _stateTransitionTable;
+        private NonDeterministicTransitionTable _stateTransitionTable;
 
 
         [Test]
@@ -73,7 +73,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
             _inputCollection = new EnumInputCollection<Inputs>();
             _stateCollection = new EnumStateCollection<States>();
 
-            _stateTransitionTable = new TransitionTable(_stateCollection, _inputCollection);
+            _stateTransitionTable = new NonDeterministicTransitionTable(_stateCollection, _inputCollection);
         }
 
         public enum Inputs
