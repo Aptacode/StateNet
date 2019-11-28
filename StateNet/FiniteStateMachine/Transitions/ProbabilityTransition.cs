@@ -1,12 +1,12 @@
-﻿using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
+﻿using Aptacode.StateNet.FiniteStateMachine.Exceptions;
+using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.Transitions
+namespace Aptacode.StateNet.FiniteStateMachine.Transitions
 {
     public class ProbabilityTransition<TKey> : BaseTransition
         where TKey : IStructuralEquatable, IStructuralComparable, IComparable

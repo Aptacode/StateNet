@@ -1,8 +1,8 @@
-﻿using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
+﻿using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
 using System;
 
-namespace Aptacode.StateNet.Transitions
+namespace Aptacode.StateNet.FiniteStateMachine.Transitions
 {
     public class Transition : BaseTransition
     {

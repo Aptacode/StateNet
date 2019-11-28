@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode.StateNet.States
+namespace Aptacode.StateNet.FiniteStateMachine.States
 {
     public struct State : IEquatable<State>
     {

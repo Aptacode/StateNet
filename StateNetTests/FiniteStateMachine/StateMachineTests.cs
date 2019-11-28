@@ -1,11 +1,12 @@
-using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
+using Aptacode.StateNet.FiniteStateMachine;
+using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aptacode.StateNet.Tests
+namespace Aptacode.StateNet.Tests.FiniteStateMachine
 {
     public class StateMachineTests
     {

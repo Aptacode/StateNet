@@ -1,10 +1,11 @@
-using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
-using Aptacode.StateNet.Transitions;
+using Aptacode.StateNet.FiniteStateMachine;
+using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
+using Aptacode.StateNet.FiniteStateMachine.Transitions;
 using NUnit.Framework;
 using System;
 
-namespace Aptacode.StateNet.Tests
+namespace Aptacode.StateNet.Tests.FiniteStateMachine
 {
     public class StateTransitionTableTests
     {

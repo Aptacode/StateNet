@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.Inputs
+namespace Aptacode.StateNet.FiniteStateMachine.Inputs
 {
     public class InputCollection : HashSet<Input>
     {

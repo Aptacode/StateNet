@@ -1,12 +1,12 @@
-﻿using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
-using Aptacode.StateNet.Transitions;
+﻿using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
+using Aptacode.StateNet.FiniteStateMachine.Transitions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.FiniteStateMachine
 {
     public class TransitionTable
     {

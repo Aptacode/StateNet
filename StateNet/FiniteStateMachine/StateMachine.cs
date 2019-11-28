@@ -1,7 +1,7 @@
-﻿using Aptacode.StateNet.Exceptions;
-using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
-using Aptacode.StateNet.Transitions;
+﻿using Aptacode.StateNet.FiniteStateMachine.Exceptions;
+using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
+using Aptacode.StateNet.FiniteStateMachine.Transitions;
 using NLog;
 using System;
 using System.Collections.Concurrent;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.FiniteStateMachine
 {
     public class StateMachine : IDisposable
     {

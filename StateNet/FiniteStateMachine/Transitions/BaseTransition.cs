@@ -1,9 +1,9 @@
-﻿using Aptacode.StateNet.Inputs;
-using Aptacode.StateNet.States;
+﻿using Aptacode.StateNet.FiniteStateMachine.Inputs;
+using Aptacode.StateNet.FiniteStateMachine.States;
 using System;
 using System.Linq;
 
-namespace Aptacode.StateNet.Transitions
+namespace Aptacode.StateNet.FiniteStateMachine.Transitions
 {
     public abstract class BaseTransition
     {
