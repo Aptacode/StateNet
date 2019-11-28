@@ -4,7 +4,6 @@ using Aptacode.StateNet.NodeMachine.Nodes;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
@@ -74,12 +73,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 
             var distribution = new TernaryDistribution(1, 1, 1);
 
-            T1.Visits(U1, U2, B1, () => distribution);
-
-            ...
-            distribution = new TernaryDistribution(1, 0, 1);
-
-
+            T1.Visits(U1, U2, B1, () => new TernaryDistribution(1, 1, 1));
             U1.Visits(T1);
             U2.Visits(T1);
             B1.Visits(T1, End1, () => new BinaryDistribution(1, 1));
