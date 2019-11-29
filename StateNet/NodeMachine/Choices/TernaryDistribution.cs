@@ -2,7 +2,7 @@
 
 namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public class TernaryDistribution : Distribution<TernaryChoice>
+    public class TernaryDistribution : ProbabilityChooser<TernaryChoice>
     {
         public TernaryDistribution(int item1Weight, int item2Weight, int item3Weight)
         {

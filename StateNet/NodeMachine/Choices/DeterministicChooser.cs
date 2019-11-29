@@ -2,10 +2,10 @@
 
 namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public class IDeterministicChoice<TChoice> : IChooser<TChoice>
+    public class DeterministicChooser<TChoice> : IChooser<TChoice>
         where TChoice : System.Enum
     {
-        public IDeterministicChoice(TChoice choice) => Choice = choice;
+        public DeterministicChooser(TChoice choice) => Choice = choice;
 
         public TChoice GetChoice() => Choice ;
 

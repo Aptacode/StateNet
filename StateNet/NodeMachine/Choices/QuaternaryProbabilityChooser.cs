@@ -2,9 +2,9 @@
 
 namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public class QuaternaryDistribution : Distribution<QuaternaryChoice>
+    public class QuaternaryProbabilityChooser : ProbabilityChooser<QuaternaryChoice>
     {
-        public QuaternaryDistribution(int item1Weight, int item2Weight, int item3Weight, int item4Weight)
+        public QuaternaryProbabilityChooser(int item1Weight, int item2Weight, int item3Weight, int item4Weight)
         {
             Item1Weight = item1Weight;
             Item2Weight = item2Weight;

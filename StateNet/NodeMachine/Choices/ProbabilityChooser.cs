@@ -2,7 +2,7 @@
 
 namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public abstract class Distribution<TChoice> : IChooser<TChoice>
+    public abstract class ProbabilityChooser<TChoice> : IChooser<TChoice>
         where TChoice : System.Enum
     {
         protected static readonly Random RandomGenerator = new Random();

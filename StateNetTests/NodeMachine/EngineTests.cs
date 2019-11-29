@@ -46,12 +46,10 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         {
             var engine = new NodeEngine(T1);
 
-            var distribution = new TernaryDistribution(1, 1, 1);
-
             T1.Visits(U1, U2, B1, () => new TernaryDistribution(1, 1, 1));
             U1.Visits(T1);
             U2.Visits(T1);
-            B1.Visits(T1, End1, () => new BinaryDistribution(1, 1));
+            B1.Visits(T1, End1, () => new DeterministicChooser<BinaryChoice>(BinaryChoice.Item1));
 
             T1.OnVisited += InstantTransition;
             U1.OnVisited += InstantTransition;

@@ -2,9 +2,9 @@
 
 namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public class BinaryDistribution : Distribution<BinaryChoice>
+    public class BinaryProbabilityChooser : ProbabilityChooser<BinaryChoice>
     {
-        public BinaryDistribution(int item1Weight, int item2Weight)
+        public BinaryProbabilityChooser(int item1Weight, int item2Weight)
         {
             Item1Weight = item1Weight;
             Item2Weight = item2Weight;
