@@ -7,8 +7,8 @@ namespace Aptacode.StateNet.NodeMachine.Choices
     {
         public DeterministicChooser(TChoice choice) => Choice = choice;
 
-        public TChoice GetChoice() => Choice ;
+        public TChoice GetChoice() => Choice;
 
-        public TChoice Choice { get; }
+        public TChoice Choice { get; set; }
     }
 }
