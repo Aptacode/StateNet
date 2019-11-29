@@ -6,7 +6,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class BinaryNode : Node
     {
-        private Func<IChooser<BinaryChoice>> ChoiceFunction;
+        public IChooser<BinaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
 
@@ -15,30 +15,23 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         public BinaryNode(string name,
                           Node destinationNodeA,
                           Node destinationNodeB,
-                          Func<IChooser<BinaryChoice>> choiceFunction) : base(name)
+                          IChooser<BinaryChoice> choiceFunction) : base(name)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
-            ChoiceFunction = choiceFunction;
+            Chooser = choiceFunction;
         }
 
         public override Node GetNext()
         {
-            var choice = ChoiceFunction?.Invoke().GetChoice();
-            if(choice.HasValue)
+            switch (Chooser.GetChoice())
             {
-                switch(choice.Value)
-                {
-                    case BinaryChoice.Item1:
-                        return DestinationNodeA;
-                    case BinaryChoice.Item2:
-                        return DestinationNodeB;
-                    default:
-                        return null;
-                }
-            } else
-            {
-                throw new Exception();
+                case BinaryChoice.Item1:
+                    return DestinationNodeA;
+                case BinaryChoice.Item2:
+                    return DestinationNodeB;
+                default:
+                    throw new Exception();
             }
         }
 
@@ -46,11 +39,11 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name}";
 
-        public void Visits(Node destinationNodeA, Node destinationNodeB, Func<IChooser<BinaryChoice>> choiceFunction)
+        public void Visits(Node destinationNodeA, Node destinationNodeB, IChooser<BinaryChoice> choiceFunction)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
-            ChoiceFunction = choiceFunction;
+            Chooser = choiceFunction;
         }
     }
 ;

@@ -6,7 +6,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class QuaternaryNode : Node
     {
-        private Func<IChooser<QuaternaryChoice>> ChoiceFunction;
+        public IChooser<QuaternaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
@@ -19,36 +19,29 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
                            Node destinationNodeB,
                            Node destinationNodeC,
                            Node destinationNodeD,
-                           Func<IChooser<QuaternaryChoice>> choiceFunction) : base(name)
+                           IChooser<QuaternaryChoice> chooser) : base(name)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
             DestinationNodeC = destinationNodeC;
             DestinationNodeD = destinationNodeD;
-            ChoiceFunction = choiceFunction;
+            Chooser = chooser;
         }
 
         public override Node GetNext()
         {
-            var choice = ChoiceFunction?.Invoke().GetChoice();
-            if(choice.HasValue)
+            switch (Chooser.GetChoice())
             {
-                switch(choice.Value)
-                {
-                    case QuaternaryChoice.Item1:
-                        return DestinationNodeA;
-                    case QuaternaryChoice.Item2:
-                        return DestinationNodeB;
-                    case QuaternaryChoice.Item3:
-                        return DestinationNodeC;
-                    case QuaternaryChoice.Item4:
-                        return DestinationNodeD;
-                    default:
-                        return null;
-                }
-            } else
-            {
-                throw new Exception();
+                case QuaternaryChoice.Item1:
+                    return DestinationNodeA;
+                case QuaternaryChoice.Item2:
+                    return DestinationNodeB;
+                case QuaternaryChoice.Item3:
+                    return DestinationNodeC;
+                case QuaternaryChoice.Item4:
+                    return DestinationNodeD;
+                default:
+                    throw new Exception();
             }
         }
 
@@ -61,13 +54,13 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
                            Node destinationNodeB,
                            Node destinationNodeC,
                            Node destinationNodeD,
-                           Func<IChooser<QuaternaryChoice>> choiceFunction)
+                           IChooser<QuaternaryChoice> chooser)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
             DestinationNodeC = destinationNodeC;
             DestinationNodeD = destinationNodeD;
-            ChoiceFunction = choiceFunction;
+            Chooser = chooser;
         }
     }
 }

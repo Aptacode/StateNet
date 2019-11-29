@@ -6,7 +6,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class TernaryNode : Node
     {
-        private Func<IChooser<TernaryChoice>> ChoiceFunction;
+        public IChooser<TernaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
@@ -17,33 +17,26 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
                            Node destinationNodeA,
                            Node destinationNodeB,
                            Node destinationNodeC,
-                           Func<IChooser<TernaryChoice>> choiceFunction) : base(name)
+                           IChooser<TernaryChoice> chooser) : base(name)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
             DestinationNodeC = destinationNodeC;
-            ChoiceFunction = choiceFunction;
+            Chooser = chooser;
         }
 
         public override Node GetNext()
         {
-            var choice = ChoiceFunction?.Invoke().GetChoice();
-            if(choice.HasValue)
+            switch (Chooser.GetChoice())
             {
-                switch(choice.Value)
-                {
-                    case TernaryChoice.Item1:
-                        return DestinationNodeA;
-                    case TernaryChoice.Item2:
-                        return DestinationNodeB;
-                    case TernaryChoice.Item3:
-                        return DestinationNodeC;
-                    default:
-                        return null;
-                }
-            } else
-            {
-                throw new Exception();
+                case TernaryChoice.Item1:
+                    return DestinationNodeA;
+                case TernaryChoice.Item2:
+                    return DestinationNodeB;
+                case TernaryChoice.Item3:
+                    return DestinationNodeC;
+                default:
+                    throw new Exception();
             }
         }
 
@@ -55,12 +48,12 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         public void Visits(Node destinationNodeA,
                            Node destinationNodeB,
                            Node destinationNodeC,
-                           Func<IChooser<TernaryChoice>> choiceFunction)
+                           IChooser<TernaryChoice> chooser)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
             DestinationNodeC = destinationNodeC;
-            ChoiceFunction = choiceFunction;
+            Chooser = chooser;
         }
     }
 }
