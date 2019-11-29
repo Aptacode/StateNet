@@ -1,31 +1,27 @@
 # AptacodeStateNet
 
-## A small .Net Standard library used to model simple Finite State Machines
+## A small .Net Standard library used to model simple State Machines
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bbdf96f5e1304d679e6addf01b2618a1)](https://www.codacy.com/manual/Timmoth/AptacodeStateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/AptacodeStateNet&amp;utm_campaign=Badge_Grade)
 
 ### Overview
 
-The state machine is configured using a StateTransitionTable which in turn takes a set of 'States' & 'Inputs' which can be either user defined enums, or string lists.
+There are two types of State Machine in State Net, both can be used to achieve the same result however they are both suited to different situations.
 
+## TableMachine
 
--  States: Each possible state that the machine can be in at a given time.
+In order to use the TableMachine you must define a StateCollection and InputCollection. There are two types of State/Input Collection: the first is indexed by a string key (the State or Input name) the other is indexed by an enum. 
+The StateCollection contains all possible states the machine can be in at any given time e.g Playing, Paused, Stopped
+The InputCollection contains all possible inputs which can be applied to the machine e.g Play, Pause, Stop
 
--  Inputs: All of the actions that can an be applied to the state machine to induce a transitions between states.
+The TableMachine stores its transitions in a TransitionTable, implemented with a Dictionary or Dictionary's the outer dictionary uses a 'State' as a Key, the value associated with it being another dictionary indexed by an 'Input' key associated with a 'Transition' value.
+There are two types of transition Table: 
+DeterministicTransitionTable - which only allows UnaryTransitions i.e a transition from StateA to StateB on input1.
+NonDeterministicTransitionTable - which allows Unary, Binary, Ternary, Quaternary... transitions i.e in the case of a TernaryTransition when Input2 is applied to State1 the result could be State2, State3, State4
 
-The state machine takes its initial state as a constructor parameter.
+All transitions for all states under each input are initialised to an 'InvalidTransition'. Each Valid transition must be defined through the TransitionTable.
 
-Once an instance of StateTransitionTable is initialised, all possible transitions between states must be defined (Note* all transitions  default to an 'InvalidTransition')
-A transition is triggered based on which state the machine is currently in and the input which was applied.
-Depending on the type of transition the user can define their own logic to determine which of the transition's possible destination states is entered. For example: the BinaryTransition takes a function callback which returns either BinaryChoice.Left or BinaryChoice.Right to determine which state to enter.
-
-There are four types of transition:
-
--  InvalidTransition an input which cannot be applied to a state.
--  UnaryTransition when an input being applied to a state always results in a transition to exactly one state.
--  BinaryTransition when an input being applied to a state can cause the state machine to move to one of two states states depending 
-on some user defined function callback.
--  NaryTransition when an input causes a transition to one of many possible states chosen by a user defined function callback.
+Once a StateCollection, InputCollection & TransitionTable have all been defined a TableEngine can be created which allows the user to apply Inputs to the current state and determines which state the application should enter.
 
 ### Written Example
 
@@ -43,44 +39,49 @@ Since the current state is 'States.Playing' the above transition will be applied
 
 ```csharp
 //Define all possible states and actions
-public enum States { NotReady, Ready, Running, Paused };
-public enum Actions { Setup, Start, Pause, Resume, Stop };
-var transitionTable = new EnumStateTransitionTable<States, Inputs>();
+public enum Inputs { Play, Pause, Stop }
+public enum States { Begin, Playing, Paused, End }
 
-//Create an instance set to an initial state
-var stateMachine = new StateMachine(transitionTable, States.NotReady);
+//Define the State Collection
+_stateCollection = new EnumStateCollection<States>();
+//Define the Input Collection
+_inputCollection = new EnumInputCollection<Inputs>();
+//Define the Transition Table
+_stateTransitionTable = new NonDeterministicTransitionTable(_stateCollection, _inputCollection);
 
 //Define all possible transitions
 
 //Invalid Transition
-transitionTable.Define(
-            States.NotReady, 
-            Actions.Start, 
-            "Must be Ready to Start"));
-            
+_stateTransitionTable.Set(_stateCollection[States.Begin], _inputCollection[Inputs.Pause], "Cannot Pause before the video is playing");
+
 //Unary Transition
-transitionTable.Define(
-            States.NotReady, 
-            Actions.Setup, 
-            States.Ready,
-            "Setup"));
+_stateTransitionTable.Set(_stateCollection[States.Begin],
+                          _inputCollection[Inputs.Stop],
+                          _stateCollection[States.End],
+                          "Stop Video");
 
 //Binary Transition
-transitionTable.Define(
-            States.Running, 
-            Actions.Pause, 
-            States.Paused, 
-            States.NotReady,
-            () =>
-            {
-                if(_canPlay)
-                {
-                    return BinaryChoice.Left;
-                }
+_stateTransitionTable.Set(_stateCollection[States.Begin],
+                          _inputCollection[Inputs.Play],
+                          _stateCollection[States.Playing],
+                          _stateCollection[States.End],
+                          (states) =>
+                                    {
+                                        if(_canPlay)
+                                        {
+                                            return states.Item1;
+                                        }
 
-                return BinaryChoice.Right;
-            });
-            "Try Pause"));
+                                        return states.Item2;
+                                    }, "Play Video");
+
+...
+
+//Create an instance set to an initial state
+_stateMachine = new TableEngine(_stateTransitionTable);
+
+//Start the state machine giving it an initial state
+_stateMachine.Start(_stateCollection[States.Begin]);
 
 //When a transition is applied
 stateMachine.OnTransition += (s, e) => 
@@ -90,11 +91,14 @@ stateMachine.OnTransition += (s, e) =>
 
 
 //Apply actions to cause a transition
-stateMachine.Apply(Actions.Setup);
-stateMachine.Apply(Actions.Start);
-
+_stateMachine.Apply(_inputCollection[Inputs.Play]);
+_stateMachine.Apply(_inputCollection[Inputs.Play]);
 
 ```
+
+## NodeMachine
+
+
 
 ## License
 
