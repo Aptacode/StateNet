@@ -98,7 +98,50 @@ _stateMachine.Apply(_inputCollection[Inputs.Play]);
 
 ## NodeMachine
 
+NodeMachine controls the flow through states by traversing a graph of nodes.
+There are 5 types of Node: Unary, Binary, Ternary, Quaternary and End.
+Each node has a GetNext function which returns the next node to visit. 
+In a UnaryNode this function always returns the same DestinationNode.
+An EndNode signifys a state with no possible transitions and so this function returns null. 
+In all other Nodes this function can return more then one Node determined by a 'ChoiceFunction' the Choice function can return either a DeterministicChooser or a ProbabilisticChooser both of these classes returns a choice based on an enumeration of possible choices.
+In the case of a DeterministicChooser the user defines the choice in a callback function.
+In the case of a ProbabilisticChooser the user defines a distribution of weights for each possible choice which the node then uses to pick a (weighted) random choice.
 
+To use this state machine you must first instantiate each node with its given name. 
+Then for each node you define which nodes can be visited and a Chooser Function for how to decide which node IS visited when that node is exited. 
+In order to move from one node to another you must subscribe to the 'OnVisited' event which is fired when a node is entered. From within the handler you define the unit of work to be executed when that node is executed, Once you are ready to visit the next node in the graph you must call the 'Exit' method of the current node.
+
+To start the graph create an instance of 'NodeEngine' which you pass in through the constructor the start node, when your ready call the Start method to begin.
+
+### Usage
+
+```csharp
+
+//Define all the nodes
+var U1 = new UnaryNode("U1");
+var U2 = new UnaryNode("U2");
+var U3 = new UnaryNode("U3");
+var B1 = new BinaryNode("B1");
+var T1 = new TernaryNode("T1");
+var End = new EndNode("End");
+
+//Define all the nodes each node can visit And the critera for deciding which to choose
+T1.Visits(B1, U1, U2, () => new TernaryDistribution(1, 1, 1));
+B1.Visits(T1, End, () => new IDeterministicChoice<BinaryChoice>(BinaryChoice.Item1)));
+U1.Visits(T1);
+U2.Visits(T1);
+
+T1.OnVisited += InstantTransition;
+U1.OnVisited += InstantTransition;
+U2.OnVisited += InstantTransition;
+B1.OnVisited += InstantTransition;
+
+_engine = new NodeEngine(Begin);
+_engine.Start();
+
+private void InstantTransition(Node sender) => sender.Exit();
+
+```
 
 ## License
 
