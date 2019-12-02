@@ -46,7 +46,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         }
 
         public override IEnumerable<Node> GetNextNodes() => new List<Node>
-        { DestinationNodeA, DestinationNodeB, DestinationNodeC };
+        { DestinationNodeA, DestinationNodeB, DestinationNodeC, DestinationNodeD };
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name}";
 
