@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Aptacode.StateNet.NodeMachine.Choices;
+using System;
 
-namespace Aptacode.StateNet.NodeMachine.Choices
+namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
     public abstract class ProbabilityChooser<TChoice> : IChooser<TChoice>
         where TChoice : System.Enum

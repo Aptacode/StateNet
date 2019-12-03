@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Aptacode.StateNet.NodeMachine.Choices;
+using System;
 
-namespace Aptacode.StateNet.NodeMachine.Choices
+namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
     public class SenaryProbabilityChooser : ProbabilityChooser<SenaryChoice>
     {
         public SenaryProbabilityChooser(int item1Weight,
-                                         int item2Weight,
-                                         int item3Weight,
-                                         int item4Weight,
-                                         int item5Weight,
-                                         int item6Weight)
+                                        int item2Weight,
+                                        int item3Weight,
+                                        int item4Weight,
+                                        int item5Weight,
+                                        int item6Weight)
         {
             Item1Weight = item1Weight;
             Item2Weight = item2Weight;
@@ -39,26 +40,28 @@ namespace Aptacode.StateNet.NodeMachine.Choices
             } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
             {
                 return SenaryChoice.Item4;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
             {
                 return SenaryChoice.Item5;
-            }
-            else if (randomChoice <= TotalWeight)
+            } else if(randomChoice <= TotalWeight)
             {
                 return SenaryChoice.Item6;
-            }
-            else
+            } else
             {
                 throw new Exception();
             }
         }
 
         public int Item1Weight { get; set; }
+
         public int Item2Weight { get; set; }
+
         public int Item3Weight { get; set; }
+
         public int Item4Weight { get; set; }
+
         public int Item5Weight { get; set; }
+
         public int Item6Weight { get; set; }
 
         public int TotalWeight => Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight;
