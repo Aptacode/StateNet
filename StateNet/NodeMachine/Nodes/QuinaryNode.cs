@@ -6,7 +6,6 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class QuinaryNode : Node
     {
-        public IChooser<QuinaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
@@ -17,7 +16,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override Node GetNext()
         {
-            switch (Chooser.GetChoice())
+            switch(Chooser.GetChoice())
             {
                 case QuinaryChoice.Item1:
                     return DestinationNodeA;
@@ -53,5 +52,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeE = destinationNodeE;
             Chooser = chooser;
         }
+
+        public IChooser<QuinaryChoice> Chooser { get; set; }
     }
 }

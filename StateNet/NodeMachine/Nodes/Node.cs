@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Aptacode.StateNet.NodeMachine.Events;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public delegate void NodeEvent(Node sender);
-
     public abstract class Node
     {
         public Node(string name) => Name = name;

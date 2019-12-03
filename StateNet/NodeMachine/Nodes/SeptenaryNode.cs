@@ -6,7 +6,6 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class SeptenaryNode : Node
     {
-        public IChooser<SeptenaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
@@ -19,7 +18,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override Node GetNext()
         {
-            switch (Chooser.GetChoice())
+            switch(Chooser.GetChoice())
             {
                 case SeptenaryChoice.Item1:
                     return DestinationNodeA;
@@ -41,7 +40,15 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         }
 
         public override IEnumerable<Node> GetNextNodes() => new List<Node>
-        { DestinationNodeA, DestinationNodeB, DestinationNodeC, DestinationNodeD, DestinationNodeE, DestinationNodeF, DestinationNodeG };
+        {
+            DestinationNodeA,
+            DestinationNodeB,
+            DestinationNodeC,
+            DestinationNodeD,
+            DestinationNodeE,
+            DestinationNodeF,
+            DestinationNodeG
+        };
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name},{DestinationNodeD.Name},{DestinationNodeE.Name},{DestinationNodeF.Name},{DestinationNodeG.Name}";
 
@@ -63,5 +70,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeG = destinationNodeG;
             Chooser = chooser;
         }
+
+        public IChooser<SeptenaryChoice> Chooser { get; set; }
     }
 }

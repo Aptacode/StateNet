@@ -1,4 +1,5 @@
-﻿using Aptacode.StateNet.NodeMachine.Nodes;
+﻿using Aptacode.StateNet.NodeMachine.Events;
+using Aptacode.StateNet.NodeMachine.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
