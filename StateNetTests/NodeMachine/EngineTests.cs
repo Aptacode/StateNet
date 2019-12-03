@@ -9,7 +9,6 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 {
     public class Tests
     {
-        private NodeEngine _engine;
         private BinaryNode B1;
         private EndNode End1;
         private TernaryNode T1;

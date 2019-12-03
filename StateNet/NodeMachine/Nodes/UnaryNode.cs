@@ -5,9 +5,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class UnaryNode : Node
     {
-        public UnaryNode(string name) : this(name, null) { }
-
-        public UnaryNode(string name, Node destinationNode) : base(name) => DestinationNode = destinationNode;
+        public UnaryNode(string name) : base(name) { }
 
         public override Node GetNext() => DestinationNode ;
 

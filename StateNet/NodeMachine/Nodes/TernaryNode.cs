@@ -6,28 +6,15 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 {
     public class TernaryNode : Node
     {
-        public IChooser<TernaryChoice> Chooser { get; set; }
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
 
-        public TernaryNode(string name) : this(name, null, null, null, null) { }
-
-        public TernaryNode(string name,
-                           Node destinationNodeA,
-                           Node destinationNodeB,
-                           Node destinationNodeC,
-                           IChooser<TernaryChoice> chooser) : base(name)
-        {
-            DestinationNodeA = destinationNodeA;
-            DestinationNodeB = destinationNodeB;
-            DestinationNodeC = destinationNodeC;
-            Chooser = chooser;
-        }
+        public TernaryNode(string name) : base(name) { }
 
         public override Node GetNext()
         {
-            switch (Chooser.GetChoice())
+            switch(Chooser.GetChoice())
             {
                 case TernaryChoice.Item1:
                     return DestinationNodeA;
@@ -55,5 +42,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeC = destinationNodeC;
             Chooser = chooser;
         }
+
+        public IChooser<TernaryChoice> Chooser { get; set; }
     }
 }

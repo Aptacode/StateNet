@@ -4,50 +4,55 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public class QuaternaryNode : Node
+    public class QuinaryNode : Node
     {
         private Node DestinationNodeA;
         private Node DestinationNodeB;
         private Node DestinationNodeC;
         private Node DestinationNodeD;
+        private Node DestinationNodeE;
 
-        public QuaternaryNode(string name) : base(name) { }
+        public QuinaryNode(string name) : base(name) { }
 
         public override Node GetNext()
         {
             switch(Chooser.GetChoice())
             {
-                case QuaternaryChoice.Item1:
+                case QuinaryChoice.Item1:
                     return DestinationNodeA;
-                case QuaternaryChoice.Item2:
+                case QuinaryChoice.Item2:
                     return DestinationNodeB;
-                case QuaternaryChoice.Item3:
+                case QuinaryChoice.Item3:
                     return DestinationNodeC;
-                case QuaternaryChoice.Item4:
+                case QuinaryChoice.Item4:
                     return DestinationNodeD;
+                case QuinaryChoice.Item5:
+                    return DestinationNodeE;
                 default:
                     throw new Exception();
             }
         }
 
         public override IEnumerable<Node> GetNextNodes() => new List<Node>
-        { DestinationNodeA, DestinationNodeB, DestinationNodeC, DestinationNodeD };
+        { DestinationNodeA, DestinationNodeB, DestinationNodeC, DestinationNodeD, DestinationNodeE };
 
-        public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name},{DestinationNodeD.Name}";
+        public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name},{DestinationNodeD.Name},{DestinationNodeE.Name}";
 
         public void Visits(Node destinationNodeA,
                            Node destinationNodeB,
                            Node destinationNodeC,
                            Node destinationNodeD,
-                           IChooser<QuaternaryChoice> chooser)
+                           Node destinationNodeE,
+                           IChooser<QuinaryChoice> chooser)
         {
             DestinationNodeA = destinationNodeA;
             DestinationNodeB = destinationNodeB;
             DestinationNodeC = destinationNodeC;
             DestinationNodeD = destinationNodeD;
+            DestinationNodeE = destinationNodeE;
             Chooser = chooser;
         }
 
-        public IChooser<QuaternaryChoice> Chooser { get; set; }
+        public IChooser<QuinaryChoice> Chooser { get; set; }
     }
 }
