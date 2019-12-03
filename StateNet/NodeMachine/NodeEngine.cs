@@ -8,11 +8,12 @@ namespace Aptacode.StateNet.NodeMachine
 {
     public class NodeEngine
     {
-        private List<Node> _visitLog;
+        private readonly NodeGraph _nodeGraph;
+        private readonly List<Node> _visitLog;
 
-        public NodeEngine(Node startNode)
+        public NodeEngine(NodeGraph nodeGraph)
         {
-            StartNode = startNode;
+            _nodeGraph = nodeGraph;
             _visitLog = new List<Node>();
         }
 
@@ -22,13 +23,8 @@ namespace Aptacode.StateNet.NodeMachine
 
         private void SubscribeToEndNodes()
         {
-            foreach(var node in Flatten(StartNode, new HashSet<Node>()))
+            foreach(var node in _nodeGraph.GetEndNodes())
             {
-                node.OnVisited += (s) =>
-                {
-                    _visitLog.Add(s);
-                };
-
                 if(node is EndNode)
                 {
                     node.OnVisited += (s) =>
@@ -39,50 +35,31 @@ namespace Aptacode.StateNet.NodeMachine
             }
         }
 
-        public HashSet<Node> Flatten(Node node, HashSet<Node> visitedNodes)
+        private void SubscribeToNodesVisited()
         {
-            if(!visitedNodes.Contains(node))
+            foreach(var node in _nodeGraph.GetAll())
             {
-                visitedNodes.Add(node);
-                foreach(var exitNode in node.GetNextNodes())
+                node.OnVisited += (sender) =>
                 {
-                    Flatten(exitNode, visitedNodes);
-                }
+                    _visitLog.Add(sender);
+                };
             }
-
-            return visitedNodes;
         }
 
         public IEnumerable<Node> GetVisitLog() => _visitLog;
 
-        public bool IsValid()
-        {
-            foreach(var node in Flatten(StartNode, new HashSet<Node>()))
-            {
-                if(node is EndNode)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public void Start()
         {
-            if(IsValid())
+            if(_nodeGraph.IsValid())
             {
+                SubscribeToNodesVisited();
                 SubscribeToEndNodes();
                 OnStarted?.Invoke(this);
-                StartNode.Visit();
+                _nodeGraph.StartNode.Visit();
             } else
             {
                 throw new Exception();
             }
         }
-
-        public Node EndNode { get; }
-
-        public Node StartNode { get; }
     }
 }
