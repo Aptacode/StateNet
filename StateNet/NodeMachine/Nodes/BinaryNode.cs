@@ -10,17 +10,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         private Node DestinationNodeA;
         private Node DestinationNodeB;
 
-        public BinaryNode(string name) : this(name, null, null, null) { }
-
-        public BinaryNode(string name,
-                          Node destinationNodeA,
-                          Node destinationNodeB,
-                          IChooser<BinaryChoice> choiceFunction) : base(name)
-        {
-            DestinationNodeA = destinationNodeA;
-            DestinationNodeB = destinationNodeB;
-            Chooser = choiceFunction;
-        }
+        public BinaryNode(string name) : base(name) { }
 
         public override Node GetNext()
         {
