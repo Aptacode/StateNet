@@ -1,9 +1,7 @@
 ﻿using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Transitions;
-using System;
 using System.Collections.Concurrent;
-using System.Linq;
 
 namespace Aptacode.StateNet.TableMachine.Tables
 {

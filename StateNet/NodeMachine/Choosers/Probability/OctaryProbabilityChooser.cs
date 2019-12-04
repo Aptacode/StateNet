@@ -3,17 +3,16 @@ using System;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
-    public class NonaryProbabilityChooser : ProbabilityChooser<NonaryChoice>
+    public class OctaryProbabilityChooser : ProbabilityChooser<OctaryChoice>
     {
-        public NonaryProbabilityChooser(int item1Weight,
+        public OctaryProbabilityChooser(int item1Weight,
                                         int item2Weight,
                                         int item3Weight,
                                         int item4Weight,
                                         int item5Weight,
                                         int item6Weight,
                                         int item7Weight,
-                                        int item8Weight,
-                                        int item9Weight)
+                                        int item8Weight)
         {
             Item1Weight = item1Weight;
             Item2Weight = item2Weight;
@@ -23,10 +22,9 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
             Item6Weight = item6Weight;
             Item7Weight = item7Weight;
             Item8Weight = item8Weight;
-            Item9Weight = item9Weight;
         }
 
-        public override NonaryChoice GetChoice()
+        public override OctaryChoice GetChoice()
         {
             if(TotalWeight == 0)
             {
@@ -36,22 +34,22 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
             var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
             if(randomChoice <= Item1Weight)
             {
-                return NonaryChoice.Item1;
+                return OctaryChoice.Item1;
             } else if(randomChoice <= Item1Weight + Item2Weight)
             {
-                return NonaryChoice.Item2;
+                return OctaryChoice.Item2;
             } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight)
             {
-                return NonaryChoice.Item3;
+                return OctaryChoice.Item3;
             } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
             {
-                return NonaryChoice.Item4;
+                return OctaryChoice.Item4;
             } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
             {
-                return NonaryChoice.Item5;
+                return OctaryChoice.Item5;
             } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight)
             {
-                return NonaryChoice.Item6;
+                return OctaryChoice.Item6;
             } else if(randomChoice <=
                 Item1Weight +
                 Item2Weight +
@@ -61,21 +59,10 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
                 Item6Weight +
                 Item7Weight)
             {
-                return NonaryChoice.Item7;
-            } else if(randomChoice <=
-                Item1Weight +
-                Item2Weight +
-                Item3Weight +
-                Item4Weight +
-                Item5Weight +
-                Item6Weight +
-                Item7Weight +
-                Item8Weight)
-            {
-                return NonaryChoice.Item8;
+                return OctaryChoice.Item7;
             } else if(randomChoice <= TotalWeight)
             {
-                return NonaryChoice.Item9;
+                return OctaryChoice.Item8;
             } else
             {
                 throw new Exception();
@@ -98,8 +85,6 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 
         public int Item8Weight { get; set; }
 
-        public int Item9Weight { get; set; }
-
         public int TotalWeight => Item1Weight +
             Item2Weight +
             Item3Weight +
@@ -107,7 +92,6 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
             Item5Weight +
             Item6Weight +
             Item7Weight +
-            Item8Weight +
-            Item9Weight;
+            Item8Weight;
     }
 }

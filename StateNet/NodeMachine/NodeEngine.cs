@@ -2,7 +2,6 @@
 using Aptacode.StateNet.NodeMachine.Nodes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Aptacode.StateNet.NodeMachine
 {

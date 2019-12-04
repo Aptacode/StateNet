@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public class TernaryNode : Node
+    public class TernaryNode : NonDeterministicNode<TernaryChoice>
     {
         private Node DestinationNodeA;
         private Node DestinationNodeB;
@@ -32,6 +32,22 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name}";
 
+        public override void UpdateReference(Node node)
+        {
+            if(DestinationNodeA?.Equals(node) == true)
+            {
+                DestinationNodeA = node;
+            }
+            if(DestinationNodeB?.Equals(node) == true)
+            {
+                DestinationNodeB = node;
+            }
+            if(DestinationNodeC?.Equals(node) == true)
+            {
+                DestinationNodeC = node;
+            }
+        }
+
         public void Visits(Node destinationNodeA,
                            Node destinationNodeB,
                            Node destinationNodeC,
@@ -42,7 +58,5 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeC = destinationNodeC;
             Chooser = chooser;
         }
-
-        public IChooser<TernaryChoice> Chooser { get; set; }
     }
 }

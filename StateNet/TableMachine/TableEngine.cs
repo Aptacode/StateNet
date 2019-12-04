@@ -76,15 +76,15 @@ namespace Aptacode.StateNet.TableMachine
         /// Apply the transition which relates to the given input on the current state
         /// </summary>
         /// <param name="input"></param>
-        public void Apply(Input input) => inputQueue.Enqueue(input) ;
+        public void Apply(Input input) => inputQueue.Enqueue(input);
 
         /// <summary>
         /// Set a transition to 'Undefined'
         /// </summary>
         /// <param name="transition"></param>
-        public void Clear(BaseTransition transition) => _stateTransitionTable.Clear(transition) ;
+        public void Clear(BaseTransition transition) => _stateTransitionTable.Clear(transition);
 
-        public void Dispose() => Stop() ;
+        public void Dispose() => Stop();
 
         public void Start(State initialState)
         {
@@ -102,7 +102,7 @@ namespace Aptacode.StateNet.TableMachine
             });
         }
 
-        public void Stop() => _isRunning = false ;
+        public void Stop() => _isRunning = false;
 
         public void Subscribe(State state, Action callback)
         {

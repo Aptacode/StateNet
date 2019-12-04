@@ -1,5 +1,4 @@
 ﻿using Aptacode.StateNet.NodeMachine.Choices;
-using System;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers
 {

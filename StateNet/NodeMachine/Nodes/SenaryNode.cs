@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public class SenaryNode : Node
+    public class SenaryNode : NonDeterministicNode<SenaryChoice>
     {
         private Node DestinationNodeA;
         private Node DestinationNodeB;
@@ -41,6 +41,34 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name},{DestinationNodeC.Name},{DestinationNodeD.Name},{DestinationNodeE.Name},{DestinationNodeF.Name}";
 
+        public override void UpdateReference(Node node)
+        {
+            if(DestinationNodeA?.Equals(node) == true)
+            {
+                DestinationNodeA = node;
+            }
+            if(DestinationNodeB?.Equals(node) == true)
+            {
+                DestinationNodeB = node;
+            }
+            if(DestinationNodeC?.Equals(node) == true)
+            {
+                DestinationNodeC = node;
+            }
+            if(DestinationNodeD?.Equals(node) == true)
+            {
+                DestinationNodeD = node;
+            }
+            if(DestinationNodeE?.Equals(node) == true)
+            {
+                DestinationNodeE = node;
+            }
+            if(DestinationNodeF?.Equals(node) == true)
+            {
+                DestinationNodeF = node;
+            }
+        }
+
         public void Visits(Node destinationNodeA,
                            Node destinationNodeB,
                            Node destinationNodeC,
@@ -57,7 +85,5 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeF = destinationNodeF;
             Chooser = chooser;
         }
-
-        public IChooser<SenaryChoice> Chooser { get; set; }
     }
 }
