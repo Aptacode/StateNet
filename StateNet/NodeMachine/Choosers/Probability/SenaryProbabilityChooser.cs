@@ -1,5 +1,5 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
-using System;
+﻿using System;
+using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
@@ -22,31 +22,37 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 
         public override SenaryChoice GetChoice()
         {
-            if(TotalWeight == 0)
+            if (TotalWeight == 0)
             {
                 throw new Exception();
             }
 
             var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
-            if(randomChoice <= Item1Weight)
+            if (randomChoice <= Item1Weight)
             {
                 return SenaryChoice.Item1;
-            } else if(randomChoice <= Item1Weight + Item2Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight)
             {
                 return SenaryChoice.Item2;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight)
             {
                 return SenaryChoice.Item3;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
             {
                 return SenaryChoice.Item4;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
             {
                 return SenaryChoice.Item5;
-            } else if(randomChoice <= TotalWeight)
+            }
+            else if (randomChoice <= TotalWeight)
             {
                 return SenaryChoice.Item6;
-            } else
+            }
+            else
             {
                 throw new Exception();
             }

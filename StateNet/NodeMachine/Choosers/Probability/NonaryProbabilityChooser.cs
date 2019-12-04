@@ -1,5 +1,5 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
-using System;
+﻿using System;
+using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
@@ -26,44 +26,52 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 
         public override NonaryChoice GetChoice()
         {
-            if(TotalWeight == 0)
+            if (TotalWeight == 0)
             {
                 throw new Exception();
             }
 
             var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
-            if(randomChoice <= Item1Weight)
+            if (randomChoice <= Item1Weight)
             {
                 return NonaryChoice.Item1;
-            } else if(randomChoice <= Item1Weight + Item2Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight)
             {
                 return NonaryChoice.Item2;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight)
             {
                 return NonaryChoice.Item3;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
             {
                 return NonaryChoice.Item4;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
             {
                 return NonaryChoice.Item5;
-            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight)
             {
                 return NonaryChoice.Item6;
-            } else if(randomChoice <=
-                Item1Weight +
-                Item2Weight +
-                Item3Weight +
-                Item4Weight +
-                Item5Weight +
-                Item6Weight +
-                Item7Weight)
+            }
+            else if (randomChoice <=
+              Item1Weight +
+              Item2Weight +
+              Item3Weight +
+              Item4Weight +
+              Item5Weight +
+              Item6Weight +
+              Item7Weight)
             {
                 return NonaryChoice.Item7;
-            } else if(randomChoice <= TotalWeight)
+            }
+            else if (randomChoice <= TotalWeight)
             {
                 return NonaryChoice.Item8;
-            } else
+            }
+            else
             {
                 throw new Exception();
             }

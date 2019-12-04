@@ -1,8 +1,7 @@
-﻿using Aptacode.StateNet.NodeMachine.Events;
-using Aptacode.StateNet.NodeMachine.Nodes;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Aptacode.StateNet.NodeMachine.Events;
+using Aptacode.StateNet.NodeMachine.Nodes;
 
 namespace Aptacode.StateNet.NodeMachine
 {
@@ -23,9 +22,9 @@ namespace Aptacode.StateNet.NodeMachine
 
         private void SubscribeToEndNodes()
         {
-            foreach(var node in _nodeGraph.GetEndNodes())
+            foreach (var node in _nodeGraph.GetEndNodes())
             {
-                if(node is EndNode)
+                if (node is EndNode)
                 {
                     node.OnVisited += (s) =>
                     {
@@ -37,7 +36,7 @@ namespace Aptacode.StateNet.NodeMachine
 
         private void SubscribeToNodesVisited()
         {
-            foreach(var node in _nodeGraph.GetAll())
+            foreach (var node in _nodeGraph.GetAll())
             {
                 node.OnVisited += (sender) =>
                 {
@@ -50,13 +49,14 @@ namespace Aptacode.StateNet.NodeMachine
 
         public void Start()
         {
-            if(_nodeGraph.IsValid())
+            if (_nodeGraph.IsValid())
             {
                 SubscribeToNodesVisited();
                 SubscribeToEndNodes();
                 OnStarted?.Invoke(this);
                 _nodeGraph.StartNode.Visit();
-            } else
+            }
+            else
             {
                 throw new Exception();
             }

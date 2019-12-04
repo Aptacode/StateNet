@@ -1,6 +1,6 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
@@ -20,7 +20,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override Node GetNext()
         {
-            switch(Chooser.GetChoice())
+            switch (Chooser.GetChoice())
             {
                 case NonaryChoice.Item1:
                     return DestinationNodeA;

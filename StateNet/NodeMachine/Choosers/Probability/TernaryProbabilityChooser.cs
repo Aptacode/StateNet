@@ -1,5 +1,5 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
-using System;
+﻿using System;
+using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
@@ -14,22 +14,25 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 
         public override TernaryChoice GetChoice()
         {
-            if(TotalWeight == 0)
+            if (TotalWeight == 0)
             {
                 throw new Exception();
             }
 
             var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
-            if(randomChoice <= Item1Weight)
+            if (randomChoice <= Item1Weight)
             {
                 return TernaryChoice.Item1;
-            } else if(randomChoice <= Item1Weight + Item2Weight)
+            }
+            else if (randomChoice <= Item1Weight + Item2Weight)
             {
                 return TernaryChoice.Item2;
-            } else if(randomChoice <= TotalWeight)
+            }
+            else if (randomChoice <= TotalWeight)
             {
                 return TernaryChoice.Item3;
-            } else
+            }
+            else
             {
                 throw new Exception();
             }

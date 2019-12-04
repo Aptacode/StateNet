@@ -6,9 +6,9 @@ namespace Aptacode.StateNet.TableMachine.Inputs
     {
         public Input(string name) => Name = name;
 
-        public override bool Equals(object obj) => (obj is Input other) && this.Equals(other);
+        public override bool Equals(object obj) => (obj is Input other) && Equals(other);
 
-        public bool Equals(Input other) => this.Name.Equals(other.Name);
+        public bool Equals(Input other) => Name.Equals(other.Name);
 
         public override int GetHashCode() => Name.GetHashCode();
 

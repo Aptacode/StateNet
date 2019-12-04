@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aptacode.StateNet.NodeMachine.Choices
+﻿namespace Aptacode.StateNet.NodeMachine.Choices
 {
     public enum SenaryChoice
     {

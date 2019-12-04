@@ -1,9 +1,9 @@
-﻿using Aptacode.StateNet.TableMachine.Inputs;
-using Aptacode.StateNet.TableMachine.States;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
 
 namespace Aptacode.StateNet.TableMachine.Transitions
 {
@@ -32,7 +32,7 @@ namespace Aptacode.StateNet.TableMachine.Transitions
             Destinations = destinations;
             _updateProbabilitys = updateProbabilitys;
             _stateWeightDistrobution = new Dictionary<State, int>();
-            foreach(var state in DestinationsToList())
+            foreach (var state in DestinationsToList())
             {
                 _stateWeightDistrobution.Add(state, 1);
             }
@@ -53,10 +53,10 @@ namespace Aptacode.StateNet.TableMachine.Transitions
             var randomChoice = new Random(DateTime.Now.Millisecond).Next(1, weightSum - 1);
 
             var total = 0;
-            foreach(var keyValue in _stateWeightDistrobution)
+            foreach (var keyValue in _stateWeightDistrobution)
             {
                 total += keyValue.Value;
-                if(total >= randomChoice)
+                if (total >= randomChoice)
                 {
                     return keyValue.Key;
                 }

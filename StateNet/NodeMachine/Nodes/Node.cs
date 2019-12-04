@@ -1,7 +1,6 @@
-﻿using Aptacode.StateNet.NodeMachine.Events;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aptacode.StateNet.NodeMachine.Events;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
@@ -17,7 +16,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         {
             OnExited?.Invoke(this);
             GetNext().Visit();
-        }) ;
+        });
 
         public abstract Node GetNext();
 
@@ -26,7 +25,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         public void Visit() => new TaskFactory().StartNew(() =>
         {
             OnVisited?.Invoke(this);
-        }) ;
+        });
 
         public string Name { get; }
     }

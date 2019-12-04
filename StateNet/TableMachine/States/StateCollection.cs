@@ -8,7 +8,7 @@ namespace Aptacode.StateNet.TableMachine.States
     {
         public StateCollection(IEnumerable<State> states) : base(states) { }
 
-        public State this[string key] { get => this.FirstOrDefault(state => state.Name.Equals(key)); }
+        public State this[string key] => this.FirstOrDefault(state => state.Name.Equals(key));
     }
 
     public class EnumStateCollection<TStates> : StateCollection
@@ -16,6 +16,6 @@ namespace Aptacode.StateNet.TableMachine.States
     {
         public EnumStateCollection() : base(Enum.GetNames(typeof(TStates)).Select(name => new State(name)).ToList()) { }
 
-        public State this[TStates key] { get => this.FirstOrDefault(state => state.Name.Equals(key.ToString())); }
+        public State this[TStates key] => this.FirstOrDefault(state => state.Name.Equals(key.ToString()));
     }
 }

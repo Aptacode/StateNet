@@ -1,9 +1,9 @@
+using System;
 using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Tables;
 using Aptacode.StateNet.TableMachine.Transitions;
 using NUnit.Framework;
-using System;
 
 namespace Aptacode.StateNet.Tests.FiniteStateMachine
 {
@@ -30,9 +30,9 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
         [Test]
         public void InitializeToNull()
         {
-            foreach(var state in (States[]) Enum.GetValues(typeof(States)))
+            foreach (var state in (States[])Enum.GetValues(typeof(States)))
             {
-                foreach(var action in (Inputs[])Enum.GetValues(typeof(Inputs)))
+                foreach (var action in (Inputs[])Enum.GetValues(typeof(Inputs)))
                 {
                     Assert.That(_stateTransitionTable.Get(_stateCollection[state], _inputCollection[action]) is InvalidTransition);
                 }

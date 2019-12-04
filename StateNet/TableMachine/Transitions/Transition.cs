@@ -1,9 +1,9 @@
-﻿using Aptacode.StateNet.TableMachine.Inputs;
-using Aptacode.StateNet.TableMachine.States;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.TableMachine.Inputs;
+using Aptacode.StateNet.TableMachine.States;
 
 namespace Aptacode.StateNet.TableMachine.Transitions
 {
@@ -39,7 +39,7 @@ namespace Aptacode.StateNet.TableMachine.Transitions
         public override State Apply()
         {
             var choice = _choiceFunction?.Invoke(Destinations);
-            if(choice.HasValue)
+            if (choice.HasValue)
             {
                 return choice.Value;
             }
