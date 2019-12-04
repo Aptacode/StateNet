@@ -1,10 +1,10 @@
-﻿using Aptacode.StateNet.NodeMachine.Events;
-using System.Collections.Generic;
+﻿using Aptacode.StateNet.NodeMachine.Choosers;
+using Aptacode.StateNet.NodeMachine.Events;
 using System.Threading.Tasks;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public abstract class Node
+    public class Node
     {
         public Node(string name) => Name = name;
 
@@ -19,22 +19,22 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         public void Exit() => new TaskFactory().StartNew(() =>
         {
             OnExited?.Invoke(this);
-            GetNext().Visit();
+            Chooser.GetNext().Visit();
         });
 
         public int GetHashCode(Node obj) => Name.GetHashCode();
 
-        public abstract Node GetNext();
-
-        public abstract IEnumerable<Node> GetNextNodes();
-
-        public abstract void UpdateReference(Node node);
+        public override string ToString() => $"{Name}->{Chooser}";
 
         public void Visit() => new TaskFactory().StartNew(() =>
         {
             OnVisited?.Invoke(this);
         });
 
+        public NodeChooser Chooser { get; set; }
+
         public string Name { get; }
     }
 }
+
+

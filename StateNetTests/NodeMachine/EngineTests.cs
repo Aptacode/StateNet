@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using Aptacode.StateNet.NodeMachine;
-using Aptacode.StateNet.NodeMachine.Choices;
-using Aptacode.StateNet.NodeMachine.Choosers;
-using Aptacode.StateNet.NodeMachine.Choosers.Probability;
+﻿using Aptacode.StateNet.NodeMachine;
 using Aptacode.StateNet.NodeMachine.Nodes;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
@@ -24,19 +21,16 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         }
 
         [SetUp]
-        public void Setup()
-        {
-
-        }
+        public void Setup() { }
 
         [Test, MaxTime(200)]
         public void TernaryBinaryDistribution()
         {
             var nodeGraph = new NodeGraph();
-            var T1 = nodeGraph.Add("T1", "U1", "U2", "B1", new TernaryProbabilityChooser(1, 1, 1));
+            var T1 = nodeGraph.Add("T1", "U1", "U2", "B1");
             var U1 = nodeGraph.Add("U1", "T1");
             var U2 = nodeGraph.Add("U2", "T1");
-            var B1 = nodeGraph.Add("B1", "T1", "End1", new DeterministicChooser<BinaryChoice>(BinaryChoice.Item1));
+            var B1 = nodeGraph.Add("B1", "T1", "End1");
             nodeGraph.SetStart("T1");
 
             T1.OnVisited += InstantTransition;
