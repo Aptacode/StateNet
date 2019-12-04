@@ -3,7 +3,6 @@ using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Transitions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Aptacode.StateNet.TableMachine.Tables
 {
@@ -15,13 +14,13 @@ namespace Aptacode.StateNet.TableMachine.Tables
         public void Set(State fromState, Input input, string message)
         {
             var transition = new InvalidTransition(fromState, input, message);
-            this.Set(transition);
+            Set(transition);
         }
 
         public void Set(State fromState, Input input, State toState, string message)
         {
             var transition = new Transition(fromState, input, toState, message);
-            this.Set(transition);
+            Set(transition);
         }
 
         public void Set(State fromState,
@@ -36,7 +35,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
                                                             (toState1, toState2),
                                                             choiceFunction,
                                                             message);
-            this.Set(transition);
+            Set(transition);
         }
 
         public void Set(State fromState,
@@ -51,7 +50,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
                                                                        (toState1, toState2),
                                                                        choiceFunction,
                                                                        message);
-            this.Set(transition);
+            Set(transition);
         }
 
         public void Set(State fromState,
@@ -69,7 +68,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
                                                                                                              toState3),
                                                                    choiceFunction,
                                                                    message);
-            this.Set(transition);
+            Set(transition);
         }
 
         public void Set(State fromState,
@@ -89,7 +88,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
                                                                                     toState4),
                                                                           choiceFunction,
                                                                           message);
-            this.Set(transition);
+            Set(transition);
         }
     }
 }

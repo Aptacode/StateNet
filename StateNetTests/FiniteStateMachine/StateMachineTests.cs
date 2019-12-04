@@ -4,7 +4,6 @@ using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Tables;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aptacode.StateNet.Tests.FiniteStateMachine
@@ -42,7 +41,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
         public void InitialState() => Assert.That(() => _stateCollection[States.Begin],
                                                   Is.EqualTo(_stateMachine.State).After(100).MilliSeconds.PollEvery(1)
             .MilliSeconds,
-                                                  "Initial state should be 'Begin'") ;
+                                                  "Initial state should be 'Begin'");
 
 
         [Test]

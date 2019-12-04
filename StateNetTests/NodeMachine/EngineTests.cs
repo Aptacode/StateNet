@@ -1,61 +1,44 @@
 ﻿using Aptacode.StateNet.NodeMachine;
-using Aptacode.StateNet.NodeMachine.Choices;
 using Aptacode.StateNet.NodeMachine.Nodes;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
     public class Tests
     {
-        private NodeEngine _engine;
-        private BinaryNode B1;
-        private EndNode End1;
-        private TernaryNode T1;
-
-        private UnaryNode U1;
-        private UnaryNode U2;
-        private UnaryNode U3;
-
         private void InstantTransition(Node sender) => sender.Exit();
 
         [Test]
-        public void InvalidEngine()
+        public void InvalidGraph()
         {
-            U1.Visits(U2);
-            U2.Visits(U1);
+            var nodeGraph = new NodeGraph();
+            nodeGraph.SetStart("U1");
+            nodeGraph.Add("U1", "U2");
+            nodeGraph.Add("U2", "U1");
 
-            Assert.IsFalse(new NodeEngine(U1).IsValid());
+            Assert.IsFalse(nodeGraph.IsValid());
         }
-
 
         [SetUp]
-        public void Setup()
-        {
-            U1 = new UnaryNode(nameof(U1));
-            U2 = new UnaryNode(nameof(U2));
-            U3 = new UnaryNode(nameof(U3));
-            B1 = new BinaryNode(nameof(B1));
-            T1 = new TernaryNode(nameof(T1));
-            End1 = new EndNode(nameof(End1));
-        }
+        public void Setup() { }
 
         [Test, MaxTime(200)]
         public void TernaryBinaryDistribution()
         {
-            var engine = new NodeEngine(T1);
-
-            T1.Visits(U1, U2, B1, new TernaryProbabilityChooser(1, 1, 1));
-            U1.Visits(T1);
-            U2.Visits(T1);
-            B1.Visits(T1, End1, new DeterministicChooser<BinaryChoice>(BinaryChoice.Item1));
+            var nodeGraph = new NodeGraph();
+            var T1 = nodeGraph.Add("T1", "U1", "U2", "B1");
+            var U1 = nodeGraph.Add("U1", "T1");
+            var U2 = nodeGraph.Add("U2", "T1");
+            var B1 = nodeGraph.Add("B1", "T1", "End1");
+            nodeGraph.SetStart("T1");
 
             T1.OnVisited += InstantTransition;
             U1.OnVisited += InstantTransition;
             U2.OnVisited += InstantTransition;
             B1.OnVisited += InstantTransition;
 
+            var engine = new NodeEngine(nodeGraph);
             engine.Start();
 
             engine.OnFinished += (s) =>
@@ -68,10 +51,14 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         [Test, MaxTime(200)]
         public void UnaryTransitionLog()
         {
-            var engine = new NodeEngine(U1);
+            var graph = new NodeGraph();
+            graph.SetStart("U1");
+            var U1 = graph.Add("U1", "U2");
+            var U2 = graph.Add("U2", "End");
+            var End = graph.GetNode("End");
 
-            U1.Visits(U2);
-            U2.Visits(End1);
+            var engine = new NodeEngine(graph);
+
             U1.OnVisited += InstantTransition;
             U2.OnVisited += InstantTransition;
 
@@ -79,15 +66,18 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 
             engine.OnFinished += (s) =>
             {
-                Assert.That(engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End1 }));
+                Assert.That(engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End }));
             };
         }
 
         [Test]
         public void ValidEngine()
         {
-            U1.Visits(End1);
-            Assert.IsTrue(new NodeEngine(U1).IsValid());
+            var nodeGraph = new NodeGraph();
+            nodeGraph.SetStart("U1");
+            nodeGraph.Add("U1", "End");
+
+            Assert.IsTrue(nodeGraph.IsValid());
         }
     }
 }

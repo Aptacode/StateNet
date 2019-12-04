@@ -30,7 +30,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
         [Test]
         public void InitializeToNull()
         {
-            foreach(var state in (States[]) Enum.GetValues(typeof(States)))
+            foreach(var state in (States[])Enum.GetValues(typeof(States)))
             {
                 foreach(var action in (Inputs[])Enum.GetValues(typeof(Inputs)))
                 {

@@ -117,28 +117,26 @@ To start the graph create an instance of 'NodeEngine' which you pass in through 
 
 ```csharp
 
-//Define all the nodes
-var U1 = new UnaryNode("U1");
-var U2 = new UnaryNode("U2");
-var U3 = new UnaryNode("U3");
-var B1 = new BinaryNode("B1");
-var T1 = new TernaryNode("T1");
-var End = new EndNode("End");
-
-//Define all the nodes each node can visit And the critera for deciding which to choose
-T1.Visits(B1, U1, U2, () => new TernaryDistribution(1, 1, 1));
-B1.Visits(T1, End, () => new IDeterministicChoice<BinaryChoice>(BinaryChoice.Item1)));
-U1.Visits(T1);
-U2.Visits(T1);
+//Define all of the nodes each node can visit And the critera for deciding which to choose
+var nodeGraph = new NodeGraph();
+nodeGraph.SetStart("T1");
+var T1 = nodeGraph.Add("T1", "U1", "U2", "B1", new TernaryProbabilityChooser(1, 1, 1));
+var U1 = nodeGraph.Add("U1", "T1");
+var U2 = nodeGraph.Add("U2", "T1");
+var B1 = nodeGraph.Add("B1", "T1", "End1", new DeterministicChooser<BinaryChoice>(BinaryChoice.Item1));
 
 T1.OnVisited += InstantTransition;
 U1.OnVisited += InstantTransition;
 U2.OnVisited += InstantTransition;
 B1.OnVisited += InstantTransition;
 
-_engine = new NodeEngine(Begin);
+_engine = new NodeEngine(nodeGraph);
 _engine.Start();
-
+_engine.OnFinished += (s) =>
+{
+...
+};
+  
 private void InstantTransition(Node sender) => sender.Exit();
 
 ```

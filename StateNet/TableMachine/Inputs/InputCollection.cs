@@ -8,7 +8,7 @@ namespace Aptacode.StateNet.TableMachine.Inputs
     {
         public InputCollection(IEnumerable<Input> inputs) : base(inputs) { }
 
-        public Input this[string key] { get => this.FirstOrDefault(input => input.Name.Equals(key)); }
+        public Input this[string key] => this.FirstOrDefault(input => input.Name.Equals(key));
     }
 
     public class EnumInputCollection<TInputs> : InputCollection
@@ -16,6 +16,6 @@ namespace Aptacode.StateNet.TableMachine.Inputs
     {
         public EnumInputCollection() : base(Enum.GetNames(typeof(TInputs)).Select(name => new Input(name)).ToList()) { }
 
-        public Input this[TInputs key] { get => this.FirstOrDefault(input => input.Name.Equals(key.ToString())); }
+        public Input this[TInputs key] => this.FirstOrDefault(input => input.Name.Equals(key.ToString()));
     }
 }

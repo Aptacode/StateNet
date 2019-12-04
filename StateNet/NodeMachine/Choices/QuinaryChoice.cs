@@ -1,9 +1,11 @@
 ﻿namespace Aptacode.StateNet.NodeMachine.Choices
 {
-    public enum TernaryChoice
+    public enum QuinaryChoice
     {
         Item1,
         Item2,
-        Item3
+        Item3,
+        Item4,
+        Item5
     }
 }

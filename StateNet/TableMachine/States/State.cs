@@ -6,9 +6,9 @@ namespace Aptacode.StateNet.TableMachine.States
     {
         public State(string name) => Name = name;
 
-        public override bool Equals(object obj) => (obj is State other) && this.Equals(other);
+        public override bool Equals(object obj) => (obj is State other) && Equals(other);
 
-        public bool Equals(State other) => this.Name.Equals(other.Name);
+        public bool Equals(State other) => Name.Equals(other.Name);
 
         public override int GetHashCode() => Name.GetHashCode();
 
