@@ -11,5 +11,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
         public override IEnumerable<Node> GetNextNodes() => new List<Node>();
 
         public override string ToString() => $"{Name}";
+
+        public override void UpdateReference(Node node) { }
     }
 }

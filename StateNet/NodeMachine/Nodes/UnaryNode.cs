@@ -12,6 +12,14 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override string ToString() => $"{Name}->{DestinationNode.Name}";
 
+        public override void UpdateReference(Node node)
+        {
+            if(DestinationNode?.Equals(node) == true)
+            {
+                DestinationNode = node;
+            }
+        }
+
         public void Visits(Node destinationNode) => DestinationNode = destinationNode;
 
         public Node DestinationNode { get; private set; }

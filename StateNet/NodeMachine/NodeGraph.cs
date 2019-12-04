@@ -1,4 +1,5 @@
 ﻿using Aptacode.StateNet.NodeMachine.Choices;
+using Aptacode.StateNet.NodeMachine.Choosers.Probability;
 using Aptacode.StateNet.NodeMachine.Nodes;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Aptacode.StateNet.NodeMachine
         {
             var sourceNode = new UnaryNode(sourceName);
             sourceNode.Visits(GetNode(destinationName));
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             return sourceNode;
         }
 
@@ -35,16 +36,23 @@ namespace Aptacode.StateNet.NodeMachine
                 case 1:
                     throw new Exception();
                 case 2:
-                    return Add(sourceName, destinationNames[0], destinationNames[1], null);
+                    return Add(sourceName,
+                               destinationNames[0],
+                               destinationNames[1],
+                               ProbabilityChooserFactory.GetChooser<BinaryChoice>());
                 case 3:
-                    return Add(sourceName, destinationNames[0], destinationNames[1], destinationNames[2], null);
+                    return Add(sourceName,
+                               destinationNames[0],
+                               destinationNames[1],
+                               destinationNames[2],
+                               ProbabilityChooserFactory.GetChooser<TernaryChoice>());
                 case 4:
                     return Add(sourceName,
                                destinationNames[0],
                                destinationNames[1],
                                destinationNames[2],
                                destinationNames[3],
-                               null);
+                               ProbabilityChooserFactory.GetChooser<QuaternaryChoice>());
                 case 5:
                     return Add(sourceName,
                                destinationNames[0],
@@ -52,7 +60,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[2],
                                destinationNames[3],
                                destinationNames[4],
-                               null);
+                               ProbabilityChooserFactory.GetChooser<QuinaryChoice>());
                 case 6:
                     return Add(sourceName,
                                destinationNames[0],
@@ -61,7 +69,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[3],
                                destinationNames[4],
                                destinationNames[5],
-                               null);
+                               ProbabilityChooserFactory.GetChooser<SenaryChoice>());
                 case 7:
                     return Add(sourceName,
                                destinationNames[0],
@@ -71,7 +79,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[4],
                                destinationNames[5],
                                destinationNames[7],
-                               null);
+                               ProbabilityChooserFactory.GetChooser<SeptenaryChoice>());
                 case 8:
                     return Add(sourceName,
                                destinationNames[0],
@@ -82,7 +90,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[5],
                                destinationNames[7],
                                destinationNames[8],
-                               null);
+                               ProbabilityChooserFactory.GetChooser<OctaryChoice>());
                 default:
                     throw new Exception();
             }
@@ -94,7 +102,7 @@ namespace Aptacode.StateNet.NodeMachine
                               IChooser<BinaryChoice> chooser)
         {
             var sourceNode = new BinaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1), GetNode(destinationName2), chooser);
             return sourceNode;
         }
@@ -106,7 +114,7 @@ namespace Aptacode.StateNet.NodeMachine
                                IChooser<TernaryChoice> chooser)
         {
             var sourceNode = new TernaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1), GetNode(destinationName2), GetNode(destinationName3), chooser);
             return sourceNode;
         }
@@ -119,7 +127,7 @@ namespace Aptacode.StateNet.NodeMachine
                                   IChooser<QuaternaryChoice> chooser)
         {
             var sourceNode = new QuaternaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -137,7 +145,7 @@ namespace Aptacode.StateNet.NodeMachine
                                IChooser<QuinaryChoice> chooser)
         {
             var sourceNode = new QuinaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -157,7 +165,7 @@ namespace Aptacode.StateNet.NodeMachine
                               IChooser<SenaryChoice> chooser)
         {
             var sourceNode = new SenaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -179,7 +187,7 @@ namespace Aptacode.StateNet.NodeMachine
                                  IChooser<SeptenaryChoice> chooser)
         {
             var sourceNode = new SeptenaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -203,7 +211,7 @@ namespace Aptacode.StateNet.NodeMachine
                               IChooser<OctaryChoice> chooser)
         {
             var sourceNode = new OctaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -229,7 +237,7 @@ namespace Aptacode.StateNet.NodeMachine
                               IChooser<NonaryChoice> chooser)
         {
             var sourceNode = new NonaryNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            SetNode(sourceNode);
             sourceNode.Visits(GetNode(destinationName1),
                               GetNode(destinationName2),
                               GetNode(destinationName3),
@@ -275,8 +283,16 @@ namespace Aptacode.StateNet.NodeMachine
 
         public bool IsValid() => GetEndNodes().Any();
 
-        public void SetStart(string sourceName) => StartNode = GetNode(sourceName);
+        public void SetNode(Node node)
+        {
+            _nodes[node.Name] = node;
+            foreach(var parentNode in _nodes.Select(keyValue => keyValue.Value))
+            {
+                parentNode.UpdateReference(node);
+            }
+        }
 
+        public void SetStart(string sourceName) => StartNode = GetNode(sourceName);
 
         public Node StartNode { get; set; }
     }

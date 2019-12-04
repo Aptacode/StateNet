@@ -28,6 +28,18 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override string ToString() => $"{Name}->{DestinationNodeA.Name},{DestinationNodeB.Name}";
 
+        public override void UpdateReference(Node node)
+        {
+            if(DestinationNodeA?.Equals(node) == true)
+            {
+                DestinationNodeA = node;
+            }
+            if(DestinationNodeB?.Equals(node) == true)
+            {
+                DestinationNodeB = node;
+            }
+        }
+
         public void Visits(Node destinationNodeA, Node destinationNodeB, IChooser<BinaryChoice> choiceFunction)
         {
             DestinationNodeA = destinationNodeA;
