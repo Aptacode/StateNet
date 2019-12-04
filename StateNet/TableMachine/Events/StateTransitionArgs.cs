@@ -1,6 +1,6 @@
-﻿using System;
-using Aptacode.StateNet.TableMachine.Inputs;
+﻿using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
+using System;
 
 namespace Aptacode.StateNet.TableMachine.Events
 {

@@ -1,7 +1,7 @@
-﻿using System.Collections.Concurrent;
-using Aptacode.StateNet.TableMachine.Inputs;
+﻿using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Transitions;
+using System.Collections.Concurrent;
 
 namespace Aptacode.StateNet.TableMachine.Tables
 {
@@ -20,7 +20,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
         {
             var stateDictionary = new ConcurrentDictionary<Input, BaseTransition>();
 
-            foreach (var input in Inputs)
+            foreach(var input in Inputs)
             {
                 stateDictionary.TryAdd(input, new InvalidTransition(state, input, "Undefined"));
             }
@@ -32,7 +32,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
         {
             var transitionDictionary = new ConcurrentDictionary<State, ConcurrentDictionary<Input, BaseTransition>>();
 
-            foreach (var state in States)
+            foreach(var state in States)
             {
                 transitionDictionary.TryAdd(state, CreateEmptyInputDictionary(state));
             }
@@ -46,15 +46,15 @@ namespace Aptacode.StateNet.TableMachine.Tables
         /// <param name="transition"></param>
         protected bool Set(BaseTransition newTransition)
         {
-            if (newTransition == null)
+            if(newTransition == null)
             {
                 return false;
             }
 
-            if (_transitions.TryGetValue(newTransition.Origin, out var inputDictionary))
+            if(_transitions.TryGetValue(newTransition.Origin, out var inputDictionary))
             {
                 inputDictionary.TryGetValue(newTransition.Input, out var oldTransition);
-                if (inputDictionary.TryUpdate(newTransition.Input, newTransition, oldTransition))
+                if(inputDictionary.TryUpdate(newTransition.Input, newTransition, oldTransition))
                 {
                     return true;
                 }
@@ -68,9 +68,9 @@ namespace Aptacode.StateNet.TableMachine.Tables
         /// <param name="transition"></param>
         public bool Clear(BaseTransition oldTransition)
         {
-            if (_transitions.TryGetValue(oldTransition.Origin, out var inputDictionary))
+            if(_transitions.TryGetValue(oldTransition.Origin, out var inputDictionary))
             {
-                if (inputDictionary.TryUpdate(oldTransition.Input,
+                if(inputDictionary.TryUpdate(oldTransition.Input,
                                              new InvalidTransition(oldTransition.Origin,
                                                                    oldTransition.Input,
                                                                    "Undefined"),
@@ -92,7 +92,7 @@ namespace Aptacode.StateNet.TableMachine.Tables
         public BaseTransition Get(State state, Input input)
         {
             BaseTransition transition = null;
-            if (_transitions.TryGetValue(state, out var inputDictionary))
+            if(_transitions.TryGetValue(state, out var inputDictionary))
             {
                 inputDictionary.TryGetValue(input, out transition);
             }

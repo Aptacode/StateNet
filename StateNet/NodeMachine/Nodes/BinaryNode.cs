@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Aptacode.StateNet.NodeMachine.Choices;
+using System;
 using System.Collections.Generic;
-using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public class BinaryNode : Node
+    public class BinaryNode : NonDeterministicNode<BinaryChoice>
     {
         private Node DestinationNodeA;
         private Node DestinationNodeB;
@@ -13,7 +13,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override Node GetNext()
         {
-            switch (Chooser.GetChoice())
+            switch(Chooser.GetChoice())
             {
                 case BinaryChoice.Item1:
                     return DestinationNodeA;
@@ -34,8 +34,5 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeB = destinationNodeB;
             Chooser = choiceFunction;
         }
-
-        public IChooser<BinaryChoice> Chooser { get; set; }
     }
-;
 }

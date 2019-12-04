@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Aptacode.StateNet.NodeMachine.Events;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aptacode.StateNet.NodeMachine.Events;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {

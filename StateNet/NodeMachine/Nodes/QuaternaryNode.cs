@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Aptacode.StateNet.NodeMachine.Choices;
+using System;
 using System.Collections.Generic;
-using Aptacode.StateNet.NodeMachine.Choices;
 
 namespace Aptacode.StateNet.NodeMachine.Nodes
 {
-    public class QuaternaryNode : Node
+    public class QuaternaryNode : NonDeterministicNode<QuaternaryChoice>
     {
         private Node DestinationNodeA;
         private Node DestinationNodeB;
@@ -15,7 +15,7 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
 
         public override Node GetNext()
         {
-            switch (Chooser.GetChoice())
+            switch(Chooser.GetChoice())
             {
                 case QuaternaryChoice.Item1:
                     return DestinationNodeA;
@@ -47,7 +47,5 @@ namespace Aptacode.StateNet.NodeMachine.Nodes
             DestinationNodeD = destinationNodeD;
             Chooser = chooser;
         }
-
-        public IChooser<QuaternaryChoice> Chooser { get; set; }
     }
 }

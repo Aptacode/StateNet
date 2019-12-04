@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Aptacode.StateNet.TableMachine.Inputs;
+﻿using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Transitions;
+using System;
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.TableMachine.Tables
 {

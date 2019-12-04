@@ -1,5 +1,5 @@
-﻿using System;
-using Aptacode.StateNet.NodeMachine.Choices;
+﻿using Aptacode.StateNet.NodeMachine.Choices;
+using System;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 {
@@ -24,41 +24,34 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probability
 
         public override SeptenaryChoice GetChoice()
         {
-            if (TotalWeight == 0)
+            if(TotalWeight == 0)
             {
                 throw new Exception();
             }
 
             var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
-            if (randomChoice <= Item1Weight)
+            if(randomChoice <= Item1Weight)
             {
                 return SeptenaryChoice.Item1;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight)
             {
                 return SeptenaryChoice.Item2;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight)
             {
                 return SeptenaryChoice.Item3;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight)
             {
                 return SeptenaryChoice.Item4;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight)
             {
                 return SeptenaryChoice.Item5;
-            }
-            else if (randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight)
+            } else if(randomChoice <= Item1Weight + Item2Weight + Item3Weight + Item4Weight + Item5Weight + Item6Weight)
             {
                 return SeptenaryChoice.Item6;
-            }
-            else if (randomChoice <= TotalWeight)
+            } else if(randomChoice <= TotalWeight)
             {
                 return SeptenaryChoice.Item7;
-            }
-            else
+            } else
             {
                 throw new Exception();
             }

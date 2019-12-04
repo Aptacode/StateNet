@@ -27,14 +27,13 @@ namespace Aptacode.StateNet.NodeMachine
             return sourceNode;
         }
 
-        public Node Add(string sourceName, List<string> destinationNames)
+        public NonDeterministicNode Add(string sourceName, List<string> destinationNames)
         {
             switch(destinationNames.Count)
             {
                 case 0:
-                    return Add(sourceName);
                 case 1:
-                    return Add(sourceName, destinationNames[0]);
+                    throw new Exception();
                 case 2:
                     return Add(sourceName, destinationNames[0], destinationNames[1], null);
                 case 3:
