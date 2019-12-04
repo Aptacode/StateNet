@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Aptacode.StateNet.TableMachine;
 using Aptacode.StateNet.TableMachine.Inputs;
 using Aptacode.StateNet.TableMachine.States;
 using Aptacode.StateNet.TableMachine.Tables;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Aptacode.StateNet.Tests.FiniteStateMachine
 {
@@ -75,11 +75,10 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
             var pauseCount = 0;
             _stateMachine.OnTransition += (s, e) =>
             {
-                if (e.Input.Name == "Play")
+                if(e.Input.Name == "Play")
                 {
                     playCount++;
-                }
-                else if (e.Input.Name == "Pause")
+                } else if(e.Input.Name == "Pause")
                 {
                     pauseCount++;
                 }
@@ -87,7 +86,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
 
             var task1 = new TaskFactory().StartNew(() =>
             {
-                for (var i = 0; i < 10; i++)
+                for(var i = 0; i < 10; i++)
                 {
                     _stateMachine.Apply(_inputCollection[Inputs.Play]);
                 }
@@ -95,7 +94,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
 
             var task2 = new TaskFactory().StartNew(() =>
             {
-                for (var i = 0; i < 10; i++)
+                for(var i = 0; i < 10; i++)
                 {
                     _stateMachine.Apply(_inputCollection[Inputs.Pause]);
                 }
@@ -124,7 +123,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
 
                                       (states) =>
             {
-                if (_canPlay)
+                if(_canPlay)
                 {
                     return states.Item1;
                 }
@@ -158,7 +157,7 @@ namespace Aptacode.StateNet.Tests.FiniteStateMachine
                                       _stateCollection[States.End],
                                       (states) =>
             {
-                if (_canPlay)
+                if(_canPlay)
                 {
                     return states.Item1;
                 }

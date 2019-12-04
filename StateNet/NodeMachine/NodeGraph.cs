@@ -1,6 +1,7 @@
 ﻿using Aptacode.StateNet.NodeMachine.Choices;
-using Aptacode.StateNet.NodeMachine.Choosers.Probability;
+using Aptacode.StateNet.NodeMachine.Choosers;
 using Aptacode.StateNet.NodeMachine.Nodes;
+using Aptacode.StateNet.NodeMachine.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,54 +14,38 @@ namespace Aptacode.StateNet.NodeMachine
 
         public NodeGraph() => _nodes = new Dictionary<string, Node>();
 
-        public EndNode Add(string sourceName)
+        public Node Add(string sourceName)
         {
-            var sourceNode = new EndNode(sourceName);
-            _nodes[sourceName] = sourceNode;
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = null;
             return sourceNode;
         }
 
-        public UnaryNode Add(string sourceName, string destinationName)
-        {
-            var sourceNode = new UnaryNode(sourceName);
-            sourceNode.Visits(GetNode(destinationName));
-            SetNode(sourceNode);
-            return sourceNode;
-        }
-
-        public NonDeterministicNode Add(string sourceName, List<string> destinationNames)
+        public Node Add(string sourceName, List<string> destinationNames)
         {
             switch(destinationNames.Count)
             {
                 case 0:
+
                 case 1:
                     throw new Exception();
                 case 2:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               ProbabilityChooserFactory.GetChooser<BinaryChoice>());
+                    return Add(sourceName, destinationNames[0], destinationNames[1]);
                 case 3:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               ProbabilityChooserFactory.GetChooser<TernaryChoice>());
+                    return Add(sourceName, destinationNames[0], destinationNames[1], destinationNames[2]);
                 case 4:
                     return Add(sourceName,
                                destinationNames[0],
                                destinationNames[1],
                                destinationNames[2],
-                               destinationNames[3],
-                               ProbabilityChooserFactory.GetChooser<QuaternaryChoice>());
+                               destinationNames[3]);
                 case 5:
                     return Add(sourceName,
                                destinationNames[0],
                                destinationNames[1],
                                destinationNames[2],
                                destinationNames[3],
-                               destinationNames[4],
-                               ProbabilityChooserFactory.GetChooser<QuinaryChoice>());
+                               destinationNames[4]);
                 case 6:
                     return Add(sourceName,
                                destinationNames[0],
@@ -68,8 +53,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[2],
                                destinationNames[3],
                                destinationNames[4],
-                               destinationNames[5],
-                               ProbabilityChooserFactory.GetChooser<SenaryChoice>());
+                               destinationNames[5]);
                 case 7:
                     return Add(sourceName,
                                destinationNames[0],
@@ -78,8 +62,7 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[3],
                                destinationNames[4],
                                destinationNames[5],
-                               destinationNames[7],
-                               ProbabilityChooserFactory.GetChooser<SeptenaryChoice>());
+                               destinationNames[6]);
                 case 8:
                     return Add(sourceName,
                                destinationNames[0],
@@ -88,193 +71,179 @@ namespace Aptacode.StateNet.NodeMachine
                                destinationNames[3],
                                destinationNames[4],
                                destinationNames[5],
+                               destinationNames[6],
+                               destinationNames[7]);
+                case 9:
+                    return Add(sourceName,
+                               destinationNames[0],
+                               destinationNames[1],
+                               destinationNames[2],
+                               destinationNames[3],
+                               destinationNames[4],
+                               destinationNames[5],
+                               destinationNames[6],
                                destinationNames[7],
-                               destinationNames[8],
-                               ProbabilityChooserFactory.GetChooser<OctaryChoice>());
+                               destinationNames[8]);
                 default:
                     throw new Exception();
             }
         }
 
-        public BinaryNode Add(string sourceName,
-                              string destinationName1,
-                              string destinationName2,
-                              IChooser<BinaryChoice> chooser)
+        public Node Add(string sourceName, string destinationName)
         {
-            var sourceNode = new BinaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1), GetNode(destinationName2), chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new DeterministicChooser<UnaryChoice>(new UnaryOptions(GetNode(destinationName)),
+                                                                       UnaryChoice.Item1);
             return sourceNode;
         }
 
-        public TernaryNode Add(string sourceName,
-                               string destinationName1,
-                               string destinationName2,
-                               string destinationName3,
-                               IChooser<TernaryChoice> chooser)
+        public Node Add(string sourceName, string destinationName1, string destinationName2)
         {
-            var sourceNode = new TernaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1), GetNode(destinationName2), GetNode(destinationName3), chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<BinaryChoice>(new BinaryOptions(GetNode(destinationName1),
+                                                                                          GetNode(destinationName2)));
             return sourceNode;
         }
 
-        public QuaternaryNode Add(string sourceName,
-                                  string destinationName1,
-                                  string destinationName2,
-                                  string destinationName3,
-                                  string destinationName4,
-                                  IChooser<QuaternaryChoice> chooser)
+        public Node Add(string sourceName, string destinationName1, string destinationName2, string destinationName3)
         {
-            var sourceNode = new QuaternaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<TernaryChoice>(new TernaryOptions(GetNode(destinationName1),
+                                                                                            GetNode(destinationName2),
+                                                                                            GetNode(destinationName3)));
+
             return sourceNode;
         }
 
-        public QuinaryNode Add(string sourceName,
-                               string destinationName1,
-                               string destinationName2,
-                               string destinationName3,
-                               string destinationName4,
-                               string destinationName5,
-                               IChooser<QuinaryChoice> chooser)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4)
         {
-            var sourceNode = new QuinaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              GetNode(destinationName5),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<QuaternaryChoice>(new QuaternaryOptions(GetNode(destinationName1),
+                                                                                                  GetNode(destinationName2),
+                                                                                                  GetNode(destinationName3),
+                                                                                                  GetNode(destinationName4)));
             return sourceNode;
         }
 
-        public SenaryNode Add(string sourceName,
-                              string destinationName1,
-                              string destinationName2,
-                              string destinationName3,
-                              string destinationName4,
-                              string destinationName5,
-                              string destinationName6,
-                              IChooser<SenaryChoice> chooser)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4,
+                        string destinationName5)
         {
-            var sourceNode = new SenaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              GetNode(destinationName5),
-                              GetNode(destinationName6),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<QuinaryChoice>(new QuinaryOptions(GetNode(destinationName1),
+                                                                                            GetNode(destinationName2),
+                                                                                            GetNode(destinationName3),
+                                                                                            GetNode(destinationName4),
+                                                                                            GetNode(destinationName5)));
+
             return sourceNode;
         }
 
-        public SeptenaryNode Add(string sourceName,
-                                 string destinationName1,
-                                 string destinationName2,
-                                 string destinationName3,
-                                 string destinationName4,
-                                 string destinationName5,
-                                 string destinationName6,
-                                 string destinationName7,
-                                 IChooser<SeptenaryChoice> chooser)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4,
+                        string destinationName5,
+                        string destinationName6)
         {
-            var sourceNode = new SeptenaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              GetNode(destinationName5),
-                              GetNode(destinationName6),
-                              GetNode(destinationName7),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<SenaryChoice>(new SenaryOptions(GetNode(destinationName1),
+                                                                                          GetNode(destinationName2),
+                                                                                          GetNode(destinationName3),
+                                                                                          GetNode(destinationName4),
+                                                                                          GetNode(destinationName5),
+                                                                                          GetNode(destinationName6)));
+
             return sourceNode;
         }
 
-        public OctaryNode Add(string sourceName,
-                              string destinationName1,
-                              string destinationName2,
-                              string destinationName3,
-                              string destinationName4,
-                              string destinationName5,
-                              string destinationName6,
-                              string destinationName7,
-                              string destinationName8,
-                              IChooser<OctaryChoice> chooser)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4,
+                        string destinationName5,
+                        string destinationName6,
+                        string destinationName7)
         {
-            var sourceNode = new OctaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              GetNode(destinationName5),
-                              GetNode(destinationName6),
-                              GetNode(destinationName7),
-                              GetNode(destinationName8),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<SeptenaryChoice>(new SeptenaryOptions(GetNode(destinationName1),
+                                                                                                GetNode(destinationName2),
+                                                                                                GetNode(destinationName3),
+                                                                                                GetNode(destinationName4),
+                                                                                                GetNode(destinationName5),
+                                                                                                GetNode(destinationName6),
+                                                                                                GetNode(destinationName7)));
+
             return sourceNode;
         }
 
-        public NonaryNode Add(string sourceName,
-                              string destinationName1,
-                              string destinationName2,
-                              string destinationName3,
-                              string destinationName4,
-                              string destinationName5,
-                              string destinationName6,
-                              string destinationName7,
-                              string destinationName8,
-                              string destinationName9,
-                              IChooser<NonaryChoice> chooser)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4,
+                        string destinationName5,
+                        string destinationName6,
+                        string destinationName7,
+                        string destinationName8)
         {
-            var sourceNode = new NonaryNode(sourceName);
-            SetNode(sourceNode);
-            sourceNode.Visits(GetNode(destinationName1),
-                              GetNode(destinationName2),
-                              GetNode(destinationName3),
-                              GetNode(destinationName4),
-                              GetNode(destinationName5),
-                              GetNode(destinationName6),
-                              GetNode(destinationName7),
-                              GetNode(destinationName8),
-                              GetNode(destinationName9),
-                              chooser);
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<OctaryChoice>(new OctaryOptions(GetNode(destinationName1),
+                                                                                          GetNode(destinationName2),
+                                                                                          GetNode(destinationName3),
+                                                                                          GetNode(destinationName4),
+                                                                                          GetNode(destinationName5),
+                                                                                          GetNode(destinationName6),
+                                                                                          GetNode(destinationName7),
+                                                                                          GetNode(destinationName8)));
+
             return sourceNode;
         }
 
-        public HashSet<Node> Flatten(Node node, HashSet<Node> visitedNodes)
+        public Node Add(string sourceName,
+                        string destinationName1,
+                        string destinationName2,
+                        string destinationName3,
+                        string destinationName4,
+                        string destinationName5,
+                        string destinationName6,
+                        string destinationName7,
+                        string destinationName8,
+                        string destinationName9)
         {
-            if(!visitedNodes.Contains(node))
-            {
-                visitedNodes.Add(node);
-                foreach(var exitNode in node.GetNextNodes())
-                {
-                    Flatten(exitNode, visitedNodes);
-                }
-            }
+            var sourceNode = GetNode(sourceName);
+            sourceNode.Chooser = new ProbabilisticChooser<NonaryChoice>(new NonaryOptions(GetNode(destinationName1),
+                                                                                          GetNode(destinationName2),
+                                                                                          GetNode(destinationName3),
+                                                                                          GetNode(destinationName4),
+                                                                                          GetNode(destinationName5),
+                                                                                          GetNode(destinationName6),
+                                                                                          GetNode(destinationName7),
+                                                                                          GetNode(destinationName8),
+                                                                                          GetNode(destinationName9)));
 
-            return visitedNodes;
+            return sourceNode;
         }
 
         public IEnumerable<Node> GetAll() => _nodes.Select(keyValue => keyValue.Value);
 
-        public IEnumerable<EndNode> GetEndNodes() => _nodes.Select(keyValue => keyValue.Value as EndNode)
-            .Where(value => value != null);
+        public IEnumerable<Node> GetEndNodes() => _nodes.Select(keyValue => keyValue.Value)
+            .Where(value => value.Chooser == null);
 
         public Node GetNode(string name)
         {
             if(!_nodes.TryGetValue(name, out var node))
             {
-                node = new EndNode(name);
+                node = new Node(name);
                 _nodes.Add(name, node);
             }
 
@@ -283,14 +252,7 @@ namespace Aptacode.StateNet.NodeMachine
 
         public bool IsValid() => GetEndNodes().Any();
 
-        public void SetNode(Node node)
-        {
-            _nodes[node.Name] = node;
-            foreach(var parentNode in _nodes.Select(keyValue => keyValue.Value))
-            {
-                parentNode.UpdateReference(node);
-            }
-        }
+        public void SetNode(Node node) => _nodes[node.Name] = node ;
 
         public void SetStart(string sourceName) => StartNode = GetNode(sourceName);
 

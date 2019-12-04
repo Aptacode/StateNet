@@ -24,13 +24,10 @@ namespace Aptacode.StateNet.NodeMachine
         {
             foreach(var node in _nodeGraph.GetEndNodes())
             {
-                if(node is EndNode)
+                node.OnVisited += (s) =>
                 {
-                    node.OnVisited += (s) =>
-                    {
-                        OnFinished?.Invoke(this);
-                    };
-                }
+                    OnFinished?.Invoke(this);
+                };
             }
         }
 

@@ -1,14 +1,18 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
+﻿using Aptacode.StateNet.NodeMachine.Nodes;
+using Aptacode.StateNet.NodeMachine.Options;
+using System;
+using System.Linq;
 
 namespace Aptacode.StateNet.NodeMachine.Choosers
 {
-    public class DeterministicChooser<TChoice> : IChooser<TChoice>
-        where TChoice : System.Enum
+    public class DeterministicChooser<TChoices> : NodeChooser<TChoices>
+        where TChoices : System.Enum
     {
-        public DeterministicChooser(TChoice choice) => Choice = choice;
+        public DeterministicChooser(NodeOptions<TChoices> choices, TChoices defaultChoice) : base(choices) => Selection =
+            defaultChoice;
 
-        public TChoice GetChoice() => Choice;
+        public override Node GetNext() => Options.GetNode(Selection) ;
 
-        public TChoice Choice { get; set; }
+        public TChoices Selection { get; set; }
     }
 }
