@@ -8,6 +8,10 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Deterministic
 {
     public class TernaryDeterministicChooser : DeterministicChooser<TernaryChoice>
     {
-        public TernaryDeterministicChooser(Node option1, Node option2, Node option3) : base(new TernaryOptions(option1, option2, option3), TernaryChoice.Item1) { }
+        public TernaryDeterministicChooser(Node option1, Node option2, Node option3) : base(new TernaryOptions(option1,
+                                                                                                               option2,
+                                                                                                               option3),
+                                                                                            TernaryChoice.Item1)
+        { }
     }
 }

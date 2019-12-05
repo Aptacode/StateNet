@@ -8,6 +8,17 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probabilistic
 {
     public class SenaryProbabilisticChooser : ProbabilisticChooser<SenaryChoice>
     {
-        public SenaryProbabilisticChooser(Node destinationA, Node destinationB, Node destinationC, Node destinationD, Node destinationE, Node destinationF) : base(new SenaryOptions(destinationA, destinationB, destinationC, destinationD, destinationE, destinationF)) { }
+        public SenaryProbabilisticChooser(Node destinationA,
+                                          Node destinationB,
+                                          Node destinationC,
+                                          Node destinationD,
+                                          Node destinationE,
+                                          Node destinationF) : base(new SenaryOptions(destinationA,
+                                                                                      destinationB,
+                                                                                      destinationC,
+                                                                                      destinationD,
+                                                                                      destinationE,
+                                                                                      destinationF))
+        { }
     }
 }
