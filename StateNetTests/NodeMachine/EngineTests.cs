@@ -39,7 +39,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
             nodeGraph.ProbabilisticLink("B1", "T1", "End");
 
             nodeGraph.SetStart("T1");
-
+             
             T1.OnVisited += InstantTransition;
             U1.OnVisited += InstantTransition;
             U2.OnVisited += InstantTransition;

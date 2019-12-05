@@ -8,21 +8,6 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probabilistic
 {
     public class OctaryProbabilisticChooser : ProbabilisticChooser<OctaryChoice>
     {
-        public OctaryProbabilisticChooser(Node destinationA,
-                                          Node destinationB,
-                                          Node destinationC,
-                                          Node destinationD,
-                                          Node destinationE,
-                                          Node destinationF,
-                                          Node destinationG,
-                                          Node destinationH) : base(new OctaryOptions(destinationA,
-                                                                                      destinationB,
-                                                                                      destinationC,
-                                                                                      destinationD,
-                                                                                      destinationE,
-                                                                                      destinationF,
-                                                                                      destinationG,
-                                                                                      destinationH))
-        { }
+        public OctaryProbabilisticChooser(Node destinationA, Node destinationB, Node destinationC, Node destinationD, Node destinationE, Node destinationF, Node destinationG, Node destinationH) : base(new OctaryOptions(destinationA, destinationB, destinationC, destinationD, destinationE, destinationF, destinationG, destinationH)) { }
     }
 }
