@@ -14,8 +14,8 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         {
             var nodeGraph = new NodeGraph();
             nodeGraph.SetStart("U1");
-            nodeGraph.Add("U1", "U2");
-            nodeGraph.Add("U2", "U1");
+            nodeGraph.DeterministicLink("U1", "U2");
+            nodeGraph.DeterministicLink("U2", "U1");
 
             Assert.IsFalse(nodeGraph.IsValid());
         }
@@ -27,10 +27,17 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         public void TernaryBinaryDistribution()
         {
             var nodeGraph = new NodeGraph();
-            var T1 = nodeGraph.Add("T1", "U1", "U2", "B1");
-            var U1 = nodeGraph.Add("U1", "T1");
-            var U2 = nodeGraph.Add("U2", "T1");
-            var B1 = nodeGraph.Add("B1", "T1", "End1");
+
+            var T1 = nodeGraph.Create("T1");
+            var U1 = nodeGraph.Create("U1");
+            var U2 = nodeGraph.Create("U2");
+            var B1 = nodeGraph.Create("B1");
+
+            nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
+            nodeGraph.DeterministicLink("U1", "T1");
+            nodeGraph.DeterministicLink("U2", "T1");
+            nodeGraph.ProbabilisticLink("B1", "T1", "End");
+
             nodeGraph.SetStart("T1");
 
             T1.OnVisited += InstantTransition;
@@ -51,13 +58,16 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         [Test, MaxTime(200)]
         public void UnaryTransitionLog()
         {
-            var graph = new NodeGraph();
-            graph.SetStart("U1");
-            var U1 = graph.Add("U1", "U2");
-            var U2 = graph.Add("U2", "End");
-            var End = graph.GetNode("End");
+            var nodeGraph = new NodeGraph();
+            nodeGraph.SetStart("U1");
+            var U1 = nodeGraph.Create("U1");
+            var U2 = nodeGraph.Create("U2");
+            var End = nodeGraph.Create("End");
 
-            var engine = new NodeEngine(graph);
+            nodeGraph.DeterministicLink("U1", "U2");
+            nodeGraph.DeterministicLink("U2", "End");
+
+            var engine = new NodeEngine(nodeGraph);
 
             U1.OnVisited += InstantTransition;
             U2.OnVisited += InstantTransition;
@@ -75,7 +85,7 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         {
             var nodeGraph = new NodeGraph();
             nodeGraph.SetStart("U1");
-            nodeGraph.Add("U1", "End");
+            nodeGraph.DeterministicLink("U1", "End");
 
             Assert.IsTrue(nodeGraph.IsValid());
         }

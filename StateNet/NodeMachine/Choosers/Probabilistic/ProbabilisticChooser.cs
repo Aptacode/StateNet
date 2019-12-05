@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.NodeMachine.Choosers
+namespace Aptacode.StateNet.NodeMachine.Choosers.Probabilistic
 {
     public class ProbabilisticChooser<TChoices> : NodeChooser<TChoices>
         where TChoices : System.Enum

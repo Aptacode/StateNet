@@ -1,7 +1,6 @@
-﻿using Aptacode.StateNet.NodeMachine.Choices;
-using Aptacode.StateNet.NodeMachine.Choosers;
+﻿using Aptacode.StateNet.NodeMachine.Choosers.Deterministic;
+using Aptacode.StateNet.NodeMachine.Choosers.Probabilistic;
 using Aptacode.StateNet.NodeMachine.Nodes;
-using Aptacode.StateNet.NodeMachine.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,224 +13,210 @@ namespace Aptacode.StateNet.NodeMachine
 
         public NodeGraph() => _nodes = new Dictionary<string, Node>();
 
-        public Node Add(string sourceName)
+        public Node Create(string sourceName)
         {
             var sourceNode = GetNode(sourceName);
             sourceNode.Chooser = null;
             return sourceNode;
         }
 
-        public Node Add(string sourceName, List<string> destinationNames)
-        {
-            switch(destinationNames.Count)
-            {
-                case 0:
 
-                case 1:
-                    throw new Exception();
-                case 2:
-                    return Add(sourceName, destinationNames[0], destinationNames[1]);
-                case 3:
-                    return Add(sourceName, destinationNames[0], destinationNames[1], destinationNames[2]);
-                case 4:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3]);
-                case 5:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3],
-                               destinationNames[4]);
-                case 6:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3],
-                               destinationNames[4],
-                               destinationNames[5]);
-                case 7:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3],
-                               destinationNames[4],
-                               destinationNames[5],
-                               destinationNames[6]);
-                case 8:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3],
-                               destinationNames[4],
-                               destinationNames[5],
-                               destinationNames[6],
-                               destinationNames[7]);
-                case 9:
-                    return Add(sourceName,
-                               destinationNames[0],
-                               destinationNames[1],
-                               destinationNames[2],
-                               destinationNames[3],
-                               destinationNames[4],
-                               destinationNames[5],
-                               destinationNames[6],
-                               destinationNames[7],
-                               destinationNames[8]);
-                default:
-                    throw new Exception();
-            }
+        public UnaryDeterministicChooser DeterministicLink(string from, string option1)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+
+            var chooser = new UnaryDeterministicChooser(option1Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName, string destinationName)
+        public BinaryDeterministicChooser DeterministicLink(string from, string option1, string option2)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new DeterministicChooser<UnaryChoice>(new UnaryOptions(GetNode(destinationName)),
-                                                                       UnaryChoice.Item1);
-            return sourceNode;
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+
+            var chooser = new BinaryDeterministicChooser(option1Node, option2Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName, string destinationName1, string destinationName2)
+        public TernaryDeterministicChooser DeterministicLink(string from,
+                                                             string option1,
+                                                             string option2,
+                                                             string option3)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<BinaryChoice>(new BinaryOptions(GetNode(destinationName1),
-                                                                                          GetNode(destinationName2)));
-            return sourceNode;
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+
+            var chooser = new TernaryDeterministicChooser(option1Node, option2Node, option3Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName, string destinationName1, string destinationName2, string destinationName3)
+        public QuaternaryDeterministicChooser DeterministicLink(string from,
+                                                                string option1,
+                                                                string option2,
+                                                                string option3,
+                                                                string option4)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<TernaryChoice>(new TernaryOptions(GetNode(destinationName1),
-                                                                                            GetNode(destinationName2),
-                                                                                            GetNode(destinationName3)));
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
 
-            return sourceNode;
+            var chooser = new QuaternaryDeterministicChooser(option1Node, option2Node, option3Node, option4Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4)
+        public QuinaryDeterministicChooser DeterministicLink(string from,
+                                                             string option1,
+                                                             string option2,
+                                                             string option3,
+                                                             string option4,
+                                                             string option5)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<QuaternaryChoice>(new QuaternaryOptions(GetNode(destinationName1),
-                                                                                                  GetNode(destinationName2),
-                                                                                                  GetNode(destinationName3),
-                                                                                                  GetNode(destinationName4)));
-            return sourceNode;
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+
+            var chooser = new QuinaryDeterministicChooser(option1Node,
+                                                          option2Node,
+                                                          option3Node,
+                                                          option4Node,
+                                                          option5Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4,
-                        string destinationName5)
+        public SenaryDeterministicChooser DeterministicLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<QuinaryChoice>(new QuinaryOptions(GetNode(destinationName1),
-                                                                                            GetNode(destinationName2),
-                                                                                            GetNode(destinationName3),
-                                                                                            GetNode(destinationName4),
-                                                                                            GetNode(destinationName5)));
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
 
-            return sourceNode;
+            var chooser = new SenaryDeterministicChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4,
-                        string destinationName5,
-                        string destinationName6)
+        public SeptenaryDeterministicChooser DeterministicLink(string from,
+                                                               string option1,
+                                                               string option2,
+                                                               string option3,
+                                                               string option4,
+                                                               string option5,
+                                                               string option6,
+                                                               string option7)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<SenaryChoice>(new SenaryOptions(GetNode(destinationName1),
-                                                                                          GetNode(destinationName2),
-                                                                                          GetNode(destinationName3),
-                                                                                          GetNode(destinationName4),
-                                                                                          GetNode(destinationName5),
-                                                                                          GetNode(destinationName6)));
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
 
-            return sourceNode;
+            var chooser = new SeptenaryDeterministicChooser(option1Node,
+                                                            option2Node,
+                                                            option3Node,
+                                                            option4Node,
+                                                            option5Node,
+                                                            option6Node,
+                                                            option7Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4,
-                        string destinationName5,
-                        string destinationName6,
-                        string destinationName7)
+        public OctaryDeterministicChooser DeterministicLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6,
+                                                            string option7,
+                                                            string option8)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<SeptenaryChoice>(new SeptenaryOptions(GetNode(destinationName1),
-                                                                                                GetNode(destinationName2),
-                                                                                                GetNode(destinationName3),
-                                                                                                GetNode(destinationName4),
-                                                                                                GetNode(destinationName5),
-                                                                                                GetNode(destinationName6),
-                                                                                                GetNode(destinationName7)));
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
+            var option8Node = GetNode(option8);
 
-            return sourceNode;
+            var chooser = new OctaryDeterministicChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node,
+                                                         option7Node,
+                                                         option8Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4,
-                        string destinationName5,
-                        string destinationName6,
-                        string destinationName7,
-                        string destinationName8)
+        public NonaryDeterministicChooser DeterministicLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6,
+                                                            string option7,
+                                                            string option8,
+                                                            string option9)
         {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<OctaryChoice>(new OctaryOptions(GetNode(destinationName1),
-                                                                                          GetNode(destinationName2),
-                                                                                          GetNode(destinationName3),
-                                                                                          GetNode(destinationName4),
-                                                                                          GetNode(destinationName5),
-                                                                                          GetNode(destinationName6),
-                                                                                          GetNode(destinationName7),
-                                                                                          GetNode(destinationName8)));
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
+            var option8Node = GetNode(option8);
+            var option9Node = GetNode(option9);
 
-            return sourceNode;
-        }
-
-        public Node Add(string sourceName,
-                        string destinationName1,
-                        string destinationName2,
-                        string destinationName3,
-                        string destinationName4,
-                        string destinationName5,
-                        string destinationName6,
-                        string destinationName7,
-                        string destinationName8,
-                        string destinationName9)
-        {
-            var sourceNode = GetNode(sourceName);
-            sourceNode.Chooser = new ProbabilisticChooser<NonaryChoice>(new NonaryOptions(GetNode(destinationName1),
-                                                                                          GetNode(destinationName2),
-                                                                                          GetNode(destinationName3),
-                                                                                          GetNode(destinationName4),
-                                                                                          GetNode(destinationName5),
-                                                                                          GetNode(destinationName6),
-                                                                                          GetNode(destinationName7),
-                                                                                          GetNode(destinationName8),
-                                                                                          GetNode(destinationName9)));
-
-            return sourceNode;
+            var chooser = new NonaryDeterministicChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node,
+                                                         option7Node,
+                                                         option8Node,
+                                                         option9Node);
+            fromNode.Chooser = chooser;
+            return chooser;
         }
 
         public IEnumerable<Node> GetAll() => _nodes.Select(keyValue => keyValue.Value);
@@ -251,6 +236,194 @@ namespace Aptacode.StateNet.NodeMachine
         }
 
         public bool IsValid() => GetEndNodes().Any();
+
+        public BinaryProbabilisticChooser ProbabilisticLink(string from, string option1, string option2)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+
+            var chooser = new BinaryProbabilisticChooser(option1Node, option2Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public TernaryProbabilisticChooser ProbabilisticLink(string from,
+                                                             string option1,
+                                                             string option2,
+                                                             string option3)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+
+            var chooser = new TernaryProbabilisticChooser(option1Node, option2Node, option3Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public QuaternaryProbabilisticChooser ProbabilisticLink(string from,
+                                                                string option1,
+                                                                string option2,
+                                                                string option3,
+                                                                string option4)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+
+            var chooser = new QuaternaryProbabilisticChooser(option1Node, option2Node, option3Node, option4Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public QuinaryProbabilisticChooser ProbabilisticLink(string from,
+                                                             string option1,
+                                                             string option2,
+                                                             string option3,
+                                                             string option4,
+                                                             string option5)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+
+            var chooser = new QuinaryProbabilisticChooser(option1Node,
+                                                          option2Node,
+                                                          option3Node,
+                                                          option4Node,
+                                                          option5Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public SenaryProbabilisticChooser ProbabilisticLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+
+            var chooser = new SenaryProbabilisticChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public SeptenaryProbabilisticChooser ProbabilisticLink(string from,
+                                                               string option1,
+                                                               string option2,
+                                                               string option3,
+                                                               string option4,
+                                                               string option5,
+                                                               string option6,
+                                                               string option7)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
+
+            var chooser = new SeptenaryProbabilisticChooser(option1Node,
+                                                            option2Node,
+                                                            option3Node,
+                                                            option4Node,
+                                                            option5Node,
+                                                            option6Node,
+                                                            option7Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public OctaryProbabilisticChooser ProbabilisticLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6,
+                                                            string option7,
+                                                            string option8)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
+            var option8Node = GetNode(option8);
+
+            var chooser = new OctaryProbabilisticChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node,
+                                                         option7Node,
+                                                         option8Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
+
+        public NonaryProbabilisticChooser ProbabilisticLink(string from,
+                                                            string option1,
+                                                            string option2,
+                                                            string option3,
+                                                            string option4,
+                                                            string option5,
+                                                            string option6,
+                                                            string option7,
+                                                            string option8,
+                                                            string option9)
+        {
+            var fromNode = GetNode(from);
+            var option1Node = GetNode(option1);
+            var option2Node = GetNode(option2);
+            var option3Node = GetNode(option3);
+            var option4Node = GetNode(option4);
+            var option5Node = GetNode(option5);
+            var option6Node = GetNode(option6);
+            var option7Node = GetNode(option7);
+            var option8Node = GetNode(option8);
+            var option9Node = GetNode(option9);
+
+            var chooser = new NonaryProbabilisticChooser(option1Node,
+                                                         option2Node,
+                                                         option3Node,
+                                                         option4Node,
+                                                         option5Node,
+                                                         option6Node,
+                                                         option7Node,
+                                                         option8Node,
+                                                         option9Node);
+            fromNode.Chooser = chooser;
+            return chooser;
+        }
 
         public void SetNode(Node node) => _nodes[node.Name] = node ;
 
