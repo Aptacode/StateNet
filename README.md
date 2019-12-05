@@ -145,7 +145,11 @@ B1.OnVisited += InstantTransition;
 _engine = new NodeEngine(nodeGraph);
 _engine.Start();
 
+_engine.OnFinished += (s) =>
+{
 ...
+};
+  
 private void InstantTransition(Node sender) => sender.Exit();
 
 ```
