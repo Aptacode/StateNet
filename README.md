@@ -119,38 +119,43 @@ To start the graph create an instance of 'NodeEngine' which you pass in through 
 
 var nodeGraph = new NodeGraph();
 
-//Define all the nodes
-var T1 = nodeGraph.Create("T1");
-var U1 = nodeGraph.Create("U1");
-var U2 = nodeGraph.Create("U2");
-var B1 = nodeGraph.Create("B1");
+//Define all the links between each node
 
-//Define all the nodes each node can visit And the critera for deciding which to choose
-var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
+//Deterministic Links - the node will always visit the selection of the chooser
 nodeGraph.DeterministicLink("U1", "T1");
 nodeGraph.DeterministicLink("U2", "T1");
+
+//Probabilistic Links - the node will visit one of the choosers options depending on their weight
 nodeGraph.ProbabilisticLink("B1", "T1", "End");
 
+//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weigt is 0)
+var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
 T1Chooser.SetWeight(TernaryChoice.Item1, 2);
-T1Chooser.SetWeight(TernaryChoice.Item2, 1);
-T1Chooser.SetWeight(TernaryChoice.Item3, 1);
-            
+T1Chooser.SetWeight(TernaryChoice.Item2, 0);
+
+//Subscribe to OnVisited - make sure to call Node.Exit() at some point to move to the next Node in the graph
+//The default behaviour is to instantly call Node.Exit()
+nodeGraph.SubscribeOnVisited(initialNodeName, (sender) => { 
+...
+sender.Exit();
+});
+
+//Set the start node
 nodeGraph.SetStart("T1");
 
-T1.OnVisited += InstantTransition;
-U1.OnVisited += InstantTransition;
-U2.OnVisited += InstantTransition;
-B1.OnVisited += InstantTransition;
-
+//Create the NodeEngine from the graph
 _engine = new NodeEngine(nodeGraph);
-_engine.Start();
 
+//Optionally listen for when the Engine reaches an End Node
 _engine.OnFinished += (s) =>
 {
 ...
 };
+
+
+_engine.Start();
+
   
-private void InstantTransition(Node sender) => sender.Exit();
 
 ```
 
