@@ -7,8 +7,6 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 {
     public class Tests
     {
-        private void InstantTransition(Node sender) => sender.Exit();
-
         [Test]
         public void InvalidGraph()
         {
@@ -23,15 +21,10 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         [SetUp]
         public void Setup() { }
 
-        [Test, MaxTime(200)]
+        [Test]
         public void TernaryBinaryDistribution()
         {
             var nodeGraph = new NodeGraph();
-
-            var T1 = nodeGraph.Create("T1");
-            var U1 = nodeGraph.Create("U1");
-            var U2 = nodeGraph.Create("U2");
-            var B1 = nodeGraph.Create("B1");
 
             nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
             nodeGraph.DeterministicLink("U1", "T1");
@@ -39,45 +32,37 @@ namespace Aptacode.StateNet.Tests.NodeMachine
             nodeGraph.ProbabilisticLink("B1", "T1", "End");
 
             nodeGraph.SetStart("T1");
-             
-            T1.OnVisited += InstantTransition;
-            U1.OnVisited += InstantTransition;
-            U2.OnVisited += InstantTransition;
-            B1.OnVisited += InstantTransition;
 
             var engine = new NodeEngine(nodeGraph);
-            engine.Start();
+
+            var hasFinished = false;
 
             engine.OnFinished += (s) =>
             {
-                var log = engine.GetVisitLog();
-                Assert.Pass();
+                hasFinished = true;
             };
+
+            engine.Start();
+
+            Assert.That(() => hasFinished, Is.True.After(200, 5));
         }
 
-        [Test, MaxTime(200)]
+        [Test]
         public void UnaryTransitionLog()
         {
             var nodeGraph = new NodeGraph();
-            nodeGraph.SetStart("U1");
             var U1 = nodeGraph.Create("U1");
             var U2 = nodeGraph.Create("U2");
             var End = nodeGraph.Create("End");
 
             nodeGraph.DeterministicLink("U1", "U2");
             nodeGraph.DeterministicLink("U2", "End");
+            nodeGraph.SetStart("U1");
 
             var engine = new NodeEngine(nodeGraph);
-
-            U1.OnVisited += InstantTransition;
-            U2.OnVisited += InstantTransition;
-
             engine.Start();
 
-            engine.OnFinished += (s) =>
-            {
-                Assert.That(engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End }));
-            };
+            Assert.That(() => engine.GetVisitLog(), Is.EquivalentTo(new List<Node> { U1, U2, End }).After(200, 5));
         }
 
         [Test]

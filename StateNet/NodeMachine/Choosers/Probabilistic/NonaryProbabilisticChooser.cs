@@ -8,6 +8,23 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probabilistic
 {
     public class NonaryProbabilisticChooser : ProbabilisticChooser<NonaryChoice>
     {
-        public NonaryProbabilisticChooser(Node destinationA, Node destinationB, Node destinationC, Node destinationD, Node destinationE, Node destinationF, Node destinationG, Node destinationH, Node destinationI) : base(new NonaryOptions(destinationA, destinationB, destinationC, destinationD, destinationE, destinationF, destinationG, destinationH, destinationI)) { }
+        public NonaryProbabilisticChooser(Node destinationA,
+                                          Node destinationB,
+                                          Node destinationC,
+                                          Node destinationD,
+                                          Node destinationE,
+                                          Node destinationF,
+                                          Node destinationG,
+                                          Node destinationH,
+                                          Node destinationI) : base(new NonaryOptions(destinationA,
+                                                                                      destinationB,
+                                                                                      destinationC,
+                                                                                      destinationD,
+                                                                                      destinationE,
+                                                                                      destinationF,
+                                                                                      destinationG,
+                                                                                      destinationH,
+                                                                                      destinationI))
+        { }
     }
 }

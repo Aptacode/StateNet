@@ -8,6 +8,9 @@ namespace Aptacode.StateNet.NodeMachine.Choosers.Probabilistic
 {
     public class TernaryProbabilisticChooser : ProbabilisticChooser<TernaryChoice>
     {
-        public TernaryProbabilisticChooser(Node destinationA, Node destinationB, Node destinationC) : base(new TernaryOptions(destinationA, destinationB, destinationC)) { }
+        public TernaryProbabilisticChooser(Node destinationA, Node destinationB, Node destinationC) : base(new TernaryOptions(destinationA,
+                                                                                                                              destinationB,
+                                                                                                                              destinationC))
+        { }
     }
 }
