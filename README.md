@@ -10,22 +10,23 @@ The original goal of StateNet was to create a simple way to define and control t
 
 There are two types of State Machine in State Net, both can be used to achieve the same result. 
 
-*NOTE NodeGraph has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation alltogether.
+*NOTE NodeGraph has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation altogether.
+
 
 ## NodeMachine
 
-NodeMachine controls the flow through states by traversing a graph of nodes.
-The Network of nodes is defined by constructing a NodeGraph.
+NodeMachine controls the flow through states by traversing a network of nodes defined by constructing a NodeGraph.
 The connections between nodes are defined by two overloaded methods in NodeGraph.
+
+DeterministicLink: Chooses the destination based on the users choice.
 
 ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
 
-DeterministicLink: Chooses the destination based on the users choice.
 
 The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
 
 
-Both 'Link' methods return a respective derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
+Both 'Link' methods return a derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
 
 Choice Enumerations: 
 
@@ -49,6 +50,11 @@ Choices : Name
 
 9       : NonaryChoice
 
+Both types of Chooser have a GetNext method which returns the next node to visit.
+
+ProbabilisticChooser uses a list of integer weights and a Random Number generator to determine which of its destination nodes it chooses. The weights all default to 1 so each option has an equal probability of being chose. The user is free to set custom weights to any option at any time. The probability a choice is selected is defined by its weight relative to the weight of all other choices. Note a choice with 0 weight WILL NOT BE CHOSEN.
+
+DeterministicChooser Chooses the item that corresponds to its Selection Property which the user can set at any time.
 
 ### Usage
 
