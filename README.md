@@ -99,19 +99,28 @@ _stateMachine.Apply(_inputCollection[Inputs.Play]);
 ## NodeMachine
 
 NodeMachine controls the flow through states by traversing a graph of nodes.
-There are 5 types of Node: Unary, Binary, Ternary, Quaternary and End.
-Each node has a GetNext function which returns the next node to visit. 
-In a UnaryNode this function always returns the same DestinationNode.
-An EndNode signifys a state with no possible transitions and so this function returns null. 
-In all other Nodes this function can return more then one Node determined by a 'ChoiceFunction' the Choice function can return either a DeterministicChooser or a ProbabilisticChooser both of these classes returns a choice based on an enumeration of possible choices.
-In the case of a DeterministicChooser the user defines the choice in a callback function.
-In the case of a ProbabilisticChooser the user defines a distribution of weights for each possible choice which the node then uses to pick a (weighted) random choice.
+The Network of nodes is defined by constructing a NodeGraph.
+The connections between nodes are defined by two overloaded methods in NodeGraph.
+ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
+DeterministicLink: Chooses the destination based on the users choice.
 
-To use this state machine you must first instantiate each node with its given name. 
-Then for each node you define which nodes can be visited and a Chooser Function for how to decide which node IS visited when that node is exited. 
-In order to move from one node to another you must subscribe to the 'OnVisited' event which is fired when a node is entered. From within the handler you define the unit of work to be executed when that node is executed, Once you are ready to visit the next node in the graph you must call the 'Exit' method of the current node.
+The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
 
-To start the graph create an instance of 'NodeEngine' which you pass in through the constructor the start node, when your ready call the Start method to begin.
+Both 'Link' methods return a respective derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
+
+Choice Enumerations: 
+Name              :   Choices
+
+UnaryChoice       :     1
+BinaryChoice      :     2
+TernaryChoice     :     3
+QuaternaryChoice  :     4
+QuinaryChoice     :     5
+SenaryChoice      :     6
+SeptenaryChoice   :     7
+OctaryChoice      :     8
+NonaryChoice      :     9
+
 
 ### Usage
 
