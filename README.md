@@ -6,7 +6,92 @@
 
 ### Overview
 
-There are two types of State Machine in State Net, both can be used to achieve the same result however they are both suited to different situations.
+The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. The library has many applications and since its inception I have used it in a number of different projects.
+
+There are two types of State Machine in State Net, both can be used to achieve the same result. 
+
+*NOTE NodeGraph has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation alltogether.
+
+## NodeMachine
+
+NodeMachine controls the flow through states by traversing a graph of nodes.
+The Network of nodes is defined by constructing a NodeGraph.
+The connections between nodes are defined by two overloaded methods in NodeGraph.
+
+ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
+
+DeterministicLink: Chooses the destination based on the users choice.
+
+The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
+
+
+Both 'Link' methods return a respective derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
+
+Choice Enumerations: 
+
+Choices : Name
+
+1       : UnaryChoice
+
+2       : BinaryChoice
+
+3       : TernaryChoice
+
+4       : QuaternaryChoice
+
+5       : QuinaryChoice
+
+6       : SenaryChoice
+
+7       : SeptenaryChoice
+
+8       : OctaryChoice
+
+9       : NonaryChoice
+
+
+### Usage
+
+```csharp
+
+var nodeGraph = new NodeGraph();
+
+//Define all the links between each node
+
+//Deterministic Links - the node will always visit the selection of the chooser
+nodeGraph.DeterministicLink("U1", "T1");
+nodeGraph.DeterministicLink("U2", "T1");
+
+//Probabilistic Links - the node will visit one of the choosers options depending on their weight
+nodeGraph.ProbabilisticLink("B1", "T1", "End");
+
+//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weigt is 0)
+var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
+T1Chooser.SetWeight(TernaryChoice.Item1, 2);
+T1Chooser.SetWeight(TernaryChoice.Item2, 0);
+
+//Subscribe to OnVisited - make sure to call Node.Exit() at some point to move to the next Node in the graph
+//The default behaviour is to instantly call Node.Exit()
+nodeGraph.SubscribeOnVisited(initialNodeName, (sender) => { 
+...
+sender.Exit();
+});
+
+//Set the start node
+nodeGraph.SetStart("T1");
+
+//Create the NodeEngine from the graph
+_engine = new NodeEngine(nodeGraph);
+
+//Optionally listen for when the Engine reaches an End Node
+_engine.OnFinished += (s) =>
+{
+...
+};
+
+_engine.Start();
+
+```
 
 ## TableMachine
 
@@ -96,89 +181,6 @@ _stateMachine.Apply(_inputCollection[Inputs.Play]);
 
 ```
 
-## NodeMachine
-
-NodeMachine controls the flow through states by traversing a graph of nodes.
-The Network of nodes is defined by constructing a NodeGraph.
-The connections between nodes are defined by two overloaded methods in NodeGraph.
-
-ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
-
-DeterministicLink: Chooses the destination based on the users choice.
-
-The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
-
-
-Both 'Link' methods return a respective derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
-
-Choice Enumerations: 
-
-Choices : Name
-
-1       : UnaryChoice
-
-2       : BinaryChoice
-
-3       : TernaryChoice
-
-4       : QuaternaryChoice
-
-5       : QuinaryChoice
-
-6       : SenaryChoice
-
-7       : SeptenaryChoice
-
-8       : OctaryChoice
-
-9       : NonaryChoice
-
-
-### Usage
-
-```csharp
-
-var nodeGraph = new NodeGraph();
-
-//Define all the links between each node
-
-//Deterministic Links - the node will always visit the selection of the chooser
-nodeGraph.DeterministicLink("U1", "T1");
-nodeGraph.DeterministicLink("U2", "T1");
-
-//Probabilistic Links - the node will visit one of the choosers options depending on their weight
-nodeGraph.ProbabilisticLink("B1", "T1", "End");
-
-//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weigt is 0)
-var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
-T1Chooser.SetWeight(TernaryChoice.Item1, 2);
-T1Chooser.SetWeight(TernaryChoice.Item2, 0);
-
-//Subscribe to OnVisited - make sure to call Node.Exit() at some point to move to the next Node in the graph
-//The default behaviour is to instantly call Node.Exit()
-nodeGraph.SubscribeOnVisited(initialNodeName, (sender) => { 
-...
-sender.Exit();
-});
-
-//Set the start node
-nodeGraph.SetStart("T1");
-
-//Create the NodeEngine from the graph
-_engine = new NodeEngine(nodeGraph);
-
-//Optionally listen for when the Engine reaches an End Node
-_engine.OnFinished += (s) =>
-{
-...
-};
-
-
-_engine.Start();
-
-  
-
-```
 
 ## License
 
