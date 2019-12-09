@@ -101,25 +101,37 @@ _stateMachine.Apply(_inputCollection[Inputs.Play]);
 NodeMachine controls the flow through states by traversing a graph of nodes.
 The Network of nodes is defined by constructing a NodeGraph.
 The connections between nodes are defined by two overloaded methods in NodeGraph.
+
 ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
+
 DeterministicLink: Chooses the destination based on the users choice.
 
 The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
 
+
 Both 'Link' methods return a respective derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
 
 Choice Enumerations: 
-Name              :   Choices
 
-UnaryChoice       :     1
-BinaryChoice      :     2
-TernaryChoice     :     3
-QuaternaryChoice  :     4
-QuinaryChoice     :     5
-SenaryChoice      :     6
-SeptenaryChoice   :     7
-OctaryChoice      :     8
-NonaryChoice      :     9
+Choices : Name
+
+1       : UnaryChoice
+
+2       : BinaryChoice
+
+3       : TernaryChoice
+
+4       : QuaternaryChoice
+
+5       : QuinaryChoice
+
+6       : SenaryChoice
+
+7       : SeptenaryChoice
+
+8       : OctaryChoice
+
+9       : NonaryChoice
 
 
 ### Usage
