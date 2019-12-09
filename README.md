@@ -8,9 +8,17 @@
 
 The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. The library has many applications and since its inception I have used it in a number of different projects.
 
-There are two types of State Machine in State Net, both can be used to achieve the same result. 
+There are two types of State Machine in State Net, NodeMachine & TableMachine. 
+They differ in the way that you define and apply connections between states.
 
-*NOTE NodeGraph has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation altogether.
+
+NodeMachine defines states as Nodes in a network. You complete a unit of work when a Node is entered and when exited it selects the next node to visit.
+
+
+TableMachine defines a Transition for each combination of State and Input. The Machine can be in one state at a time and it navigates between states based on the result of the Transition defined for the current state and the input that was applied to it.
+
+
+*NOTE NodeMachine has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation altogether.
 
 
 ## NodeMachine
