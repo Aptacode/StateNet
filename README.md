@@ -79,7 +79,7 @@ nodeGraph.DeterministicLink("U2", "T1");
 //Probabilistic Links - the node will visit one of the choosers options depending on their weight
 nodeGraph.ProbabilisticLink("B1", "T1", "End");
 
-//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weigt is 0)
+//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weight is 1)
 var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
 T1Chooser.SetWeight(TernaryChoice.Item1, 2);
 T1Chooser.SetWeight(TernaryChoice.Item2, 0);
