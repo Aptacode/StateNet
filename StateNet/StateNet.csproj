@@ -1,9 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Aptacode.StateNet</RootNamespace>
     <AssemblyName>StateNet</AssemblyName>
+    <Authors>Timothy Jones</Authors>
+    <Company>Aptacode</Company>
+    <Description>A small .Net Standard library used to model simple State Machines</Description>
+    <Copyright>MIT</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Timmoth/StateNet</PackageProjectUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/Timmoth/StateNet</RepositoryUrl>
+    <RepositoryType />
+    <PackageTags>Finite State Machine FSM NFSM</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -12,6 +24,13 @@
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.6.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\Images\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
