@@ -2,6 +2,9 @@
 
 ## A small .Net Standard library used to model simple State Machines
 
+NuGet package
+https://www.nuget.org/packages/Aptacode.StateNet/
+
 Discord Group for development / help
 https://discord.gg/D8MSXJB
 
