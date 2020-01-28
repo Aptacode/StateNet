@@ -1,4 +1,4 @@
-# AptacodeStateNet
+# Aptacode.StateNet
 
 ## A small .Net Standard library used to model simple State Machines
 

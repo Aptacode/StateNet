@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Aptacode.StateNet</RootNamespace>
-    <AssemblyName>StateNet</AssemblyName>
+    <AssemblyName>Aptacode.StateNet</AssemblyName>
     <Authors>Timothy Jones</Authors>
     <Company>Aptacode</Company>
     <Description>A small .Net Standard library used to model simple State Machines</Description>
     <Copyright>MIT</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Timmoth/StateNet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Timmoth/Aptacode.StateNet</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/Timmoth/StateNet</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Timmoth/Aptacode.StateNet</RepositoryUrl>
     <RepositoryType />
     <PackageTags>Finite State Machine FSM NFSM</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -20,6 +20,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\Build\Debug\</OutputPath>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
