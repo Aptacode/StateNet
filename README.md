@@ -1,12 +1,114 @@
-# AptacodeStateNet
+# StateNet
 
 ## A small .Net Standard library used to model simple State Machines
+
+Discord Group for development / help
+https://discord.gg/D8MSXJB
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bbdf96f5e1304d679e6addf01b2618a1)](https://www.codacy.com/manual/Timmoth/AptacodeStateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/AptacodeStateNet&amp;utm_campaign=Badge_Grade)
 
 ### Overview
 
-There are two types of State Machine in State Net, both can be used to achieve the same result however they are both suited to different situations.
+The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. The library has many applications and since its inception I have used it in a number of different projects.
+
+There are two types of State Machine in State Net, NodeMachine & TableMachine. 
+They differ in the way that you define and apply connections between states.
+
+
+NodeMachine defines states as Nodes in a network. You complete a unit of work when a Node is entered and when exited it selects the next node to visit.
+
+
+TableMachine defines a Transition for each combination of State and Input. The Machine can be in one state at a time and it navigates between states based on the result of the Transition defined for the current state and the input that was applied to it.
+
+
+*NOTE NodeMachine has a much friendlier API and better performance. As such I am currently working on a wrapper around the NodeMachine to allow for the logic to be defined in a similar way to TableMachine and subsequently remove the TableMachine implementation altogether.
+
+
+## NodeMachine
+
+NodeMachine controls the flow through states by traversing a network of nodes defined by constructing a NodeGraph.
+The connections between nodes are defined by two overloaded methods in NodeGraph.
+
+DeterministicLink: Chooses the destination based on the users choice.
+
+ProbabilisticLink: Chooses the destination based on a collection of weighted probabilities.
+
+
+The first parameter of both methods is the name of the node for which the connection starts. All subsequent parameters are the names of nodes that can be reached from that connection. 
+
+
+Both 'Link' methods return a derived class of NodeChooser<TChoice> where TChoice is a 'Choice' enumeration which contains an item for each node that can be reached by that connection. 
+
+Choice Enumerations: 
+
+Choices : Name
+
+1       : UnaryChoice
+
+2       : BinaryChoice
+
+3       : TernaryChoice
+
+4       : QuaternaryChoice
+
+5       : QuinaryChoice
+
+6       : SenaryChoice
+
+7       : SeptenaryChoice
+
+8       : OctaryChoice
+
+9       : NonaryChoice
+
+Both types of Chooser have a GetNext method which returns the next node to visit.
+
+ProbabilisticChooser uses a list of integer weights and a Random Number generator to determine which of its destination nodes it chooses. The weights all default to 1 so each option has an equal probability of being chose. The user is free to set custom weights to any option at any time. The probability a choice is selected is defined by its weight relative to the weight of all other choices. Note a choice with 0 weight WILL NOT BE CHOSEN.
+
+DeterministicChooser Chooses the item that corresponds to its Selection Property which the user can set at any time.
+
+### Usage
+
+```csharp
+
+var nodeGraph = new NodeGraph();
+
+//Define all the links between each node
+
+//Deterministic Links - the node will always visit the selection of the chooser
+nodeGraph.DeterministicLink("U1", "T1");
+nodeGraph.DeterministicLink("U2", "T1");
+
+//Probabilistic Links - the node will visit one of the choosers options depending on their weight
+nodeGraph.ProbabilisticLink("B1", "T1", "End");
+
+//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weight is 1)
+var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
+T1Chooser.SetWeight(TernaryChoice.Item1, 2);
+T1Chooser.SetWeight(TernaryChoice.Item2, 0);
+
+//Subscribe to OnVisited - make sure to call Node.Exit() at some point to move to the next Node in the graph
+//The default behaviour is to instantly call Node.Exit()
+nodeGraph.SubscribeOnVisited(initialNodeName, (sender) => { 
+...
+sender.Exit();
+});
+
+//Set the start node
+nodeGraph.SetStart("T1");
+
+//Create the NodeEngine from the graph
+_engine = new NodeEngine(nodeGraph);
+
+//Optionally listen for when the Engine reaches an End Node
+_engine.OnFinished += (s) =>
+{
+...
+};
+
+_engine.Start();
+
+```
 
 ## TableMachine
 
@@ -96,50 +198,6 @@ _stateMachine.Apply(_inputCollection[Inputs.Play]);
 
 ```
 
-## NodeMachine
-
-NodeMachine controls the flow through states by traversing a graph of nodes.
-There are 5 types of Node: Unary, Binary, Ternary, Quaternary and End.
-Each node has a GetNext function which returns the next node to visit. 
-In a UnaryNode this function always returns the same DestinationNode.
-An EndNode signifys a state with no possible transitions and so this function returns null. 
-In all other Nodes this function can return more then one Node determined by a 'ChoiceFunction' the Choice function can return either a DeterministicChooser or a ProbabilisticChooser both of these classes returns a choice based on an enumeration of possible choices.
-In the case of a DeterministicChooser the user defines the choice in a callback function.
-In the case of a ProbabilisticChooser the user defines a distribution of weights for each possible choice which the node then uses to pick a (weighted) random choice.
-
-To use this state machine you must first instantiate each node with its given name. 
-Then for each node you define which nodes can be visited and a Chooser Function for how to decide which node IS visited when that node is exited. 
-In order to move from one node to another you must subscribe to the 'OnVisited' event which is fired when a node is entered. From within the handler you define the unit of work to be executed when that node is executed, Once you are ready to visit the next node in the graph you must call the 'Exit' method of the current node.
-
-To start the graph create an instance of 'NodeEngine' which you pass in through the constructor the start node, when your ready call the Start method to begin.
-
-### Usage
-
-```csharp
-
-//Define all of the nodes each node can visit And the critera for deciding which to choose
-var nodeGraph = new NodeGraph();
-nodeGraph.SetStart("T1");
-var T1 = nodeGraph.Add("T1", "U1", "U2", "B1", new TernaryProbabilityChooser(1, 1, 1));
-var U1 = nodeGraph.Add("U1", "T1");
-var U2 = nodeGraph.Add("U2", "T1");
-var B1 = nodeGraph.Add("B1", "T1", "End1", new DeterministicChooser<BinaryChoice>(BinaryChoice.Item1));
-
-T1.OnVisited += InstantTransition;
-U1.OnVisited += InstantTransition;
-U2.OnVisited += InstantTransition;
-B1.OnVisited += InstantTransition;
-
-_engine = new NodeEngine(nodeGraph);
-_engine.Start();
-_engine.OnFinished += (s) =>
-{
-...
-};
-  
-private void InstantTransition(Node sender) => sender.Exit();
-
-```
 
 ## License
 

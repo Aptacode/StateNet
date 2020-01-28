@@ -3,7 +3,7 @@ using Aptacode.StateNet.NodeMachine.Options;
 using System;
 using System.Linq;
 
-namespace Aptacode.StateNet.NodeMachine.Choosers
+namespace Aptacode.StateNet.NodeMachine.Choosers.Deterministic
 {
     public class DeterministicChooser<TChoices> : NodeChooser<TChoices>
         where TChoices : System.Enum
