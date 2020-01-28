@@ -2,6 +2,9 @@
 
 ## A small .Net Standard library used to model simple State Machines
 
+Discord Group for development / help
+https://discord.gg/D8MSXJB
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bbdf96f5e1304d679e6addf01b2618a1)](https://www.codacy.com/manual/Timmoth/AptacodeStateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/AptacodeStateNet&amp;utm_campaign=Badge_Grade)
 
 ### Overview
@@ -79,7 +82,7 @@ nodeGraph.DeterministicLink("U2", "T1");
 //Probabilistic Links - the node will visit one of the choosers options depending on their weight
 nodeGraph.ProbabilisticLink("B1", "T1", "End");
 
-//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weigt is 0)
+//Create a ProbabilisticLink. Then set custom weights for item 1 & 2 (the default weight is 1)
 var T1Chooser = nodeGraph.ProbabilisticLink("T1", "U1", "U2", "B1");
 T1Chooser.SetWeight(TernaryChoice.Item1, 2);
 T1Chooser.SetWeight(TernaryChoice.Item2, 0);
