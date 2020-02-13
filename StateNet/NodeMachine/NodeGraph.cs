@@ -1,4 +1,5 @@
-﻿using Aptacode.StateNet.NodeMachine.Choosers;
+﻿using Aptacode.StateNet.NodeMachine.Attributes;
+using Aptacode.StateNet.NodeMachine.Choosers;
 using Aptacode.StateNet.NodeMachine.Choosers.Deterministic;
 using Aptacode.StateNet.NodeMachine.Choosers.Probabilistic;
 using Aptacode.StateNet.NodeMachine.Events;
@@ -6,6 +7,7 @@ using Aptacode.StateNet.NodeMachine.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Aptacode.StateNet.NodeMachine
 {
@@ -13,7 +15,52 @@ namespace Aptacode.StateNet.NodeMachine
     {
         private readonly Dictionary<string, Node> _nodes;
 
-        public NodeGraph() => _nodes = new Dictionary<string, Node>();
+        public NodeGraph()
+        {
+            _nodes = new Dictionary<string, Node>();
+
+            ActOnFieldAttributes(typeof(NodeNameAttribute), (field, attribute) =>
+            {
+                field.SetValue(this, Create(((NodeNameAttribute)attribute).Name));
+            }); 
+
+            ActOnFieldAttributes(typeof(NodeStartAttribute), (field, attribute) =>
+            {
+                Node x = (Node)field.GetValue(this);
+                SetStart(x?.Name ?? "Nameless Start Node");
+            });
+
+            ActOnFieldAttributes(typeof(NodeConnectionAttribute), (field, attribute) =>
+            {
+                var connectionInfo = (NodeConnectionAttribute)attribute;
+
+                if (connectionInfo.ConnectionChance == 1)
+                {
+                    this.DeterministicLink(connectionInfo.SourceName, connectionInfo.TargetName);
+                }
+                else
+                {
+                    throw new NotImplementedException("Only 1-to-1 deterministic connections have been implemented. ConnectionChance must be 1");
+                }
+            });     
+        }
+
+        private void ActOnFieldAttributes(Type targetType, Action<FieldInfo, object> doWhenFound)
+        {
+            TypeInfo typeInfo = this.GetType().GetTypeInfo();
+            var fields = typeInfo.GetRuntimeFields();
+            foreach (var field in fields)
+            {
+                var attrs = field.GetCustomAttributes(true);
+                foreach (var attr in attrs)
+                {
+                    if (attr.GetType() == targetType)
+                    {
+                        doWhenFound(field, attr);
+                    }
+                }
+            }
+        }
 
         private void InstantTransition(Node sender) => sender.Exit() ;
 
