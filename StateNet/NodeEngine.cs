@@ -1,11 +1,10 @@
-﻿using Aptacode.StateNet.NodeMachine.Events;
-using Aptacode.StateNet.NodeMachine.Nodes;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aptacode.StateNet.Events;
 
-namespace Aptacode.StateNet.NodeMachine
+namespace Aptacode.StateNet
 {
     public class NodeEngine
     {

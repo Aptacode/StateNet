@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode.StateNet.NodeMachine.Attributes
+namespace Aptacode.StateNet.Events.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class NodeConnectionAttribute : Attribute

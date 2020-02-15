@@ -1,8 +1,7 @@
-﻿using Aptacode.StateNet.NodeMachine;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Linq;
 
-namespace Aptacode.StateNet.Tests.NodeMachine
+namespace Aptacode.StateNet.Tests
 {
     public class Programatic_NodeGraphTests
     {

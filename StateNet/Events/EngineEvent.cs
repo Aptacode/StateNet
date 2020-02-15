@@ -1,4 +1,4 @@
-﻿namespace Aptacode.StateNet.NodeMachine.Events
+﻿namespace Aptacode.StateNet.Events
 {
     public delegate void EngineEvent(NodeEngine sender);
 }

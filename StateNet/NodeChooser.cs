@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Aptacode.StateNet.NodeMachine.Nodes;
 
-namespace Aptacode.StateNet.NodeMachine.Choosers
+namespace Aptacode.StateNet
 {
     public class NodeChooser
     {

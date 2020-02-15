@@ -1,12 +1,7 @@
-﻿using Aptacode.StateNet.NodeMachine;
-using Aptacode.StateNet.NodeMachine.Attributes;
-using Aptacode.StateNet.NodeMachine.Choosers;
-using Aptacode.StateNet.NodeMachine.Nodes;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using NUnit.Framework;
 
 
-namespace Aptacode.StateNet.Tests.NodeMachine
+namespace Aptacode.StateNet.Tests
 {
     public class NodeChooserTests
     {

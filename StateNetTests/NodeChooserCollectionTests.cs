@@ -1,9 +1,7 @@
-﻿using Aptacode.StateNet.NodeMachine.Choosers;
-using Aptacode.StateNet.NodeMachine.Nodes;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 
-namespace Aptacode.StateNet.Tests.NodeMachine
+namespace Aptacode.StateNet.Tests
 {
     public class NodeChooserCollectionTests
     {

@@ -1,13 +1,10 @@
-﻿using Aptacode.StateNet.NodeMachine.Attributes;
-using Aptacode.StateNet.NodeMachine.Choosers;
-using Aptacode.StateNet.NodeMachine.Events;
-using Aptacode.StateNet.NodeMachine.Nodes;
+﻿using Aptacode.StateNet.Events.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Aptacode.StateNet.NodeMachine
+namespace Aptacode.StateNet
 {
     public class NodeGraph
     {

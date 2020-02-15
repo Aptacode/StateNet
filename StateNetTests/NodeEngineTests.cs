@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.NodeMachine;
-using Aptacode.StateNet.NodeMachine.Attributes;
-using Aptacode.StateNet.NodeMachine.Nodes;
+using Aptacode.StateNet.Events.Attributes;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests.NodeMachine
+namespace Aptacode.StateNet.Tests
 {
     public class NodeEngineTests
     {
