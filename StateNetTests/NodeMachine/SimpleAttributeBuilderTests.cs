@@ -7,16 +7,15 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
-    public class AttributeBuilderTests
+    public class SimpleAttributeBuilderTests
     {
         private class DummyGraph : NodeGraph
-        {           
-            [NodeConnection("U1", "U2", 1)]
-            [NodeName("U1")]
-            [NodeStart]
+        {
+            [NodeStart("Start")]
+            [NodeConnection("Next", "End")]
             public Node StartTestNode;
 
-            [NodeName("U2")]
+            [NodeName("End")]
             public Node EndTestNode;
         }
 
@@ -26,14 +25,14 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 
 
         [Test]
-        public void SimpleNodesCreated()
+        public void NodesCreated()
         {
             var nodeGraph = new DummyGraph();
             var nodes = new List<Node>(nodeGraph.GetAll());
 
             Assert.AreEqual(2, nodes.Count);
-            Assert.AreEqual("U1", nodeGraph.StartTestNode.Name);
-            Assert.AreEqual("U2", nodeGraph.EndTestNode.Name);
+            Assert.AreEqual("Start", nodeGraph.StartTestNode.Name);
+            Assert.AreEqual("End", nodeGraph.EndTestNode.Name);
         }
 
         [Test]
@@ -41,15 +40,14 @@ namespace Aptacode.StateNet.Tests.NodeMachine
         {
             var nodeGraph = new DummyGraph();
 
-            Assert.AreEqual("U1", nodeGraph.StartNode?.Name);            
+            Assert.AreEqual("Start", nodeGraph.StartNode?.Name);            
         }
 
         [Test]
         public void SimpleConnectionCreated()
         {
             var nodeGraph = new DummyGraph();
-
-            Assert.AreEqual("U1->U2", nodeGraph.StartTestNode.ToString());
+            Assert.AreEqual("Start:(Next->(End:1))", nodeGraph.StartTestNode.ToString());
             Assert.IsTrue(nodeGraph.IsValid());
         }
     }

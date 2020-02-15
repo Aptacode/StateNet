@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Aptacode.StateNet.NodeMachine.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class NodeConnectionAttribute : Attribute
     {
-        public string SourceName;
+        public string ActionName;
         public string TargetName;
-        public double ConnectionChance;
+        public int ConnectionChance;
 
-        public NodeConnectionAttribute(string sourceName, string targetName, double connectionChance)
+        public NodeConnectionAttribute(string actionName, string targetName, int connectionChance = 1)
         {
-            SourceName = sourceName;
             TargetName = targetName;
+            ActionName = actionName;
             ConnectionChance = connectionChance;
         }
     }
