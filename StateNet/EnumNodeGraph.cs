@@ -15,7 +15,6 @@ namespace Aptacode.StateNet
 
         public void Set(TStates source, TActions action, params (TStates, int)[] targetChoices)
         {
-            var sourceNode = GetNode(source);
             foreach (var pair in targetChoices)
             {
                 var targetNode = GetNode(pair.Item1);
