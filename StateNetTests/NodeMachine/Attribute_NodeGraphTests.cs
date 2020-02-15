@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
-    public class SimpleAttributeBuilderTests
+    public class Attribute_NodeGraphTests
     {
         private class DummyGraph : NodeGraph
         {

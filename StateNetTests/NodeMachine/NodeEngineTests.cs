@@ -36,12 +36,11 @@ namespace Aptacode.StateNet.Tests.NodeMachine
 
             private void Setup()
             {
-
                 Decision1TestNode.OnUpdateChoosers += (s) =>
                 {
                     if (++decision1Count == 2)
                     {
-                        Decision1TestNode["Next"].Always(EndTestNode);
+                        s["Next"].Always(EndTestNode);
                     }
                 };
             }

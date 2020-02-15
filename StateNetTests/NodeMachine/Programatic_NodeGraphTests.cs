@@ -1,14 +1,10 @@
 ﻿using Aptacode.StateNet.NodeMachine;
-using Aptacode.StateNet.NodeMachine.Attributes;
-using Aptacode.StateNet.NodeMachine.Choosers;
-using Aptacode.StateNet.NodeMachine.Nodes;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Aptacode.StateNet.Tests.NodeMachine
 {
-    public class NodeGraphTests
+    public class Programatic_NodeGraphTests
     {
         [SetUp]
         public void Setup() { }
