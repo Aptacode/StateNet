@@ -25,23 +25,17 @@ namespace Aptacode.StateNet.Tests
             [NodeName("End")]
             public Node EndTestNode;
 
-            public DummyGraph()
-            {
-                Setup();
-            }
+            public DummyGraph() => Setup();
 
             private int decision1Count = 0;
 
-            private void Setup()
-            {
-                Decision1TestNode.OnUpdateChoosers += (s) =>
-                {
-                    if (++decision1Count == 2)
-                    {
-                        s["Next"].Always(EndTestNode);
-                    }
-                };
-            }
+            private void Setup() => Decision1TestNode.OnUpdateChoosers += (s) =>
+                                  {
+                                      if (++decision1Count == 2)
+                                      {
+                                          this["D1", "Next"].Always(EndTestNode);
+                                      }
+                                  };
 
         }
 
@@ -68,19 +62,19 @@ namespace Aptacode.StateNet.Tests
         }
 
         private bool canPlay;
-        Node ready;
-        Node playing;
-        Node paused;
-        Node stopped;
+        private Node ready;
+        private Node playing;
+        private Node paused;
+        private Node stopped;
 
         private NodeGraph GetPlayerGraph()
         {
             var graph = new NodeGraph();
 
-            ready = graph.GetNode("ready");
-            playing = graph.GetNode("playing");
-            paused = graph.GetNode("paused");
-            stopped = graph.GetNode("stopped");
+            ready = graph["ready"];
+            playing = graph["playing"];
+            paused = graph["paused"];
+            stopped = graph["stopped"];
 
             graph.StartNode = ready;
 
@@ -88,37 +82,37 @@ namespace Aptacode.StateNet.Tests
             {
                 if (canPlay)
                 {
-                    s["Play"].Always(playing);
+                    graph["ready", "Play"].Always(playing);
                 }
                 else
                 {
-                    s["Play"].Invalid();
+                    graph["ready", "Play"].Invalid();
                 }
             };
-            ready["Pause"].Invalid();
-            ready["Stop"].Always(stopped);
+            graph["ready", "Pause"].Invalid();
+            graph["ready", "Stop"].Always(stopped);
 
-            playing["Play"].Invalid();
-            playing["Pause"].Always(paused);
-            playing["Stop"].Always(stopped);
+            graph["playing", "Play"].Invalid();
+            graph["playing", "Pause"].Always(paused);
+            graph["playing", "Stop"].Always(stopped);
 
             paused.OnUpdateChoosers += (s) =>
             {
                 if (canPlay)
                 {
-                    s["Play"].Always(playing);
+                    graph["paused", "Play"].Always(playing);
                 }
                 else
                 {
-                    s["Play"].Invalid();
+                    graph["paused", "Play"].Invalid();
                 }
             };
-            paused["Pause"].Invalid();
-            paused["Stop"].Always(stopped);
+            graph["paused", "Pause"].Invalid();
+            graph["paused", "Stop"].Always(stopped);
 
-            stopped["Play"].Invalid();
-            stopped["Pause"].Invalid();
-            stopped["Stop"].Invalid();
+            graph["stopped", "Play"].Invalid();
+            graph["stopped", "Pause"].Invalid();
+            graph["stopped", "Stop"].Invalid();
 
             return graph;
         }

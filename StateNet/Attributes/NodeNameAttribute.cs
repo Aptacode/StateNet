@@ -6,9 +6,6 @@ namespace Aptacode.StateNet.Events.Attributes
     public class NodeNameAttribute : Attribute
     {
         public string Name;
-        public NodeNameAttribute(string name)
-        {
-            Name = name;
-        }
+        public NodeNameAttribute(string name) => Name = name;
     }
 }

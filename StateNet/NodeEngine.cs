@@ -3,19 +3,20 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aptacode.StateNet.Events;
+using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
-    public class NodeEngine
+    public class NodeEngine : INodeEngine
     {
-        private readonly NodeGraph _nodeGraph;
+        private readonly INodeGraph _nodeGraph;
         private readonly List<Node> _visitLog;
         public Node CurrentNode { get; private set; }
 
         private readonly ConcurrentQueue<string> inputQueue;
         private bool _isRunning;
 
-        public NodeEngine(NodeGraph nodeGraph)
+        public NodeEngine(INodeGraph nodeGraph)
         {
             _nodeGraph = nodeGraph;
             _visitLog = new List<Node>();
@@ -32,7 +33,7 @@ namespace Aptacode.StateNet
 
         private void SubscribeToEndNodes()
         {
-            foreach(var node in _nodeGraph.GetEndNodes())
+            foreach (var node in _nodeGraph.GetEndNodes())
             {
                 node.OnVisited += (s) =>
                 {
@@ -43,7 +44,7 @@ namespace Aptacode.StateNet
 
         private void SubscribeToNodesVisited()
         {
-            foreach(var node in _nodeGraph.GetAll())
+            foreach (var node in _nodeGraph.GetAll())
             {
                 node.OnVisited += (sender) =>
                 {
@@ -60,11 +61,30 @@ namespace Aptacode.StateNet
             }
         }
 
+        public void Subscribe(Node node, Action callback)
+        {
+            if (!_callbackDictionary.TryGetValue(node, out var actions))
+            {
+                actions = new List<Action>();
+                _callbackDictionary.Add(node, actions);
+            }
+
+            actions.Add(callback);
+        }
+
+        public void Unsubscribe(Node node, Action callback)
+        {
+            if (_callbackDictionary.TryGetValue(node, out var actions))
+            {
+                actions.Remove(callback);
+            }
+        }
+
         public IEnumerable<Node> GetVisitLog() => _visitLog;
 
         public void Start()
         {
-            if(_nodeGraph.IsValid())
+            if (_nodeGraph.IsValid())
             {
                 SubscribeToNodesVisited();
                 SubscribeToEndNodes();
@@ -100,7 +120,7 @@ namespace Aptacode.StateNet
                 try
                 {
                     CurrentNode.UpdateChoosers();
-                    var nextNode = CurrentNode.Next(actionName);
+                    var nextNode = _nodeGraph.Next(CurrentNode, actionName);
                     if (nextNode != null)
                     {
                         CurrentNode.Exit();

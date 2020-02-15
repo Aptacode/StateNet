@@ -1,6 +1,6 @@
-﻿using Aptacode.StateNet.Events.Attributes;
+﻿using System.Collections.Generic;
+using Aptacode.StateNet.Events.Attributes;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 
 namespace Aptacode.StateNet.Tests
@@ -38,14 +38,14 @@ namespace Aptacode.StateNet.Tests
         {
             var nodeGraph = new DummyGraph();
 
-            Assert.AreEqual("Start", nodeGraph.StartNode?.Name);            
+            Assert.AreEqual("Start", nodeGraph.StartNode?.Name);
         }
 
         [Test]
         public void SimpleConnectionCreated()
         {
             var nodeGraph = new DummyGraph();
-            Assert.AreEqual("Start:(Next->(End:1))", nodeGraph.StartTestNode.ToString());
+            Assert.AreEqual("Start", nodeGraph.StartTestNode.ToString());
             Assert.IsTrue(nodeGraph.IsValid());
         }
     }
