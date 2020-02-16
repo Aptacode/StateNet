@@ -58,7 +58,7 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<Node> { graph.StartTestNode, graph.Decision2TestNode, graph.Decision1TestNode, graph.Decision1TestNode, graph.EndTestNode };
 
-            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetVisitLog()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetHistory()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
 
         private bool canPlay;
@@ -133,7 +133,7 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<Node> { ready, playing, paused, playing, stopped };
 
-            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetVisitLog()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetHistory()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }

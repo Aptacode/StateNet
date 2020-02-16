@@ -2,15 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Aptacode.StateNet.Events.Attributes;
 using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
+
+    public class NodeChooserCollection
+    {
+        private readonly Dictionary<Node, Dictionary<string, NodeChooser>> _nodeChoosers = new Dictionary<Node, Dictionary<string, NodeChooser>>();
+
+        public Dictionary<string, NodeChooser> GetNodeChoosers(Node node)
+        {
+            if (!_nodeChoosers.TryGetValue(node, out var chooserDictionary))
+            {
+                chooserDictionary = new Dictionary<string, NodeChooser>();
+                _nodeChoosers.Add(node, chooserDictionary);
+            }
+
+            return chooserDictionary;
+        }
+
+        public Dictionary<string, NodeChooser> this[Node node] => GetNodeChoosers(node);
+
+        public NodeChooser this[Node node, string action]
+        {
+            get
+            {
+                var nodeChooserDictionary = GetNodeChoosers(node);
+                if (!nodeChooserDictionary.TryGetValue(action, out var nodeChooser))
+                {
+                    nodeChooser = new NodeChooser();
+                    nodeChooserDictionary.Add(action, nodeChooser);
+                }
+
+                return nodeChooser;
+            }
+
+            set => GetNodeChoosers(node)[action] = value;
+        }
+
+    }
+
     public class NodeGraph : INodeGraph
     {
         protected readonly Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
-        protected readonly Dictionary<Node, Dictionary<string, NodeChooser>> _Choosers = new Dictionary<Node, Dictionary<string, NodeChooser>>();
+        protected readonly NodeChooserCollection _nodeChooserCollection = new NodeChooserCollection();
 
         public IEnumerable<Node> GetAll() => _nodes.Select(keyValue => keyValue.Value);
         public IEnumerable<Node> GetEndNodes() => _nodes.Select(keyValue => keyValue.Value).Where(IsEndNode);
@@ -27,51 +65,20 @@ namespace Aptacode.StateNet
 
             return node;
         }
-        public Dictionary<string, NodeChooser> GetChoosers(Node node)
-        {
-            if (!_Choosers.TryGetValue(node, out var choosers))
-            {
-                choosers = new Dictionary<string, NodeChooser>();
-                _Choosers.Add(node, choosers);
-            }
 
-            return choosers;
+        public Node this[string nodeName] => GetNode(nodeName);
+        public NodeChooser this[string nodeName, string action]
+        {
+            get => _nodeChooserCollection[GetNode(nodeName), action];
+            set => _nodeChooserCollection[GetNode(nodeName), action] = value;
+        }
+        public NodeChooser this[Node node, string action]
+        {
+            get => _nodeChooserCollection[node, action];
+            set => _nodeChooserCollection[node, action] = value;
         }
 
-        public Node this[string state] => GetNode(state);
-        public NodeChooser this[string state, string action]
-        {
-            get
-            {
-                var choosers = GetChoosers(GetNode(state));
-                if (choosers.TryGetValue(action, out var value))
-                {
-                    return value;
-                }
-                else
-                {
-                    var nodeChooser = new NodeChooser();
-                    choosers.Add(action, nodeChooser);
-                    return nodeChooser;
-                }
-            }
-
-            set => GetChoosers(GetNode(state))[action] = value;
-        }
-
-        public Node Next(Node node, string actionName)
-        {
-            if (GetChoosers(node).TryGetValue(actionName, out var chooser))
-            {
-                return chooser?.Next();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public bool IsEndNode(Node node) => GetChoosers(node).Count(c => c.Value.TotalWeight > 0) == 0;
-
+        public bool IsEndNode(Node node) => _nodeChooserCollection.GetNodeChoosers(node).Values.Count((chooser) => !chooser.IsInvalid) == 0;
 
         public NodeGraph()
         {
@@ -111,6 +118,26 @@ namespace Aptacode.StateNet
             }
         }
 
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
 
+            foreach (var node in _nodes.Values.ToList())
+            {
+                stringBuilder.AppendLine(node.Name);
+
+                var actionChoosers = _nodeChooserCollection.GetNodeChoosers(node).ToList();
+                if (actionChoosers.Count > 0)
+                {
+                    stringBuilder.AppendLine($"({actionChoosers[0].Key}->{actionChoosers[0].Value})");
+                    for (var i = 1; i < actionChoosers.Count; i++)
+                    {
+                        stringBuilder.AppendLine($",({actionChoosers[i].Key}->{actionChoosers[i].Value})");
+                    }
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 }

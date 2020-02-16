@@ -10,7 +10,7 @@ namespace Aptacode.StateNet
     public class NodeEngine : INodeEngine
     {
         private readonly INodeGraph _nodeGraph;
-        private readonly List<Node> _visitLog;
+        private readonly List<Node> _history;
         public Node CurrentNode { get; private set; }
 
         private readonly ConcurrentQueue<string> inputQueue;
@@ -19,7 +19,7 @@ namespace Aptacode.StateNet
         public NodeEngine(INodeGraph nodeGraph)
         {
             _nodeGraph = nodeGraph;
-            _visitLog = new List<Node>();
+            _history = new List<Node>();
             _callbackDictionary = new Dictionary<Node, List<Action>>();
             inputQueue = new ConcurrentQueue<string>();
             _isRunning = false;
@@ -48,7 +48,7 @@ namespace Aptacode.StateNet
             {
                 node.OnVisited += (sender) =>
                 {
-                    _visitLog.Add(sender);
+                    _history.Add(sender);
 
                     _callbackDictionary[node]?.ForEach(callback =>
                     {
@@ -80,7 +80,7 @@ namespace Aptacode.StateNet
             }
         }
 
-        public IEnumerable<Node> GetVisitLog() => _visitLog;
+        public IEnumerable<Node> GetHistory() => _history;
 
         public void Start()
         {
@@ -90,7 +90,7 @@ namespace Aptacode.StateNet
                 SubscribeToEndNodes();
                 OnStarted?.Invoke(this);
                 CurrentNode = _nodeGraph.StartNode;
-                _visitLog.Add(CurrentNode);
+                _history.Add(CurrentNode);
 
                 new TaskFactory().StartNew(async () =>
                 {
@@ -120,7 +120,7 @@ namespace Aptacode.StateNet
                 try
                 {
                     CurrentNode.UpdateChoosers();
-                    var nextNode = _nodeGraph.Next(CurrentNode, actionName);
+                    var nextNode = Next(CurrentNode, actionName);
                     if (nextNode != null)
                     {
                         CurrentNode.Exit();
@@ -134,5 +134,7 @@ namespace Aptacode.StateNet
                 }
             }
         }
+
+        public Node Next(Node node, string actionName) => _nodeGraph[node, actionName]?.Next(_history);
     }
 }

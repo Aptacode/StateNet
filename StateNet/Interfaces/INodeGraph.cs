@@ -11,7 +11,10 @@ namespace Aptacode.StateNet.Interfaces
         bool IsValid();
 
         Node StartNode { get; set; }
-        Node Next(Node node, string actionName);
+
+        Node this[string nodeName] { get; }
+        NodeChooser this[string nodeName, string action] { get; set; }
+        NodeChooser this[Node node, string action] { get; set; }
     }
 
 }

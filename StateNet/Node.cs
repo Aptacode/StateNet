@@ -25,22 +25,6 @@ namespace Aptacode.StateNet
 
         public override string ToString() => Name;
 
-        //public override string ToString()
-        //{
-        //    var stringBuilder = new StringBuilder();
-
-        //    var pairs = _Choosers.ToList();
-        //    if (pairs.Count > 0)
-        //    {
-        //        stringBuilder.Append($"({pairs[0].Key}->{pairs[0].Value})");
-        //        for (int i = 1; i < pairs.Count; i++)
-        //        {
-        //            stringBuilder.Append($",({pairs[i].Key}->{pairs[i].Value})");
-        //        }
-        //    }
-
-        //    return $"{Name}{(IsEndNode ? "" : ":" + stringBuilder.ToString())}";
-        //}
         public string Name { get; }
     }
 }

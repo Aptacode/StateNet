@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet
 {
@@ -9,23 +11,21 @@ namespace Aptacode.StateNet
     {
         private static readonly Random RandomGenerator = new Random(new Guid().GetHashCode());
 
-        private readonly Dictionary<Node, int> _distribution = new Dictionary<Node, int>();
+        private readonly Dictionary<Node, INodeWeight> _distribution = new Dictionary<Node, INodeWeight>();
 
-        public NodeChooser() => TotalWeight = 0;
-
-        internal Node Next()
+        internal Node Next(List<Node> history)
         {
-            if (TotalWeight == 0)
+            if (TotalWeight(history) == 0)
             {
                 return null;
             }
 
-            var randomChoice = RandomGenerator.Next(1, TotalWeight + 1);
+            var randomChoice = RandomGenerator.Next(1, TotalWeight(history) + 1);
 
             var weightSum = 0;
             foreach (var keyValue in _distribution)
             {
-                weightSum += keyValue.Value;
+                weightSum += keyValue.Value.GetWeight(history);
                 if (weightSum >= randomChoice)
                 {
                     return keyValue.Key;
@@ -35,11 +35,11 @@ namespace Aptacode.StateNet
             throw new Exception();
         }
 
-        public int GetWeight(Node choice)
+        public int GetWeight(Node choice, List<Node> history)
         {
             if (_distribution.ContainsKey(choice))
             {
-                return _distribution[choice];
+                return _distribution[choice].GetWeight(history);
             }
             else
             {
@@ -56,11 +56,7 @@ namespace Aptacode.StateNet
             }
         }
         public void Invalid() => Clear();
-        public void Clear()
-        {
-            TotalWeight = 0;
-            _distribution.Clear();
-        }
+        public void Clear() => _distribution.Clear();
 
         public void SetDistribution(params (Node, int)[] choices)
         {
@@ -74,13 +70,13 @@ namespace Aptacode.StateNet
                 UpdateWeight(choice.Item1, choice.Item2);
             }
         }
-        public void UpdateWeight(Node choice, int weight)
-        {
-            TotalWeight += weight - GetWeight(choice);
-            _distribution[choice] = weight;
-        }
+        public void UpdateWeight(Node choice, int weight) => _distribution[choice] = new StaticNodeWeight(weight);
 
-        public int TotalWeight { get; private set; }
+        public void UpdateWeight(Node choice, INodeWeight weight) => _distribution[choice] = weight;
+
+        public int TotalWeight(List<Node> history) => _distribution.Values.Select(f => f.GetWeight(history)).Sum();
+
+        public bool IsInvalid => _distribution.Count == 0;
 
         public override string ToString()
         {
