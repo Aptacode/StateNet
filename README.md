@@ -17,21 +17,22 @@ https://discord.gg/D8MSXJB
 The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Though since its inception the library has grown versatile with many potential usecases.
 
 ### Usage
-###### 1) Configure the NodeGraph
+#### 1) Configure the NodeGraph
 - All possible states
 - All possible actions that can be applied to each state
 - All relations between states
 - Set the start state
 
-###### 2) Start the NodeEngine
+#### 2) Start the NodeEngine
 - Subscribe to relevant events: OnStarted, OnFinished, OnTransition or listen for specific node transitions
 - Subscribe to NodeEvents - OnTransition
 - Subscribe to a specific Node 
 - Call Start()
 - Call Apply(action) to move through the graph
 
-Currently there are three approaches to define a NodeGraph
-###### 1) Object oriented
+### Three approaches to configure a NodeGraph
+
+#### 1) Object oriented
 - Define a class which derives from NodeGraph
 - Define each node as a property on the class
 - Use attributes on the Node properties to define the relationships between them
@@ -58,7 +59,7 @@ Currently there are three approaches to define a NodeGraph
       public Node EndTestNode;
   }
 ```
-###### 2) Programmatic - string based
+#### 2) Programmatic - string based
 ```csharp
 
   var graph = new NodeGraph();
@@ -71,7 +72,7 @@ Currently there are three approaches to define a NodeGraph
   graph["Paused", "Stop"].Always(graph["Stopped"]);
 
 ```
-###### 3) Programmatic - strongly typed
+#### 3) Programmatic - strongly typed
 ```csharp
 
     public enum States { Ready, Playing, Paused, Stopped }
@@ -93,7 +94,7 @@ Currently there are three approaches to define a NodeGraph
     
 ```
 
-###### Using the NodeEngine
+#### Using the NodeEngine
 ```csharp
 
 //Create and configure the NodeGraph using your prefered method
