@@ -1,4 +1,5 @@
 ﻿using System;
+using Aptacode.StateNet.Connections;
 
 namespace Aptacode.StateNet
 {
@@ -37,10 +38,9 @@ namespace Aptacode.StateNet
 
         public Node this[TStates state] => GetNode(state);
 
-        public NodeChooser this[TStates state, TActions action]
+        public NodeConnections this[TStates state, TActions action]
         {
             get => this[state.ToString(), action.ToString()];
-            set => this[state.ToString(), action.ToString()] = value;
         }
     }
 }

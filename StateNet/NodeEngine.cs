@@ -10,26 +10,26 @@ namespace Aptacode.StateNet
     public class NodeEngine : INodeEngine
     {
         private readonly INodeGraph _nodeGraph;
-        private readonly List<Node> _visitLog;
-        public Node CurrentNode { get; private set; }
-
-        private readonly ConcurrentQueue<string> inputQueue;
+        private readonly List<Node> _history;
+        private readonly NodeChooser _nodeChooser;
+        private readonly ConcurrentQueue<string> _inputQueue;
+        private readonly Dictionary<Node, List<Action>> _callbackDictionary;
         private bool _isRunning;
+        public Node CurrentNode { get; private set; }
 
         public NodeEngine(INodeGraph nodeGraph)
         {
             _nodeGraph = nodeGraph;
-            _visitLog = new List<Node>();
+            _history = new List<Node>();
+            _nodeChooser = new NodeChooser(_history);
             _callbackDictionary = new Dictionary<Node, List<Action>>();
-            inputQueue = new ConcurrentQueue<string>();
+            _inputQueue = new ConcurrentQueue<string>();
             _isRunning = false;
         }
 
         public event EngineEvent OnFinished;
 
         public event EngineEvent OnStarted;
-
-        private readonly Dictionary<Node, List<Action>> _callbackDictionary;
 
         private void SubscribeToEndNodes()
         {
@@ -48,16 +48,24 @@ namespace Aptacode.StateNet
             {
                 node.OnVisited += (sender) =>
                 {
-                    _visitLog.Add(sender);
+                    _history.Add(sender);
 
-                    _callbackDictionary[node]?.ForEach(callback =>
-                    {
-                        new TaskFactory().StartNew(() =>
-                        {
-                            callback?.Invoke();
-                        });
-                    });
+                    NotifySubscribers(sender);
                 };
+            }
+        }
+
+        private void NotifySubscribers(Node node)
+        {
+            if (_callbackDictionary.ContainsKey(node))
+            {
+                _callbackDictionary[node]?.ForEach(callback =>
+                {
+                    new TaskFactory().StartNew(() =>
+                    {
+                        callback?.Invoke();
+                    }).ConfigureAwait(false);
+                });
             }
         }
 
@@ -80,7 +88,7 @@ namespace Aptacode.StateNet
             }
         }
 
-        public IEnumerable<Node> GetVisitLog() => _visitLog;
+        public List<Node> GetHistory() => _history;
 
         public void Start()
         {
@@ -90,7 +98,7 @@ namespace Aptacode.StateNet
                 SubscribeToEndNodes();
                 OnStarted?.Invoke(this);
                 CurrentNode = _nodeGraph.StartNode;
-                _visitLog.Add(CurrentNode);
+                _history.Add(CurrentNode);
 
                 new TaskFactory().StartNew(async () =>
                 {
@@ -101,9 +109,7 @@ namespace Aptacode.StateNet
                         NextTransition();
                         await Task.Delay(1).ConfigureAwait(false);
                     }
-                });
-
-
+                }).ConfigureAwait(false);
             }
             else
             {
@@ -111,28 +117,23 @@ namespace Aptacode.StateNet
             }
         }
         public void Stop() => _isRunning = false;
-        public void Apply(string actionName) => inputQueue.Enqueue(actionName);
+        public void Apply(string actionName) => _inputQueue.Enqueue(actionName);
 
         private void NextTransition()
         {
-            if (inputQueue.TryDequeue(out var actionName))
+            if (_inputQueue.TryDequeue(out var actionName))
             {
-                try
+                CurrentNode.UpdateChoosers();
+                var nextNode = Next(CurrentNode, actionName);
+                if (nextNode != null)
                 {
-                    CurrentNode.UpdateChoosers();
-                    var nextNode = _nodeGraph.Next(CurrentNode, actionName);
-                    if (nextNode != null)
-                    {
-                        CurrentNode.Exit();
-                        CurrentNode = nextNode;
-                        CurrentNode.Visit();
-                    }
-                }
-                catch
-                {
-
+                    CurrentNode.Exit();
+                    CurrentNode = nextNode;
+                    CurrentNode.Visit();
                 }
             }
         }
+
+        public Node Next(Node node, string actionName) => _nodeChooser.Next(_nodeGraph[node, actionName]);
     }
 }

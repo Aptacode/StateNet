@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Events.Attributes;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet
 {
     public class NodeGraph : INodeGraph
     {
         protected readonly Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
-        protected readonly Dictionary<Node, Dictionary<string, NodeChooser>> _Choosers = new Dictionary<Node, Dictionary<string, NodeChooser>>();
+        protected readonly ConnectionDictionary _actionConnections = new ConnectionDictionary();
 
         public IEnumerable<Node> GetAll() => _nodes.Select(keyValue => keyValue.Value);
         public IEnumerable<Node> GetEndNodes() => _nodes.Select(keyValue => keyValue.Value).Where(IsEndNode);
@@ -27,51 +30,18 @@ namespace Aptacode.StateNet
 
             return node;
         }
-        public Dictionary<string, NodeChooser> GetChoosers(Node node)
-        {
-            if (!_Choosers.TryGetValue(node, out var choosers))
-            {
-                choosers = new Dictionary<string, NodeChooser>();
-                _Choosers.Add(node, choosers);
-            }
 
-            return choosers;
+        public Node this[string nodeName] => GetNode(nodeName);
+        public NodeConnections this[string nodeName, string action]
+        {
+            get => _actionConnections[GetNode(nodeName), action];
+        }
+        public NodeConnections this[Node node, string action]
+        {
+            get => _actionConnections[node, action];
         }
 
-        public Node this[string state] => GetNode(state);
-        public NodeChooser this[string state, string action]
-        {
-            get
-            {
-                var choosers = GetChoosers(GetNode(state));
-                if (choosers.TryGetValue(action, out var value))
-                {
-                    return value;
-                }
-                else
-                {
-                    var nodeChooser = new NodeChooser();
-                    choosers.Add(action, nodeChooser);
-                    return nodeChooser;
-                }
-            }
-
-            set => GetChoosers(GetNode(state))[action] = value;
-        }
-
-        public Node Next(Node node, string actionName)
-        {
-            if (GetChoosers(node).TryGetValue(actionName, out var chooser))
-            {
-                return chooser?.Next();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public bool IsEndNode(Node node) => GetChoosers(node).Count(c => c.Value.TotalWeight > 0) == 0;
-
+        public bool IsEndNode(Node node) => _actionConnections[node].GetAllNodeConnections().All((chooser) => chooser.IsInvalid);
 
         public NodeGraph()
         {
@@ -91,7 +61,8 @@ namespace Aptacode.StateNet
             {
                 var connectionInfo = (NodeConnectionAttribute)attribute;
                 var node = (Node)field.GetValue(this);
-                this[node.Name, connectionInfo.ActionName].UpdateWeight(GetNode(connectionInfo.TargetName), connectionInfo.ConnectionChance);
+
+                this[node.Name, connectionInfo.ActionName].UpdateWeight(GetNode(connectionInfo.TargetName), ConnectionWeightFactory.FromString(connectionInfo.ConnectionDescription));
             });
         }
 
@@ -111,6 +82,26 @@ namespace Aptacode.StateNet
             }
         }
 
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
 
+            foreach (var node in _nodes.Values.ToList())
+            {
+                stringBuilder.AppendLine(node.Name);
+
+                var actionChoosers = _actionConnections.GetActionConnection(node).GetAll();
+                if (actionChoosers.Any())
+                {
+                    stringBuilder.AppendLine($"({actionChoosers[0].Key}->{actionChoosers[0].Value})");
+                    for (var i = 1; i < actionChoosers.Count; i++)
+                    {
+                        stringBuilder.AppendLine($",({actionChoosers[i].Key}->{actionChoosers[i].Value})");
+                    }
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 }

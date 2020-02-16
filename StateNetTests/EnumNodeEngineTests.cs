@@ -63,9 +63,7 @@ namespace Aptacode.StateNet.Tests
 
             graph[States.Stopped, Actions.Play].Invalid();
             graph[States.Stopped, Actions.Pause].Invalid();
-            graph[States.Stopped, Actions.Stop].Invalid();
-
-            return graph;
+            graph[States.Stopped, Actions.Stop].Invalid(); return graph;
         }
 
         [Test]
@@ -84,7 +82,7 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<Node> { ready, playing, paused, playing, stopped };
 
-            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetVisitLog()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }
