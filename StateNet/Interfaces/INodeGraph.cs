@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Connections;
 
 namespace Aptacode.StateNet.Interfaces
 {
@@ -13,8 +14,8 @@ namespace Aptacode.StateNet.Interfaces
         Node StartNode { get; set; }
 
         Node this[string nodeName] { get; }
-        NodeChooser this[string nodeName, string action] { get; set; }
-        NodeChooser this[Node node, string action] { get; set; }
+        NodeConnections this[string nodeName, string action] { get; }
+        NodeConnections this[Node node, string action] { get; }
     }
 
 }

@@ -10,6 +10,7 @@ namespace Aptacode.StateNet
     public class NodeEngine : INodeEngine
     {
         private readonly INodeGraph _nodeGraph;
+        private readonly NodeChooser _nodeChoose;
         private readonly List<Node> _history;
         public Node CurrentNode { get; private set; }
 
@@ -20,6 +21,7 @@ namespace Aptacode.StateNet
         {
             _nodeGraph = nodeGraph;
             _history = new List<Node>();
+            _nodeChoose = new NodeChooser(_history);
             _callbackDictionary = new Dictionary<Node, List<Action>>();
             inputQueue = new ConcurrentQueue<string>();
             _isRunning = false;
@@ -135,6 +137,6 @@ namespace Aptacode.StateNet
             }
         }
 
-        public Node Next(Node node, string actionName) => _nodeGraph[node, actionName]?.Next(_history);
+        public Node Next(Node node, string actionName) => _nodeChoose.Next(_nodeGraph[node, actionName]);
     }
 }

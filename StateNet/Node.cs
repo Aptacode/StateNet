@@ -7,7 +7,8 @@ namespace Aptacode.StateNet
         public Node(string name) => Name = name;
 
         #region Overrides
-        public int GetHashCode(Node obj) => Name.GetHashCode();
+
+        public override int GetHashCode() => Name.GetHashCode();
         public override bool Equals(object obj) => (obj is Node other) && Equals(other);
         public bool Equals(Node other) => Name.Equals(other.Name);
         #endregion
@@ -17,7 +18,6 @@ namespace Aptacode.StateNet
         internal void Exit() => OnExited?.Invoke(this);
         internal void UpdateChoosers() => OnUpdateChoosers?.Invoke(this);
         #endregion
-
 
         public event NodeEvent OnVisited;
         public event NodeEvent OnUpdateChoosers;
