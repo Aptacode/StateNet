@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Aptacode.StateNet.Connections
 {
-
-
     public class ConnectionDictionary
     {
         private readonly Dictionary<Node, ActionConnection> _actionConnections = new Dictionary<Node, ActionConnection>();

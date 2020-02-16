@@ -8,7 +8,6 @@ namespace Aptacode.StateNet.Tests
         [SetUp]
         public void Setup() { }
 
-        //TODO ToString Test
-        //TODO Next probability distrobution Tests
+
     }
 }

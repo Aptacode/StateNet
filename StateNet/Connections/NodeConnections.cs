@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Aptacode.StateNet.Interfaces;
@@ -11,7 +10,8 @@ namespace Aptacode.StateNet.Connections
     {
         private readonly Dictionary<Node, INodeWeight> _distribution = new Dictionary<Node, INodeWeight>();
 
-        public INodeWeight this[Node node] { 
+        public INodeWeight this[Node node]
+        {
             get
             {
                 if (_distribution.ContainsKey(node))
@@ -21,7 +21,8 @@ namespace Aptacode.StateNet.Connections
                 return null;
             }
         }
-
+        public void Invalid() => Clear();
+        public void Clear() => _distribution.Clear();
         public void Always(Node choice)
         {
             Clear();
@@ -31,14 +32,12 @@ namespace Aptacode.StateNet.Connections
             }
         }
 
-        public void Invalid() => Clear();
-        public void Clear() => _distribution.Clear();
-
         public void SetDistribution(params (Node, int)[] choices)
         {
             Clear();
             UpdateDistribution(choices);
         }
+
         public void UpdateDistribution(params (Node, int)[] choices)
         {
             foreach (var choice in choices)

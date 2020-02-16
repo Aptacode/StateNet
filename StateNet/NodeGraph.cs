@@ -6,6 +6,7 @@ using System.Text;
 using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Events.Attributes;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet
 {
@@ -60,7 +61,8 @@ namespace Aptacode.StateNet
             {
                 var connectionInfo = (NodeConnectionAttribute)attribute;
                 var node = (Node)field.GetValue(this);
-                this[node.Name, connectionInfo.ActionName].UpdateWeight(GetNode(connectionInfo.TargetName), connectionInfo.ConnectionChance);
+
+                this[node.Name, connectionInfo.ActionName].UpdateWeight(GetNode(connectionInfo.TargetName), ConnectionWeightFactory.FromString(connectionInfo.ConnectionDescription));
             });
         }
 

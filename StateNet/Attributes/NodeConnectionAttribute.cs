@@ -1,4 +1,6 @@
 ﻿using System;
+using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet.Events.Attributes
 {
@@ -7,13 +9,13 @@ namespace Aptacode.StateNet.Events.Attributes
     {
         public string ActionName;
         public string TargetName;
-        public int ConnectionChance;
+        public string ConnectionDescription;
 
-        public NodeConnectionAttribute(string actionName, string targetName, int connectionChance = 1)
+        public NodeConnectionAttribute(string actionName, string targetName, string connectionDescription = null)
         {
             TargetName = targetName;
             ActionName = actionName;
-            ConnectionChance = connectionChance;
+            ConnectionDescription = connectionDescription;
         }
     }
 }

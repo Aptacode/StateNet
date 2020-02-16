@@ -40,7 +40,7 @@ namespace Aptacode.StateNet
                 }
             }
 
-            throw new Exception();
+            return null;
         }
 
         public int TotalWeight(NodeConnections connections) => connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();

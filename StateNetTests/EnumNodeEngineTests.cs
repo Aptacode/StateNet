@@ -82,7 +82,7 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<Node> { ready, playing, paused, playing, stopped };
 
-            Assert.That(() => expectedLog, Is.EquivalentTo(engine.GetHistory()).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }

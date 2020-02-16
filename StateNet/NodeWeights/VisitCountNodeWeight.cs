@@ -10,10 +10,10 @@ namespace Aptacode.StateNet.NodeWeights
         public int LessThenWeight { get; set; }
         public int EqualToWeight { get; set; }
         public int GreaterThenWeight { get; set; }
-        public Node Node { get; set; }
-        public VisitCountNodeWeight(Node node, int count, int lessThenWeight, int equalToWeight, int greaterThenWeight)
+        public string NodeName { get; set; }
+        public VisitCountNodeWeight(string nodeName, int count, int lessThenWeight, int equalToWeight, int greaterThenWeight)
         {
-            Node = node;
+            NodeName = nodeName;
             Count = count;
             LessThenWeight = lessThenWeight;
             EqualToWeight = equalToWeight;
@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.NodeWeights
 
         public int GetWeight(List<Node> history)
         {
-            var nodeCount = history.Count(n => n == Node);
+            var nodeCount = history.Count(n => n.Name == NodeName);
             if (nodeCount > Count)
             {
                 return GreaterThenWeight;
