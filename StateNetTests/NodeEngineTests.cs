@@ -19,7 +19,8 @@ namespace Aptacode.StateNet.Tests
             public Node Decision1TestNode;
 
             [NodeName("D2")]
-            [NodeConnection("Next", "D1")]
+            [NodeConnection("Next", "D1", "VisitCount:D2,2,0,0,2")]
+            [NodeConnection("Next", "D2", "VisitCount:D2,2,1,1,0")]
             public Node Decision2TestNode;
 
             [NodeName("End")]
@@ -29,13 +30,16 @@ namespace Aptacode.StateNet.Tests
 
             private int decision1Count = 0;
 
-            private void Setup() => Decision1TestNode.OnUpdateChoosers += (s) =>
+            private void Setup()
+            {
+                Decision1TestNode.OnUpdateChoosers += (s) =>
                                   {
                                       if (++decision1Count == 2)
                                       {
                                           this["D1", "Next"].Always(EndTestNode);
                                       }
                                   };
+            }
 
         }
 
@@ -55,10 +59,14 @@ namespace Aptacode.StateNet.Tests
             engine.Apply("Next");
             engine.Apply("Next");
             engine.Apply("Next");
+            engine.Apply("Next");
+            engine.Apply("Next");
+            engine.Apply("Next");
+            engine.Apply("Next");
 
-            var expectedLog = new List<Node> { graph.StartTestNode, graph.Decision2TestNode, graph.Decision1TestNode, graph.Decision1TestNode, graph.EndTestNode };
+            var expectedLog = new List<Node> { graph.StartTestNode, graph.Decision2TestNode, graph.Decision2TestNode, graph.Decision2TestNode, graph.Decision1TestNode, graph.Decision1TestNode, graph.EndTestNode };
 
-            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(500).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
 
         private bool canPlay;

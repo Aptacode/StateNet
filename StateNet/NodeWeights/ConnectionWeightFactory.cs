@@ -17,7 +17,7 @@ namespace Aptacode.StateNet.NodeWeights
                 case "Static":
                     return new StaticNodeWeight(int.Parse(parameters[0]));
                 case "VisitCount":
-                    return new VisitCountNodeWeight(parameters[0], int.Parse(parameters[1]), int.Parse(parameters[2]), int.Parse(parameters[3]), int.Parse(parameters[3]));
+                    return new VisitCountNodeWeight(parameters[0], int.Parse(parameters[1]), int.Parse(parameters[2]), int.Parse(parameters[3]), int.Parse(parameters[4]));
                 default:
                     return new StaticNodeWeight(1);
             }
