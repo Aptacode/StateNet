@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
-    public class AttributeNetworkTests
+    /// <summary>
+    /// Checks if the various states in a network are being assigned to correctly.
+    /// Primary focus is testing that the *initial* Network reflection is behaving as expected.
+    /// </summary>
+    public class BasicAttributeAssignmentTests
     {
         private class DummyNetwork : Network
         {
