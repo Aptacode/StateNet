@@ -1,8 +1,7 @@
-﻿using Aptacode.StateNet.Events.Attributes;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Aptacode.StateNet.Tests
+namespace Aptacode.StateNet.Tests.AttributeTests
 {
     /// <summary>
     /// Checks if the various states in a network are being assigned to correctly.
@@ -10,40 +9,30 @@ namespace Aptacode.StateNet.Tests
     /// </summary>
     public class BasicAttributeAssignmentTests
     {
-        private class DummyNetwork : Network
-        {
-            [StartState("Start")]
-            [Connection("Next", "End")]
-            public State StartState;
-
-            [StateName("End")]
-            public State EndState;
-        }
-
         [Test]
         public void StatesCreated()
         {
-            var network = new DummyNetwork();
+            var network = new TwoStateStartToEndNetwork();
             var states = new List<State>(network.GetAll());
 
             Assert.AreEqual(2, states.Count);
-            Assert.AreEqual("Start", network.StartState.Name);
-            Assert.AreEqual("End", network.EndState.Name);
+            Assert.AreEqual("Start", network.StartTestState.Name);
+            Assert.AreEqual("End", network.EndTestState.Name);
         }
 
         [Test]
         public void IsStartStateSet()
         {
-            var nodeGraph = new DummyNetwork();
+            var nodeGraph = new TwoStateStartToEndNetwork();
 
-            Assert.AreEqual("Start", nodeGraph.StartState?.Name);
+            Assert.AreEqual("Start", nodeGraph.StartTestState?.Name);
         }
 
         [Test]
         public void SimpleConnectionCreated()
         {
-            var nodeGraph = new DummyNetwork();
-            Assert.AreEqual("Start", nodeGraph.StartState.ToString());
+            var nodeGraph = new TwoStateStartToEndNetwork();
+            Assert.AreEqual("Start", nodeGraph.StartTestState.ToString());
             Assert.IsTrue(nodeGraph.IsValid());
         }
     }

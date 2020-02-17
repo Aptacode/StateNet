@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
-    class AttributeAssignmentOverridingTests
+    /// <summary>
+    /// Checks that a network set up with class attributes is updated
+    /// by any post-instantiation changes.
+    /// </summary>
+    public class AttributeAssignmentOverridingTests
     {
     }
 }
