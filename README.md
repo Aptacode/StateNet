@@ -17,59 +17,59 @@ https://discord.gg/D8MSXJB
 The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Though since its inception the library has grown versatile with many potential usecases.
 
 ### Usage
-#### 1) Configure the NodeGraph
+#### 1) Configure the Network
 - All possible states
 - All possible actions that can be applied to each state
 - All relations between states
 - Set the start state
 
-#### 2) Start the NodeEngine
-- Subscribe to relevant events: OnStarted, OnFinished, OnTransition or listen for specific node transitions
-- Subscribe to NodeEvents - OnTransition
-- Subscribe to a specific Node 
+#### 2) Start the Engine
+- Subscribe to relevant events: OnStarted, OnFinished, OnTransition or listen for specific State transitions
+- Subscribe to StateEvents - OnTransition
+- Subscribe to a specific State 
 - Call Start()
-- Call Apply(action) to move through the graph
+- Call Apply(action) to move through the network
 
-### Three approaches to configure a NodeGraph
+### Three approaches to configure a Network
 
 #### 1) Object oriented
-- Define a class which derives from NodeGraph
-- Define each node as a property on the class
-- Use attributes on the Node properties to define the relationships between them
+- Define a class which derives from Network
+- Define each State as a property on the class
+- Use attributes on the State properties to define the relationships between them
 
 ```csharp
-  public class CustomGraph : NodeGraph
+  public class CustomNetwork : Network
   {
-      [NodeStart("Start")]
-      [NodeConnection("Left", "D1")]
-      [NodeConnection("Right", "D2")]
-      public Node StartTestNode;
+      [StateStart("Start")]
+      [Connection("Left", "D1")]
+      [Connection("Right", "D2")]
+      public State StartTestState;
 
-      [NodeName("D1")]
-      [NodeConnection("Next", "D1", "Static:1")]
-      [NodeConnection("Next", "End", "Static:0")]
-      public Node Decision1TestNode;
+      [StateName("D1")]
+      [Connection("Next", "D1", "Static:1")]
+      [Connection("Next", "End", "Static:0")]
+      public State Decision1TestState;
 
-      [NodeName("D2")]
-      [NodeConnection("Next", "D1", "VisitCount:D2,2,0,0,2")]
-      [NodeConnection("Next", "D2", "VisitCount:D2,2,1,1,0")]
-      public Node Decision2TestNode;
+      [StateName("D2")]
+      [Connection("Next", "D1", "VisitCount:D2,2,0,0,2")]
+      [Connection("Next", "D2", "VisitCount:D2,2,1,1,0")]
+      public State Decision2TestState;
 
-      [NodeName("End")]
-      public Node EndTestNode;
+      [StateName("End")]
+      public State EndTestState;
   }
 ```
 #### 2) Programmatic - string based
 ```csharp
 
-  var graph = new NodeGraph();
-  graph.StartNode = graph["Ready"];
+  var network = new Network();
+  network.StartState = network["Ready"];
   
-  graph["Ready", "Play"].Always(graph["Playing"]);
-  graph["Playing", "Pause"].Always(graph["Paused"]);
-  graph["Playing", "Stop"].Always(graph["Stopped"]);
-  graph["Paused", "Play"].Always(graph["Playing"]);
-  graph["Paused", "Stop"].Always(graph["Stopped"]);
+  network["Ready", "Play"].Always(network["Playing"]);
+  network["Playing", "Pause"].Always(network["Paused"]);
+  network["Playing", "Stop"].Always(network["Stopped"]);
+  network["Paused", "Play"].Always(network["Playing"]);
+  network["Paused", "Stop"].Always(network["Stopped"]);
 
 ```
 #### 3) Programmatic - strongly typed
@@ -78,43 +78,43 @@ The original goal of StateNet was to create a simple way to define and control t
     public enum States { Ready, Playing, Paused, Stopped }
     public enum Actions { Play, Pause, Stop }
     
-    var graph = new EnumNodeGraph<States, Actions>();
+    var network = new EnumNetwork<States, Actions>();
     
-    var Ready = graph[States.Ready];
-    var Playing = graph[States.Playing];
-    var Paused = graph[States.Paused];
-    var Stopped = graph[States.Stopped];
-    graph.StartNode = Ready;
+    var Ready = network[States.Ready];
+    var Playing = network[States.Playing];
+    var Paused = network[States.Paused];
+    var Stopped = network[States.Stopped];
+    network.StartState = Ready;
 
-    graph[Ready, Actions.Play].Always(Playing);
-    graph[Playing, Actions.Pause].Always(Paused);
-    graph[Playing, Actions.Stop].Always(Stopped);
-    graph[Paused, Actions.Play].Always(Playing);
-    graph[Paused, Actions.Stop].Always(Stopped);
+    network[Ready, Actions.Play].Always(Playing);
+    network[Playing, Actions.Pause].Always(Paused);
+    network[Playing, Actions.Stop].Always(Stopped);
+    network[Paused, Actions.Play].Always(Playing);
+    network[Paused, Actions.Stop].Always(Stopped);
     
 ```
 
-#### Using the NodeEngine
+#### Using the Engine
 ```csharp
 
-//Create and configure the NodeGraph using your prefered method
-var nodeGraph = ...
+//Create and configure the Network using your prefered method
+var network = ...
 
-//Create the NodeEngine
-var nodeEngine = new NodeEngine(nodeGraph);
+//Create the Engine
+var engine = new Engine(network);
 
 //Subscribe to the engines events
-nodeEngine.OnFinished += (sender) => { ... }
-nodeEngine.OnTransition += (sender) => { ... }
-nodeEngine.Subscribe(nodeGraph["Playing"], () => { ... });
+engine.OnFinished += (sender) => { ... }
+engine.OnTransition += (sender) => { ... }
+engine.Subscribe(network["Playing"], () => { ... });
 
-//Start the NodeEngine
-nodeEngine.Start();
+//Start the Engine
+engine.Start();
 
 //Apply actions to move through the states
-nodeEngine.Apply("Play");
+engine.Apply("Play");
 ...
-nodeEngine.Apply("Stop");
+engine.Apply("Stop");
 
 ```
 
