@@ -45,18 +45,13 @@ namespace Aptacode.StateNet
         }
 
         public ConnectionGroup this[State node] => GetConnection(node);
+
         public State this[string state] => GetState(state);
 
-        public StateDistribution this[string state, string action]
-        {
-            get => GetConnection(GetState(state))[action];
-        }
-
-        public StateDistribution this[State state, string action]
-        {
-            get => GetConnection(state)[action];
-        }
-
+        public StateDistribution this[string state, string action] => GetConnection(GetState(state))[action];
+        
+        public StateDistribution this[State state, string action] => GetConnection(state)[action];
+        
         public bool IsEndNode(State state) => GetConnection(state).GetAllDistributions().All((chooser) => chooser.IsInvalid);
 
         public Network()
@@ -78,8 +73,14 @@ namespace Aptacode.StateNet
                 var connectionInfo = (ConnectionAttribute)attribute;
                 var state = (State)field.GetValue(this);
 
-                this[state.Name, connectionInfo.ActionName].UpdateWeight(GetState(connectionInfo.TargetName), ConnectionWeightFactory.FromString(connectionInfo.ConnectionDescription));
+                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
+                
             });
+        }
+
+        private void AddNewConnection(string startStateName, string actionName, string targetStateName, string connectionDescription = "")
+        {
+            this[startStateName, actionName].UpdateWeight(GetState(targetStateName), ConnectionWeightFactory.FromString(connectionDescription));
         }
 
         private void ActOnFieldAttributes(Type targetType, Action<FieldInfo, object> doWhenFound)
