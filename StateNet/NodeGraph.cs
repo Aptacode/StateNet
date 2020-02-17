@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Aptacode.StateNet.Connections;
+using Aptacode.StateNet.Events.Attributes;
+using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Aptacode.StateNet.Connections;
-using Aptacode.StateNet.Events.Attributes;
-using Aptacode.StateNet.Interfaces;
-using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet
 {
@@ -16,8 +16,11 @@ namespace Aptacode.StateNet
         protected readonly ConnectionDictionary _actionConnections = new ConnectionDictionary();
 
         public IEnumerable<Node> GetAll() => _nodes.Select(keyValue => keyValue.Value);
+
         public IEnumerable<Node> GetEndNodes() => _nodes.Select(keyValue => keyValue.Value).Where(IsEndNode);
+
         public bool IsValid() => GetEndNodes().Any();
+
         public Node StartNode { get; set; }
 
         public Node GetNode(string name)
@@ -32,10 +35,12 @@ namespace Aptacode.StateNet
         }
 
         public Node this[string nodeName] => GetNode(nodeName);
+
         public NodeConnections this[string nodeName, string action]
         {
             get => _actionConnections[GetNode(nodeName), action];
         }
+
         public NodeConnections this[Node node, string action]
         {
             get => _actionConnections[node, action];

@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using Aptacode.StateNet.Connections;
+﻿using Aptacode.StateNet.Connections;
 using NUnit.Framework;
-
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
     public class NodeChooserTests
     {
-        [SetUp]
-        public void Setup() { }
-
         [Test]
         public void SetWeightTests()
         {
@@ -35,7 +31,7 @@ namespace Aptacode.StateNet.Tests
 
         //TODO
         // ToString Test
-        // GetNext probability distrobution Tests
+        // GetNext probability distribution Tests
         // SetWeight new format
         // SetWeight Fluent API?
     }

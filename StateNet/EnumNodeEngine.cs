@@ -8,7 +8,6 @@ namespace Aptacode.StateNet
     {
         public EnumNodeEngine(EnumNodeGraph<TStates, TActions> nodeGraph) : base(nodeGraph)
         {
-
         }
 
         public void Apply(TActions action) => Apply(action.ToString());

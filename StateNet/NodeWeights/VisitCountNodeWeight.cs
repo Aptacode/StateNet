@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Aptacode.StateNet.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet.NodeWeights
 {
@@ -11,6 +11,7 @@ namespace Aptacode.StateNet.NodeWeights
         public int EqualToWeight { get; set; }
         public int GreaterThenWeight { get; set; }
         public string NodeName { get; set; }
+
         public VisitCountNodeWeight(string nodeName, int count, int lessThenWeight, int equalToWeight, int greaterThenWeight)
         {
             NodeName = nodeName;

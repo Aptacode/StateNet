@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.Connections
         }
 
         public IEnumerable<NodeConnections> GetAllNodeConnections() => _nodeCollectionDictionary.Values;
-        public List<KeyValuePair<string, NodeConnections>> GetAll() => _nodeCollectionDictionary.ToList();
 
+        public List<KeyValuePair<string, NodeConnections>> GetAll() => _nodeCollectionDictionary.ToList();
     }
 }

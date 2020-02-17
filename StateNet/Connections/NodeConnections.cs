@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.NodeWeights;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Aptacode.StateNet.Interfaces;
-using Aptacode.StateNet.NodeWeights;
 
 namespace Aptacode.StateNet.Connections
 {
@@ -21,8 +21,11 @@ namespace Aptacode.StateNet.Connections
                 return null;
             }
         }
+
         public void Invalid() => Clear();
+
         public void Clear() => _distribution.Clear();
+
         public void Always(Node choice)
         {
             Clear();
@@ -45,6 +48,7 @@ namespace Aptacode.StateNet.Connections
                 UpdateWeight(choice.Item1, choice.Item2);
             }
         }
+
         public void UpdateWeight(Node choice, int weight) => _distribution[choice] = new StaticNodeWeight(weight);
 
         public void UpdateWeight(Node choice, INodeWeight weight) => _distribution[choice] = weight;
@@ -69,7 +73,7 @@ namespace Aptacode.StateNet.Connections
         }
 
         public IEnumerable<INodeWeight> GetWeights() => _distribution.Values;
-        public List<KeyValuePair<Node,INodeWeight>> GetAll() => _distribution.ToList();
 
+        public List<KeyValuePair<Node, INodeWeight>> GetAll() => _distribution.ToList();
     }
 }

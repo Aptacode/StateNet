@@ -1,5 +1,5 @@
-﻿using System;
-using Aptacode.StateNet.Connections;
+﻿using Aptacode.StateNet.Connections;
+using System;
 
 namespace Aptacode.StateNet
 {
@@ -7,7 +7,10 @@ namespace Aptacode.StateNet
         where TStates : Enum
         where TActions : Enum
     {
-        public void Set(TStates source, TActions action, TStates target)
+        public void Set(
+            TStates source,
+            TActions action,
+            TStates target)
         {
             var targetNode = GetNode(target);
 

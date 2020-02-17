@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
     public enum States { Ready, Playing, Paused, Stopped }
+
     public enum Actions { Play, Pause, Stop }
 
     public class EnumEngineTests
     {
-
-        [SetUp]
-        public void Setup() { }
-
         private bool canPlay;
         private Node ready;
         private Node playing;

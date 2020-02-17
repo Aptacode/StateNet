@@ -1,13 +1,10 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Linq;
 
 namespace Aptacode.StateNet.Tests
 {
     public class Programatic_NodeGraphTests
     {
-        [SetUp]
-        public void Setup() { }
-
         [Test]
         public void GraphTests()
         {
@@ -35,6 +32,6 @@ namespace Aptacode.StateNet.Tests
         }
 
         //TODO ToString Test
-        //TODO GetNext probability distrobution Tests
+        //TODO GetNext probability distribution Tests
     }
 }

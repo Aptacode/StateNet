@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Aptacode.StateNet.Events.Attributes;
+﻿using Aptacode.StateNet.Events.Attributes;
 using NUnit.Framework;
-
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
@@ -16,11 +15,6 @@ namespace Aptacode.StateNet.Tests
             [NodeName("End")]
             public Node EndTestNode;
         }
-
-
-        [SetUp]
-        public void Setup() { }
-
 
         [Test]
         public void NodesCreated()

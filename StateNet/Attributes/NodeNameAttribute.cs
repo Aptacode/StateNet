@@ -5,7 +5,8 @@ namespace Aptacode.StateNet.Events.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class NodeNameAttribute : Attribute
     {
-        public string Name;
+        public string Name { get; set; }
+
         public NodeNameAttribute(string name) => Name = name;
     }
 }

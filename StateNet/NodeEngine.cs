@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Aptacode.StateNet.Events;
+using Aptacode.StateNet.Interfaces;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using Aptacode.StateNet.Events;
-using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
@@ -14,7 +15,8 @@ namespace Aptacode.StateNet
         private readonly NodeChooser _nodeChooser;
         private readonly ConcurrentQueue<string> _inputQueue;
         private readonly Dictionary<Node, List<Action>> _callbackDictionary;
-        private bool _isRunning;
+        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly CancellationToken cancellationToken;
         public Node CurrentNode { get; private set; }
 
         public NodeEngine(INodeGraph nodeGraph)
@@ -24,7 +26,8 @@ namespace Aptacode.StateNet
             _nodeChooser = new NodeChooser(_history);
             _callbackDictionary = new Dictionary<Node, List<Action>>();
             _inputQueue = new ConcurrentQueue<string>();
-            _isRunning = false;
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
         }
 
         public event EngineEvent OnFinished;
@@ -102,21 +105,26 @@ namespace Aptacode.StateNet
 
                 new TaskFactory().StartNew(async () =>
                 {
-                    _isRunning = true;
-
-                    while (_isRunning)
+                    while (true)
                     {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         NextTransition();
                         await Task.Delay(1).ConfigureAwait(false);
                     }
-                }).ConfigureAwait(false);
+                }, cancellationToken).ConfigureAwait(false);
             }
             else
             {
                 throw new Exception();
             }
         }
-        public void Stop() => _isRunning = false;
+
+        public void Stop() => cancellationTokenSource.Cancel();
+
         public void Apply(string actionName) => _inputQueue.Enqueue(actionName);
 
         private void NextTransition()

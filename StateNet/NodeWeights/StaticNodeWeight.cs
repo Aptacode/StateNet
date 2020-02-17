@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Aptacode.StateNet.Interfaces;
+﻿using Aptacode.StateNet.Interfaces;
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.NodeWeights
 {
