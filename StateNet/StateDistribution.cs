@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Aptacode.StateNet.Connections
+namespace Aptacode.StateNet
 {
-    public class NodeConnections
+    public class StateDistribution
     {
-        private readonly Dictionary<Node, INodeWeight> _distribution = new Dictionary<Node, INodeWeight>();
+        private readonly Dictionary<State, IConnectionWeight> _distribution = new Dictionary<State, IConnectionWeight>();
 
-        public INodeWeight this[Node node]
+        public IConnectionWeight this[State node]
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Aptacode.StateNet.Connections
 
         public void Clear() => _distribution.Clear();
 
-        public void Always(Node choice)
+        public void Always(State choice)
         {
             Clear();
             if (choice != null)
@@ -35,13 +35,13 @@ namespace Aptacode.StateNet.Connections
             }
         }
 
-        public void SetDistribution(params (Node, int)[] choices)
+        public void SetDistribution(params (State, int)[] choices)
         {
             Clear();
             UpdateDistribution(choices);
         }
 
-        public void UpdateDistribution(params (Node, int)[] choices)
+        public void UpdateDistribution(params (State, int)[] choices)
         {
             foreach (var choice in choices)
             {
@@ -49,9 +49,9 @@ namespace Aptacode.StateNet.Connections
             }
         }
 
-        public void UpdateWeight(Node choice, int weight) => _distribution[choice] = new StaticNodeWeight(weight);
+        public void UpdateWeight(State choice, int weight) => _distribution[choice] = new StaticWeight(weight);
 
-        public void UpdateWeight(Node choice, INodeWeight weight) => _distribution[choice] = weight;
+        public void UpdateWeight(State choice, IConnectionWeight weight) => _distribution[choice] = weight;
 
         public bool IsInvalid => _distribution.Count == 0;
 
@@ -72,8 +72,8 @@ namespace Aptacode.StateNet.Connections
             return stringBuilder.ToString();
         }
 
-        public IEnumerable<INodeWeight> GetWeights() => _distribution.Values;
+        public IEnumerable<IConnectionWeight> GetWeights() => _distribution.Values;
 
-        public List<KeyValuePair<Node, INodeWeight>> GetAll() => _distribution.ToList();
+        public List<KeyValuePair<State, IConnectionWeight>> GetAll() => _distribution.ToList();
     }
 }

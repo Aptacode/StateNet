@@ -2,8 +2,8 @@
 
 namespace Aptacode.StateNet.Interfaces
 {
-    public interface INodeWeight
+    public interface IConnectionWeight
     {
-        int GetWeight(List<Node> history);
+        int GetWeight(List<State> history);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Aptacode.StateNet
 {
-    public class EnumNodeEngine<TStates, TActions> : NodeEngine
+    public class EnumEngine<TStates, TActions> : Engine
         where TStates : Enum
         where TActions : Enum
     {
-        public EnumNodeEngine(EnumNodeGraph<TStates, TActions> nodeGraph) : base(nodeGraph)
+        public EnumEngine(EnumNetwork<TStates, TActions> network) : base(network)
         {
         }
 

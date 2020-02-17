@@ -3,10 +3,10 @@
 namespace Aptacode.StateNet.Events.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class NodeNameAttribute : Attribute
+    public class StartStateAttribute : Attribute
     {
         public string Name { get; set; }
 
-        public NodeNameAttribute(string name) => Name = name;
+        public StartStateAttribute(string name) => Name = name;
     }
 }

@@ -1,22 +1,21 @@
-﻿using Aptacode.StateNet.Connections;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
-    public class NodeChooserTests
+    public class StateChooserTests
     {
         [Test]
         public void SetWeightTests()
         {
-            var history = new List<Node>();
-            var nodeChooser = new NodeChooser(history);
+            var history = new List<State>();
+            var nodeChooser = new StateChooser(history);
 
-            var nodeConnection = new NodeConnections();
+            var nodeConnection = new StateDistribution();
             Assert.AreEqual(0, nodeChooser.TotalWeight(nodeConnection));
 
-            var d1 = new Node("D1");
-            var d2 = new Node("D2");
+            var d1 = new State("D1");
+            var d2 = new State("D2");
 
             nodeConnection.UpdateWeight(d1, 1);
             nodeConnection.UpdateWeight(d2, 2);

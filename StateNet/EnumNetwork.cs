@@ -1,9 +1,8 @@
-﻿using Aptacode.StateNet.Connections;
-using System;
+﻿using System;
 
 namespace Aptacode.StateNet
 {
-    public class EnumNodeGraph<TStates, TActions> : NodeGraph
+    public class EnumNetwork<TStates, TActions> : Network
         where TStates : Enum
         where TActions : Enum
     {
@@ -28,20 +27,20 @@ namespace Aptacode.StateNet
 
         public void UpdateWeight(TStates source, TActions action, TStates targetState, int targetWeight) => this[source.ToString(), action.ToString()].UpdateWeight(GetNode(targetState), targetWeight);
 
-        public Node GetNode(TStates state)
+        public State GetNode(TStates state)
         {
-            if (!_nodes.TryGetValue(state.ToString(), out var node))
+            if (!_states.TryGetValue(state.ToString(), out var node))
             {
-                node = new Node(state.ToString());
-                _nodes.Add(state.ToString(), node);
+                node = new State(state.ToString());
+                _states.Add(state.ToString(), node);
             }
 
             return node;
         }
 
-        public Node this[TStates state] => GetNode(state);
+        public State this[TStates state] => GetNode(state);
 
-        public NodeConnections this[TStates state, TActions action]
+        public StateDistribution this[TStates state, TActions action]
         {
             get => this[state.ToString(), action.ToString()];
         }

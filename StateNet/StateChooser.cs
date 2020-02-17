@@ -1,25 +1,24 @@
-﻿using Aptacode.StateNet.Connections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Aptacode.StateNet
 {
-    public class NodeChooser
+    public class StateChooser
     {
         private static readonly Random RandomGenerator = new Random(Guid.NewGuid().GetHashCode());
-        private readonly List<Node> _history;
+        private readonly List<State> _history;
 
-        public NodeChooser(List<Node> history)
+        public StateChooser(List<State> history)
         {
             _history = history;
         }
 
-        public NodeChooser()
+        public StateChooser()
         {
         }
 
-        internal Node Next(NodeConnections connections)
+        internal State Next(StateDistribution connections)
         {
             var totalWeight = TotalWeight(connections);
 
@@ -43,6 +42,6 @@ namespace Aptacode.StateNet
             return null;
         }
 
-        public int TotalWeight(NodeConnections connections) => connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();
+        public int TotalWeight(StateDistribution connections) => connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();
     }
 }

@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace Aptacode.StateNet
 {
-    public class NodeEngine : INodeEngine
+    public class Engine : IEngine
     {
-        private readonly INodeGraph _nodeGraph;
-        private readonly List<Node> _history;
-        private readonly NodeChooser _nodeChooser;
+        private readonly INetwork _network;
+        private readonly List<State> _history;
+        private readonly StateChooser _stateChooser;
         private readonly ConcurrentQueue<string> _inputQueue;
-        private readonly Dictionary<Node, List<Action>> _callbackDictionary;
+        private readonly Dictionary<State, List<Action>> _callbackDictionary;
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly CancellationToken cancellationToken;
-        public Node CurrentNode { get; private set; }
+        public State CurrentState { get; private set; }
 
-        public NodeEngine(INodeGraph nodeGraph)
+        public Engine(INetwork network)
         {
-            _nodeGraph = nodeGraph;
-            _history = new List<Node>();
-            _nodeChooser = new NodeChooser(_history);
-            _callbackDictionary = new Dictionary<Node, List<Action>>();
+            _network = network;
+            _history = new List<State>();
+            _stateChooser = new StateChooser(_history);
+            _callbackDictionary = new Dictionary<State, List<Action>>();
             _inputQueue = new ConcurrentQueue<string>();
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
@@ -36,7 +36,7 @@ namespace Aptacode.StateNet
 
         private void SubscribeToEndNodes()
         {
-            foreach (var node in _nodeGraph.GetEndNodes())
+            foreach (var node in _network.GetEndStates())
             {
                 node.OnVisited += (s) =>
                 {
@@ -47,7 +47,7 @@ namespace Aptacode.StateNet
 
         private void SubscribeToNodesVisited()
         {
-            foreach (var node in _nodeGraph.GetAll())
+            foreach (var node in _network.GetAll())
             {
                 node.OnVisited += (sender) =>
                 {
@@ -58,11 +58,11 @@ namespace Aptacode.StateNet
             }
         }
 
-        private void NotifySubscribers(Node node)
+        private void NotifySubscribers(State state)
         {
-            if (_callbackDictionary.ContainsKey(node))
+            if (_callbackDictionary.ContainsKey(state))
             {
-                _callbackDictionary[node]?.ForEach(callback =>
+                _callbackDictionary[state]?.ForEach(callback =>
                 {
                     new TaskFactory().StartNew(() =>
                     {
@@ -72,36 +72,36 @@ namespace Aptacode.StateNet
             }
         }
 
-        public void Subscribe(Node node, Action callback)
+        public void Subscribe(State state, Action callback)
         {
-            if (!_callbackDictionary.TryGetValue(node, out var actions))
+            if (!_callbackDictionary.TryGetValue(state, out var actions))
             {
                 actions = new List<Action>();
-                _callbackDictionary.Add(node, actions);
+                _callbackDictionary.Add(state, actions);
             }
 
             actions.Add(callback);
         }
 
-        public void Unsubscribe(Node node, Action callback)
+        public void Unsubscribe(State state, Action callback)
         {
-            if (_callbackDictionary.TryGetValue(node, out var actions))
+            if (_callbackDictionary.TryGetValue(state, out var actions))
             {
                 actions.Remove(callback);
             }
         }
 
-        public List<Node> GetHistory() => _history;
+        public List<State> GetHistory() => _history;
 
         public void Start()
         {
-            if (_nodeGraph.IsValid())
+            if (_network.IsValid())
             {
                 SubscribeToNodesVisited();
                 SubscribeToEndNodes();
                 OnStarted?.Invoke(this);
-                CurrentNode = _nodeGraph.StartNode;
-                _history.Add(CurrentNode);
+                CurrentState = _network.StartState;
+                _history.Add(CurrentState);
 
                 new TaskFactory().StartNew(async () =>
                 {
@@ -117,10 +117,6 @@ namespace Aptacode.StateNet
                     }
                 }, cancellationToken).ConfigureAwait(false);
             }
-            else
-            {
-                throw new Exception();
-            }
         }
 
         public void Stop() => cancellationTokenSource.Cancel();
@@ -131,17 +127,17 @@ namespace Aptacode.StateNet
         {
             if (_inputQueue.TryDequeue(out var actionName))
             {
-                CurrentNode.UpdateChoosers();
-                var nextNode = Next(CurrentNode, actionName);
+                CurrentState.UpdateChoosers();
+                var nextNode = Next(CurrentState, actionName);
                 if (nextNode != null)
                 {
-                    CurrentNode.Exit();
-                    CurrentNode = nextNode;
-                    CurrentNode.Visit();
+                    CurrentState.Exit();
+                    CurrentState = nextNode;
+                    CurrentState.Visit();
                 }
             }
         }
 
-        public Node Next(Node node, string actionName) => _nodeChooser.Next(_nodeGraph[node, actionName]);
+        public State Next(State state, string actionName) => _stateChooser.Next(_network[state, actionName]);
     }
 }
