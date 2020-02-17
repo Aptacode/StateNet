@@ -78,8 +78,15 @@ namespace Aptacode.StateNet
                 var connectionInfo = (ConnectionAttribute)attribute;
                 var state = (State)field.GetValue(this);
 
-                this[state.Name, connectionInfo.ActionName].UpdateWeight(GetState(connectionInfo.TargetName), ConnectionWeightFactory.FromString(connectionInfo.ConnectionDescription));
+                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
+                
             });
+        }
+
+        private void AddNewConnection(string startStateName, string actionName, string targetStateName, string connectionDescription = "")
+        {
+            this[startStateName, actionName].UpdateWeight(GetState(targetStateName), ConnectionWeightFactory.FromString(connectionDescription));
+            //this[state.Name, connectionInfo.ActionName].UpdateWeight(GetState(connectionInfo.TargetName), ConnectionWeightFactory.FromString(connectionInfo.ConnectionDescription));
         }
 
         private void ActOnFieldAttributes(Type targetType, Action<FieldInfo, object> doWhenFound)
