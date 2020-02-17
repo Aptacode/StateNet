@@ -28,11 +28,19 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             Assert.AreEqual("Start", nodeGraph.StartTestState?.Name);
         }
 
-        [Test]
+        [Test(Description = "Should create a 1-to-1 (one-way) connection between start and end states")]
         public void SimpleConnectionCreated()
         {
+            //Arrange & Act
             var nodeGraph = new TwoStateStartToEndNetwork();
+            var connectionGroup = nodeGraph[nodeGraph.StartState];
+            var stateDistributions = new List<StateDistribution>(connectionGroup.GetAllDistributions());
+            var connectionWeight = stateDistributions[0][nodeGraph.EndTestState];
+
+            //Assert
             Assert.AreEqual("Start", nodeGraph.StartTestState.ToString());
+            Assert.AreEqual(1, stateDistributions.Count, "Should have only one connection");
+            Assert.AreEqual(1, connectionWeight.GetWeight(null), "One connection should have a weight of 1");
             Assert.IsTrue(nodeGraph.IsValid());
         }
     }
