@@ -14,11 +14,7 @@ namespace Aptacode.StateNet
             _history = history;
         }
 
-        public StateChooser()
-        {
-        }
-
-        internal State Next(StateDistribution connections)
+        internal State Choose(StateDistribution connections)
         {
             var totalWeight = TotalWeight(connections);
 

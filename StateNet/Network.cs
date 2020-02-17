@@ -35,13 +35,13 @@ namespace Aptacode.StateNet
 
         public ConnectionGroup GetConnection(State node)
         {
-            if (!_connections.TryGetValue(node, out var actiongroup))
+            if (!_connections.TryGetValue(node, out var connectionGroup))
             {
-                actiongroup = new ConnectionGroup();
-                _connections.Add(node, actiongroup);
+                connectionGroup = new ConnectionGroup();
+                _connections.Add(node, connectionGroup);
             }
 
-            return actiongroup;
+            return connectionGroup;
         }
 
         public ConnectionGroup this[State node] => GetConnection(node);
@@ -106,13 +106,13 @@ namespace Aptacode.StateNet
             {
                 stringBuilder.AppendLine(state.Name);
 
-                var actionGroups = GetConnection(state).GetAll();
-                if (actionGroups.Any())
+                var connectionGroups = GetConnection(state).GetAll();
+                if (connectionGroups.Any())
                 {
-                    stringBuilder.AppendLine($"({actionGroups[0].Key}->{actionGroups[0].Value})");
-                    for (var i = 1; i < actionGroups.Count; i++)
+                    stringBuilder.AppendLine($"({connectionGroups[0].Key}->{connectionGroups[0].Value})");
+                    for (var i = 1; i < connectionGroups.Count; i++)
                     {
-                        stringBuilder.AppendLine($",({actionGroups[i].Key}->{actionGroups[i].Value})");
+                        stringBuilder.AppendLine($",({connectionGroups[i].Key}->{connectionGroups[i].Value})");
                     }
                 }
             }

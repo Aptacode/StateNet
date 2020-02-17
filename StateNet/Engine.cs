@@ -34,6 +34,8 @@ namespace Aptacode.StateNet
 
         public event EngineEvent OnStarted;
 
+        public event StateEvent OnTransition;
+
         private void SubscribeToEndNodes()
         {
             foreach (var node in _network.GetEndStates())
@@ -60,6 +62,12 @@ namespace Aptacode.StateNet
 
         private void NotifySubscribers(State state)
         {
+            new TaskFactory().StartNew(() =>
+            {
+                OnTransition?.Invoke(state);
+
+            }).ConfigureAwait(false);
+
             if (_callbackDictionary.ContainsKey(state))
             {
                 _callbackDictionary[state]?.ForEach(callback =>
@@ -128,16 +136,16 @@ namespace Aptacode.StateNet
             if (_inputQueue.TryDequeue(out var actionName))
             {
                 CurrentState.UpdateChoosers();
-                var nextNode = Next(CurrentState, actionName);
-                if (nextNode != null)
+
+                var nextState = GetNextState(CurrentState, actionName);
+                if (nextState != null)
                 {
                     CurrentState.Exit();
-                    CurrentState = nextNode;
+                    CurrentState = nextState;
                     CurrentState.Visit();
                 }
             }
         }
-
-        public State Next(State state, string actionName) => _stateChooser.Next(_network[state, actionName]);
+        private State GetNextState(State state, string actionName) => _stateChooser.Choose(_network[state, actionName]);
     }
 }
