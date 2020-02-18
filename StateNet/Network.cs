@@ -56,6 +56,12 @@ namespace Aptacode.StateNet
 
         public Network()
         {
+            //TODO - figure out a clean way to use fields and properties in the same
+            //assignment operation. They are both MemberInfos, but that's too restrictive with no SetValue()
+            //
+            //Can't just use: https://stackoverflow.com/questions/2004508/checking-type-parameter-of-a-generic-method-in-c-sharp
+            //You still duplicate castings and logic for both fields and properties.
+
             ActOnFieldAttributes(typeof(StateNameAttribute), (field, attribute) =>
             {
                 field.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
@@ -107,13 +113,13 @@ namespace Aptacode.StateNet
         {
             var typeInfo = GetType().GetTypeInfo();
 
-            foreach (var field in typeInfo.GetRuntimeFields())
+            foreach (var fieldInfo in typeInfo.GetRuntimeFields())
             {
-                foreach (var attr in field.GetCustomAttributes(true))
+                foreach (var attr in fieldInfo.GetCustomAttributes(true))
                 {
                     if (attr.GetType() == targetType)
                     {
-                        doWhenFound(field, attr);
+                        doWhenFound(fieldInfo, attr);
                     }
                 }
             }

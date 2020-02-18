@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
@@ -29,12 +30,22 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             Assert.AreEqual(3, states.Count);
             Assert.AreEqual("Start", network.StartTestState.Name);
             Assert.AreEqual("End", network.EndTestState.Name);
+            //Deliberately not using GetAll("Private"), as (for now) it also changes the network  
+            Assert.AreEqual(1, network.GetAll().Count(state => state.Name == "Private"));
         }
 
         [Test]
         public void IsStartStateSetByFields()
         {
             var network = new TwoStateStartToEndNetwork();
+
+            Assert.AreEqual("Start", network.StartTestState?.Name);
+        }
+
+        [Test(Description = "Should have an assigned start state based on use of StartStateAttribute")]
+        public void IsStartStateSetUsingProperties()
+        {
+            var network = new TwoStatePropertyAttibuteNetwork();
 
             Assert.AreEqual("Start", network.StartTestState?.Name);
         }
@@ -49,9 +60,32 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             var connectionWeight = stateDistributions[0][network.EndTestState];
 
             //Assert
-            Assert.AreEqual("Start", network.StartTestState.ToString());
             Assert.AreEqual(1, stateDistributions.Count, "Should have only one connection");
-            Assert.AreEqual(1, connectionWeight.GetWeight(null), "One connection should have a weight of 1");
+            Assert.AreEqual(1, connectionWeight?.GetWeight(null), "One connection should have a weight of 1");
+            Assert.IsTrue(network.IsValid());
+        }
+
+        [Test(Description = "Should create a 3-state, 2-step connection series (start-private-end)")]
+        public void SimpleConnectionCreatedByProperties()
+        {
+            //Arrange & Act
+            var network = new TwoStatePropertyAttibuteNetwork();
+            var privateState = network.GetState("Private");
+
+            var firstConnectionGroup = network[network.StartState];
+            var secondConnectionGroup = network[privateState];
+
+            var firstStateDistributions = new List<StateDistribution>(firstConnectionGroup.GetAllDistributions());
+            var secondStateDistributions = new List<StateDistribution>(secondConnectionGroup.GetAllDistributions());
+
+            var firstConnectionWeight = firstStateDistributions[0][privateState];
+            var secondConnectionWeight = secondStateDistributions[0][network.EndTestState];
+
+            //Assert
+            Assert.AreEqual(1, firstStateDistributions.Count, "Should have only one connection");
+            Assert.AreEqual(1, firstConnectionWeight?.GetWeight(null), "One connection should have a weight of 1");
+            Assert.AreEqual(1, secondStateDistributions.Count, "Should have only one connection");
+            Assert.AreEqual(1, secondConnectionWeight?.GetWeight(null), "One connection should have a weight of 1");
             Assert.IsTrue(network.IsValid());
         }
     }
