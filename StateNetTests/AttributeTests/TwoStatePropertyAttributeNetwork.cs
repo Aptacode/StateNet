@@ -8,8 +8,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         [Connection("Next", "Private")]
         public State StartTestState { get; }
 
-        [StateName("End")]
-        public State EndTestState { get; }
+        [StateName("End")] public State EndTestState { get; }
 
         [StateName("Private")]
         [Connection("Finish", "End")]

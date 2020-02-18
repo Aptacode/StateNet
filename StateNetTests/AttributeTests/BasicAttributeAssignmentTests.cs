@@ -25,7 +25,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             "Should find 3 states when instantiating a class that has 3 properties with State Attributes")]
         public void StatesCreatedUsingProperties()
         {
-            var network = new TwoStatePropertyAttibuteNetwork();
+            var network = new TwoStatePropertyAttributeNetwork();
             var states = new List<State>(network.GetAll());
 
             Assert.AreEqual(3, states.Count);
@@ -46,7 +46,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         [Test(Description = "Should have an assigned start state based on use of StartStateAttribute")]
         public void IsStartStateSetUsingProperties()
         {
-            var network = new TwoStatePropertyAttibuteNetwork();
+            var network = new TwoStatePropertyAttributeNetwork();
 
             Assert.AreEqual("Start", network.StartTestState?.Name);
         }
@@ -70,7 +70,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         public void SimpleConnectionCreatedByProperties()
         {
             //Arrange & Act
-            var network = new TwoStatePropertyAttibuteNetwork();
+            var network = new TwoStatePropertyAttributeNetwork();
             var privateState = network.GetState("Private");
 
             var firstConnectionGroup = network[network.StartState];

@@ -182,10 +182,12 @@ namespace Aptacode.StateNet
                     continue;
                 }
 
-                stringBuilder.Append('(').Append(connectionGroups[0].Key).Append("->").Append(connectionGroups[0].Value).AppendLine(")");
+                stringBuilder.Append('(').Append(connectionGroups[0].Key).Append("->").Append(connectionGroups[0].Value)
+                    .AppendLine(")");
                 for (var i = 1; i < connectionGroups.Count; i++)
                 {
-                    stringBuilder.Append(",(").Append(connectionGroups[i].Key).Append("->").Append(connectionGroups[i].Value).AppendLine(")");
+                    stringBuilder.Append(",(").Append(connectionGroups[i].Key).Append("->")
+                        .Append(connectionGroups[i].Value).AppendLine(")");
                 }
             }
 
