@@ -61,10 +61,22 @@ namespace Aptacode.StateNet
                 field.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
             });
 
+            ActOnPropertyAttributes(typeof(StateNameAttribute), (property, attribute) =>
+            {
+                property.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
+            });
+
             ActOnFieldAttributes(typeof(StartStateAttribute), (field, attribute) =>
             {
                 var state = GetState(((StartStateAttribute)attribute).Name);
                 field.SetValue(this, state);
+                StartState = state;
+            });
+
+            ActOnPropertyAttributes(typeof(StartStateAttribute), (property, attribute) =>
+            {
+                var state = GetState(((StartStateAttribute)attribute).Name);
+                property.SetValue(this, state);
                 StartState = state;
             });
 
@@ -74,7 +86,15 @@ namespace Aptacode.StateNet
                 var state = (State)field.GetValue(this);
 
                 AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
-                
+            });
+
+            ActOnPropertyAttributes(typeof(ConnectionAttribute), (property, attribute) =>
+            {
+                var connectionInfo = (ConnectionAttribute)attribute;
+                var state = (State)property.GetValue(this);
+
+                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
+
             });
         }
 
@@ -94,6 +114,22 @@ namespace Aptacode.StateNet
                     if (attr.GetType() == targetType)
                     {
                         doWhenFound(field, attr);
+                    }
+                }
+            }
+        }
+
+        private void ActOnPropertyAttributes(Type targetType, Action<PropertyInfo, object> doWhenFound)
+        {
+            var typeInfo = GetType().GetTypeInfo();
+            
+            foreach (var propertyInfo in typeInfo.GetRuntimeProperties())
+            {                
+                foreach (var property in propertyInfo.GetCustomAttributes(true))
+                {
+                    if (property.GetType() == targetType)
+                    {
+                        doWhenFound(propertyInfo, property);
                     }
                 }
             }
