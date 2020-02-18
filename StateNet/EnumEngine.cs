@@ -10,6 +10,9 @@ namespace Aptacode.StateNet
         {
         }
 
-        public void Apply(TActions action) => Apply(action.ToString());
+        public void Apply(TActions action)
+        {
+            Apply(action.ToString());
+        }
     }
 }

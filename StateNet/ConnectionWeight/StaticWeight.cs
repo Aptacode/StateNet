@@ -1,14 +1,20 @@
-﻿using Aptacode.StateNet.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Aptacode.StateNet.Interfaces;
 
-namespace Aptacode.StateNet.NodeWeights
+namespace Aptacode.StateNet.ConnectionWeight
 {
     public class StaticWeight : IConnectionWeight
     {
+        public StaticWeight(int weight)
+        {
+            Weight = weight;
+        }
+
         public int Weight { get; set; }
 
-        public StaticWeight(int weight) => Weight = weight;
-
-        public int GetWeight(List<State> history) => Weight;
+        public int GetWeight(List<State> history)
+        {
+            return Weight;
+        }
     }
 }

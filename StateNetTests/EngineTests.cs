@@ -1,46 +1,16 @@
-﻿using Aptacode.StateNet.Events.Attributes;
+﻿using System.Collections.Generic;
+using Aptacode.StateNet.Attributes;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Tests
 {
     public class EngineTests
     {
-        private class DummyNetwork : Network
-        {
-            [StartState("Start")]
-            [Connection("Left", "D1")]
-            [Connection("Right", "D2")]
-            public State StartTestState;
-
-            [StateName("D1")]
-            [Connection("Next", "D1", "Static:1")]
-            [Connection("Next", "End", "Static:0")]
-            public State Decision1TestState;
-
-            [StateName("D2")]
-            [Connection("Next", "D1", "VisitCount:D2,2,0,0,2")]
-            [Connection("Next", "D2", "VisitCount:D2,2,1,1,0")]
-            public State Decision2TestState;
-
-            [StateName("End")]
-            public State EndTestState;
-
-            public DummyNetwork() => Setup();
-
-            private int decision1Count = 0;
-
-            private void Setup()
-            {
-                Decision1TestState.OnUpdateConnections += (s) =>
-                                  {
-                                      if (++decision1Count == 2)
-                                      {
-                                          this["D1", "Next"].Always(EndTestState);
-                                      }
-                                  };
-            }
-        }
+        private bool canPlay;
+        private State paused;
+        private State playing;
+        private State ready;
+        private State stopped;
 
         [Test]
         public void StateHistoryTest()
@@ -59,16 +29,15 @@ namespace Aptacode.StateNet.Tests
             engine.Apply("Next");
             engine.Apply("Next");
 
-            var expectedLog = new List<State> { network.StartTestState, network.Decision2TestState, network.Decision2TestState, network.Decision2TestState, network.Decision1TestState, network.Decision1TestState, network.EndTestState };
+            var expectedLog = new List<State>
+            {
+                network.StartTestState, network.Decision2TestState, network.Decision2TestState,
+                network.Decision2TestState, network.Decision1TestState, network.Decision1TestState, network.EndTestState
+            };
 
-            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetHistory(),
+                Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
-
-        private bool canPlay;
-        private State ready;
-        private State playing;
-        private State paused;
-        private State stopped;
 
         private Network GetTestNetwork()
         {
@@ -81,7 +50,7 @@ namespace Aptacode.StateNet.Tests
 
             network.StartState = ready;
 
-            ready.OnUpdateConnections += (s) =>
+            ready.OnUpdateConnections += s =>
             {
                 if (canPlay)
                 {
@@ -89,17 +58,17 @@ namespace Aptacode.StateNet.Tests
                 }
                 else
                 {
-                    network["ready", "Play"].Invalid();
+                    network["ready", "Play"].Invalidate();
                 }
             };
-            network["ready", "Pause"].Invalid();
+            network["ready", "Pause"].Invalidate();
             network["ready", "Stop"].Always(stopped);
 
-            network["playing", "Play"].Invalid();
+            network["playing", "Play"].Invalidate();
             network["playing", "Pause"].Always(paused);
             network["playing", "Stop"].Always(stopped);
 
-            paused.OnUpdateConnections += (s) =>
+            paused.OnUpdateConnections += s =>
             {
                 if (canPlay)
                 {
@@ -107,15 +76,15 @@ namespace Aptacode.StateNet.Tests
                 }
                 else
                 {
-                    network["paused", "Play"].Invalid();
+                    network["paused", "Play"].Invalidate();
                 }
             };
-            network["paused", "Pause"].Invalid();
+            network["paused", "Pause"].Invalidate();
             network["paused", "Stop"].Always(stopped);
 
-            network["stopped", "Play"].Invalid();
-            network["stopped", "Pause"].Invalid();
-            network["stopped", "Stop"].Invalid();
+            network["stopped", "Play"].Invalidate();
+            network["stopped", "Pause"].Invalidate();
+            network["stopped", "Stop"].Invalidate();
 
             return network;
         }
@@ -134,9 +103,44 @@ namespace Aptacode.StateNet.Tests
             engine.Apply("Play");
             engine.Apply("Stop");
 
-            var expectedLog = new List<State> { ready, playing, paused, playing, stopped };
+            var expectedLog = new List<State> {ready, playing, paused, playing, stopped};
 
-            Assert.That(() => engine.GetHistory(), Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetHistory(),
+                Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+        }
+
+        private class DummyNetwork : Network
+        {
+            private int decision1Count;
+
+            [StateName("D1")] [Connection("Next", "D1", "Static:1")] [Connection("Next", "End", "Static:0")]
+            public State Decision1TestState;
+
+            [StateName("D2")]
+            [Connection("Next", "D1", "VisitCount:D2,2,0,0,2")]
+            [Connection("Next", "D2", "VisitCount:D2,2,1,1,0")]
+            public State Decision2TestState;
+
+            [StateName("End")] public State EndTestState;
+
+            [StartState("Start")] [Connection("Left", "D1")] [Connection("Right", "D2")]
+            public State StartTestState;
+
+            public DummyNetwork()
+            {
+                Setup();
+            }
+
+            private void Setup()
+            {
+                Decision1TestState.OnUpdateConnections += s =>
+                {
+                    if (++decision1Count == 2)
+                    {
+                        this["D1", "Next"].Always(EndTestState);
+                    }
+                };
+            }
         }
     }
 }

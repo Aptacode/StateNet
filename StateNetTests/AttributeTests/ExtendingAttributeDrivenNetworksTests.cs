@@ -1,13 +1,13 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
     /// <summary>
-    /// Checks that a network declared using attributes maintains its 
-    /// initial attribute-declared architecture, plus non-overriding user additions.
-    /// For example, adding extra extra states or state changes.
+    ///     Checks that a network declared using attributes maintains its
+    ///     initial attribute-declared architecture, plus non-overriding user additions.
+    ///     For example, adding extra states or state changes.
     /// </summary>
     public class ExtendingAttributeDrivenNetworksTests
     {
@@ -24,19 +24,20 @@ namespace Aptacode.StateNet.Tests.AttributeTests
 
             //Act
             var newState = network.GetState("NewState");
-            
+
             //Assert
             Assert.AreEqual(3, network.GetAll().Count());
             Assert.AreEqual("NewState", newState.Name);
         }
 
-        [Test(Description = "Should have an extra connection when extending 2 attribute-state network with new connected state")]
+        [Test(Description =
+            "Should have an extra connection when extending 2 attribute-state network with new connected state")]
         public void TestAddingNewConnectedState()
         {
             //Arrange
             var network = new TwoStateStartToEndNetwork();
             var states = new List<State>(network.GetAll());
-            
+
             //Act
             var newState = network.GetState("NewState");
 

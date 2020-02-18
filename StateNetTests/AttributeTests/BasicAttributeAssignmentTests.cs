@@ -1,12 +1,12 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
     /// <summary>
-    /// Checks if the various states in a network are being assigned to correctly.
-    /// Primary focus is testing that the *initial* Network reflection is behaving as expected.
+    ///     Checks if the various states in a network are being assigned to correctly.
+    ///     Primary focus is testing that the *initial* Network reflection is behaving as expected.
     /// </summary>
     public class BasicAttributeAssignmentTests
     {
@@ -21,7 +21,8 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             Assert.AreEqual("End", network.EndTestState.Name);
         }
 
-        [Test(Description = "Should find 3 states when instantiating a class that has 3 properties with State Attributes")]
+        [Test(Description =
+            "Should find 3 states when instantiating a class that has 3 properties with State Attributes")]
         public void StatesCreatedUsingProperties()
         {
             var network = new TwoStatePropertyAttibuteNetwork();

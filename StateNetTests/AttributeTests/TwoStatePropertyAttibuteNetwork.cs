@@ -1,7 +1,4 @@
-﻿using Aptacode.StateNet.Events.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Aptacode.StateNet.Attributes;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
@@ -11,8 +8,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         [Connection("Next", "Private")]
         public State StartTestState { get; private set; }
 
-        [StateName("End")]
-        public State EndTestState { get; private set; }
+        [StateName("End")] public State EndTestState { get; private set; }
 
         [StateName("Private")]
         [Connection("Finish", "End")]

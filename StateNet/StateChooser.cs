@@ -6,7 +6,7 @@ namespace Aptacode.StateNet
 {
     public class StateChooser
     {
-        private static readonly Random RandomGenerator = new Random(Guid.NewGuid().GetHashCode());
+        private static readonly Random RandomGenerator = new Random();
         private readonly List<State> _history;
 
         public StateChooser(List<State> history)
@@ -38,6 +38,9 @@ namespace Aptacode.StateNet
             return null;
         }
 
-        public int TotalWeight(StateDistribution connections) => connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();
+        public int TotalWeight(StateDistribution connections)
+        {
+            return connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();
+        }
     }
 }
