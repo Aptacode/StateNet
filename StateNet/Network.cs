@@ -1,4 +1,5 @@
 ﻿using Aptacode.StateNet.Events.Attributes;
+using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.NodeWeights;
 using System;
@@ -56,50 +57,22 @@ namespace Aptacode.StateNet
 
         public Network()
         {
-            //TODO - figure out a clean way to use fields and properties in the same
-            //assignment operation. They are both MemberInfos, but that's too restrictive with no SetValue()
-            //
-            //Can't just use: https://stackoverflow.com/questions/2004508/checking-type-parameter-of-a-generic-method-in-c-sharp
-            //You still duplicate castings and logic for both fields and properties.
-            //
-            //Consider creating a MemberInfo extension method that checks for fields and properties, casts as needed,
-            //and sets a value if appropriate. Eg memberInfo.TrySetValue("NewValue");
-            ActOnFieldAttributes(typeof(StateNameAttribute), (field, attribute) =>
+            ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute), (memberInfo, attribute) =>
             {
-                field.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
+                memberInfo.TrySetValue(this, GetState(((StateNameAttribute)attribute).Name));
             });
 
-            ActOnPropertyAttributes(typeof(StateNameAttribute), (property, attribute) =>
-            {
-                property.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
-            });
-
-            ActOnFieldAttributes(typeof(StartStateAttribute), (field, attribute) =>
+            ActOnFieldAndPropertyAttributes(typeof(StartStateAttribute), (memberInfo, attribute) =>
             {
                 var state = GetState(((StartStateAttribute)attribute).Name);
-                field.SetValue(this, state);
+                memberInfo.TrySetValue(this, state);
                 StartState = state;
             });
-
-            ActOnPropertyAttributes(typeof(StartStateAttribute), (property, attribute) =>
-            {
-                var state = GetState(((StartStateAttribute)attribute).Name);
-                property.SetValue(this, state);
-                StartState = state;
-            });
-
-            ActOnFieldAttributes(typeof(ConnectionAttribute), (field, attribute) =>
+            
+            ActOnFieldAndPropertyAttributes(typeof(ConnectionAttribute), (field, attribute) =>
             {
                 var connectionInfo = (ConnectionAttribute)attribute;
-                var state = (State)field.GetValue(this);
-
-                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
-            });
-
-            ActOnPropertyAttributes(typeof(ConnectionAttribute), (property, attribute) =>
-            {
-                var connectionInfo = (ConnectionAttribute)attribute;
-                var state = (State)property.GetValue(this);
+                field.TryGetValue(this, out State state);
 
                 AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
             });
@@ -110,13 +83,13 @@ namespace Aptacode.StateNet
             this[startStateName, actionName].UpdateWeight(GetState(targetStateName), ConnectionWeightFactory.FromString(connectionDescription));
         }
 
-        private void ActOnFieldAttributes(Type targetType, Action<FieldInfo, object> doWhenFound)
+        private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)
         {
             var typeInfo = GetType().GetTypeInfo();
 
             foreach (var fieldInfo in typeInfo.GetRuntimeFields())
             {
-                foreach (var attr in fieldInfo.GetCustomAttributes(true))
+                foreach (var attr in fieldInfo.GetCustomAttributes(false))
                 {
                     if (attr.GetType() == targetType)
                     {
@@ -124,23 +97,18 @@ namespace Aptacode.StateNet
                     }
                 }
             }
-        }
-
-        private void ActOnPropertyAttributes(Type targetType, Action<PropertyInfo, object> doWhenFound)
-        {
-            var typeInfo = GetType().GetTypeInfo();
-            
             foreach (var propertyInfo in typeInfo.GetRuntimeProperties())
-            {                
-                foreach (var property in propertyInfo.GetCustomAttributes(true))
+            {
+                foreach (var attr in propertyInfo.GetCustomAttributes(false))
                 {
-                    if (property.GetType() == targetType)
+                    if (attr.GetType() == targetType)
                     {
-                        doWhenFound(propertyInfo, property);
+                        doWhenFound(propertyInfo, attr);
                     }
                 }
             }
         }
+
 
         public override string ToString()
         {
