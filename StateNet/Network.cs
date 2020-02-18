@@ -56,9 +56,22 @@ namespace Aptacode.StateNet
 
         public Network()
         {
+            //TODO - figure out a clean way to use fields and properties in the same
+            //assignment operation. They are both MemberInfos, but that's too restrictive with no SetValue()
+            //
+            //Can't just use: https://stackoverflow.com/questions/2004508/checking-type-parameter-of-a-generic-method-in-c-sharp
+            //You still duplicate castings and logic for both fields and properties.
+            //
+            //Consider creating a MemberInfo extension method that checks for fields and properties, casts as needed,
+            //and sets a value if appropriate. Eg memberInfo.TrySetValue("NewValue");
             ActOnFieldAttributes(typeof(StateNameAttribute), (field, attribute) =>
             {
                 field.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
+            });
+
+            ActOnPropertyAttributes(typeof(StateNameAttribute), (property, attribute) =>
+            {
+                property.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
             });
 
             ActOnFieldAttributes(typeof(StartStateAttribute), (field, attribute) =>
@@ -68,13 +81,27 @@ namespace Aptacode.StateNet
                 StartState = state;
             });
 
+            ActOnPropertyAttributes(typeof(StartStateAttribute), (property, attribute) =>
+            {
+                var state = GetState(((StartStateAttribute)attribute).Name);
+                property.SetValue(this, state);
+                StartState = state;
+            });
+
             ActOnFieldAttributes(typeof(ConnectionAttribute), (field, attribute) =>
             {
                 var connectionInfo = (ConnectionAttribute)attribute;
                 var state = (State)field.GetValue(this);
 
                 AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
-                
+            });
+
+            ActOnPropertyAttributes(typeof(ConnectionAttribute), (property, attribute) =>
+            {
+                var connectionInfo = (ConnectionAttribute)attribute;
+                var state = (State)property.GetValue(this);
+
+                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
             });
         }
 
@@ -87,13 +114,29 @@ namespace Aptacode.StateNet
         {
             var typeInfo = GetType().GetTypeInfo();
 
-            foreach (var field in typeInfo.GetRuntimeFields())
+            foreach (var fieldInfo in typeInfo.GetRuntimeFields())
             {
-                foreach (var attr in field.GetCustomAttributes(true))
+                foreach (var attr in fieldInfo.GetCustomAttributes(true))
                 {
                     if (attr.GetType() == targetType)
                     {
-                        doWhenFound(field, attr);
+                        doWhenFound(fieldInfo, attr);
+                    }
+                }
+            }
+        }
+
+        private void ActOnPropertyAttributes(Type targetType, Action<PropertyInfo, object> doWhenFound)
+        {
+            var typeInfo = GetType().GetTypeInfo();
+            
+            foreach (var propertyInfo in typeInfo.GetRuntimeProperties())
+            {                
+                foreach (var property in propertyInfo.GetCustomAttributes(true))
+                {
+                    if (property.GetType() == targetType)
+                    {
+                        doWhenFound(propertyInfo, property);
                     }
                 }
             }
