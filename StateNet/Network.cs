@@ -88,24 +88,35 @@ namespace Aptacode.StateNet
 
         public StateDistribution this[State state, string action] => GetConnection(state)[action];
 
-        public State GetState(string name)
+        public State GetState(string name, bool createIfMissing = true)
         {
             if (_states.TryGetValue(name, out var node))
             {
                 return node;
             }
 
+            if (!createIfMissing)
+            {
+                return null;
+            }
+
             node = new State(name);
             _states.Add(name, node);
 
             return node;
+
         }
 
-        public ConnectionGroup GetConnection(State node)
+        public ConnectionGroup GetConnection(State node, bool createIfMissing = true)
         {
             if (_connections.TryGetValue(node, out var connectionGroup))
             {
                 return connectionGroup;
+            }
+
+            if (!createIfMissing)
+            {
+                return null;
             }
 
             connectionGroup = new ConnectionGroup();
