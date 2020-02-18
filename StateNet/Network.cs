@@ -61,7 +61,9 @@ namespace Aptacode.StateNet
             //
             //Can't just use: https://stackoverflow.com/questions/2004508/checking-type-parameter-of-a-generic-method-in-c-sharp
             //You still duplicate castings and logic for both fields and properties.
-
+            //
+            //Consider creating a MemberInfo extension method that checks for fields and properties, casts as needed,
+            //and sets a value if appropriate. Eg memberInfo.TrySetValue("NewValue");
             ActOnFieldAttributes(typeof(StateNameAttribute), (field, attribute) =>
             {
                 field.SetValue(this, GetState(((StateNameAttribute)attribute).Name));
@@ -100,7 +102,6 @@ namespace Aptacode.StateNet
                 var state = (State)property.GetValue(this);
 
                 AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName, connectionInfo.ConnectionDescription);
-
             });
         }
 
