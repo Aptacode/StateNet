@@ -14,26 +14,18 @@ https://discord.gg/D8MSXJB
 
 ### Overview
 
-The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Though since its inception the library has grown versatile with many potential usecases.
+The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Since its inception the library has grown versatile with many potential usecases.
 
 ### Usage
-#### 1) Configure the Network
-- All possible states
-- All possible actions that can be applied to each state
-- All relations between states
-- Set the start state
 
-#### 2) Start the Engine
-- Subscribe to relevant events: OnStarted, OnFinished, OnTransition or listen for specific State transitions
-- Subscribe to StateEvents - OnTransition
-- Subscribe to a specific State 
-- Call Start()
-- Call Apply(action) to move through the network
+StateNet works by defining a network of states interlinked by the actions which can be applied to them. 
 
-### Three approaches to configure a Network
+#### How to Configure the Network
+Determine all of the states you need and consider the relationship between them to determine the actions for your system.
+There are two approaches to configure the network:
 
 #### 1) Object oriented
-- Define a class which derives from Network
+- Create a class which derives from 'Network'
 - Define each State as a property on the class
 - Use attributes on the State properties to define the relationships between them
 
@@ -59,42 +51,53 @@ The original goal of StateNet was to create a simple way to define and control t
       public State EndTestState;
   }
 ```
-#### 2) Programmatic - string based
+
+#### 2) Programmatic
+Note* You can create a strongly typed network using enumerations OR a string based network.
 ```csharp
 
-  var network = new Network();
-  network.StartState = network["Ready"];
-  
-  network["Ready", "Play"].Always(network["Playing"]);
-  network["Playing", "Pause"].Always(network["Paused"]);
-  network["Playing", "Stop"].Always(network["Stopped"]);
-  network["Paused", "Play"].Always(network["Playing"]);
-  network["Paused", "Stop"].Always(network["Stopped"]);
+	//Strongly typed enumeration network
+	//**********************************
+	//Declare two enums consisting of each state and action
+	public enum States { Ready, Playing, Paused, Stopped }
+	public enum Actions { Play, Pause, Stop }
 
+	//Create a new network
+	var network1 = new EnumNetwork<States, Actions>();
+
+	//Get each state
+	var Ready = network1[States.Ready];
+	var Playing = network1[States.Playing];
+	var Paused = network1[States.Paused];
+	var Stopped = network1[States.Stopped];
+	
+	//Set the start state
+	network1.StartState = Ready;
+
+	//Define the relationships between each state
+	network1[Ready, Actions.Play].Always(Playing);
+	network1[Playing, Actions.Pause].Always(Paused);
+	network1[Playing, Actions.Stop].Always(Stopped);
+	network1[Paused, Actions.Play].Always(Playing);
+	network1[Paused, Actions.Stop].Always(Stopped);
+	
+	//String based network
+	//**********************************
+	var network2 = new Network();
+	network2.StartState = network2["Ready"];
+
+	network2["Ready", "Play"].Always(network2["Playing"]);
+	network2["Playing", "Pause"].Always(network2["Paused"]);
+	network2["Playing", "Stop"].Always(network2["Stopped"]);
+	network2["Paused", "Play"].Always(network2["Playing"]);
+	network2["Paused", "Stop"].Always(network2["Stopped"]);
 ```
-#### 3) Programmatic - strongly typed
-```csharp
 
-    public enum States { Ready, Playing, Paused, Stopped }
-    public enum Actions { Play, Pause, Stop }
-    
-    var network = new EnumNetwork<States, Actions>();
-    
-    var Ready = network[States.Ready];
-    var Playing = network[States.Playing];
-    var Paused = network[States.Paused];
-    var Stopped = network[States.Stopped];
-    network.StartState = Ready;
+#### Running the engine
+Pass the configured network to the engine through its constructor.
+Optionally subscribe to the engines events such as OnStarted, OnFinished, OnTransition or subscribe to specific State transitions.
+Control the flow through the network by calling Start(), Stop() and Apply(action)
 
-    network[Ready, Actions.Play].Always(Playing);
-    network[Playing, Actions.Pause].Always(Paused);
-    network[Playing, Actions.Stop].Always(Stopped);
-    network[Paused, Actions.Play].Always(Playing);
-    network[Paused, Actions.Stop].Always(Stopped);
-    
-```
-
-#### Using the Engine
 ```csharp
 
 //Create and configure the Network using your prefered method
