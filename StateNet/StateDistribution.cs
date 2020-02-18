@@ -63,15 +63,15 @@ namespace Aptacode.StateNet
             var stringBuilder = new StringBuilder();
 
             var pairs = _distribution.ToList();
-            if (pairs.Count <= 0)
+            if (pairs.Count == 0)
             {
                 return stringBuilder.ToString();
             }
 
-            stringBuilder.Append($"({pairs[0].Key.Name}:{pairs[0].Value})");
+            stringBuilder.Append('(').Append(pairs[0].Key.Name).Append(':').Append(pairs[0].Value).Append(')');
             for (var i = 1; i < pairs.Count; i++)
             {
-                stringBuilder.Append($",({pairs[i].Key.Name}:{pairs[i].Value})");
+                stringBuilder.Append(",(").Append(pairs[i].Key.Name).Append(':').Append(pairs[i].Value).Append(')');
             }
 
             return stringBuilder.ToString();

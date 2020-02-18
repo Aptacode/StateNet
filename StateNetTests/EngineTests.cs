@@ -50,7 +50,7 @@ namespace Aptacode.StateNet.Tests
 
             network.StartState = ready;
 
-            ready.OnUpdateConnections += s =>
+            ready.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {
@@ -68,7 +68,7 @@ namespace Aptacode.StateNet.Tests
             network["playing", "Pause"].Always(paused);
             network["playing", "Stop"].Always(stopped);
 
-            paused.OnUpdateConnections += s =>
+            paused.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {
@@ -133,7 +133,7 @@ namespace Aptacode.StateNet.Tests
 
             private void Setup()
             {
-                Decision1TestState.OnUpdateConnections += s =>
+                Decision1TestState.OnUpdateConnections += delegate
                 {
                     if (++decision1Count == 2)
                     {

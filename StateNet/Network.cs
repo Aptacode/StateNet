@@ -25,10 +25,10 @@ namespace Aptacode.StateNet
             //Consider creating a MemberInfo extension method that checks for fields and properties, casts as needed,
             //and sets a value if appropriate. Eg memberInfo.TrySetValue("NewValue");
             ActOnFieldAttributes(typeof(StateNameAttribute),
-                (field, attribute) => { field.SetValue(this, GetState(((StateNameAttribute) attribute).Name)); });
+                (field, attribute) => field.SetValue(this, GetState(((StateNameAttribute) attribute).Name)));
 
             ActOnPropertyAttributes(typeof(StateNameAttribute),
-                (property, attribute) => { property.SetValue(this, GetState(((StateNameAttribute) attribute).Name)); });
+                (property, attribute) => property.SetValue(this, GetState(((StateNameAttribute) attribute).Name)));
 
             ActOnFieldAttributes(typeof(StartStateAttribute), (field, attribute) =>
             {
@@ -104,7 +104,6 @@ namespace Aptacode.StateNet
             _states.Add(name, node);
 
             return node;
-
         }
 
         public ConnectionGroup GetConnection(State node, bool createIfMissing = true)
@@ -178,15 +177,15 @@ namespace Aptacode.StateNet
                 stringBuilder.AppendLine(state.Name);
 
                 var connectionGroups = GetConnection(state).GetAll();
-                if (!connectionGroups.Any())
+                if (connectionGroups.Count == 0)
                 {
                     continue;
                 }
 
-                stringBuilder.AppendLine($"({connectionGroups[0].Key}->{connectionGroups[0].Value})");
+                stringBuilder.Append('(').Append(connectionGroups[0].Key).Append("->").Append(connectionGroups[0].Value).AppendLine(")");
                 for (var i = 1; i < connectionGroups.Count; i++)
                 {
-                    stringBuilder.AppendLine($",({connectionGroups[i].Key}->{connectionGroups[i].Value})");
+                    stringBuilder.Append(",(").Append(connectionGroups[i].Key).Append("->").Append(connectionGroups[i].Value).AppendLine(")");
                 }
             }
 

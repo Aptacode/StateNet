@@ -103,7 +103,7 @@ namespace Aptacode.StateNet
         {
             foreach (var node in _network.GetEndStates())
             {
-                node.OnVisited += s => { OnFinished?.Invoke(this); };
+                node.OnVisited += delegate { OnFinished?.Invoke(this); };
             }
         }
 
@@ -122,13 +122,13 @@ namespace Aptacode.StateNet
 
         private void NotifySubscribers(State state)
         {
-            new TaskFactory().StartNew(() => { OnTransition?.Invoke(state); }, cancellationToken).ConfigureAwait(false);
+            new TaskFactory().StartNew(() => OnTransition?.Invoke(state), cancellationToken).ConfigureAwait(false);
 
             if (_callbackDictionary.ContainsKey(state))
             {
                 _callbackDictionary[state]?.ForEach(callback =>
                 {
-                    new TaskFactory().StartNew(() => { callback?.Invoke(); }, cancellationToken)
+                    new TaskFactory().StartNew(() => callback?.Invoke(), cancellationToken)
                         .ConfigureAwait(false);
                 });
             }

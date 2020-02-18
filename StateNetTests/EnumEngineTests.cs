@@ -37,7 +37,7 @@ namespace Aptacode.StateNet.Tests
 
             network.StartState = ready;
 
-            ready.OnUpdateConnections += s =>
+            ready.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {
@@ -55,7 +55,7 @@ namespace Aptacode.StateNet.Tests
             network[States.Playing, Actions.Pause].Always(paused);
             network[States.Playing, Actions.Stop].Always(stopped);
 
-            paused.OnUpdateConnections += s =>
+            paused.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {

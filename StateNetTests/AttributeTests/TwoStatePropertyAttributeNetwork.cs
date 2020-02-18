@@ -2,16 +2,17 @@
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
-    public class TwoStatePropertyAttibuteNetwork : Network
+    public class TwoStatePropertyAttributeNetwork : Network
     {
         [StartState("Start")]
         [Connection("Next", "Private")]
-        public State StartTestState { get; private set; }
+        public State StartTestState { get; }
 
-        [StateName("End")] public State EndTestState { get; private set; }
+        [StateName("End")]
+        public State EndTestState { get; }
 
         [StateName("Private")]
         [Connection("Finish", "End")]
-        private State PrivateState { get; set; }
+        public State PrivateState { get; set; }
     }
 }
