@@ -10,31 +10,39 @@
     <Copyright>MIT</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Timmoth/Aptacode.StateNet</PackageProjectUrl>
-    <PackageIcon>Logo.png</PackageIcon>
+    <PackageIcon>StateNetLogo.png</PackageIcon>
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/Timmoth/Aptacode.StateNet</RepositoryUrl>
     <RepositoryType />
-    <PackageTags>Finite State Machine FSM NFSM</PackageTags>
+    <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.5</Version>
     <AssemblyVersion>1.0.5.0</AssemblyVersion>
     <LangVersion>7.3</LangVersion>
+    <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\Build\Debug\</OutputPath>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\Build\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.6.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Resources\Images\Logo.png">
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+    <None Include="..\Resources\Images\StateNetLogo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.7" />
   </ItemGroup>
 
 </Project>
