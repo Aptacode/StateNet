@@ -1,5 +1,9 @@
 # Aptacode.StateNet
 
+<p align="center">
+  <img width="600" height="200" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/StateNetBanner.png">
+</p>
+
 ![alt text](https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/blob/dev/Resources/Images/StateNetBanner.png)
 
 ## A small .Net Standard library used to model simple State Machines
