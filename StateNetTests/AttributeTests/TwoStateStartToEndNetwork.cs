@@ -4,9 +4,11 @@ namespace Aptacode.StateNet.Tests.AttributeTests
 {
     public class TwoStateStartToEndNetwork : Network
     {
-        [StateName("End")] public State EndTestState;
+        [StartState("Start")] 
+        [Connection("Next", "End")]
+        public State StartTestState { get; set; }
 
-        [StartState("Start")] [Connection("Next", "End")]
-        public State StartTestState;
+        [StateName("End")]
+        public State EndTestState { get; set; }
     }
 }

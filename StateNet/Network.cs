@@ -1,7 +1,5 @@
-﻿using Aptacode.StateNet.Events.Attributes;
-using Aptacode.StateNet.Extensions;
+﻿using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
-using Aptacode.StateNet.NodeWeights;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.ConnectionWeight;
-using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {

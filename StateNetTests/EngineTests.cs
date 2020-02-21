@@ -114,17 +114,17 @@ namespace Aptacode.StateNet.Tests
             private int decision1Count;
 
             [StateName("D1")] [Connection("Next", "D1", "Static:1")] [Connection("Next", "End", "Static:0")]
-            public State Decision1TestState;
+            public State Decision1TestState { get; set; }
 
             [StateName("D2")]
             [Connection("Next", "D1", "VisitCount:D2,2,0,0,2")]
             [Connection("Next", "D2", "VisitCount:D2,2,1,1,0")]
-            public State Decision2TestState;
+            public State Decision2TestState { get; set; }
 
-            [StateName("End")] public State EndTestState;
+            [StateName("End")] public State EndTestState { get; set; }
 
             [StartState("Start")] [Connection("Left", "D1")] [Connection("Right", "D2")]
-            public State StartTestState;
+            public State StartTestState { get; set; }
 
             public DummyNetwork()
             {
