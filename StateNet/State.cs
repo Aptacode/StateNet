@@ -1,30 +1,16 @@
-﻿using Aptacode.StateNet.Events;
+﻿using System;
+using Aptacode.StateNet.Events;
 
 namespace Aptacode.StateNet
 {
-    public sealed class State : System.IEquatable<State>
+    public sealed class State : IEquatable<State>
     {
-        public State(string name) => Name = name;
+        public State(string name)
+        {
+            Name = name;
+        }
 
-        #region Overrides
-
-        public override int GetHashCode() => Name.GetHashCode();
-
-        public override bool Equals(object obj) => (obj is State other) && Equals(other);
-
-        public bool Equals(State other) => Name.Equals(other.Name);
-
-        #endregion Overrides
-
-        #region Internal
-
-        internal void Visit() => OnVisited?.Invoke(this);
-
-        internal void Exit() => OnExited?.Invoke(this);
-
-        internal void UpdateChoosers() => OnUpdateConnections?.Invoke(this);
-
-        #endregion Internal
+        public string Name { get; }
 
         public event StateEvent OnVisited;
 
@@ -32,8 +18,47 @@ namespace Aptacode.StateNet
 
         public event StateEvent OnExited;
 
-        public override string ToString() => Name;
+        public override string ToString()
+        {
+            return Name;
+        }
 
-        public string Name { get; }
+        #region Overrides
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is State other && Equals(other);
+        }
+
+        public bool Equals(State other)
+        {
+            return other != null && Name.Equals(other.Name);
+        }
+
+        #endregion Overrides
+
+        #region Internal
+
+        internal void Visit()
+        {
+            OnVisited?.Invoke(this);
+        }
+
+        internal void Exit()
+        {
+            OnExited?.Invoke(this);
+        }
+
+        internal void UpdateChoosers()
+        {
+            OnUpdateConnections?.Invoke(this);
+        }
+
+        #endregion Internal
     }
 }

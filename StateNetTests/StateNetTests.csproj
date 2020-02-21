@@ -8,6 +8,8 @@
     <RootNamespace>Aptacode.StateNet.Tests</RootNamespace>
 
     <AssemblyName>Aptacode.StateNet.Tests</AssemblyName>
+
+    <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
