@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="640" height="320" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/StateNetBanner.png">
+  <img width="640" height="320" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/StateNetBanner.jpg">
 </p>
 
 ## A .Net Standard library used to model complicated State Machines
