@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace WPFDemo.Converters
 {
-    public class IsStateActiveToStrokeConverter :  IValueConverter
+    public class IsStateActiveToStrokeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -13,10 +13,8 @@ namespace WPFDemo.Converters
             {
                 return new SolidColorBrush(Color.FromRgb(25, 200, 25));
             }
-            else
-            {
-                return new SolidColorBrush(Color.FromRgb(0,0,0));
-            }
+
+            return new SolidColorBrush(Color.FromRgb(0, 0, 0));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

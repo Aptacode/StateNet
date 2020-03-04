@@ -12,23 +12,23 @@
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type viewModels:StateViewModel}">
                 <views:StateView DataContext="{Binding}" />
-            </DataTemplate>  
+            </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <Label Content="Current State: "></Label>
+            <Label Content="Current State: " />
             <Label Width="100" HorizontalContentAlignment="Left">A1</Label>
-            <ComboBox Width="150" Margin="5"></ComboBox>
+            <ComboBox Width="150" Margin="5" />
             <Button Width="100" Margin="5" Click="Button_Click">Apply</Button>
         </StackPanel>
 
-        <ContentPresenter x:Name="ContentPresenter" Width="100" Height="100" Grid.Row="1"></ContentPresenter>
+        <ContentPresenter x:Name="ContentPresenter" Width="100" Height="100" Grid.Row="1" />
 
     </Grid>
 </Window>

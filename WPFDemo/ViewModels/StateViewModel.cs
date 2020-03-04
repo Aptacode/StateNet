@@ -2,21 +2,20 @@
 {
     public class StateViewModel : BaseViewModel
     {
-		private bool _IsActive;
-
-		public bool IsActive
-		{
-			get { return _IsActive; }
-            set { SetField(ref _IsActive, value); }
-        }
+        private bool _IsActive;
 
         private string _Name;
 
-        public string Name
+        public bool IsActive
         {
-            get { return _Name; }
-            set { SetField(ref _Name, value); }
+            get => _IsActive;
+            set => SetField(ref _IsActive, value);
         }
 
-	}
+        public string Name
+        {
+            get => _Name;
+            set => SetField(ref _Name, value);
+        }
+    }
 }

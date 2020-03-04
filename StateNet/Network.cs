@@ -1,12 +1,12 @@
-﻿using Aptacode.StateNet.Extensions;
-using Aptacode.StateNet.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.ConnectionWeight;
+using Aptacode.StateNet.Extensions;
+using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
@@ -17,21 +17,22 @@ namespace Aptacode.StateNet
 
         public Network()
         {
-            ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute), (memberInfo, attribute) =>
-            {
-                memberInfo.TrySetValue(this, GetState(((StateNameAttribute)attribute).Name));
-            });
+            ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute),
+                (memberInfo, attribute) =>
+                {
+                    memberInfo.TrySetValue(this, GetState(((StateNameAttribute) attribute).Name));
+                });
 
             ActOnFieldAndPropertyAttributes(typeof(StartStateAttribute), (memberInfo, attribute) =>
             {
-                var state = GetState(((StartStateAttribute)attribute).Name);
+                var state = GetState(((StartStateAttribute) attribute).Name);
                 memberInfo.TrySetValue(this, state);
                 StartState = state;
             });
-            
+
             ActOnFieldAndPropertyAttributes(typeof(ConnectionAttribute), (field, attribute) =>
             {
-                var connectionInfo = (ConnectionAttribute)attribute;
+                var connectionInfo = (ConnectionAttribute) attribute;
                 field.TryGetValue(this, out State state);
 
                 AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName,
