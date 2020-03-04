@@ -9,6 +9,11 @@ namespace Aptacode.StateNet
         private readonly IRandomNumberGenerator _randomNumberGenerator;
         private readonly List<State> _stateHistory;
 
+        /// <summary>
+        /// Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
+        /// </summary>
+        /// <param name="randomNumberGenerator"></param>
+        /// <param name="stateHistory"></param>
         public StateChooser(IRandomNumberGenerator randomNumberGenerator, List<State> stateHistory)
         {
             _randomNumberGenerator = randomNumberGenerator;
@@ -16,7 +21,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        ///     Chooses the next state based on the given StateDistribution
+        /// Return the next state based on the given StateDistribution and the current StateHistory
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
@@ -34,7 +39,7 @@ namespace Aptacode.StateNet
             //Get a random number between 1 and the totalWeight + 1
             var choice = _randomNumberGenerator.Generate(1, totalWeight + 1);
 
-            //Loop over each connection weight pair keeping a tally of the weight of each connection passed
+            //Iterate over each connection weight keeping a running total of their sum in the weightCounter
             //Return the state where weightCounter >= choice
             using (var iterator = connectionWeights.GetEnumerator())
             {
