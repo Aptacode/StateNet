@@ -62,7 +62,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
 
             //Assert
             Assert.AreEqual(1, stateDistributions.Count, "Should have only one connection");
-            Assert.AreEqual(1, connectionWeight?.GetWeight(null), "One connection should have a weight of 1");
+            Assert.AreEqual(1, connectionWeight?.GetConnectionWeight(null), "One connection should have a weight of 1");
             Assert.IsTrue(network.IsValid());
         }
 
@@ -84,9 +84,11 @@ namespace Aptacode.StateNet.Tests.AttributeTests
 
             //Assert
             Assert.AreEqual(1, firstStateDistributions.Count, "Should have only one connection");
-            Assert.AreEqual(1, firstConnectionWeight?.GetWeight(null), "One connection should have a weight of 1");
+            Assert.AreEqual(1, firstConnectionWeight?.GetConnectionWeight(null),
+                "One connection should have a weight of 1");
             Assert.AreEqual(1, secondStateDistributions.Count, "Should have only one connection");
-            Assert.AreEqual(1, secondConnectionWeight?.GetWeight(null), "One connection should have a weight of 1");
+            Assert.AreEqual(1, secondConnectionWeight?.GetConnectionWeight(null),
+                "One connection should have a weight of 1");
             Assert.IsTrue(network.IsValid());
         }
     }

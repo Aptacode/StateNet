@@ -5,7 +5,7 @@ namespace Aptacode.StateNet.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class ConnectionAttribute : Attribute
     {
-        public ConnectionAttribute(string actionName, string targetName, string connectionDescription = null)
+        public ConnectionAttribute(string actionName, string targetName, string connectionDescription = "1")
         {
             TargetName = targetName;
             ActionName = actionName;

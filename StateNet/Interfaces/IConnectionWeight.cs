@@ -4,6 +4,6 @@ namespace Aptacode.StateNet.Interfaces
 {
     public interface IConnectionWeight
     {
-        int GetWeight(List<State> history);
+        int GetConnectionWeight(List<State> stateHistory);
     }
 }

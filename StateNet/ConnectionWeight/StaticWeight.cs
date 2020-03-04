@@ -12,7 +12,7 @@ namespace Aptacode.StateNet.ConnectionWeight
 
         public int Weight { get; set; }
 
-        public int GetWeight(List<State> history)
+        public int GetConnectionWeight(List<State> stateHistory)
         {
             return Weight;
         }

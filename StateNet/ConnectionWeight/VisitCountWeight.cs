@@ -25,15 +25,39 @@ namespace Aptacode.StateNet.ConnectionWeight
             GreaterThenWeight = greaterThenWeight;
         }
 
-        public int ComparisonVisitCount { get; set; }
-        public int LessThenWeight { get; set; }
-        public int EqualToWeight { get; set; }
-        public int GreaterThenWeight { get; set; }
+        /// <summary>
+        ///     Count this states visits
+        /// </summary>
         public string State { get; set; }
 
-        public int GetWeight(List<State> history)
+        /// <summary>
+        ///     Number to compare the TotalVisitCount against
+        /// </summary>
+        public int ComparisonVisitCount { get; set; }
+
+        /// <summary>
+        ///     The weight returned if the TotalVisitCount is less then the ComparisonVisitCount
+        /// </summary>
+        public int LessThenWeight { get; set; }
+
+        /// <summary>
+        ///     The weight returned if the TotalVisitCount equals the ComparisonVisitCount
+        /// </summary>
+        public int EqualToWeight { get; set; }
+
+        /// <summary>
+        ///     The weight returned if the TotalVisitCount is greater then the ComparisonVisitCount
+        /// </summary>
+        public int GreaterThenWeight { get; set; }
+
+        /// <summary>
+        ///     Returns the ConnectionWeight based on the stateHistory
+        /// </summary>
+        /// <param name="stateHistory"></param>
+        /// <returns></returns>
+        public int GetConnectionWeight(List<State> stateHistory)
         {
-            var nodeCount = GetTotalVisitCount(history);
+            var nodeCount = GetTotalVisitCount(stateHistory);
 
             if (nodeCount > ComparisonVisitCount)
             {
@@ -48,9 +72,14 @@ namespace Aptacode.StateNet.ConnectionWeight
             return EqualToWeight;
         }
 
+        /// <summary>
+        ///     Returns the number of times State has been visited in the history
+        /// </summary>
+        /// <param name="history"></param>
+        /// <returns></returns>
         public int GetTotalVisitCount(List<State> history)
         {
-            return history.Count(n => n.Name == State);
+            return history?.Count(n => n.Name == State) ?? 0;
         }
     }
 }

@@ -107,10 +107,12 @@ namespace Aptacode.StateNet
         }
 
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
-            string connectionDescription = "")
+            string connectionDescription = "1")
         {
+            var s = ConnectionWeightParser.FromString(connectionDescription);
+
             this[startStateName, actionName].UpdateWeight(GetState(targetStateName),
-                ConnectionWeightFactory.FromString(connectionDescription));
+                ConnectionWeightParser.FromString(connectionDescription));
         }
 
         private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)

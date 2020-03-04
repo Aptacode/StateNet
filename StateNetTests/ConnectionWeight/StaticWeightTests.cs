@@ -15,7 +15,6 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
                 yield return new TestCaseData(-1);
                 yield return new TestCaseData(1);
                 yield return new TestCaseData(100);
-
             }
         }
 
@@ -27,7 +26,6 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
                 yield return new TestCaseData(-1, 1);
                 yield return new TestCaseData(1, 1);
                 yield return new TestCaseData(100, 1);
-
             }
         }
 
@@ -46,14 +44,14 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         [TestCaseSource(nameof(ChangingSetWeightTestCases))]
         public void GetWeight_Returns_ConstructorWeight(int setWeight)
         {
-            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetWeight(null));
+            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetConnectionWeight(null));
         }
 
         [Test]
         [TestCaseSource(nameof(ChangingHistoryTestCases))]
         public void SetWeight_IsNotAffectedBy_History(int setWeight, List<State> history)
         {
-            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetWeight(history));
+            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetConnectionWeight(history));
         }
 
         [Test]
@@ -62,7 +60,7 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             var connectionWeight = new StaticWeight(initialWeight);
             connectionWeight.Weight = setWeight;
-            Assert.AreEqual(setWeight, connectionWeight.GetWeight(null));
+            Assert.AreEqual(setWeight, connectionWeight.GetConnectionWeight(null));
         }
     }
 }

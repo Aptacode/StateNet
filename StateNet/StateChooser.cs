@@ -28,7 +28,7 @@ namespace Aptacode.StateNet
             var weightSum = 0;
             foreach (var keyValue in connections.GetAll())
             {
-                weightSum += keyValue.Value.GetWeight(_history);
+                weightSum += keyValue.Value.GetConnectionWeight(_history);
                 if (weightSum >= randomChoice)
                 {
                     return keyValue.Key;
@@ -40,7 +40,7 @@ namespace Aptacode.StateNet
 
         public int TotalWeight(StateDistribution connections)
         {
-            return connections.GetWeights().Select(f => f.GetWeight(_history)).Sum();
+            return connections.GetWeights().Select(f => f.GetConnectionWeight(_history)).Sum();
         }
     }
 }

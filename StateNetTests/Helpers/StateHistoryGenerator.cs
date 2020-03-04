@@ -6,7 +6,7 @@ namespace Aptacode.StateNet.Tests.Helpers
     public static class StateHistoryGenerator
     {
         /// <summary>
-        /// Returns a list of states generated from the sequence of integers passed 
+        ///     Returns a list of states generated from the sequence of integers passed
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
