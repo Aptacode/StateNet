@@ -139,6 +139,7 @@ namespace Aptacode.StateNet
                 }
             }
         }
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();

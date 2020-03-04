@@ -6,7 +6,7 @@ namespace Aptacode.StateNet
     public sealed class State : IEquatable<State>
     {
         /// <summary>
-        /// Represents a single state in the network
+        ///     Represents a single state in the network
         /// </summary>
         /// <param name="name">The name of the state</param>
         public State(string name)
@@ -15,23 +15,23 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// The state name
+        ///     The state name
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Raised when the state is entered
+        ///     Raised when the state is entered
         /// </summary>
         public event StateEvent OnVisited;
 
         /// <summary>
-        /// Raised before the state determines which connection to take
-        /// Use to update probabilities
+        ///     Raised before the state determines which connection to take
+        ///     Use to update probabilities
         /// </summary>
         public event StateEvent OnUpdateConnections;
 
         /// <summary>
-        /// Raised when the state is exited
+        ///     Raised when the state is exited
         /// </summary>
         public event StateEvent OnExited;
 

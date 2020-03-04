@@ -7,7 +7,8 @@ namespace Aptacode.StateNet
         where TStates : Enum
         where TActions : Enum
     {
-        public EnumEngine(IRandomNumberGenerator randomNumberGenerator, EnumNetwork<TStates, TActions> network) : base(randomNumberGenerator, network)
+        public EnumEngine(IRandomNumberGenerator randomNumberGenerator, EnumNetwork<TStates, TActions> network) : base(
+            randomNumberGenerator, network)
         {
         }
 

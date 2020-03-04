@@ -16,7 +16,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Chooses the next state based on the given StateDistribution
+        ///     Chooses the next state based on the given StateDistribution
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
@@ -49,32 +49,37 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Calculates the weight of each connections in the StateDistribution given the current state history and returns a list of State,Weight pairs
+        ///     Calculates the weight of each connections in the StateDistribution given the current state history and returns a
+        ///     list of State,Weight pairs
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        private IEnumerable<(State, int)> GetConnectionWeights(StateDistribution connections) =>
-            connections
+        private IEnumerable<(State, int)> GetConnectionWeights(StateDistribution connections)
+        {
+            return connections
                 .GetAll()
                 .Select(f => (f.Key, f.Value.GetConnectionWeight(_stateHistory)));
+        }
 
         /// <summary>
-        /// Calculates the sum of each connection in the given StateDistribution 
+        ///     Calculates the sum of each connection in the given StateDistribution
         /// </summary>
         /// <param name="weights"></param>
-        private int TotalWeight(IEnumerable<(State, int)> weights) => 
-            weights
+        private int TotalWeight(IEnumerable<(State, int)> weights)
+        {
+            return weights
                 .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);
+        }
 
 
         /// <summary>
-        /// Calculates the sum of each connections weight in the StateDistribution given the current StateHistory
+        ///     Calculates the sum of each connections weight in the StateDistribution given the current StateHistory
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        public int TotalWeight(StateDistribution connections) => TotalWeight(GetConnectionWeights(connections));
-
-
-
+        public int TotalWeight(StateDistribution connections)
+        {
+            return TotalWeight(GetConnectionWeights(connections));
+        }
     }
 }
