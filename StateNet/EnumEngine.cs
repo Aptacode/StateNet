@@ -1,4 +1,5 @@
 ﻿using System;
+using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
@@ -6,7 +7,7 @@ namespace Aptacode.StateNet
         where TStates : Enum
         where TActions : Enum
     {
-        public EnumEngine(EnumNetwork<TStates, TActions> network) : base(network)
+        public EnumEngine(IRandomNumberGenerator randomNumberGenerator, EnumNetwork<TStates, TActions> network) : base(randomNumberGenerator, network)
         {
         }
 

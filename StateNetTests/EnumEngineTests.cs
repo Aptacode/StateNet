@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Random;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
@@ -81,7 +82,7 @@ namespace Aptacode.StateNet.Tests
             canPlay = true;
             var network = GetTestNetwork();
 
-            var engine = new EnumEngine<States, Actions>(network);
+            var engine = new EnumEngine<States, Actions>(new SystemRandomNumberGenerator(), network);
 
             engine.Start();
             engine.Apply(Actions.Play);

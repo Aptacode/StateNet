@@ -13,20 +13,20 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
             {
                 yield return new TestCaseData(1, 1, 10, 20, 30, null, 10, "Null history returns LessThen weight");
 
-                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.History(), 10,
+                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.Generate(), 10,
                     "0 visits less than comparison return 10");
-                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.History(1), 20,
+                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.Generate(1), 20,
                     "1 visits equals comparison return 20");
-                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.History(1, 1), 30,
+                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.Generate(1, 1), 30,
                     "2 visits greater then comparison return 30");
 
-                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.History(2), 10,
+                yield return new TestCaseData(1, 1, 10, 20, 30, StateHistoryGenerator.Generate(2), 10,
                     "0 visits less than comparison return 10");
-                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.History(2, 1), 10,
+                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.Generate(2, 1), 10,
                     "1 visits less than comparison return 10");
-                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.History(1, 2, 1), 20,
+                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.Generate(1, 2, 1), 20,
                     "2 visits equals comparison return 20");
-                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.History(1, 2, 1, 2, 1), 30,
+                yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.Generate(1, 2, 1, 2, 1), 30,
                     "3 visits greater then comparison return 30");
             }
         }

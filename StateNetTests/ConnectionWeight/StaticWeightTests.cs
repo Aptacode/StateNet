@@ -33,10 +33,10 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             get
             {
-                yield return new TestCaseData(1, StateHistoryGenerator.History());
-                yield return new TestCaseData(1, StateHistoryGenerator.History(1));
-                yield return new TestCaseData(1, StateHistoryGenerator.History(1, 1));
-                yield return new TestCaseData(1, StateHistoryGenerator.History(1, 2));
+                yield return new TestCaseData(1, StateHistoryGenerator.Generate());
+                yield return new TestCaseData(1, StateHistoryGenerator.Generate(1));
+                yield return new TestCaseData(1, StateHistoryGenerator.Generate(1, 1));
+                yield return new TestCaseData(1, StateHistoryGenerator.Generate(1, 2));
             }
         }
 

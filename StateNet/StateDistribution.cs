@@ -68,10 +68,20 @@ namespace Aptacode.StateNet
                 return stringBuilder.ToString();
             }
 
-            stringBuilder.Append('(').Append(pairs[0].Key.Name).Append(':').Append(pairs[0].Value).Append(')');
+            stringBuilder
+                .Append('(')
+                .Append(pairs[0].Key.Name)
+                .Append(':')
+                .Append(pairs[0].Value)
+                .Append(')');
             for (var i = 1; i < pairs.Count; i++)
             {
-                stringBuilder.Append(",(").Append(pairs[i].Key.Name).Append(':').Append(pairs[i].Value).Append(')');
+                stringBuilder
+                    .Append(",(")
+                    .Append(pairs[i].Key.Name)
+                    .Append(':')
+                    .Append(pairs[i].Value)
+                    .Append(')');
             }
 
             return stringBuilder.ToString();

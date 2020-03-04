@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Attributes;
+using Aptacode.StateNet.Random;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
@@ -16,7 +17,7 @@ namespace Aptacode.StateNet.Tests
         public void StateHistoryTest()
         {
             var network = new DummyNetwork();
-            var engine = new Engine(network);
+            var engine = new Engine(new SystemRandomNumberGenerator(), network);
 
             Assert.AreEqual(null, engine.CurrentState);
             engine.Start();
@@ -95,7 +96,7 @@ namespace Aptacode.StateNet.Tests
             canPlay = true;
             var network = GetTestNetwork();
 
-            var engine = new Engine(network);
+            var engine = new Engine(new SystemRandomNumberGenerator(), network);
 
             engine.Start();
             engine.Apply("Play");

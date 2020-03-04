@@ -1,37 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Aptacode.StateNet.Random;
+using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
     public class StateChooserTests
     {
-        [Test]
-        public void SetWeightTests()
+        public static IEnumerable<TestCaseData> NodeChooserTotalWeightTestCases
         {
-            var history = new List<State>();
-            var nodeChooser = new StateChooser(history);
-
-            var nodeConnection = new StateDistribution();
-            Assert.AreEqual(0, nodeChooser.TotalWeight(nodeConnection));
-
-            var d1 = new State("D1");
-            var d2 = new State("D2");
-
-            nodeConnection.UpdateWeight(d1, 1);
-            nodeConnection.UpdateWeight(d2, 2);
-
-            Assert.AreEqual(3, nodeChooser.TotalWeight(nodeConnection));
-
-            nodeConnection.UpdateWeight(d1, 2);
-            nodeConnection.UpdateWeight(d2, 0);
-
-            Assert.AreEqual(2, nodeChooser.TotalWeight(nodeConnection));
+            get
+            {
+                yield return new TestCaseData(StateDistributionGenerator.Generate(), StateHistoryGenerator.Generate(), 0, "An empty distribution should return 0 weight");
+                yield return new TestCaseData(StateDistributionGenerator.Generate(1), StateHistoryGenerator.Generate(), 1, "Total Weight = 1");
+                yield return new TestCaseData(StateDistributionGenerator.Generate(0,1), StateHistoryGenerator.Generate(), 1, "Total Weight = 1");
+                yield return new TestCaseData(StateDistributionGenerator.Generate(1,2), StateHistoryGenerator.Generate(), 3, "Total Weight = 3");
+                yield return new TestCaseData(StateDistributionGenerator.Generate(1,-1), StateHistoryGenerator.Generate(), 1, "Negative weights should count as 0");
+            }
+        }
+        public static IEnumerable<TestCaseData> TestCases
+        {
+            get
+            {
+                yield return new TestCaseData(StateDistributionGenerator.Generate(), StateHistoryGenerator.Generate(), 0, "An empty distribution should return 0 weight");
+            }
         }
 
-        //TODO
-        // ToString Test
-        // GetNext probability distribution Tests
-        // SetWeight new format
-        // SetWeight Fluent API?
+
+        [Test]
+        [TestCaseSource(nameof(NodeChooserTotalWeightTestCases))]
+        public void NodeChooser_TotalWeight(StateDistribution stateDistribution, List<State> stateHistory, int expectedValue, string message = "")
+        {
+            Assert.AreEqual(expectedValue, new StateChooser(new SystemRandomNumberGenerator(), stateHistory).TotalWeight(stateDistribution), message);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(NodeChooserTotalWeightTestCases))]
+        public void NodeChooser_ChooseValue(StateDistribution stateDistribution, List<State> stateHistory, int expectedValue, string message = "")
+        {
+            Assert.AreEqual(expectedValue, new StateChooser(new SystemRandomNumberGenerator(), stateHistory).TotalWeight(stateDistribution), message);
+        }
     }
 }

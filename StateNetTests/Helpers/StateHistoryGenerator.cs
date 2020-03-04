@@ -10,7 +10,7 @@ namespace Aptacode.StateNet.Tests.Helpers
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        public static List<State> History(params int[] sequence)
+        public static List<State> Generate(params int[] sequence)
         {
             return sequence.Select(v => new State(v.ToString())).ToList();
         }

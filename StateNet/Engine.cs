@@ -18,11 +18,11 @@ namespace Aptacode.StateNet
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
 
-        public Engine(INetwork network)
+        public Engine(IRandomNumberGenerator randomNumberGenerator, INetwork network)
         {
             _network = network;
             _history = new List<State>();
-            _stateChooser = new StateChooser(_history);
+            _stateChooser = new StateChooser(randomNumberGenerator, _history);
             _callbackDictionary = new Dictionary<State, List<Action>>();
             _inputQueue = new ConcurrentQueue<string>();
             cancellationTokenSource = new CancellationTokenSource();

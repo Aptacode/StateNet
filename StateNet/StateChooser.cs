@@ -1,46 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet
 {
     public class StateChooser
     {
-        private static readonly Random RandomGenerator = new Random();
-        private readonly List<State> _history;
+        private readonly IRandomNumberGenerator _randomNumberGenerator;
+        private readonly List<State> _stateHistory;
 
-        public StateChooser(List<State> history)
+        public StateChooser(IRandomNumberGenerator randomNumberGenerator, List<State> stateHistory)
         {
-            _history = history;
+            _randomNumberGenerator = randomNumberGenerator;
+            _stateHistory = stateHistory;
         }
 
-        internal State Choose(StateDistribution connections)
+        /// <summary>
+        /// Chooses the next state based on the given StateDistribution
+        /// </summary>
+        /// <param name="connections"></param>
+        /// <returns></returns>
+        public State Choose(StateDistribution connections)
         {
-            var totalWeight = TotalWeight(connections);
+            var connectionWeights = GetConnectionWeights(connections).ToList();
 
+            //If the total weight is 0 no state can be entered
+            var totalWeight = TotalWeight(connectionWeights);
             if (totalWeight == 0)
             {
                 return null;
             }
 
-            var randomChoice = RandomGenerator.Next(1, totalWeight + 1);
+            //Get a random number between 1 and the totalWeight + 1
+            var choice = _randomNumberGenerator.Generate(1, totalWeight + 1);
 
-            var weightSum = 0;
-            foreach (var keyValue in connections.GetAll())
+            //Loop over each connection weight pair keeping a tally of the weight of each connection passed
+            //Return the state where weightCounter >= choice
+            using (var iterator = connectionWeights.GetEnumerator())
             {
-                weightSum += keyValue.Value.GetConnectionWeight(_history);
-                if (weightSum >= randomChoice)
+                var weightCounter = 0;
+                while (weightCounter < choice && iterator.MoveNext())
                 {
-                    return keyValue.Key;
+                    weightCounter += iterator.Current.Item2;
                 }
+
+                return iterator.Current.Item1;
             }
-
-            return null;
         }
 
-        public int TotalWeight(StateDistribution connections)
-        {
-            return connections.GetWeights().Select(f => f.GetConnectionWeight(_history)).Sum();
-        }
+        /// <summary>
+        /// Calculates the weight of each connections in the StateDistribution given the current state history and returns a list of State,Weight pairs
+        /// </summary>
+        /// <param name="connections"></param>
+        /// <returns></returns>
+        private IEnumerable<(State, int)> GetConnectionWeights(StateDistribution connections) =>
+            connections
+                .GetAll()
+                .Select(f => (f.Key, f.Value.GetConnectionWeight(_stateHistory)));
+
+        /// <summary>
+        /// Calculates the sum of each connection in the given StateDistribution 
+        /// </summary>
+        /// <param name="weights"></param>
+        private int TotalWeight(IEnumerable<(State, int)> weights) => 
+            weights
+                .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);
+
+
+        /// <summary>
+        /// Calculates the sum of each connections weight in the StateDistribution given the current StateHistory
+        /// </summary>
+        /// <param name="connections"></param>
+        /// <returns></returns>
+        public int TotalWeight(StateDistribution connections) => TotalWeight(GetConnectionWeights(connections));
+
+
+
     }
 }
