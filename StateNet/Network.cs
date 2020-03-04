@@ -109,8 +109,6 @@ namespace Aptacode.StateNet
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
             string connectionDescription = "1")
         {
-            var s = ConnectionWeightParser.FromString(connectionDescription);
-
             this[startStateName, actionName].UpdateWeight(GetState(targetStateName),
                 ConnectionWeightParser.FromString(connectionDescription));
         }
@@ -141,8 +139,6 @@ namespace Aptacode.StateNet
                 }
             }
         }
-
-
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
@@ -157,12 +153,20 @@ namespace Aptacode.StateNet
                     continue;
                 }
 
-                stringBuilder.Append('(').Append(connectionGroups[0].Key).Append("->").Append(connectionGroups[0].Value)
+                stringBuilder
+                    .Append('(')
+                    .Append(connectionGroups[0].Key)
+                    .Append("->")
+                    .Append(connectionGroups[0].Value)
                     .AppendLine(")");
                 for (var i = 1; i < connectionGroups.Count; i++)
                 {
-                    stringBuilder.Append(",(").Append(connectionGroups[i].Key).Append("->")
-                        .Append(connectionGroups[i].Value).AppendLine(")");
+                    stringBuilder
+                        .Append(",(")
+                        .Append(connectionGroups[i].Key)
+                        .Append("->")
+                        .Append(connectionGroups[i].Value)
+                        .AppendLine(")");
                 }
             }
 
