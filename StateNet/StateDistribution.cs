@@ -13,12 +13,7 @@ namespace Aptacode.StateNet
 
         public IConnectionWeight this[State node] => _distribution.ContainsKey(node) ? _distribution[node] : null;
 
-        public bool IsInvalid => _distribution.Count == 0;
-
-        public void Invalidate()
-        {
-            Clear();
-        }
+        public bool HasConnections => _distribution.Any(connection => connection.Value.GetConnectionWeight(null) > 0);
 
         public void Clear()
         {

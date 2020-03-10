@@ -33,5 +33,10 @@ namespace Aptacode.StateNet
         {
             return _distributionDictionary.ToList();
         }
+
+        public IEnumerable<string> GetAllActions()
+        {
+            return _distributionDictionary.Keys;
+        }
     }
 }

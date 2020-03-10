@@ -11,10 +11,10 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             get
             {
-                yield return new TestCaseData(0);
-                yield return new TestCaseData(-1);
-                yield return new TestCaseData(1);
-                yield return new TestCaseData(100);
+                yield return new TestCaseData(0, 0);
+                yield return new TestCaseData(-1, 0);
+                yield return new TestCaseData(1, 1);
+                yield return new TestCaseData(100, 100);
             }
         }
 
@@ -22,10 +22,12 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             get
             {
-                yield return new TestCaseData(0, 1);
-                yield return new TestCaseData(-1, 1);
-                yield return new TestCaseData(1, 1);
-                yield return new TestCaseData(100, 1);
+                yield return new TestCaseData(1, 0, 0);
+                yield return new TestCaseData(1, -1, 0);
+                yield return new TestCaseData(0, 1, 1);
+                yield return new TestCaseData(-1, 1, 1);
+                yield return new TestCaseData(1, 1, 1);
+                yield return new TestCaseData(100, 1, 1);
             }
         }
 
@@ -42,9 +44,9 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
 
         [Test]
         [TestCaseSource(nameof(ChangingSetWeightTestCases))]
-        public void GetWeight_Returns_ConstructorWeight(int setWeight)
+        public void GetWeight_Returns_ConstructorWeight(int setWeight, int expectedValue)
         {
-            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetConnectionWeight(null));
+            Assert.AreEqual(expectedValue, new StaticWeight(setWeight).GetConnectionWeight(null));
         }
 
         [Test]
@@ -56,11 +58,11 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
 
         [Test]
         [TestCaseSource(nameof(ChangingWeightTestCases))]
-        public void SetWeight_Overwrites_ConstructorWeight(int initialWeight, int setWeight)
+        public void SetWeight_Overwrites_ConstructorWeight(int initialWeight, int setWeight, int expectedValue)
         {
             var connectionWeight = new StaticWeight(initialWeight);
             connectionWeight.Weight = setWeight;
-            Assert.AreEqual(setWeight, connectionWeight.GetConnectionWeight(null));
+            Assert.AreEqual(expectedValue, connectionWeight.GetConnectionWeight(null));
         }
     }
 }

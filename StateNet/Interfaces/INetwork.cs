@@ -14,5 +14,8 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<State> GetEndStates();
 
         bool IsValid();
+
+        IEnumerable<string> GetAllActions();
+        IEnumerable<string> GetAllActions(State state);
     }
 }

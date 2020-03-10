@@ -10,7 +10,7 @@ namespace Aptacode.StateNet
         private readonly List<State> _stateHistory;
 
         /// <summary>
-        /// Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
+        ///     Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
         /// <param name="stateHistory"></param>
@@ -21,7 +21,7 @@ namespace Aptacode.StateNet
         }
 
         /// <summary>
-        /// Return the next state based on the given StateDistribution and the current StateHistory
+        ///     Return the next state based on the given StateDistribution and the current StateHistory
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>

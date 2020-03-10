@@ -6,6 +6,11 @@ namespace Aptacode.StateNet.ConnectionWeight
 {
     public class VisitCountWeight : IConnectionWeight
     {
+        private int _equalToWeight;
+        private int _greaterThenWeight;
+
+        private int _lessThenWeight;
+
         /// <summary>
         ///     Determines the probabilistic weight of a transition depending on the number of times the engine has visited a given
         ///     state
@@ -38,17 +43,32 @@ namespace Aptacode.StateNet.ConnectionWeight
         /// <summary>
         ///     The weight returned if the TotalVisitCount is less then the ComparisonVisitCount
         /// </summary>
-        public int LessThenWeight { get; set; }
+        /// private int _weight;
+        public int LessThenWeight
+        {
+            get => _lessThenWeight;
+            set => _lessThenWeight = value >= 0 ? value : 0;
+        }
 
         /// <summary>
         ///     The weight returned if the TotalVisitCount equals the ComparisonVisitCount
         /// </summary>
-        public int EqualToWeight { get; set; }
+        /// private int _weight;
+        public int EqualToWeight
+        {
+            get => _equalToWeight;
+            set => _equalToWeight = value >= 0 ? value : 0;
+        }
 
         /// <summary>
         ///     The weight returned if the TotalVisitCount is greater then the ComparisonVisitCount
         /// </summary>
-        public int GreaterThenWeight { get; set; }
+        /// private int _weight;
+        public int GreaterThenWeight
+        {
+            get => _greaterThenWeight;
+            set => _greaterThenWeight = value >= 0 ? value : 0;
+        }
 
         /// <summary>
         ///     Returns the ConnectionWeight based on the stateHistory

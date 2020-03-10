@@ -12,12 +12,11 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
             get
             {
                 yield return new TestCaseData("StaticWeight:0", StateHistoryGenerator.Generate(), 0);
-                yield return new TestCaseData("StaticWeight:-1", StateHistoryGenerator.Generate(), -1);
+                yield return new TestCaseData("StaticWeight:-1", StateHistoryGenerator.Generate(), 0);
                 yield return new TestCaseData("StaticWeight:1", StateHistoryGenerator.Generate(), 1);
                 yield return new TestCaseData("StaticWeight:10", StateHistoryGenerator.Generate(), 10);
                 yield return new TestCaseData("0", StateHistoryGenerator.Generate(), 0);
                 yield return new TestCaseData("1", StateHistoryGenerator.Generate(), 1);
-                yield return new TestCaseData("-10", StateHistoryGenerator.Generate(), -10);
             }
         }
 

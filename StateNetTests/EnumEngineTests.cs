@@ -46,13 +46,13 @@ namespace Aptacode.StateNet.Tests
                 }
                 else
                 {
-                    network[States.Ready, Actions.Play].Invalidate();
+                    network[States.Ready, Actions.Play].Clear();
                 }
             };
-            network[States.Ready, Actions.Pause].Invalidate();
+            network[States.Ready, Actions.Pause].Clear();
             network[States.Ready, Actions.Stop].Always(stopped);
 
-            network[States.Playing, Actions.Play].Invalidate();
+            network[States.Playing, Actions.Play].Clear();
             network[States.Playing, Actions.Pause].Always(paused);
             network[States.Playing, Actions.Stop].Always(stopped);
 
@@ -64,15 +64,15 @@ namespace Aptacode.StateNet.Tests
                 }
                 else
                 {
-                    network[States.Paused, Actions.Play].Invalidate();
+                    network[States.Paused, Actions.Play].Clear();
                 }
             };
-            network[States.Paused, Actions.Pause].Invalidate();
+            network[States.Paused, Actions.Pause].Clear();
             network[States.Paused, Actions.Stop].Always(stopped);
 
-            network[States.Stopped, Actions.Play].Invalidate();
-            network[States.Stopped, Actions.Pause].Invalidate();
-            network[States.Stopped, Actions.Stop].Invalidate();
+            network[States.Stopped, Actions.Play].Clear();
+            network[States.Stopped, Actions.Pause].Clear();
+            network[States.Stopped, Actions.Stop].Clear();
             return network;
         }
 

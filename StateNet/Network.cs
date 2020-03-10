@@ -47,6 +47,18 @@ namespace Aptacode.StateNet
             return _states.Select(keyValue => keyValue.Value);
         }
 
+        public IEnumerable<string> GetAllActions()
+        {
+            return _connections.Values
+                .Select(connectionGroup => connectionGroup.GetAllActions())
+                .Aggregate((a,b) => a.Concat(b));
+        }
+
+        public IEnumerable<string> GetAllActions(State state)
+        {
+            return _connections[state].GetAllActions();
+        }
+
         public IEnumerable<State> GetEndStates()
         {
             return _states.Select(keyValue => keyValue.Value).Where(IsEndNode);
@@ -103,7 +115,7 @@ namespace Aptacode.StateNet
 
         public bool IsEndNode(State state)
         {
-            return GetConnection(state).GetAllDistributions().All(chooser => chooser.IsInvalid);
+            return GetConnection(state).GetAllDistributions().All(chooser => !chooser.HasConnections);
         }
 
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,

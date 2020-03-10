@@ -28,6 +28,13 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
                     "2 visits equals comparison return 20");
                 yield return new TestCaseData(1, 2, 10, 20, 30, StateHistoryGenerator.Generate(1, 2, 1, 2, 1), 30,
                     "3 visits greater then comparison return 30");
+
+                yield return new TestCaseData(1, 1, -1, -1, -1, StateHistoryGenerator.Generate(), 0,
+                    "Should round negative weight to 0");
+                yield return new TestCaseData(1, 1, -1, -1, -1, StateHistoryGenerator.Generate(1), 0,
+                    "Should round negative weight to 0");
+                yield return new TestCaseData(1, 1, -1, -1, -1, StateHistoryGenerator.Generate(1, 1), 0,
+                    "Should round negative weight to 0");
             }
         }
 
