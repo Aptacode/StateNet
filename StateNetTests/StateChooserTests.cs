@@ -11,12 +11,12 @@ namespace Aptacode.StateNet.Tests
         {
             get
             {
-                yield return new TestCaseData(StateDistributionGenerator.Generate(), 0,
+                yield return new TestCaseData(ConnectionGenerator.Generate(), 0,
                     "An empty distribution should return 0 weight");
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1), 1, "Total Weight = 1");
-                yield return new TestCaseData(StateDistributionGenerator.Generate(0, 1), 1, "Total Weight = 1");
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, 2), 3, "Total Weight = 3");
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, -1), 1,
+                yield return new TestCaseData(ConnectionGenerator.Generate(1), 1, "Total Weight = 1");
+                yield return new TestCaseData(ConnectionGenerator.Generate(0, 1), 1, "Total Weight = 1");
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, 2), 3, "Total Weight = 3");
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, -1), 1,
                     "Negative weights should count as 0");
             }
         }
@@ -25,10 +25,10 @@ namespace Aptacode.StateNet.Tests
         {
             get
             {
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, 1, 1), 1, 0);
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, 1, 1), 2, 1);
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, 1, 1), 3, 2);
-                yield return new TestCaseData(StateDistributionGenerator.Generate(1, 2, 1), 3, 1);
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, 1, 1), 1, 0);
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, 1, 1), 2, 1);
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, 1, 1), 3, 2);
+                yield return new TestCaseData(ConnectionGenerator.Generate(1, 2, 1), 3, 1);
             }
         }
 
@@ -45,7 +45,8 @@ namespace Aptacode.StateNet.Tests
 
         [Test]
         [TestCaseSource(nameof(NodeChooserChoiceTestCases))]
-        public void NodeChooser_ChooseValue(IEnumerable<Connection> connectionDistribution, int weight,
+        public void NodeChooser_ChooseValue(IEnumerable<Connection> connectionDistribution,
+            int weight,
             int expectedChoice)
         {
             Assert.AreEqual(expectedChoice.ToString(),

@@ -1,5 +1,6 @@
 ﻿using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Persistence.JSon;
+using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
@@ -22,6 +23,18 @@ namespace Aptacode.StateNet.Tests
 
             var jsonString = NetworkToJSon.ToJson(inputNetwork);
             var outputNetwork = NetworkToJSon.FromJSon(jsonString);
+
+            Assert.AreEqual(inputNetwork.ToString(), outputNetwork.ToString());
+        }
+
+        [Test]
+        public void CanSaveAndLoadNetworkFromFile()
+        {
+            var inputNetwork = new DummyNetwork();
+
+            var serializer = new NetworkJsonSerializer("./test.json");
+            serializer.Write(inputNetwork);
+            var outputNetwork = serializer.Read();
 
             Assert.AreEqual(inputNetwork.ToString(), outputNetwork.ToString());
         }

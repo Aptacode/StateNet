@@ -36,7 +36,7 @@ namespace Aptacode.StateNet
                 var connectionInfo = (ConnectionAttribute) attribute;
                 field.TryGetValue(this, out State state);
 
-                AddNewConnection(state.Name, connectionInfo.ActionName, connectionInfo.TargetName,
+                AddNewConnection(state.Name, connectionInfo.InputName, connectionInfo.TargetName,
                     connectionInfo.ConnectionDescription);
             });
         }
@@ -85,7 +85,7 @@ namespace Aptacode.StateNet
         {
             return Connections
                 .Where(connection => connection.From == state)
-                .Select(connection => Inputs[connection.Input])
+                .Select(connection => GetInput(connection.Input))
                 .Distinct();
         }
 
@@ -309,6 +309,23 @@ namespace Aptacode.StateNet
         public override bool Equals(object obj)
         {
             return obj is INetwork other && Equals(other);
+        }
+
+        public void Remove(State state)
+        {
+            States.Remove(state);
+
+            var connections = Connections.Where(connection => connection.From == state || connection.To == state)
+                .ToList();
+            connections.ForEach(connection => Connections.Remove(connection));
+        }
+
+        public void Remove(Input input)
+        {
+            Inputs.Remove(input);
+
+            var connections = Connections.Where(connection => connection.Input == input).ToList();
+            connections.ForEach(connection => Connections.Remove(connection));
         }
     }
 }

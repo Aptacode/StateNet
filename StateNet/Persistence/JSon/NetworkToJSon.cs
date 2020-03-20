@@ -13,7 +13,6 @@ namespace Aptacode.StateNet.Persistence.JSon
         public static readonly string InputsPropertyName = "Inputs";
         public static readonly string ConnectionsPropertyName = "Connections";
 
-
         public static Network FromJSon(string jsonInput)
         {
             var network = new Network();
@@ -44,10 +43,10 @@ namespace Aptacode.StateNet.Persistence.JSon
         {
             var jObject = new JObject();
 
-            jObject.Add(StartStatePropertyName, JsonConvert.SerializeObject(network.StartState));
-            jObject.Add(StatesPropertyName, JsonConvert.SerializeObject(network.GetStates()));
-            jObject.Add(InputsPropertyName, JsonConvert.SerializeObject(network.GetInputs()));
-            jObject.Add(ConnectionsPropertyName, JsonConvert.SerializeObject(network.GetConnections()));
+            jObject.Add(StartStatePropertyName, JToken.FromObject(network.StartState));
+            jObject.Add(StatesPropertyName, JToken.FromObject(network.GetStates()));
+            jObject.Add(InputsPropertyName, JToken.FromObject(network.GetInputs()));
+            jObject.Add(ConnectionsPropertyName, JToken.FromObject(network.GetConnections()));
 
             return jObject.ToString(Formatting.Indented);
         }
