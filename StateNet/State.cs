@@ -40,6 +40,11 @@ namespace Aptacode.StateNet
             return Name;
         }
 
+        public static implicit operator string(State instance)
+        {
+            return instance?.Name;
+        }
+
         #region Overrides
 
         public override int GetHashCode()

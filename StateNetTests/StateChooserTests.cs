@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
@@ -33,21 +34,23 @@ namespace Aptacode.StateNet.Tests
 
         [Test]
         [TestCaseSource(nameof(NodeChooserTotalWeightTestCases))]
-        public void NodeChooser_TotalWeight(StateDistribution stateDistribution, int expectedValue, string message = "")
+        public void NodeChooser_TotalWeight(IEnumerable<Connection> connectionDistribution, int expectedValue,
+            string message = "")
         {
             Assert.AreEqual(expectedValue,
                 new StateChooser(new DummyRandomNumberGenerator(), StateHistoryGenerator.Generate()).TotalWeight(
-                    stateDistribution), message);
+                    connectionDistribution), message);
         }
 
 
         [Test]
         [TestCaseSource(nameof(NodeChooserChoiceTestCases))]
-        public void NodeChooser_ChooseValue(StateDistribution stateDistribution, int weight, int expectedChoice)
+        public void NodeChooser_ChooseValue(IEnumerable<Connection> connectionDistribution, int weight,
+            int expectedChoice)
         {
             Assert.AreEqual(expectedChoice.ToString(),
                 new StateChooser(new DummyRandomNumberGenerator(weight), StateHistoryGenerator.Generate())
-                    .Choose(stateDistribution).Name, "Should choose the correct choice");
+                    .Choose(connectionDistribution), "Should choose the correct choice");
         }
     }
 }

@@ -109,7 +109,7 @@ namespace Aptacode.StateNet
 
         private void SubscribeToNodesVisited()
         {
-            foreach (var node in _network.GetAll())
+            foreach (var node in _network.GetStates())
             {
                 node.OnVisited += sender =>
                 {
@@ -156,7 +156,8 @@ namespace Aptacode.StateNet
 
         private State GetNextState(State state, string actionName)
         {
-            return _stateChooser.Choose(_network[state, actionName]);
+            var stateName = _stateChooser.Choose(_network[state, actionName]);
+            return _network[stateName];
         }
     }
 }

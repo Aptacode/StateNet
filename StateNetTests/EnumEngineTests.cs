@@ -1,24 +1,10 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Random;
+using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
-    public enum States
-    {
-        Ready,
-        Playing,
-        Paused,
-        Stopped
-    }
-
-    public enum Actions
-    {
-        Play,
-        Pause,
-        Stop
-    }
-
     public class EnumEngineTests
     {
         private bool canPlay;
@@ -27,52 +13,52 @@ namespace Aptacode.StateNet.Tests
         private State ready;
         private State stopped;
 
-        private EnumNetwork<States, Actions> GetTestNetwork()
+        private EnumNetwork<DummyStates.States, DummyActions.Actions> GetTestNetwork()
         {
-            var network = new EnumNetwork<States, Actions>();
+            var network = new EnumNetwork<DummyStates.States, DummyActions.Actions>();
 
-            ready = network[States.Ready];
-            playing = network[States.Playing];
-            paused = network[States.Paused];
-            stopped = network[States.Stopped];
+            ready = network[DummyStates.States.Ready];
+            playing = network[DummyStates.States.Playing];
+            paused = network[DummyStates.States.Paused];
+            stopped = network[DummyStates.States.Stopped];
 
-            network.StartState = ready;
+            network.SetStart(ready);
 
             ready.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {
-                    network[States.Ready, Actions.Play].Always(playing);
+                    network.Always(DummyStates.States.Ready, DummyActions.Actions.Play, DummyStates.States.Playing);
                 }
                 else
                 {
-                    network[States.Ready, Actions.Play].Clear();
+                    network.Clear(DummyStates.States.Ready, DummyActions.Actions.Play);
                 }
             };
-            network[States.Ready, Actions.Pause].Clear();
-            network[States.Ready, Actions.Stop].Always(stopped);
+            network.Clear(DummyStates.States.Ready, DummyActions.Actions.Pause);
+            network.Always(DummyStates.States.Ready, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
-            network[States.Playing, Actions.Play].Clear();
-            network[States.Playing, Actions.Pause].Always(paused);
-            network[States.Playing, Actions.Stop].Always(stopped);
+            network.Clear(DummyStates.States.Playing, DummyActions.Actions.Play);
+            network.Always(DummyStates.States.Playing, DummyActions.Actions.Pause, DummyStates.States.Paused);
+            network.Always(DummyStates.States.Playing, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
             paused.OnUpdateConnections += delegate
             {
                 if (canPlay)
                 {
-                    network[States.Paused, Actions.Play].Always(playing);
+                    network.Always(DummyStates.States.Paused, DummyActions.Actions.Play, DummyStates.States.Playing);
                 }
                 else
                 {
-                    network[States.Paused, Actions.Play].Clear();
+                    network.Clear(DummyStates.States.Paused, DummyActions.Actions.Play);
                 }
             };
-            network[States.Paused, Actions.Pause].Clear();
-            network[States.Paused, Actions.Stop].Always(stopped);
+            network.Clear(DummyStates.States.Paused, DummyActions.Actions.Pause);
+            network.Always(DummyStates.States.Paused, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
-            network[States.Stopped, Actions.Play].Clear();
-            network[States.Stopped, Actions.Pause].Clear();
-            network[States.Stopped, Actions.Stop].Clear();
+            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Play);
+            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Pause);
+            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Stop);
             return network;
         }
 
@@ -82,13 +68,14 @@ namespace Aptacode.StateNet.Tests
             canPlay = true;
             var network = GetTestNetwork();
 
-            var engine = new EnumEngine<States, Actions>(new SystemRandomNumberGenerator(), network);
+            var engine =
+                new EnumEngine<DummyStates.States, DummyActions.Actions>(new SystemRandomNumberGenerator(), network);
 
             engine.Start();
-            engine.Apply(Actions.Play);
-            engine.Apply(Actions.Pause);
-            engine.Apply(Actions.Play);
-            engine.Apply(Actions.Stop);
+            engine.Apply(DummyActions.Actions.Play);
+            engine.Apply(DummyActions.Actions.Pause);
+            engine.Apply(DummyActions.Actions.Play);
+            engine.Apply(DummyActions.Actions.Stop);
 
             var expectedLog = new List<State> {ready, playing, paused, playing, stopped};
 

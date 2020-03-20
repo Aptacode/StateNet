@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.ConnectionWeight;
+using Aptacode.StateNet.Connections.Weights;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
@@ -46,7 +46,7 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         public void ConnectionWeightParser_FromString_ReturnsExpectedWeight_GivenHistory(string input,
             List<State> stateHistory, int expectedWeight)
         {
-            Assert.AreEqual(expectedWeight, ConnectionWeightParser.FromString(input).GetConnectionWeight(stateHistory));
+            Assert.AreEqual(expectedWeight, ConnectionWeightParser.FromString(input).GetWeight(stateHistory));
         }
     }
 }

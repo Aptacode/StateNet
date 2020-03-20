@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Aptacode.StateNet.Connections;
 
 namespace Aptacode.StateNet
 {
@@ -6,45 +8,34 @@ namespace Aptacode.StateNet
         where TStates : Enum
         where TActions : Enum
     {
-        public State this[TStates state] => GetNode(state);
+        public State this[TStates state] => this[state.ToString()];
 
-        public StateDistribution this[TStates state, TActions action] => this[state.ToString(), action.ToString()];
+        public IEnumerable<Connection> this[TStates state, TActions action] =>
+            this[state.ToString(), action.ToString()];
 
-        public void Set(
-            TStates source,
-            TActions action,
-            TStates target)
+        public State GetState(TStates state, bool createIfMissing = true)
         {
-            var targetNode = GetNode(target);
-
-            this[source.ToString(), action.ToString()].Always(targetNode);
+            return GetState(state.ToString(), createIfMissing);
         }
 
-        public void Set(TStates source, TActions action, params (TStates, int)[] targetChoices)
+        public void Always(TStates fromState, TActions action, TStates toState)
         {
-            foreach (var (states, item2) in targetChoices)
-            {
-                var targetNode = GetNode(states);
-                this[source.ToString(), action.ToString()].UpdateWeight(targetNode, item2);
-            }
+            Always(fromState.ToString(), action.ToString(), toState.ToString());
         }
 
-        public void UpdateWeight(TStates source, TActions action, TStates targetState, int targetWeight)
+        public void Clear(TStates fromState, TActions action, TStates toState)
         {
-            this[source.ToString(), action.ToString()].UpdateWeight(GetNode(targetState), targetWeight);
+            Clear(fromState.ToString(), action.ToString(), toState.ToString());
         }
 
-        public State GetNode(TStates state)
+        public void Clear(TStates fromState, TActions action)
         {
-            if (_states.TryGetValue(state.ToString(), out var node))
-            {
-                return node;
-            }
+            Clear(fromState.ToString(), action.ToString());
+        }
 
-            node = new State(state.ToString());
-            _states.Add(state.ToString(), node);
-
-            return node;
+        public void Clear(TStates fromState)
+        {
+            Clear(fromState.ToString());
         }
     }
 }

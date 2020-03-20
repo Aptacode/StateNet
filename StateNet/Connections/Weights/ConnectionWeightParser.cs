@@ -1,6 +1,4 @@
-﻿using Aptacode.StateNet.Interfaces;
-
-namespace Aptacode.StateNet.ConnectionWeight
+﻿namespace Aptacode.StateNet.Connections.Weights
 {
     public static class ConnectionWeightParser
     {
@@ -13,7 +11,7 @@ namespace Aptacode.StateNet.ConnectionWeight
         /// </summary>
         /// <param name="description"></param>
         /// <returns></returns>
-        public static IConnectionWeight FromString(string description)
+        public static ConnectionWeight FromString(string description)
         {
             //If the description is just an integer parse and return it as static weight
             if (int.TryParse(description, out var weight))
@@ -33,12 +31,12 @@ namespace Aptacode.StateNet.ConnectionWeight
             }
         }
 
-        public static IConnectionWeight DefaultWeight()
+        public static ConnectionWeight DefaultWeight()
         {
             return new StaticWeight(0);
         }
 
-        public static IConnectionWeight ParseStaticWeight(string description)
+        public static ConnectionWeight ParseStaticWeight(string description)
         {
             var parameters = GetConnectionWeightParameters(description);
             if (parameters.Length == 0)
@@ -50,7 +48,7 @@ namespace Aptacode.StateNet.ConnectionWeight
             return new StaticWeight(weight);
         }
 
-        public static IConnectionWeight ParseVisitCountWeight(string description)
+        public static ConnectionWeight ParseVisitCountWeight(string description)
         {
             var parameters = GetConnectionWeightParameters(description);
             if (parameters.Length >= 5 &&

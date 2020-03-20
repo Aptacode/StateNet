@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Interfaces;
 
-namespace Aptacode.StateNet.ConnectionWeight
+namespace Aptacode.StateNet.Connections.Weights
 {
-    public class VisitCountWeight : IConnectionWeight
+    public class VisitCountWeight : ConnectionWeight
     {
         private int _equalToWeight;
         private int _greaterThenWeight;
 
         private int _lessThenWeight;
+
+        public VisitCountWeight()
+        {
+            State = null;
+            ComparisonVisitCount = 0;
+            LessThenWeight = 0;
+            EqualToWeight = 0;
+            GreaterThenWeight = 0;
+        }
 
         /// <summary>
         ///     Determines the probabilistic weight of a transition depending on the number of times the engine has visited a given
@@ -70,12 +78,14 @@ namespace Aptacode.StateNet.ConnectionWeight
             set => _greaterThenWeight = value >= 0 ? value : 0;
         }
 
+        public override string TypeName => nameof(VisitCountWeight);
+
         /// <summary>
         ///     Returns the ConnectionWeight based on the stateHistory
         /// </summary>
         /// <param name="stateHistory"></param>
         /// <returns></returns>
-        public int GetConnectionWeight(List<State> stateHistory)
+        public override int GetWeight(List<State> stateHistory)
         {
             var nodeCount = GetTotalVisitCount(stateHistory);
 
@@ -84,12 +94,12 @@ namespace Aptacode.StateNet.ConnectionWeight
                 return GreaterThenWeight;
             }
 
-            if (nodeCount < ComparisonVisitCount)
-            {
-                return LessThenWeight;
-            }
+            return nodeCount < ComparisonVisitCount ? LessThenWeight : EqualToWeight;
+        }
 
-            return EqualToWeight;
+        public override string ToString()
+        {
+            return $"{TypeName}:{State},{ComparisonVisitCount},{LessThenWeight},{EqualToWeight},{GreaterThenWeight}";
         }
 
         /// <summary>
@@ -100,6 +110,22 @@ namespace Aptacode.StateNet.ConnectionWeight
         public int GetTotalVisitCount(List<State> history)
         {
             return history?.Count(n => n.Name == State) ?? 0;
+        }
+
+        public override int GetHashCode()
+        {
+            return (State, LessThenWeight, EqualToWeight, GreaterThenWeight).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is VisitCountWeight other && Equals(other);
+        }
+
+        public bool Equals(VisitCountWeight other)
+        {
+            return other != null && State.Equals(other.State) && LessThenWeight.Equals(other.LessThenWeight) &&
+                   EqualToWeight.Equals(other.EqualToWeight) && GreaterThenWeight.Equals(other.GreaterThenWeight);
         }
     }
 }

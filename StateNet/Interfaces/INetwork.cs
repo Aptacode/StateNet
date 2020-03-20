@@ -1,21 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Aptacode.StateNet.Connections;
 
 namespace Aptacode.StateNet.Interfaces
 {
-    public interface INetwork
+    public interface INetwork : IEquatable<INetwork>
     {
-        State StartState { get; set; }
+        List<Connection> Connections { get; }
+
+        State StartState { get; }
 
         State this[string state] { get; }
-        StateDistribution this[string state, string action] { get; }
-        StateDistribution this[State state, string action] { get; }
-        IEnumerable<State> GetAll();
+        IEnumerable<Connection> this[string state, string action] { get; }
+        Connection this[string fromState, string action, string toState] { get; set; }
+        void SetStart(string state);
+
+
+        IEnumerable<State> GetStates();
 
         IEnumerable<State> GetEndStates();
 
         bool IsValid();
+        IEnumerable<Input> GetInputs();
+        IEnumerable<Input> GetInputs(string state);
 
-        IEnumerable<string> GetAllActions();
-        IEnumerable<string> GetAllActions(State state);
+        IEnumerable<Connection> GetConnections();
     }
 }

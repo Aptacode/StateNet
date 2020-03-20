@@ -16,7 +16,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         {
             //Arrange
             var network = new TwoStateStartToEndNetwork();
-            var states = new List<State>(network.GetAll());
+            var states = new List<State>(network.GetStates());
 
             Assert.AreEqual(2, states.Count);
             Assert.AreEqual("Start", network.StartTestState.Name);
@@ -26,7 +26,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             var newState = network.GetState("NewState");
 
             //Assert
-            Assert.AreEqual(3, network.GetAll().Count());
+            Assert.AreEqual(3, network.GetStates().Count());
             Assert.AreEqual("NewState", newState.Name);
         }
 
@@ -36,7 +36,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         {
             //Arrange
             var network = new TwoStateStartToEndNetwork();
-            var states = new List<State>(network.GetAll());
+            var states = new List<State>(network.GetStates());
 
             //Act
             var newState = network.GetState("NewState");

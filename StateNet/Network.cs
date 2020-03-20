@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Aptacode.StateNet.Attributes;
-using Aptacode.StateNet.ConnectionWeight;
+using Aptacode.StateNet.Connections;
+using Aptacode.StateNet.Connections.Weights;
 using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
 
@@ -12,8 +13,8 @@ namespace Aptacode.StateNet
 {
     public class Network : INetwork
     {
-        private readonly Dictionary<State, ConnectionGroup> _connections = new Dictionary<State, ConnectionGroup>();
-        protected readonly Dictionary<string, State> _states = new Dictionary<string, State>();
+        protected readonly Dictionary<string, Input> Inputs = new Dictionary<string, Input>();
+        protected readonly Dictionary<string, State> States = new Dictionary<string, State>();
 
         public Network()
         {
@@ -40,28 +41,64 @@ namespace Aptacode.StateNet
             });
         }
 
-        public ConnectionGroup this[State node] => GetConnection(node);
 
-        public IEnumerable<State> GetAll()
+        public IEnumerable<Connection> this[State state] =>
+            Connections.Where(connection => connection.From == GetState(state));
+
+        public List<Connection> Connections { get; } = new List<Connection>();
+
+        public IEnumerable<Connection> this[string fromState, string action] =>
+            Connections.Where(connection =>
+                connection.From == GetState(fromState) && connection.Input == GetInput(action));
+
+        public Connection this[string fromState, string action, string toState]
         {
-            return _states.Select(keyValue => keyValue.Value);
+            get
+            {
+                return Connections.FirstOrDefault(connection =>
+                    connection.From == GetState(fromState) && connection.Input == GetInput(action) &&
+                    connection.To == GetState(toState));
+            }
+            set
+            {
+                var oldConnection = this[fromState, action, toState];
+                if (oldConnection != null)
+                {
+                    Connections.Remove(oldConnection);
+                }
+
+                Connections.Add(value);
+            }
         }
 
-        public IEnumerable<string> GetAllActions()
+        public IEnumerable<State> GetStates()
         {
-            return _connections.Values
-                .Select(connectionGroup => connectionGroup.GetAllActions())
-                .Aggregate((a,b) => a.Concat(b));
+            return States.Values.OrderBy(state => state.Name);
         }
 
-        public IEnumerable<string> GetAllActions(State state)
+        public IEnumerable<Input> GetInputs()
         {
-            return _connections[state].GetAllActions();
+            return Inputs.Values.OrderBy(input => input.Name);
+        }
+
+        public IEnumerable<Input> GetInputs(string state)
+        {
+            return Connections
+                .Where(connection => connection.From == state)
+                .Select(connection => Inputs[connection.Input])
+                .Distinct();
+        }
+
+        public IEnumerable<Connection> GetConnections()
+        {
+            return Connections.OrderBy(c => c.From)
+                .ThenBy(c => c.Input)
+                .ThenBy(c => c.To);
         }
 
         public IEnumerable<State> GetEndStates()
         {
-            return _states.Select(keyValue => keyValue.Value).Where(IsEndNode);
+            return States.Values.Where(state => !Connections.Exists(connection => connection.From == state.Name));
         }
 
         public bool IsValid()
@@ -69,17 +106,25 @@ namespace Aptacode.StateNet
             return GetEndStates().Any();
         }
 
-        public State StartState { get; set; }
+        public State StartState { get; private set; }
+
+        public void SetStart(string state)
+        {
+            StartState = GetState(state);
+        }
 
         public State this[string state] => GetState(state);
 
-        public StateDistribution this[string state, string action] => GetConnection(GetState(state))[action];
-
-        public StateDistribution this[State state, string action] => GetConnection(state)[action];
+        public bool Equals(INetwork other)
+        {
+            return other != null && GetInputs().SequenceEqual(other.GetInputs()) &&
+                   GetStates().SequenceEqual(other.GetStates()) && Connections.SequenceEqual(other.Connections) &&
+                   StartState.Equals(other.StartState);
+        }
 
         public State GetState(string name, bool createIfMissing = true)
         {
-            if (_states.TryGetValue(name, out var node))
+            if (States.TryGetValue(name, out var node))
             {
                 return node;
             }
@@ -90,38 +135,33 @@ namespace Aptacode.StateNet
             }
 
             node = new State(name);
-            _states.Add(name, node);
+            States.Add(name, node);
 
             return node;
         }
 
-        public ConnectionGroup GetConnection(State node, bool createIfMissing = true)
+        public Input GetInput(string name)
         {
-            if (_connections.TryGetValue(node, out var connectionGroup))
+            if (Inputs.TryGetValue(name, out var input))
             {
-                return connectionGroup;
+                return input;
             }
 
-            if (!createIfMissing)
-            {
-                return null;
-            }
+            input = new Input(name);
+            Inputs.Add(name, input);
 
-            connectionGroup = new ConnectionGroup();
-            _connections.Add(node, connectionGroup);
-
-            return connectionGroup;
+            return input;
         }
 
         public bool IsEndNode(State state)
         {
-            return GetConnection(state).GetAllDistributions().All(chooser => !chooser.HasConnections);
+            return !this[state].Any();
         }
 
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
             string connectionDescription = "1")
         {
-            this[startStateName, actionName].UpdateWeight(GetState(targetStateName),
+            Connect(startStateName, actionName, targetStateName,
                 ConnectionWeightParser.FromString(connectionDescription));
         }
 
@@ -152,38 +192,123 @@ namespace Aptacode.StateNet
             }
         }
 
+        public State CreateState(string name)
+        {
+            return GetState(name);
+        }
+
+        public Input CreateInput(string name)
+        {
+            return GetInput(name);
+        }
+
+        public void Connect(Connection connection)
+        {
+            this[connection.From, connection.Input, connection.To] = connection;
+        }
+
+        public void Connect(string fromState, string action, string toState, ConnectionWeight weight = null)
+        {
+            weight = weight ?? new StaticWeight(1);
+
+            this[fromState, action, toState] = new Connection(fromState, action, toState, weight);
+        }
+
+        public void Clear(string fromState = null, string action = null, string toState = null)
+        {
+            var connectionsToRemove = new List<Connection>();
+            if (string.IsNullOrEmpty(fromState))
+            {
+                connectionsToRemove.AddRange(Connections);
+            }
+            else if (string.IsNullOrEmpty(action))
+            {
+                connectionsToRemove.AddRange(this[GetState(fromState)]);
+            }
+            else if (string.IsNullOrEmpty(toState))
+            {
+                connectionsToRemove.AddRange(this[fromState, action]);
+            }
+            else
+            {
+                connectionsToRemove.Add(this[fromState, action, toState]);
+            }
+
+            connectionsToRemove.ForEach(connection => Connections.Remove(connection));
+        }
+
+        public void Always(string fromState, string action, string toState)
+        {
+            Clear(fromState, action);
+            Connect(fromState, action, toState, new StaticWeight(1));
+        }
+
+        public void SetDistribution(string fromState, string action, params (string, int)[] choices)
+        {
+            Clear(fromState, action);
+            UpdateDistribution(fromState, action, choices);
+        }
+
+        public void SetDistribution(string fromState, string action, params (string, ConnectionWeight)[] choices)
+        {
+            Clear(fromState, action);
+            UpdateDistribution(fromState, action, choices);
+        }
+
+        public void UpdateDistribution(string fromState, string action, params (string, int)[] choices)
+        {
+            var connectionWeights = choices
+                .Select(c => (c.Item1, new StaticWeight(c.Item2) as ConnectionWeight))
+                .ToArray();
+            UpdateDistribution(fromState, action, connectionWeights);
+        }
+
+        public void UpdateDistribution(string fromState, string action,
+            params (string, ConnectionWeight)[] choices)
+        {
+            foreach (var (toState, weight) in choices)
+            {
+                Clear(fromState, action, toState);
+                Connect(fromState, action, toState, weight);
+            }
+        }
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (var state in _states.Values.ToList())
-            {
-                stringBuilder.AppendLine(state.Name);
+            stringBuilder.AppendLine("StartState");
+            stringBuilder.Append("{");
+            stringBuilder.Append(StartState);
+            stringBuilder.Append("}");
 
-                var connectionGroups = GetConnection(state).GetAll();
-                if (connectionGroups.Count == 0)
-                {
-                    continue;
-                }
+            stringBuilder.AppendLine("States");
+            stringBuilder.Append("{");
+            stringBuilder.Append(string.Join(",", GetStates()));
+            stringBuilder.Append("}");
 
-                stringBuilder
-                    .Append('(')
-                    .Append(connectionGroups[0].Key)
-                    .Append("->")
-                    .Append(connectionGroups[0].Value)
-                    .AppendLine(")");
-                for (var i = 1; i < connectionGroups.Count; i++)
-                {
-                    stringBuilder
-                        .Append(",(")
-                        .Append(connectionGroups[i].Key)
-                        .Append("->")
-                        .Append(connectionGroups[i].Value)
-                        .AppendLine(")");
-                }
-            }
+            stringBuilder.AppendLine("Inputs");
+            stringBuilder.Append("{");
+            stringBuilder.Append(string.Join(",", GetInputs()));
+            stringBuilder.Append("}");
+
+            stringBuilder.AppendLine("Connections");
+            stringBuilder.Append("{");
+            stringBuilder.Append(string.Join(",", GetConnections()));
+            stringBuilder.Append("}");
 
             return stringBuilder.ToString();
+        }
+
+
+        public override int GetHashCode()
+        {
+            return (Connections, States, Inputs, StartState).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is INetwork other && Equals(other);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.ConnectionWeight;
+using Aptacode.StateNet.Connections.Weights;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
@@ -46,14 +46,14 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         [TestCaseSource(nameof(ChangingSetWeightTestCases))]
         public void GetWeight_Returns_ConstructorWeight(int setWeight, int expectedValue)
         {
-            Assert.AreEqual(expectedValue, new StaticWeight(setWeight).GetConnectionWeight(null));
+            Assert.AreEqual(expectedValue, new StaticWeight(setWeight).GetWeight(null));
         }
 
         [Test]
         [TestCaseSource(nameof(ChangingHistoryTestCases))]
         public void SetWeight_IsNotAffectedBy_History(int setWeight, List<State> history)
         {
-            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetConnectionWeight(history));
+            Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetWeight(history));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             var connectionWeight = new StaticWeight(initialWeight);
             connectionWeight.Weight = setWeight;
-            Assert.AreEqual(expectedValue, connectionWeight.GetConnectionWeight(null));
+            Assert.AreEqual(expectedValue, connectionWeight.GetWeight(null));
         }
     }
 }
