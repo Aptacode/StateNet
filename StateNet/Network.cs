@@ -122,6 +122,24 @@ namespace Aptacode.StateNet
                    StartState.Equals(other.StartState);
         }
 
+        public Input GetInput(string name, bool createIfMissing = true)
+        {
+            if (Inputs.TryGetValue(name, out var input))
+            {
+                return input;
+            }
+
+            if (!createIfMissing)
+            {
+                return null;
+            }
+
+            input = new Input(name);
+            Inputs.Add(name, input);
+
+            return input;
+        }
+
         public State GetState(string name, bool createIfMissing = true)
         {
             if (States.TryGetValue(name, out var node))
@@ -138,19 +156,6 @@ namespace Aptacode.StateNet
             States.Add(name, node);
 
             return node;
-        }
-
-        public Input GetInput(string name)
-        {
-            if (Inputs.TryGetValue(name, out var input))
-            {
-                return input;
-            }
-
-            input = new Input(name);
-            Inputs.Add(name, input);
-
-            return input;
         }
 
         public bool IsEndNode(State state)

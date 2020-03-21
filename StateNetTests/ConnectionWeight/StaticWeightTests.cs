@@ -51,7 +51,7 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
 
         [Test]
         [TestCaseSource(nameof(ChangingHistoryTestCases))]
-        public void SetWeight_IsNotAffectedBy_History(int setWeight, List<State> history)
+        public void SetWeight_IsNotAffectedBy_History(int setWeight, List<(Input, State)> history)
         {
             Assert.AreEqual(setWeight, new StaticWeight(setWeight).GetWeight(history));
         }

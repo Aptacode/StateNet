@@ -15,6 +15,8 @@ namespace Aptacode.StateNet
         /// </summary>
         public string Name { get; }
 
+        public static Input Empty { get; } = new Input(string.Empty);
+
         public event InputEvent OnApplied;
 
         public override string ToString()

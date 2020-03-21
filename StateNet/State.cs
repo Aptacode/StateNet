@@ -19,6 +19,8 @@ namespace Aptacode.StateNet
         /// </summary>
         public string Name { get; }
 
+        public static State Invalid { get; } = new State(string.Empty);
+
         /// <summary>
         ///     Raised when the state is entered
         /// </summary>

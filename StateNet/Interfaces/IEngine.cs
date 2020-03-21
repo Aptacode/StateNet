@@ -12,10 +12,10 @@ namespace Aptacode.StateNet.Interfaces
         event EngineEvent OnStarted;
 
         event StateEvent OnTransition;
-        List<State> GetHistory();
+        List<(Input, State)> GetHistory();
         void Subscribe(State state, Action callback);
         void Unsubscribe(State state, Action callback);
-        void Apply(string actionName);
+        bool Apply(string inputName);
         void Start();
         void Stop();
     }

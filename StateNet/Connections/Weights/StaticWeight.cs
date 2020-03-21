@@ -27,7 +27,7 @@ namespace Aptacode.StateNet.Connections.Weights
 
         public override string TypeName => nameof(StaticWeight);
 
-        public override int GetWeight(List<State> stateHistory)
+        public override int GetWeight(List<(Input, State)> stateHistory)
         {
             return Weight;
         }

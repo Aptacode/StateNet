@@ -21,6 +21,8 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<State> GetEndStates();
 
         bool IsValid();
+
+        Input GetInput(string name, bool createIfMissing = true);
         IEnumerable<Input> GetInputs();
         IEnumerable<Input> GetInputs(string state);
 

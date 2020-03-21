@@ -11,8 +11,8 @@ namespace Aptacode.StateNet
     public class Engine : IEngine
     {
         private readonly Dictionary<State, List<Action>> _callbackDictionary;
-        private readonly List<State> _history;
-        private readonly ConcurrentQueue<string> _inputQueue;
+        private readonly List<(Input, State)> _history;
+        private readonly ConcurrentQueue<Input> _inputQueue;
         private readonly INetwork _network;
         private readonly StateChooser _stateChooser;
         private readonly CancellationToken cancellationToken;
@@ -21,10 +21,10 @@ namespace Aptacode.StateNet
         public Engine(IRandomNumberGenerator randomNumberGenerator, INetwork network)
         {
             _network = network;
-            _history = new List<State>();
+            _history = new List<(Input, State)>();
             _stateChooser = new StateChooser(randomNumberGenerator, _history);
             _callbackDictionary = new Dictionary<State, List<Action>>();
-            _inputQueue = new ConcurrentQueue<string>();
+            _inputQueue = new ConcurrentQueue<Input>();
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
         }
@@ -56,7 +56,7 @@ namespace Aptacode.StateNet
             }
         }
 
-        public List<State> GetHistory()
+        public List<(Input, State)> GetHistory()
         {
             return _history;
         }
@@ -72,7 +72,7 @@ namespace Aptacode.StateNet
             SubscribeToEndNodes();
             OnStarted?.Invoke(this);
             CurrentState = _network.StartState;
-            _history.Add(CurrentState);
+            _history.Add((Input.Empty, CurrentState));
 
             new TaskFactory().StartNew(async () =>
             {
@@ -94,9 +94,18 @@ namespace Aptacode.StateNet
             cancellationTokenSource.Cancel();
         }
 
-        public void Apply(string actionName)
+        public bool Apply(string inputName)
         {
-            _inputQueue.Enqueue(actionName);
+            var input = _network.GetInput(inputName, false);
+
+            if (input.Equals(Input.Empty))
+            {
+                return false;
+            }
+
+            _inputQueue.Enqueue(input);
+
+            return true;
         }
 
         private void SubscribeToEndNodes()
@@ -111,12 +120,7 @@ namespace Aptacode.StateNet
         {
             foreach (var node in _network.GetStates())
             {
-                node.OnVisited += sender =>
-                {
-                    _history.Add(sender);
-
-                    NotifySubscribers(sender);
-                };
+                node.OnVisited += NotifySubscribers;
             }
         }
 
@@ -136,14 +140,16 @@ namespace Aptacode.StateNet
 
         private void NextTransition()
         {
-            if (!_inputQueue.TryDequeue(out var actionName))
+            if (!_inputQueue.TryDequeue(out var input))
             {
                 return;
             }
 
+            _history.Add((input, CurrentState));
+
             CurrentState.UpdateChoosers();
 
-            var nextState = GetNextState(CurrentState, actionName);
+            var nextState = GetNextState(CurrentState, input);
             if (nextState == null)
             {
                 return;

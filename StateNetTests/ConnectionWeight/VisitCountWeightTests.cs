@@ -41,7 +41,8 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         [Test]
         [TestCaseSource(nameof(ChangingHistoryTestCases))]
         public void GetWeight_Returns_ExpectedWeight(int state, int comparisonCount, int lessThenWeight,
-            int equalToWeight, int greaterThenWeight, List<State> history, int expectedWeight, string message = "")
+            int equalToWeight, int greaterThenWeight, List<(Input, State)> history, int expectedWeight,
+            string message = "")
         {
             Assert.AreEqual(expectedWeight,
                 new VisitCountWeight(state.ToString(), comparisonCount, lessThenWeight, equalToWeight,

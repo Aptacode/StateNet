@@ -8,14 +8,14 @@ namespace Aptacode.StateNet
     public class StateChooser
     {
         private readonly IRandomNumberGenerator _randomNumberGenerator;
-        private readonly List<State> _stateHistory;
+        private readonly List<(Input, State)> _stateHistory;
 
         /// <summary>
         ///     Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
         /// <param name="stateHistory"></param>
-        public StateChooser(IRandomNumberGenerator randomNumberGenerator, List<State> stateHistory)
+        public StateChooser(IRandomNumberGenerator randomNumberGenerator, List<(Input, State)> stateHistory)
         {
             _randomNumberGenerator = randomNumberGenerator;
             _stateHistory = stateHistory;

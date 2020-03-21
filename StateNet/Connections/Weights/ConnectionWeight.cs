@@ -12,7 +12,7 @@ namespace Aptacode.StateNet.Connections.Weights
             return Equals((object) other);
         }
 
-        public abstract int GetWeight(List<State> stateHistory);
+        public abstract int GetWeight(List<(Input, State)> stateHistory);
         public abstract override string ToString();
 
         public abstract int GetHashCode();

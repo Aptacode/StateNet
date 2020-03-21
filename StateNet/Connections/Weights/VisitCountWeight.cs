@@ -85,7 +85,7 @@ namespace Aptacode.StateNet.Connections.Weights
         /// </summary>
         /// <param name="stateHistory"></param>
         /// <returns></returns>
-        public override int GetWeight(List<State> stateHistory)
+        public override int GetWeight(List<(Input, State)> stateHistory)
         {
             var nodeCount = GetTotalVisitCount(stateHistory);
 
@@ -107,9 +107,9 @@ namespace Aptacode.StateNet.Connections.Weights
         /// </summary>
         /// <param name="history"></param>
         /// <returns></returns>
-        public int GetTotalVisitCount(List<State> history)
+        public int GetTotalVisitCount(List<(Input, State)> history)
         {
-            return history?.Count(n => n.Name == State) ?? 0;
+            return history?.Count(n => n.Item2.Name == State) ?? 0;
         }
 
         public override int GetHashCode()
