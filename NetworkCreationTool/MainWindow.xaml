@@ -10,7 +10,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -44,22 +43,23 @@
                     <TextBox DockPanel.Dock="Right" Text="{Binding NewInputName}" />
                 </DockPanel>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <ListBox Grid.Column="0" ItemsSource="{Binding ConnectedStates}"
-                             SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
-                    <ListBox Grid.Column="1" ItemsSource="{Binding DisconnectedStates}"
-                             SelectedValue="{Binding SelectedDisconnectedState, Mode=TwoWay}" />
-                </Grid>
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Content="Connect" Command="{Binding ConnectStateCommand}" />
+                        <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding DisconnectedStates}"
+                                  SelectedValue="{Binding SelectedDisconnectedState}" />
+                    </DockPanel>
+
+                    <Button DockPanel.Dock="Bottom" Content="Disconnect" Command="{Binding DisconnectStateCommand}" />
+
+                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Content="Update" Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
+                        <TextBox DockPanel.Dock="Left" Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}"/>
+                    </DockPanel>
+
+                    <ListBox ItemsSource="{Binding ConnectedStates}" SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
+                </DockPanel>
             </DockPanel>
         </Border>
-
-        <Border Margin="10" Background="Gray" Grid.Column="2" Grid.Row="1">
-            <DockPanel LastChildFill="True" />
-        </Border>
-
     </Grid>
 </Window>

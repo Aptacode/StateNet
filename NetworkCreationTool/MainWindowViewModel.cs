@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mime;
+using System.Windows;
 using Aptacode.StateNet;
 using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Persistence.JSon;
@@ -28,10 +30,15 @@ namespace NetworkCreationTool
         private string _newInputName;
 
         private string _newStateName;
+        private string _selectedConnectedStateExpression;
 
         private DelegateCommand _removeInputCommand;
 
         private DelegateCommand _removeStateCommand;
+
+        private DelegateCommand _updateSelectedConnectedStateExpressionCommand;
+        private DelegateCommand _connectStateCommand;
+        private DelegateCommand _disconnectStateCommand;
 
         private State _selectedConnectedState;
 
@@ -51,7 +58,11 @@ namespace NetworkCreationTool
             DisconnectedStates = new ObservableCollection<State>();
 
             Load();
+
+            Application.Current.Exit += Current_Exit;
         }
+
+        private void Current_Exit(object sender, ExitEventArgs e) => Save();
 
         public ObservableCollection<State> AllStates
         {
@@ -94,14 +105,15 @@ namespace NetworkCreationTool
             {
                 SetProperty(ref _selectedConnectedState, value);
 
-                if (SelectedConnectedState == null)
+                if (_selectedConnectedState == null)
                 {
-                    return;
+                    SelectedConnectedStateExpression = string.Empty;
                 }
-
-                _network.Clear(SelectedState, SelectedInput, SelectedConnectedState);
-
-                LoadConnections();
+                else
+                {
+                    SelectedConnectedStateExpression = _network[SelectedState, SelectedInput, SelectedConnectedState]
+                        .Weight.Expression;
+                }
             }
         }
 
@@ -111,16 +123,6 @@ namespace NetworkCreationTool
             set
             {
                 SetProperty(ref _selectedDisconnectedState, value);
-
-                if (SelectedDisconnectedState == null)
-                {
-                    return;
-                }
-
-                _network.Connect(SelectedState, SelectedInput, SelectedDisconnectedState,
-                    new ConnectionWeight(1.ToString()));
-
-                LoadConnections();
             }
         }
 
@@ -144,6 +146,15 @@ namespace NetworkCreationTool
         {
             get => _newInputName;
             set => SetProperty(ref _newInputName, value);
+        }
+
+        public string SelectedConnectedStateExpression
+        {
+            get => _selectedConnectedStateExpression;
+            set
+            {
+                SetProperty(ref _selectedConnectedStateExpression, value);
+            }
         }
 
         public DelegateCommand RemoveStateCommand =>
@@ -189,10 +200,49 @@ namespace NetworkCreationTool
                 Refresh();
             }));
 
+        public DelegateCommand UpdateSelectedConnectedStateExpressionCommand =>
+            _updateSelectedConnectedStateExpressionCommand ?? (_updateSelectedConnectedStateExpressionCommand = new DelegateCommand(() =>
+            {
+                _network.Connect(SelectedState, SelectedInput, SelectedConnectedState,
+                    new ConnectionWeight(SelectedConnectedStateExpression));
+            }));
+
+        public DelegateCommand ConnectStateCommand =>
+            _connectStateCommand ?? (_connectStateCommand = new DelegateCommand(() =>
+            {
+                if (SelectedDisconnectedState == null)
+                {
+                    return;
+                }
+
+                _network.Connect(SelectedState, SelectedInput, SelectedDisconnectedState,
+                    new ConnectionWeight(1.ToString()));
+
+                LoadConnections();
+            }));
+
+        public DelegateCommand DisconnectStateCommand =>
+            _disconnectStateCommand ?? (_disconnectStateCommand = new DelegateCommand(() =>
+            {
+                if (SelectedConnectedState == null)
+                {
+                    return;
+                }
+
+                _network.Clear(SelectedState, SelectedInput, SelectedConnectedState);
+
+                LoadConnections();
+            }));
+
         public void Load()
         {
             _network = _networkSerializer.Read();
             Refresh();
+        }
+
+        public void Save()
+        {
+            _networkSerializer.Write(_network);
         }
 
         public void Refresh()
