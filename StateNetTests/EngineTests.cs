@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Aptacode.StateNet.Random;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace Aptacode.StateNet.Tests
                 network.Decision2TestState, network.Decision1TestState, network.EndTestState
             };
 
-            Assert.That(() => engine.GetHistory(),
+            Assert.That(() => engine.GetLog().Log.Select(item => item.Item2),
                 Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
         }
 
@@ -91,16 +92,21 @@ namespace Aptacode.StateNet.Tests
 
             var engine = new Engine(new SystemRandomNumberGenerator(), network);
 
+            var play = network.GetInput("Play");
+            var pause = network.GetInput("Pause");
+            var stop = network.GetInput("Stop");
+
             engine.Start();
             engine.Apply("Play");
             engine.Apply("Pause");
             engine.Apply("Play");
             engine.Apply("Stop");
 
-            var expectedLog = new List<State> {ready, playing, paused, playing, stopped};
+            var expectedLog = new List<(Input, State)>
+                {(Input.Empty, ready), (play, playing), (pause, paused), (play, playing), (stop, stopped)};
 
-            Assert.That(() => engine.GetHistory(),
-                Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetLog().Log,
+                Is.EquivalentTo(expectedLog).After(200).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }

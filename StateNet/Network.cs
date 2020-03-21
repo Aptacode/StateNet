@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Connections;
-using Aptacode.StateNet.Connections.Weights;
 using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
 
@@ -166,8 +165,7 @@ namespace Aptacode.StateNet
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
             string connectionDescription = "1")
         {
-            Connect(startStateName, actionName, targetStateName,
-                ConnectionWeightParser.FromString(connectionDescription));
+            Connect(startStateName, actionName, targetStateName, new ConnectionWeight(connectionDescription));
         }
 
         private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)
@@ -214,7 +212,7 @@ namespace Aptacode.StateNet
 
         public void Connect(string fromState, string action, string toState, ConnectionWeight weight = null)
         {
-            weight = weight ?? new StaticWeight(1);
+            weight = weight ?? new ConnectionWeight(1.ToString());
 
             this[fromState, action, toState] = new Connection(fromState, action, toState, weight);
         }
@@ -245,7 +243,7 @@ namespace Aptacode.StateNet
         public void Always(string fromState, string action, string toState)
         {
             Clear(fromState, action);
-            Connect(fromState, action, toState, new StaticWeight(1));
+            Connect(fromState, action, toState, new ConnectionWeight(1.ToString()));
         }
 
         public void SetDistribution(string fromState, string action, params (string, int)[] choices)
@@ -263,7 +261,7 @@ namespace Aptacode.StateNet
         public void UpdateDistribution(string fromState, string action, params (string, int)[] choices)
         {
             var connectionWeights = choices
-                .Select(c => (c.Item1, new StaticWeight(c.Item2) as ConnectionWeight))
+                .Select(c => (c.Item1, new ConnectionWeight(c.Item2.ToString())))
                 .ToArray();
             UpdateDistribution(fromState, action, connectionWeights);
         }

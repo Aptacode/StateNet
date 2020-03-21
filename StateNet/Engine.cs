@@ -11,7 +11,7 @@ namespace Aptacode.StateNet
     public class Engine : IEngine
     {
         private readonly Dictionary<State, List<Action>> _callbackDictionary;
-        private readonly List<(Input, State)> _history;
+        private readonly EngineLog _engineLog;
         private readonly ConcurrentQueue<Input> _inputQueue;
         private readonly INetwork _network;
         private readonly StateChooser _stateChooser;
@@ -21,8 +21,8 @@ namespace Aptacode.StateNet
         public Engine(IRandomNumberGenerator randomNumberGenerator, INetwork network)
         {
             _network = network;
-            _history = new List<(Input, State)>();
-            _stateChooser = new StateChooser(randomNumberGenerator, _history);
+            _engineLog = new EngineLog();
+            _stateChooser = new StateChooser(randomNumberGenerator, _engineLog);
             _callbackDictionary = new Dictionary<State, List<Action>>();
             _inputQueue = new ConcurrentQueue<Input>();
             cancellationTokenSource = new CancellationTokenSource();
@@ -56,9 +56,9 @@ namespace Aptacode.StateNet
             }
         }
 
-        public List<(Input, State)> GetHistory()
+        public EngineLog GetLog()
         {
-            return _history;
+            return _engineLog;
         }
 
         public void Start()
@@ -72,7 +72,8 @@ namespace Aptacode.StateNet
             SubscribeToEndNodes();
             OnStarted?.Invoke(this);
             CurrentState = _network.StartState;
-            _history.Add((Input.Empty, CurrentState));
+
+            _engineLog.Add(Input.Empty, CurrentState);
 
             new TaskFactory().StartNew(async () =>
             {
@@ -98,7 +99,7 @@ namespace Aptacode.StateNet
         {
             var input = _network.GetInput(inputName, false);
 
-            if (input.Equals(Input.Empty))
+            if (Input.Empty.Equals(input))
             {
                 return false;
             }
@@ -145,8 +146,6 @@ namespace Aptacode.StateNet
                 return;
             }
 
-            _history.Add((input, CurrentState));
-
             CurrentState.UpdateChoosers();
 
             var nextState = GetNextState(CurrentState, input);
@@ -154,6 +153,8 @@ namespace Aptacode.StateNet
             {
                 return;
             }
+
+            _engineLog.Add(input, nextState);
 
             CurrentState.Exit();
             CurrentState = nextState;

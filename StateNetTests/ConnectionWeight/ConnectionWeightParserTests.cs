@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Connections.Weights;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
@@ -39,14 +38,14 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
             }
         }
 
-        [Test]
-        [TestCaseSource(nameof(StaticWeightFromStringTestCases))]
-        [TestCaseSource(nameof(VisitCountWeightFromStringTestCases))]
-        [TestCaseSource(nameof(InvalidDescription))]
-        public void ConnectionWeightParser_FromString_ReturnsExpectedWeight_GivenHistory(string input,
-            List<(Input, State)> stateHistory, int expectedWeight)
-        {
-            Assert.AreEqual(expectedWeight, ConnectionWeightParser.FromString(input).GetWeight(stateHistory));
-        }
+        //[Test]
+        //[TestCaseSource(nameof(StaticWeightFromStringTestCases))]
+        //[TestCaseSource(nameof(VisitCountWeightFromStringTestCases))]
+        //[TestCaseSource(nameof(InvalidDescription))]
+        //public void ConnectionWeightParser_FromString_ReturnsExpectedWeight_GivenHistory(string input,
+        //    List<(Input, State)> stateHistory, int expectedWeight)
+        //{
+        //    Assert.AreEqual(expectedWeight, ConnectionWeightParser.FromString(input).GetWeight(stateHistory));
+        //}
     }
 }

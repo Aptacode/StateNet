@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Aptacode.StateNet;
-using Aptacode.StateNet.Connections.Weights;
+using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Persistence.JSon;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -117,7 +117,8 @@ namespace NetworkCreationTool
                     return;
                 }
 
-                _network.Connect(SelectedState, SelectedInput, SelectedDisconnectedState, new StaticWeight(1));
+                _network.Connect(SelectedState, SelectedInput, SelectedDisconnectedState,
+                    new ConnectionWeight(1.ToString()));
 
                 LoadConnections();
             }

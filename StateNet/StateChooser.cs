@@ -7,18 +7,18 @@ namespace Aptacode.StateNet
 {
     public class StateChooser
     {
+        private readonly EngineLog _engineLog;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
-        private readonly List<(Input, State)> _stateHistory;
 
         /// <summary>
         ///     Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
-        /// <param name="stateHistory"></param>
-        public StateChooser(IRandomNumberGenerator randomNumberGenerator, List<(Input, State)> stateHistory)
+        /// <param name="engineLog"></param>
+        public StateChooser(IRandomNumberGenerator randomNumberGenerator, EngineLog engineLog)
         {
             _randomNumberGenerator = randomNumberGenerator;
-            _stateHistory = stateHistory;
+            _engineLog = engineLog;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Aptacode.StateNet
         private IEnumerable<(string, int)> GetConnectionWeights(IEnumerable<Connection> connections)
         {
             return connections.Select(connection =>
-                (connection.To, connection.Weight.GetWeight(_stateHistory)));
+                (connection.To, connection.Weight.GetWeight(_engineLog)));
         }
 
         /// <summary>

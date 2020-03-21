@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Aptacode.StateNet.Tests.Helpers
 {
@@ -10,9 +9,12 @@ namespace Aptacode.StateNet.Tests.Helpers
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        public static List<(Input, State)> Generate(params int[] sequence)
+        public static EngineLog Generate(params int[] sequence)
         {
-            return sequence.Select(v => (Input.Empty, new State(v.ToString()))).ToList();
+            var log = new EngineLog();
+            sequence.Select(v => (Input.Empty, new State(v.ToString()))).ToList()
+                .ForEach(pair => log.Add(pair.Empty, pair.Item2));
+            return log;
         }
     }
 }

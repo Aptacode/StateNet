@@ -1,6 +1,4 @@
-﻿using Aptacode.StateNet.Connections.Weights;
-
-namespace Aptacode.StateNet.Connections
+﻿namespace Aptacode.StateNet.Connections
 {
     public sealed class Connection
     {

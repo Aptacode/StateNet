@@ -29,7 +29,7 @@ namespace Aptacode.StateNet.Persistence.JSon
             var states = JsonConvert.DeserializeObject<List<State>>(statesJson).ToList();
             var inputs = JsonConvert.DeserializeObject<List<Input>>(inputsJson).ToList();
             var connections = JsonConvert
-                .DeserializeObject<List<Connection>>(connectionsJson, new ConnectionWeightConverter()).ToList();
+                .DeserializeObject<List<Connection>>(connectionsJson).ToList();
 
             network.SetStart(startState);
             states.ForEach(state => network.CreateState(state));

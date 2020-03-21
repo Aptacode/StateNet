@@ -22,6 +22,10 @@ namespace Aptacode.StateNet.Tests
             paused = network[DummyStates.States.Paused];
             stopped = network[DummyStates.States.Stopped];
 
+            network.CreateInput(DummyActions.Actions.Play.ToString());
+            network.CreateInput(DummyActions.Actions.Pause.ToString());
+            network.CreateInput(DummyActions.Actions.Stop.ToString());
+
             network.SetStart(ready);
 
             ready.OnUpdateConnections += delegate
@@ -79,8 +83,8 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<State> {ready, playing, paused, playing, stopped};
 
-            Assert.That(() => engine.GetHistory(),
-                Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
+            Assert.That(() => engine.GetLog().StateLog,
+                Is.EquivalentTo(expectedLog).After(500).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }

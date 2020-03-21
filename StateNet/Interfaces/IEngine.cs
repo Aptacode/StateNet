@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Aptacode.StateNet.Events;
 
 namespace Aptacode.StateNet.Interfaces
@@ -12,7 +11,7 @@ namespace Aptacode.StateNet.Interfaces
         event EngineEvent OnStarted;
 
         event StateEvent OnTransition;
-        List<(Input, State)> GetHistory();
+        EngineLog GetLog();
         void Subscribe(State state, Action callback);
         void Unsubscribe(State state, Action callback);
         bool Apply(string inputName);
