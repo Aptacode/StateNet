@@ -68,8 +68,6 @@ namespace Aptacode.StateNet
                 return;
             }
 
-            SubscribeToNodesVisited();
-            SubscribeToEndNodes();
             OnStarted?.Invoke(this);
             CurrentState = _network.StartState;
 
@@ -109,22 +107,6 @@ namespace Aptacode.StateNet
             return true;
         }
 
-        private void SubscribeToEndNodes()
-        {
-            foreach (var node in _network.GetEndStates())
-            {
-                node.OnVisited += delegate { OnFinished?.Invoke(this); };
-            }
-        }
-
-        private void SubscribeToNodesVisited()
-        {
-            foreach (var node in _network.GetStates())
-            {
-                node.OnVisited += NotifySubscribers;
-            }
-        }
-
         private void NotifySubscribers(State state)
         {
             new TaskFactory().StartNew(() => OnTransition?.Invoke(state), cancellationToken).ConfigureAwait(false);
@@ -146,8 +128,6 @@ namespace Aptacode.StateNet
                 return;
             }
 
-            CurrentState.UpdateChoosers();
-
             var nextState = GetNextState(CurrentState, input);
             if (nextState == null)
             {
@@ -155,10 +135,16 @@ namespace Aptacode.StateNet
             }
 
             _engineLog.Add(input, nextState);
-
-            CurrentState.Exit();
             CurrentState = nextState;
-            CurrentState.Visit();
+
+            if (CurrentState.IsEnd())
+            {
+                OnFinished?.Invoke(this);
+            }
+            else
+            {
+                NotifySubscribers(CurrentState);
+            }
         }
 
         private State GetNextState(State state, string actionName)

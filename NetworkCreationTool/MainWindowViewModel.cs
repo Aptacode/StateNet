@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Mime;
 using System.Windows;
 using Aptacode.StateNet;
 using Aptacode.StateNet.Connections;
@@ -23,24 +22,22 @@ namespace NetworkCreationTool
         private ObservableCollection<State> _allStates;
 
         private ObservableCollection<State> _connectedStates;
+        private DelegateCommand _connectStateCommand;
 
         private ObservableCollection<State> _disconnectedStates;
+        private DelegateCommand _disconnectStateCommand;
         private Network _network;
 
         private string _newInputName;
 
         private string _newStateName;
-        private string _selectedConnectedStateExpression;
 
         private DelegateCommand _removeInputCommand;
 
         private DelegateCommand _removeStateCommand;
 
-        private DelegateCommand _updateSelectedConnectedStateExpressionCommand;
-        private DelegateCommand _connectStateCommand;
-        private DelegateCommand _disconnectStateCommand;
-
         private State _selectedConnectedState;
+        private string _selectedConnectedStateExpression;
 
         private State _selectedDisconnectedState;
 
@@ -48,6 +45,8 @@ namespace NetworkCreationTool
 
 
         private State _selectedState;
+
+        private DelegateCommand _updateSelectedConnectedStateExpressionCommand;
 
         public MainWindowViewModel()
         {
@@ -61,8 +60,6 @@ namespace NetworkCreationTool
 
             Application.Current.Exit += Current_Exit;
         }
-
-        private void Current_Exit(object sender, ExitEventArgs e) => Save();
 
         public ObservableCollection<State> AllStates
         {
@@ -120,10 +117,7 @@ namespace NetworkCreationTool
         public State SelectedDisconnectedState
         {
             get => _selectedDisconnectedState;
-            set
-            {
-                SetProperty(ref _selectedDisconnectedState, value);
-            }
+            set => SetProperty(ref _selectedDisconnectedState, value);
         }
 
         public Input SelectedInput
@@ -151,10 +145,7 @@ namespace NetworkCreationTool
         public string SelectedConnectedStateExpression
         {
             get => _selectedConnectedStateExpression;
-            set
-            {
-                SetProperty(ref _selectedConnectedStateExpression, value);
-            }
+            set => SetProperty(ref _selectedConnectedStateExpression, value);
         }
 
         public DelegateCommand RemoveStateCommand =>
@@ -201,11 +192,12 @@ namespace NetworkCreationTool
             }));
 
         public DelegateCommand UpdateSelectedConnectedStateExpressionCommand =>
-            _updateSelectedConnectedStateExpressionCommand ?? (_updateSelectedConnectedStateExpressionCommand = new DelegateCommand(() =>
-            {
-                _network.Connect(SelectedState, SelectedInput, SelectedConnectedState,
-                    new ConnectionWeight(SelectedConnectedStateExpression));
-            }));
+            _updateSelectedConnectedStateExpressionCommand ?? (_updateSelectedConnectedStateExpressionCommand =
+                new DelegateCommand(() =>
+                {
+                    _network.Connect(SelectedState, SelectedInput, SelectedConnectedState,
+                        new ConnectionWeight(SelectedConnectedStateExpression));
+                }));
 
         public DelegateCommand ConnectStateCommand =>
             _connectStateCommand ?? (_connectStateCommand = new DelegateCommand(() =>
@@ -233,6 +225,11 @@ namespace NetworkCreationTool
 
                 LoadConnections();
             }));
+
+        private void Current_Exit(object sender, ExitEventArgs e)
+        {
+            Save();
+        }
 
         public void Load()
         {
@@ -270,7 +267,7 @@ namespace NetworkCreationTool
             }
 
             var connections = _network[SelectedState, SelectedInput];
-            ConnectedStates.AddRange(connections.Select(connection => _network[connection.To]).Distinct());
+            ConnectedStates.AddRange(connections.Select(connection => connection.To).Distinct());
             DisconnectedStates.AddRange(AllStates.Where(state => !ConnectedStates.Contains(state)));
         }
     }

@@ -8,12 +8,6 @@ namespace Aptacode.StateNet.Tests
 {
     public class EngineTests
     {
-        private bool canPlay;
-        private State paused;
-        private State playing;
-        private State ready;
-        private State stopped;
-
         [Test]
         public void StateHistoryTest()
         {
@@ -44,42 +38,14 @@ namespace Aptacode.StateNet.Tests
         {
             var network = new Network();
 
-            ready = network["ready"];
-            playing = network["playing"];
-            paused = network["paused"];
-            stopped = network["stopped"];
+            network.SetStart("ready");
 
-            network.SetStart(ready);
-
-            ready.OnUpdateConnections += delegate
-            {
-                if (canPlay)
-                {
-                    network.Always("ready", "Play", playing.Name);
-                }
-                else
-                {
-                    network.Clear("ready", "Play");
-                }
-            };
-            network.Clear("ready", "Pause");
-            network.Always("ready", "Stop", stopped.Name);
-
-            network.Always("playing", "Pause", paused.Name);
-            network.Always("playing", "Stop", stopped.Name);
-
-            paused.OnUpdateConnections += delegate
-            {
-                if (canPlay)
-                {
-                    network.Always("paused", "Play", playing.Name);
-                }
-                else
-                {
-                    network.Clear("paused", "Play");
-                }
-            };
-            network.Always("paused", "Stop", stopped.Name);
+            network.Always("ready", "Play", "playing");
+            network.Always("ready", "Stop", "stopped");
+            network.Always("playing", "Pause", "paused");
+            network.Always("playing", "Stop", "stopped");
+            network.Always("paused", "Play", "playing");
+            network.Always("paused", "Stop", "stopped");
 
             return network;
         }
@@ -87,14 +53,9 @@ namespace Aptacode.StateNet.Tests
         [Test]
         public void EngineTest2s()
         {
-            canPlay = true;
             var network = GetTestNetwork();
 
             var engine = new Engine(new SystemRandomNumberGenerator(), network);
-
-            var play = network.GetInput("Play");
-            var pause = network.GetInput("Pause");
-            var stop = network.GetInput("Stop");
 
             engine.Start();
             engine.Apply("Play");
@@ -102,10 +63,10 @@ namespace Aptacode.StateNet.Tests
             engine.Apply("Play");
             engine.Apply("Stop");
 
-            var expectedLog = new List<(Input, State)>
-                {(Input.Empty, ready), (play, playing), (pause, paused), (play, playing), (stop, stopped)};
+            var expectedLog = new List<(string, string)>
+                {("", "ready"), ("Play", "playing"), ("Pause", "paused"), ("Play", "playing"), ("Stop", "stopped")};
 
-            Assert.That(() => engine.GetLog().Log,
+            Assert.That(() => engine.GetLog().Log.Select(pair => (pair.Item1.Name, pair.Item2.Name)),
                 Is.EquivalentTo(expectedLog).After(200).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }

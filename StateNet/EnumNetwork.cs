@@ -37,5 +37,15 @@ namespace Aptacode.StateNet
         {
             Clear(fromState.ToString());
         }
+
+        public void CreateInput(TActions action)
+        {
+            base.CreateInput(action.ToString());
+        }
+
+        public void SetStart(TStates state)
+        {
+            base.SetStart(state.ToString());
+        }
     }
 }

@@ -4,8 +4,6 @@ namespace Aptacode.StateNet.Tests.Mocks
 {
     public class DummyNetwork : Network
     {
-        private int decision1Count;
-
         [StateName("D1")]
         [Connection("Next", "D1", "StateCount(\"D2\") < 2 ? 1 : 0")]
         [Connection("Next", "End", "StateCount(\"D2\") >= 2 ? 1 : 0")]

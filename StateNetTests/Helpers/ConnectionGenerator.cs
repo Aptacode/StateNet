@@ -11,7 +11,7 @@ namespace Aptacode.StateNet.Tests.Helpers
             var output = new List<Connection>();
             for (var i = 0; i < choices.Length; i++)
             {
-                output.Add(new Connection(fromState, input, i.ToString(),
+                output.Add(new Connection(new State(fromState), new Input(input), new State(i.ToString()),
                     new Connections.ConnectionWeight(choices[i])));
             }
 
@@ -23,7 +23,7 @@ namespace Aptacode.StateNet.Tests.Helpers
             var output = new List<Connection>();
             for (var i = 0; i < choices.Length; i++)
             {
-                output.Add(new Connection("defaultState", "defaultInput", i.ToString(),
+                output.Add(new Connection(new State("defaultState"), new Input("defaultInput"), new State(i.ToString()),
                     new Connections.ConnectionWeight(choices[i])));
             }
 

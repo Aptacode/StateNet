@@ -114,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateNet\StateNet.csproj">
-      <Project>{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}</Project>
+      <Project>{e77792b2-6683-4f76-95fb-3aa79f0bf1a8}</Project>
       <Name>StateNet</Name>
     </ProjectReference>
   </ItemGroup>

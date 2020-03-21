@@ -41,32 +41,32 @@ namespace Aptacode.StateNet
         }
 
 
-        public IEnumerable<Connection> this[State state] =>
-            Connections.Where(connection => connection.From == GetState(state));
-
-        public List<Connection> Connections { get; } = new List<Connection>();
+        public IEnumerable<Connection> this[State state] => state.GetConnections();
 
         public IEnumerable<Connection> this[string fromState, string action] =>
-            Connections.Where(connection =>
-                connection.From == GetState(fromState) && connection.Input == GetInput(action));
+            GetState(fromState).GetConnections()
+                .Where(connection => connection.Input.Equals(GetInput(action)));
 
         public Connection this[string fromState, string action, string toState]
         {
             get
             {
-                return Connections.FirstOrDefault(connection =>
-                    connection.From == GetState(fromState) && connection.Input == GetInput(action) &&
-                    connection.To == GetState(toState));
+                return GetState(fromState).GetConnections().FirstOrDefault(connection =>
+                    connection.Input.Equals(GetInput(action)) && connection.To.Equals(GetState(toState)));
             }
             set
             {
+                var selectedState = GetState(fromState);
                 var oldConnection = this[fromState, action, toState];
                 if (oldConnection != null)
                 {
-                    Connections.Remove(oldConnection);
+                    selectedState.Remove(oldConnection);
                 }
 
-                Connections.Add(value);
+                if (value != null)
+                {
+                    selectedState.Add(value);
+                }
             }
         }
 
@@ -82,28 +82,29 @@ namespace Aptacode.StateNet
 
         public IEnumerable<Input> GetInputs(string state)
         {
-            return Connections
-                .Where(connection => connection.From == state)
-                .Select(connection => GetInput(connection.Input))
+            return GetState(state).GetConnections().Select(connection => GetInput(connection.Input))
                 .Distinct();
         }
 
         public IEnumerable<Connection> GetConnections()
         {
-            return Connections.OrderBy(c => c.From)
-                .ThenBy(c => c.Input)
-                .ThenBy(c => c.To);
+            return Connections.OrderBy(c => c.From.Name)
+                .ThenBy(c => c.Input.Name)
+                .ThenBy(c => c.To.Name);
         }
 
         public IEnumerable<State> GetEndStates()
         {
-            return States.Values.Where(state => !Connections.Exists(connection => connection.From == state.Name));
+            return States.Values.Where(state => state.IsEnd());
         }
 
         public bool IsValid()
         {
             return GetEndStates().Any();
         }
+
+        public List<Connection> Connections =>
+            States.Values.Select(state => state.GetConnections()).Aggregate((a, b) => a.Concat(b)).ToList();
 
         public State StartState { get; private set; }
 
@@ -210,16 +211,18 @@ namespace Aptacode.StateNet
             this[connection.From, connection.Input, connection.To] = connection;
         }
 
-        public void Connect(string fromState, string action, string toState, ConnectionWeight weight = null)
+        public void Connect(string fromState, string input, string toState, ConnectionWeight weight = null)
         {
             weight = weight ?? new ConnectionWeight(1.ToString());
 
-            this[fromState, action, toState] = new Connection(fromState, action, toState, weight);
+            this[fromState, input, toState] =
+                new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
         }
 
         public void Clear(string fromState = null, string action = null, string toState = null)
         {
             var connectionsToRemove = new List<Connection>();
+
             if (string.IsNullOrEmpty(fromState))
             {
                 connectionsToRemove.AddRange(Connections);
@@ -237,7 +240,7 @@ namespace Aptacode.StateNet
                 connectionsToRemove.Add(this[fromState, action, toState]);
             }
 
-            connectionsToRemove.ForEach(connection => Connections.Remove(connection));
+            connectionsToRemove.ForEach(connection => connection?.From?.Remove(connection));
         }
 
         public void Always(string fromState, string action, string toState)

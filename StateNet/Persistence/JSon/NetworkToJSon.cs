@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Connections;
 using Newtonsoft.Json;
@@ -49,6 +50,22 @@ namespace Aptacode.StateNet.Persistence.JSon
             jObject.Add(ConnectionsPropertyName, JToken.FromObject(network.GetConnections()));
 
             return jObject.ToString(Formatting.Indented);
+        }
+
+        public class StateConverter : JsonConverter<State>
+        {
+            public override void WriteJson(JsonWriter writer, State value, JsonSerializer serializer)
+            {
+                writer.WriteValue(value.ToString());
+            }
+
+            public override State ReadJson(JsonReader reader, Type objectType, State existingValue,
+                bool hasExistingValue, JsonSerializer serializer)
+            {
+                var s = (string) reader.Value;
+
+                return new State(s);
+            }
         }
     }
 }

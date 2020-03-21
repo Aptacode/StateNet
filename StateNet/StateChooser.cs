@@ -60,7 +60,7 @@ namespace Aptacode.StateNet
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        private IEnumerable<(string, int)> GetConnectionWeights(IEnumerable<Connection> connections)
+        private IEnumerable<(State, int)> GetConnectionWeights(IEnumerable<Connection> connections)
         {
             return connections.Select(connection =>
                 (connection.To, connection.Weight.GetWeight(_engineLog)));
@@ -70,7 +70,7 @@ namespace Aptacode.StateNet
         ///     Calculates the sum of each connection in the given StateDistribution
         /// </summary>
         /// <param name="weights"></param>
-        private int TotalWeight(IEnumerable<(string, int)> weights)
+        private int TotalWeight(IEnumerable<(State, int)> weights)
         {
             return weights
                 .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);

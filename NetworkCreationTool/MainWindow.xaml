@@ -53,11 +53,13 @@
                     <Button DockPanel.Dock="Bottom" Content="Disconnect" Command="{Binding DisconnectStateCommand}" />
 
                     <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Content="Update" Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
-                        <TextBox DockPanel.Dock="Left" Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}"/>
+                        <Button DockPanel.Dock="Right" Content="Update"
+                                Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
+                        <TextBox DockPanel.Dock="Left" Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}" />
                     </DockPanel>
 
-                    <ListBox ItemsSource="{Binding ConnectedStates}" SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
+                    <ListBox ItemsSource="{Binding ConnectedStates}"
+                             SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
                 </DockPanel>
             </DockPanel>
         </Border>

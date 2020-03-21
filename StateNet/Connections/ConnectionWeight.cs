@@ -29,7 +29,10 @@ namespace Aptacode.StateNet.Connections
             set
             {
                 _expression = string.IsNullOrEmpty(value) ? 1.ToString() : value;
-                _weightFunction = Compiler.Compile(_expression);
+
+                _weightFunction = int.TryParse(_expression, out var weight)
+                    ? _ => weight
+                    : Compiler.Compile(_expression);
             }
         }
 

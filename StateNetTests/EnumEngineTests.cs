@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Aptacode.StateNet.Random;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
@@ -7,38 +8,18 @@ namespace Aptacode.StateNet.Tests
 {
     public class EnumEngineTests
     {
-        private bool canPlay;
-        private State paused;
-        private State playing;
-        private State ready;
-        private State stopped;
-
         private EnumNetwork<DummyStates.States, DummyActions.Actions> GetTestNetwork()
         {
             var network = new EnumNetwork<DummyStates.States, DummyActions.Actions>();
 
-            ready = network[DummyStates.States.Ready];
-            playing = network[DummyStates.States.Playing];
-            paused = network[DummyStates.States.Paused];
-            stopped = network[DummyStates.States.Stopped];
+            network.CreateInput(DummyActions.Actions.Play);
+            network.CreateInput(DummyActions.Actions.Pause);
+            network.CreateInput(DummyActions.Actions.Stop);
 
-            network.CreateInput(DummyActions.Actions.Play.ToString());
-            network.CreateInput(DummyActions.Actions.Pause.ToString());
-            network.CreateInput(DummyActions.Actions.Stop.ToString());
+            network.SetStart(DummyStates.States.Ready);
 
-            network.SetStart(ready);
+            network.Always(DummyStates.States.Ready, DummyActions.Actions.Play, DummyStates.States.Playing);
 
-            ready.OnUpdateConnections += delegate
-            {
-                if (canPlay)
-                {
-                    network.Always(DummyStates.States.Ready, DummyActions.Actions.Play, DummyStates.States.Playing);
-                }
-                else
-                {
-                    network.Clear(DummyStates.States.Ready, DummyActions.Actions.Play);
-                }
-            };
             network.Clear(DummyStates.States.Ready, DummyActions.Actions.Pause);
             network.Always(DummyStates.States.Ready, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
@@ -46,17 +27,7 @@ namespace Aptacode.StateNet.Tests
             network.Always(DummyStates.States.Playing, DummyActions.Actions.Pause, DummyStates.States.Paused);
             network.Always(DummyStates.States.Playing, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
-            paused.OnUpdateConnections += delegate
-            {
-                if (canPlay)
-                {
-                    network.Always(DummyStates.States.Paused, DummyActions.Actions.Play, DummyStates.States.Playing);
-                }
-                else
-                {
-                    network.Clear(DummyStates.States.Paused, DummyActions.Actions.Play);
-                }
-            };
+            network.Always(DummyStates.States.Paused, DummyActions.Actions.Play, DummyStates.States.Playing);
             network.Clear(DummyStates.States.Paused, DummyActions.Actions.Pause);
             network.Always(DummyStates.States.Paused, DummyActions.Actions.Stop, DummyStates.States.Stopped);
 
@@ -69,7 +40,6 @@ namespace Aptacode.StateNet.Tests
         [Test]
         public void EnumEngineHistoryTest()
         {
-            canPlay = true;
             var network = GetTestNetwork();
 
             var engine =
@@ -81,9 +51,9 @@ namespace Aptacode.StateNet.Tests
             engine.Apply(DummyActions.Actions.Play);
             engine.Apply(DummyActions.Actions.Stop);
 
-            var expectedLog = new List<State> {ready, playing, paused, playing, stopped};
+            var expectedLog = new List<string> {"Ready", "Playing", "Paused", "Playing", "Stopped"};
 
-            Assert.That(() => engine.GetLog().StateLog,
+            Assert.That(() => engine.GetLog().StateLog.Select(state => state.Name),
                 Is.EquivalentTo(expectedLog).After(500).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }

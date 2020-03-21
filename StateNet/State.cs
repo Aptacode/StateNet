@@ -1,10 +1,13 @@
 ﻿using System;
-using Aptacode.StateNet.Events;
+using System.Collections.Generic;
+using Aptacode.StateNet.Connections;
 
 namespace Aptacode.StateNet
 {
     public sealed class State : IEquatable<State>
     {
+        private readonly List<Connection> _connections = new List<Connection>();
+
         /// <summary>
         ///     Represents a single state in the network
         /// </summary>
@@ -21,22 +24,6 @@ namespace Aptacode.StateNet
 
         public static State Invalid { get; } = new State(string.Empty);
 
-        /// <summary>
-        ///     Raised when the state is entered
-        /// </summary>
-        public event StateEvent OnVisited;
-
-        /// <summary>
-        ///     Raised before the state determines which connection to take
-        ///     Use to update probabilities
-        /// </summary>
-        public event StateEvent OnUpdateConnections;
-
-        /// <summary>
-        ///     Raised when the state is exited
-        /// </summary>
-        public event StateEvent OnExited;
-
         public override string ToString()
         {
             return Name;
@@ -45,6 +32,26 @@ namespace Aptacode.StateNet
         public static implicit operator string(State instance)
         {
             return instance?.Name;
+        }
+
+        public IEnumerable<Connection> GetConnections()
+        {
+            return _connections;
+        }
+
+        public void Remove(Connection connection)
+        {
+            _connections.Remove(connection);
+        }
+
+        public void Add(Connection connection)
+        {
+            _connections.Add(connection);
+        }
+
+        public bool IsEnd()
+        {
+            return _connections.Count == 0;
         }
 
         #region Overrides
@@ -65,24 +72,5 @@ namespace Aptacode.StateNet
         }
 
         #endregion Overrides
-
-        #region Internal
-
-        internal void Visit()
-        {
-            OnVisited?.Invoke(this);
-        }
-
-        internal void Exit()
-        {
-            OnExited?.Invoke(this);
-        }
-
-        internal void UpdateChoosers()
-        {
-            OnUpdateConnections?.Invoke(this);
-        }
-
-        #endregion Internal
     }
 }

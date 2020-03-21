@@ -10,9 +10,8 @@ namespace Aptacode.StateNet.Connections
 
         public StatefulScriptCompiler()
         {
-            var options = ScriptOptions.Default.WithImports("System.Linq").WithReferences("System.Linq");
+            var options = ScriptOptions.Default;
             script = CSharpScript.Create<T>($"default ({typeof(T).FullName})", options, typeof(EngineLog));
-            var runner = script.CreateDelegate();
         }
 
         public Func<EngineLog, T> Compile(string source)
