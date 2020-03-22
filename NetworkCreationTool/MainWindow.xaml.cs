@@ -11,28 +11,31 @@ namespace NetworkCreationTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Network network;
-        private TreeViewItem top;
+        private Network _network;
+        private TreeViewItem _rootItem;
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel();
+            Load();
+        }
 
-
-            var _networkSerializer = new NetworkJsonSerializer("./test.json");
-            network = _networkSerializer.Read();
-
-            top = new TreeViewItem();
-            top.Tag = network.StartState;
-            top.Header = network.StartState.Name;
-            top.Items.Add(null);
-            top.Expanded += ItemExpanded;
-            TreeView.Items.Add(top);
+        private void Load()
+        {
+            _network = new NetworkJsonSerializer("./test.json").Read();
+            _rootItem = new TreeViewItem();
+            _rootItem.Tag = _network.StartState;
+            _rootItem.Header = _network.StartState.Name;
+            _rootItem.Items.Add(null);
+            _rootItem.Expanded += ItemExpanded;
+            TreeView.Items.Add(_rootItem);
         }
 
         private void ItemExpanded(object sender, RoutedEventArgs e)
         {
-            var parentTreeViewItem = sender as TreeViewItem;
+            if(!(sender is TreeViewItem parentTreeViewItem))
+                return;
+
             var parentState = parentTreeViewItem.Tag as State;
 
             if (parentTreeViewItem.Items.Count != 1 || parentTreeViewItem.Items[0] != null)
@@ -40,11 +43,13 @@ namespace NetworkCreationTool
 
             parentTreeViewItem.Items.Clear();
 
-            foreach (var connection in network.GetState(parentState).GetConnections())
+            foreach (var connection in _network.GetState(parentState).GetConnections())
             {
-                TreeViewItem child = new TreeViewItem();
-                child.Tag = connection.To;
-                child.Header = $"{connection.Input.Name} : {connection.To.Name}";
+                var child = new TreeViewItem
+                {
+                    Tag = connection.To,
+                    Header = $"{connection.Input.Name} : {connection.To.Name}"
+                };
                 child.Expanded += ItemExpanded;
                 child.Items.Add(null);
                 parentTreeViewItem.Items.Add(child);

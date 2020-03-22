@@ -40,8 +40,7 @@ namespace Aptacode.StateNet
             });
         }
 
-
-        public IEnumerable<Connection> this[State state] => state.GetConnections();
+        public IEnumerable<Connection> GetConnections(string state) => GetState(state).GetConnections();
 
         public IEnumerable<Connection> this[string fromState, string action] =>
             GetState(fromState).GetConnections()
@@ -51,8 +50,10 @@ namespace Aptacode.StateNet
         {
             get
             {
-                return GetState(fromState).GetConnections().FirstOrDefault(connection =>
-                    connection.Input.Equals(GetInput(action)) && connection.To.Equals(GetState(toState)));
+                return GetConnections(fromState)
+                    .FirstOrDefault(connection =>
+                    connection.Input.Equals(GetInput(action)) && 
+                    connection.To.Equals(GetState(toState)));
             }
             set
             {
@@ -82,7 +83,8 @@ namespace Aptacode.StateNet
 
         public IEnumerable<Input> GetInputs(string state)
         {
-            return GetState(state).GetConnections().Select(connection => GetInput(connection.Input))
+            return GetConnections(state)
+                .Select(connection => GetInput(connection.Input))
                 .Distinct();
         }
 
@@ -103,8 +105,9 @@ namespace Aptacode.StateNet
             return GetEndStates().Any();
         }
 
-        public List<Connection> Connections =>
-            States.Values.Select(state => state.GetConnections()).Aggregate((a, b) => a.Concat(b)).ToList();
+        public IEnumerable<Connection> Connections =>
+            States.Values.Select(state => state.GetConnections())
+                .Aggregate((a, b) => a.Concat(b));
 
         public State StartState { get; private set; }
 
@@ -117,8 +120,10 @@ namespace Aptacode.StateNet
 
         public bool Equals(INetwork other)
         {
-            return other != null && GetInputs().SequenceEqual(other.GetInputs()) &&
-                   GetStates().SequenceEqual(other.GetStates()) && Connections.SequenceEqual(other.Connections) &&
+            return other != null && 
+                   GetInputs().SequenceEqual(other.GetInputs()) &&
+                   GetStates().SequenceEqual(other.GetStates()) && 
+                   Connections.SequenceEqual(other.Connections) &&
                    StartState.Equals(other.StartState);
         }
 
@@ -142,9 +147,9 @@ namespace Aptacode.StateNet
 
         public State GetState(string name, bool createIfMissing = true)
         {
-            if (States.TryGetValue(name, out var node))
+            if (States.TryGetValue(name, out var state))
             {
-                return node;
+                return state;
             }
 
             if (!createIfMissing)
@@ -152,15 +157,10 @@ namespace Aptacode.StateNet
                 return null;
             }
 
-            node = new State(name);
-            States.Add(name, node);
+            state = new State(name);
+            States.Add(name, state);
 
-            return node;
-        }
-
-        public bool IsEndNode(State state)
-        {
-            return !this[state].Any();
+            return state;
         }
 
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
@@ -196,15 +196,9 @@ namespace Aptacode.StateNet
             }
         }
 
-        public State CreateState(string name)
-        {
-            return GetState(name);
-        }
+        public State CreateState(string name) => GetState(name, true);
 
-        public Input CreateInput(string name)
-        {
-            return GetInput(name);
-        }
+        public Input CreateInput(string name) => GetInput(name, true);
 
         public void Connect(Connection connection)
         {
@@ -213,10 +207,9 @@ namespace Aptacode.StateNet
 
         public void Connect(string fromState, string input, string toState, ConnectionWeight weight = null)
         {
-            weight = weight ?? new ConnectionWeight(1.ToString());
-
-            this[fromState, input, toState] =
-                new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
+            weight = weight ?? new ConnectionWeight(1);
+            var newConnection = new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
+            Connect(newConnection);
         }
 
         public void Clear(string fromState = null, string action = null, string toState = null)
@@ -229,7 +222,7 @@ namespace Aptacode.StateNet
             }
             else if (string.IsNullOrEmpty(action))
             {
-                connectionsToRemove.AddRange(this[GetState(fromState)]);
+                connectionsToRemove.AddRange(GetState(fromState).GetConnections());
             }
             else if (string.IsNullOrEmpty(toState))
             {
@@ -321,17 +314,18 @@ namespace Aptacode.StateNet
         {
             States.Remove(state);
 
-            var connections = Connections.Where(connection => connection.From == state || connection.To == state)
+            var connections = Connections.Where(connection => connection.From.Equals(state) || connection.To.Equals(state))
                 .ToList();
-            connections.ForEach(connection => Connections.Remove(connection));
+
+            connections.ForEach(connection => connection.From.Remove(connection));
         }
 
         public void Remove(Input input)
         {
             Inputs.Remove(input);
 
-            var connections = Connections.Where(connection => connection.Input == input).ToList();
-            connections.ForEach(connection => Connections.Remove(connection));
+            var connections = Connections.Where(connection => connection.Input.Equals(input)).ToList();
+            connections.ForEach(connection => connection.From.Remove(connection));
         }
     }
 }

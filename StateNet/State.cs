@@ -39,12 +39,12 @@ namespace Aptacode.StateNet
             return _connections;
         }
 
-        public void Remove(Connection connection)
+        internal void Remove(Connection connection)
         {
             _connections.Remove(connection);
         }
 
-        public void Add(Connection connection)
+        internal void Add(Connection connection)
         {
             _connections.Add(connection);
         }

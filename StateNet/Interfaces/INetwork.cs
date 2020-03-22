@@ -6,15 +6,13 @@ namespace Aptacode.StateNet.Interfaces
 {
     public interface INetwork : IEquatable<INetwork>
     {
-        List<Connection> Connections { get; }
-
+        IEnumerable<Connection> Connections { get; }
+        void SetStart(string state);
         State StartState { get; }
 
         State this[string state] { get; }
-        IEnumerable<Connection> this[string state, string action] { get; }
-        Connection this[string fromState, string action, string toState] { get; set; }
-        void SetStart(string state);
-
+        IEnumerable<Connection> this[string state, string input] { get; }
+        Connection this[string fromState, string input, string toState] { get; set; }
 
         IEnumerable<State> GetStates();
 
@@ -27,5 +25,6 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<Input> GetInputs(string state);
 
         IEnumerable<Connection> GetConnections();
+        IEnumerable<Connection> GetConnections(string state);
     }
 }
