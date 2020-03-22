@@ -98,6 +98,34 @@ namespace Aptacode.StateNet
                 .ThenBy(c => c.To.Name);
         }
 
+        public IEnumerable<State> GetOrderedStates()
+        {
+            return Traverse<State>(StartState, (state) => GetConnections(state).Select(c => c.To));
+        }
+
+        public static IEnumerable<T> Traverse<T>(T item, Func<T, IEnumerable<T>> childSelector)
+        {
+            var items = new List<T>(){item};
+
+            var stack = new Stack<T>();
+            stack.Push(item);
+            while (stack.Any())
+            {
+                var next = stack.Pop();
+
+                foreach (var child in childSelector(next))
+                {
+                    if (!items.Contains(child))
+                    {
+                        items.Add(child);
+                        stack.Push(child);
+                    }
+                }
+            }
+
+            return items;
+        }
+
         public IEnumerable<State> GetEndStates()
         {
             return States.Values.Where(state => state.IsEnd());
@@ -281,16 +309,10 @@ namespace Aptacode.StateNet
             }
         }
 
-        public void Connect(Connection connection)
-        {
-            this[connection.From, connection.Input, connection.To] = connection;
-        }
-
         public void Connect(string fromState, string input, string toState, ConnectionWeight weight = null)
         {
             weight = weight ?? new ConnectionWeight(1);
-            var newConnection = new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
-            Connect(newConnection);
+            this[fromState, input, toState] = new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
         }
 
         public override string ToString()

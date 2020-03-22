@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using Aptacode.StateNet;
 using Aptacode.StateNet.Persistence.JSon;
@@ -47,12 +48,12 @@ namespace NetworkCreationTool
 
             parentTreeViewItem.Items.Clear();
 
-            foreach (var connection in _network.GetState(parentState).GetConnections())
+            foreach (var connection in _network.GetState(parentState).GetConnections().GroupBy(connection => connection.To))
             {
                 var child = new TreeViewItem
                 {
-                    Tag = connection.To,
-                    Header = $"{connection.Input.Name} : {connection.To.Name}"
+                    Tag = connection.Key,
+                    Header = $"{string.Join(", ", connection.Select(c => c.Input.Name))} : {connection.Key.Name}"
                 };
                 child.Expanded += ItemExpanded;
                 child.Items.Add(null);

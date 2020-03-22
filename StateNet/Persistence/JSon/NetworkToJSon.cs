@@ -35,7 +35,7 @@ namespace Aptacode.StateNet.Persistence.JSon
             network.SetStart(startState);
             states.ForEach(state => network.CreateState(state));
             inputs.ForEach(input => network.CreateInput(input));
-            connections.ForEach(connection => network.Connect(connection));
+            connections.ForEach(connection => network.Connect(connection.From, connection.Input, connection.To, connection.Weight));
 
             return network;
         }

@@ -249,7 +249,7 @@ namespace NetworkCreationTool
             ConnectedStates.Clear();
             DisconnectedStates.Clear();
 
-            AllStates.AddRange(_network.GetStates());
+            AllStates.AddRange(_network.GetOrderedStates());
             AllInputs.AddRange(_network.GetInputs());
 
             NewStateName = string.Empty;
