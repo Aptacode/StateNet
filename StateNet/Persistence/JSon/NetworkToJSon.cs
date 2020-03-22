@@ -42,12 +42,14 @@ namespace Aptacode.StateNet.Persistence.JSon
 
         public static string ToJson(Network network)
         {
-            var jObject = new JObject();
+            var jObject = new JObject
+            {
+                {StartStatePropertyName, JToken.FromObject(network.StartState)},
+                {StatesPropertyName, JToken.FromObject(network.GetStates())},
+                {InputsPropertyName, JToken.FromObject(network.GetInputs())},
+                {ConnectionsPropertyName, JToken.FromObject(network.GetConnections())}
+            };
 
-            jObject.Add(StartStatePropertyName, JToken.FromObject(network.StartState));
-            jObject.Add(StatesPropertyName, JToken.FromObject(network.GetStates()));
-            jObject.Add(InputsPropertyName, JToken.FromObject(network.GetInputs()));
-            jObject.Add(ConnectionsPropertyName, JToken.FromObject(network.GetConnections()));
 
             return jObject.ToString(Formatting.Indented);
         }

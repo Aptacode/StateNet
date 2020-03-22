@@ -30,9 +30,9 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             get
             {
-                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(2, 2), 0);
-                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1), 0);
-                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1, 1), 1);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(2, 2), 0);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1), 0);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1, 1), 1);
             }
         }
 

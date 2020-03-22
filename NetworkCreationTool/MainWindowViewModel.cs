@@ -250,6 +250,9 @@ namespace NetworkCreationTool
             DisconnectedStates.Clear();
 
             AllStates.AddRange(_network.GetOrderedStates());
+            //Add All States which are not connect to anyother
+            _network.GetStates().Where(s => !AllStates.Contains(s)).ToList().ForEach(s => AllStates.Add(s));
+
             AllInputs.AddRange(_network.GetInputs());
 
             NewStateName = string.Empty;
