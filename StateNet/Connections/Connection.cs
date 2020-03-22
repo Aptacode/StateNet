@@ -16,7 +16,6 @@ namespace Aptacode.StateNet.Connections
         public Input Input { get; set; }
         public State To { get; set; }
         public ConnectionWeight Weight { get; set; }
-
         public override string ToString()
         {
             return $"{From}({Input})->({To}:{Weight})";

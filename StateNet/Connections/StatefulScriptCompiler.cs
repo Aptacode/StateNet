@@ -16,8 +16,7 @@ namespace Aptacode.StateNet.Connections
 
         public Func<EngineLog, T> Compile(string source)
         {
-            script = script.ContinueWith<T>($"return {source};");
-            var runner = script.CreateDelegate();
+            var runner = script.ContinueWith<T>($"return {source};").CreateDelegate();
             return globals =>
             {
                 if (globals == null)

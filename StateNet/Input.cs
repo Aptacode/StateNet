@@ -17,21 +17,10 @@ namespace Aptacode.StateNet
 
         public static Input Empty { get; } = new Input(string.Empty);
 
-        public event InputEvent OnApplied;
-
         public override string ToString()
         {
             return Name;
         }
-
-        #region Internal
-
-        internal void Apply()
-        {
-            OnApplied?.Invoke(this);
-        }
-
-        #endregion Internal
 
         public static implicit operator string(Input instance)
         {

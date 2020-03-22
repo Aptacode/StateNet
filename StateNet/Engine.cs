@@ -35,7 +35,7 @@ namespace Aptacode.StateNet
 
         public event EngineEvent OnStarted;
 
-        public event StateEvent OnTransition;
+        public event TransitionEvent OnTransition;
 
         public void Subscribe(State state, Action callback)
         {
@@ -109,8 +109,6 @@ namespace Aptacode.StateNet
 
         private void NotifySubscribers(State state)
         {
-            new TaskFactory().StartNew(() => OnTransition?.Invoke(state), cancellationToken).ConfigureAwait(false);
-
             if (_callbackDictionary.ContainsKey(state))
             {
                 _callbackDictionary[state]?.ForEach(callback =>
@@ -135,6 +133,9 @@ namespace Aptacode.StateNet
             }
 
             _engineLog.Add(input, nextState);
+
+            new TaskFactory().StartNew(() => OnTransition?.Invoke(this, CurrentState, input, nextState), cancellationToken).ConfigureAwait(false);
+
             CurrentState = nextState;
 
             if (CurrentState.IsEnd())
@@ -147,9 +148,9 @@ namespace Aptacode.StateNet
             }
         }
 
-        private State GetNextState(State state, string actionName)
+        private State GetNextState(State state, string input)
         {
-            var stateName = _stateChooser.Choose(_network[state, actionName]);
+            var stateName = _stateChooser.Choose(_network[state, input]);
             return _network[stateName];
         }
     }

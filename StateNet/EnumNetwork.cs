@@ -43,6 +43,9 @@ namespace Aptacode.StateNet
             return GetConnections(state.ToString());
         }
 
+        public void Connect(TStates fromState, TInputs input, TStates toState, ConnectionWeight weight = null) =>
+            this.Connect(fromState.ToString(), input.ToString(), toState.ToString(), weight);
+
         public void Always(TStates fromState, TInputs input, TStates toSate)
         {
             Always(fromState.ToString(), input.ToString(), toSate.ToString());

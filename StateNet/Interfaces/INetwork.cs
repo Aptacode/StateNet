@@ -34,7 +34,7 @@ namespace Aptacode.StateNet.Interfaces
         void SetDistribution(string fromState, string input, params (string, int)[] choices);
         void SetDistribution(string fromState, string input, params (string, ConnectionWeight)[] choices);
         void UpdateDistribution(string fromState, string input, params (string, int)[] choices);
-
+        void Connect(string fromState, string input, string toState, ConnectionWeight weight);
         void UpdateDistribution(string fromState, string input,
             params (string, ConnectionWeight)[] choices);
 

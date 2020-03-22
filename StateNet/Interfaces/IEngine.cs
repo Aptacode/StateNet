@@ -10,7 +10,7 @@ namespace Aptacode.StateNet.Interfaces
 
         event EngineEvent OnStarted;
 
-        event StateEvent OnTransition;
+        event TransitionEvent OnTransition;
         EngineLog GetLog();
         void Subscribe(State state, Action callback);
         void Unsubscribe(State state, Action callback);

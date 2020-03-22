@@ -21,7 +21,7 @@ namespace Aptacode.StateNet.Connections
             Expression = expression;
         }
 
-        public static StatefulScriptCompiler<int> Compiler { get; } = new StatefulScriptCompiler<int>();
+        private static StatefulScriptCompiler<int> Compiler { get; } = new StatefulScriptCompiler<int>();
 
         public string Expression
         {
@@ -72,7 +72,7 @@ namespace Aptacode.StateNet.Connections
 
         public override string ToString()
         {
-            return $"ConnectionWeight:{Expression}";
+            return Expression;
         }
     }
 }
