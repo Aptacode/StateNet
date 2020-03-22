@@ -66,6 +66,6 @@
             </DockPanel>
         </Border>
 
-        <TreeView x:Name="TreeView" Grid.Column="2" Grid.Row="1"></TreeView>
+        <TreeView x:Name="TreeView" Grid.Column="2" Grid.Row="1" />
     </Grid>
 </Window>

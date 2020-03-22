@@ -4,8 +4,38 @@ using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.ConnectionWeight
 {
-    public class StaticWeightTests
+    public class ConnectionWeightTests
     {
+        public static IEnumerable<TestCaseData> StaticWeightFromStringTestCases
+        {
+            get
+            {
+                yield return new TestCaseData("0", StateHistoryGenerator.Generate(), 0);
+                yield return new TestCaseData("-1", StateHistoryGenerator.Generate(), 0);
+                yield return new TestCaseData("1", StateHistoryGenerator.Generate(), 1);
+                yield return new TestCaseData("10", StateHistoryGenerator.Generate(), 10);
+            }
+        }
+
+        public static IEnumerable<TestCaseData> InvalidDescription
+        {
+            get
+            {
+                yield return new TestCaseData("ten", StateHistoryGenerator.Generate(), 0);
+                yield return new TestCaseData("1.5", StateHistoryGenerator.Generate(), 0);
+            }
+        }
+
+        public static IEnumerable<TestCaseData> VisitCountWeightFromStringTestCases
+        {
+            get
+            {
+                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(2, 2), 0);
+                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1), 0);
+                yield return new TestCaseData("StateCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1, 1), 1);
+            }
+        }
+
         public static IEnumerable<TestCaseData> ChangingSetWeightTestCases
         {
             get
@@ -53,6 +83,16 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         public void SetWeight_IsNotAffectedBy_History(int setWeight, EngineLog log)
         {
             Assert.AreEqual(setWeight, new Connections.ConnectionWeight(setWeight).GetWeight(log));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(StaticWeightFromStringTestCases))]
+        [TestCaseSource(nameof(VisitCountWeightFromStringTestCases))]
+        [TestCaseSource(nameof(InvalidDescription))]
+        public void ConnectionWeightParser_FromString_ReturnsExpectedWeight_GivenHistory(string input,
+            EngineLog engineLog, int expectedWeight)
+        {
+            Assert.AreEqual(expectedWeight, new Connections.ConnectionWeight(input).GetWeight(engineLog));
         }
     }
 }

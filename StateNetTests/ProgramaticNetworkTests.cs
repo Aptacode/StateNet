@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
@@ -49,31 +50,23 @@ namespace Aptacode.StateNet.Tests
 
     public class ProgrammaticNetworkTests
     {
-        [Test]
-        public void CanCreateA()
+        public static IEnumerable<TestCaseData> ProgrammaticNetworkCreationTestCases
         {
-            var graph = new Network();
-
-            Assert.AreEqual(0, graph.GetStates().Count());
-            Assert.AreEqual(0, graph.GetEndStates().Count());
-            Assert.AreEqual(null, graph.StartState);
-            Assert.AreEqual(false, graph.IsValid());
-
-            var start = graph["Start"];
-            var d1 = graph["D1"];
-            var d2 = graph["D2"];
-            var end = graph["End"];
-
-            graph.SetStart(start);
-            graph.SetDistribution("Start", "Next", (d1, 1), (d2, 2));
-            graph.SetDistribution("D1", "Left", (d1, 1), (end, 2));
-            graph.SetDistribution("D2", "Right", (d1, 1), (end, 2));
-
-            Assert.AreEqual(4, graph.GetStates().Count());
-            Assert.AreEqual(1, graph.GetEndStates().Count());
-            Assert.AreEqual(start, graph.StartState);
-            Assert.AreEqual(true, graph.IsValid());
+            get { yield return new TestCaseData(DummyProgrammaticNetworks.CreateEmptyNetwork(), 0, 0, 0, 0, false); }
         }
+
+        [Test]
+        [TestCaseSource(nameof(ProgrammaticNetworkCreationTestCases))]
+        public void ProgrammaticNetworkCreation(Network network, int states, int inputs, int connections, int endStates,
+            bool isValid)
+        {
+            Assert.AreEqual(states, network.GetStates().Count());
+            Assert.AreEqual(inputs, network.GetInputs().Count());
+            Assert.AreEqual(connections, network.GetConnections().Count());
+            Assert.AreEqual(endStates, network.GetEndStates().Count());
+            Assert.AreEqual(isValid, network.IsValid());
+        }
+
 
         //TODO ToString Test
         //TODO GetNext probability distribution Tests

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Aptacode.StateNet;
 using Aptacode.StateNet.Persistence.JSon;
@@ -13,6 +12,7 @@ namespace NetworkCreationTool
     {
         private Network _network;
         private TreeViewItem _rootItem;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,13 +33,17 @@ namespace NetworkCreationTool
 
         private void ItemExpanded(object sender, RoutedEventArgs e)
         {
-            if(!(sender is TreeViewItem parentTreeViewItem))
+            if (!(sender is TreeViewItem parentTreeViewItem))
+            {
                 return;
+            }
 
             var parentState = parentTreeViewItem.Tag as State;
 
             if (parentTreeViewItem.Items.Count != 1 || parentTreeViewItem.Items[0] != null)
+            {
                 return;
+            }
 
             parentTreeViewItem.Items.Clear();
 

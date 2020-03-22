@@ -15,7 +15,7 @@ namespace Aptacode.StateNet
         public State(string name)
         {
             Name = name;
-        }   
+        }
 
         /// <summary>
         ///     The state name

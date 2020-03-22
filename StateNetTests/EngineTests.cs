@@ -1,39 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Random;
-using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
     public class EngineTests
     {
-        [Test]
-        public void StateHistoryTest()
-        {
-            var network = new DummyNetwork();
-            var engine = new Engine(new SystemRandomNumberGenerator(), network);
-
-            Assert.AreEqual(null, engine.CurrentState);
-            engine.Start();
-            engine.Apply("Right");
-            engine.Apply("Next");
-            engine.Apply("Next");
-            engine.Apply("Next");
-            engine.Apply("Next");
-            engine.Apply("Next");
-            engine.Apply("Next");
-
-            var expectedLog = new List<State>
-            {
-                network.StartTestState, network.Decision2TestState, network.Decision2TestState,
-                network.Decision2TestState, network.Decision1TestState, network.EndTestState
-            };
-
-            Assert.That(() => engine.GetLog().Log.Select(item => item.Item2),
-                Is.EquivalentTo(expectedLog).After(100).MilliSeconds.PollEvery(1).MilliSeconds);
-        }
-
         private Network GetTestNetwork()
         {
             var network = new Network();
@@ -51,11 +24,9 @@ namespace Aptacode.StateNet.Tests
         }
 
         [Test]
-        public void EngineTest2s()
+        public void EngineLogTests()
         {
-            var network = GetTestNetwork();
-
-            var engine = new Engine(new SystemRandomNumberGenerator(), network);
+            var engine = new Engine(new SystemRandomNumberGenerator(), GetTestNetwork());
 
             engine.Start();
             engine.Apply("Play");
