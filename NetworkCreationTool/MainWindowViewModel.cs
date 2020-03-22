@@ -153,7 +153,7 @@ namespace NetworkCreationTool
             {
                 if (SelectedState != null)
                 {
-                    _network.Remove(SelectedState);
+                    _network.RemoveState(SelectedState);
                     Refresh();
                 }
             }));
@@ -187,7 +187,7 @@ namespace NetworkCreationTool
                     return;
                 }
 
-                _network.Remove(SelectedInput);
+                _network.RemoveInput(SelectedInput);
                 Refresh();
             }));
 

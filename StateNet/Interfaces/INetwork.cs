@@ -19,12 +19,29 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<State> GetEndStates();
 
         bool IsValid();
-
-        Input GetInput(string name, bool createIfMissing = true);
+        State GetState(string stateName, bool createIfMissing = true);
+        Input GetInput(string inputName, bool createIfMissing = true);
         IEnumerable<Input> GetInputs();
         IEnumerable<Input> GetInputs(string state);
 
         IEnumerable<Connection> GetConnections();
         IEnumerable<Connection> GetConnections(string state);
+
+        void Always(string fromState, string input, string toState);
+        void Clear(string fromState);
+        void Clear(string fromState, string input);
+        void Clear(string fromState, string input, string toState);
+        void SetDistribution(string fromState, string input, params (string, int)[] choices);
+        void SetDistribution(string fromState, string input, params (string, ConnectionWeight)[] choices);
+        void UpdateDistribution(string fromState, string input, params (string, int)[] choices);
+
+        void UpdateDistribution(string fromState, string input,
+            params (string, ConnectionWeight)[] choices);
+
+        void RemoveState(string state);
+        void RemoveInput(string input);
+
+        Input CreateInput(string input);
+        State CreateState(string state);
     }
 }

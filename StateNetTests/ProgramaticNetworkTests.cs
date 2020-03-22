@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
     public static class DummyProgrammaticNetworks
     {
-        public static Network CreateEmptyNetwork()
+        public static INetwork CreateEmptyNetwork()
         {
             return new Network();
         }
 
-        public static Network CreateSingleStateNetwork()
+        public static INetwork CreateSingleStateNetwork()
         {
-            var network = new Network();
+            INetwork network = new Network();
             var state0 = new State("0");
             network.SetStart(state0);
             return network;
         }
 
-        public static Network CreateSingleConnectionNetwork()
+        public static INetwork CreateSingleConnectionNetwork()
         {
             var state0 = new State("0");
             var state1 = new State("1");
@@ -31,7 +32,7 @@ namespace Aptacode.StateNet.Tests
             return network;
         }
 
-        public static Network CreateSelfConnectionNetwork()
+        public static INetwork CreateSelfConnectionNetwork()
         {
             var state0 = new State("0");
             var state1 = new State("1");
@@ -52,7 +53,15 @@ namespace Aptacode.StateNet.Tests
     {
         public static IEnumerable<TestCaseData> ProgrammaticNetworkCreationTestCases
         {
-            get { yield return new TestCaseData(DummyProgrammaticNetworks.CreateEmptyNetwork(), 0, 0, 0, 0, false); }
+            get
+            {
+                yield return new TestCaseData(DummyProgrammaticNetworks.CreateEmptyNetwork(), 0, 0, 0, 0, false);
+                yield return new TestCaseData(DummyProgrammaticNetworks.CreateSingleStateNetwork(), 1, 0, 0, 1, true);
+                yield return new TestCaseData(DummyProgrammaticNetworks.CreateSingleConnectionNetwork(), 2, 1, 1, 1,
+                    true);
+                yield return new TestCaseData(DummyProgrammaticNetworks.CreateSelfConnectionNetwork(), 3, 1, 3, 1,
+                    true);
+            }
         }
 
         [Test]
@@ -66,9 +75,5 @@ namespace Aptacode.StateNet.Tests
             Assert.AreEqual(endStates, network.GetEndStates().Count());
             Assert.AreEqual(isValid, network.IsValid());
         }
-
-
-        //TODO ToString Test
-        //TODO GetNext probability distribution Tests
     }
 }

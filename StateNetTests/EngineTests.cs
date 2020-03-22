@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Random;
 using NUnit.Framework;
 
@@ -7,9 +8,9 @@ namespace Aptacode.StateNet.Tests
 {
     public class EngineTests
     {
-        private Network GetTestNetwork()
+        private INetwork GetTestNetwork()
         {
-            var network = new Network();
+            INetwork network = new Network();
 
             network.SetStart("ready");
 

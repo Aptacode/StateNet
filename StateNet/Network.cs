@@ -166,6 +166,88 @@ namespace Aptacode.StateNet
             return state;
         }
 
+        public State CreateState(string name)
+        {
+            return GetState(name);
+        }
+
+        public Input CreateInput(string name)
+        {
+            return GetInput(name);
+        }
+
+        public void Clear(string fromState)
+        {
+            GetState(fromState).GetConnections().ToList().ForEach(connection => connection?.From?.Remove(connection));
+        }
+
+        public void Clear(string fromState, string action)
+        {
+            GetState(fromState).GetConnections().Where(connection => connection.Input.Equals(GetInput(action))).ToList()
+                .ForEach(connection => connection?.From?.Remove(connection));
+        }
+
+        public void Clear(string fromState, string action, string toState)
+        {
+            var connection = this[fromState, action, toState];
+            connection?.From?.Remove(connection);
+        }
+
+        public void Always(string fromState, string action, string toState)
+        {
+            Clear(fromState, action);
+            Connect(fromState, action, toState, new ConnectionWeight(1.ToString()));
+        }
+
+        public void SetDistribution(string fromState, string input, params (string, int)[] choices)
+        {
+            Clear(fromState, input);
+            UpdateDistribution(fromState, input, choices);
+        }
+
+        public void SetDistribution(string fromState, string input, params (string, ConnectionWeight)[] choices)
+        {
+            Clear(fromState, input);
+            UpdateDistribution(fromState, input, choices);
+        }
+
+        public void UpdateDistribution(string fromState, string input, params (string, int)[] choices)
+        {
+            var connectionWeights = choices
+                .Select(c => (c.Item1, new ConnectionWeight(c.Item2.ToString())))
+                .ToArray();
+            UpdateDistribution(fromState, input, connectionWeights);
+        }
+
+        public void UpdateDistribution(string fromState, string input,
+            params (string, ConnectionWeight)[] choices)
+        {
+            foreach (var (toState, weight) in choices)
+            {
+                Clear(fromState, input, toState);
+                Connect(fromState, input, toState, weight);
+            }
+        }
+
+        public void RemoveState(string state)
+        {
+            States.Remove(state);
+
+            var connections = Connections
+                .Where(connection => connection.From.Name.Equals(state) || connection.To.Name.Equals(state))
+                .ToList();
+
+            connections.ForEach(connection => connection.From.Remove(connection));
+        }
+
+        public void RemoveInput(string input)
+        {
+            Inputs.Remove(input);
+
+            var connections = Connections.Where(connection => connection.Input.Name.Equals(input)).ToList();
+            connections.ForEach(connection => connection.From.Remove(connection));
+        }
+
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
             string connectionDescription = "1")
         {
@@ -199,16 +281,6 @@ namespace Aptacode.StateNet
             }
         }
 
-        public State CreateState(string name)
-        {
-            return GetState(name);
-        }
-
-        public Input CreateInput(string name)
-        {
-            return GetInput(name);
-        }
-
         public void Connect(Connection connection)
         {
             this[connection.From, connection.Input, connection.To] = connection;
@@ -219,66 +291,6 @@ namespace Aptacode.StateNet
             weight = weight ?? new ConnectionWeight(1);
             var newConnection = new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
             Connect(newConnection);
-        }
-
-        public void Clear(string fromState = null, string action = null, string toState = null)
-        {
-            var connectionsToRemove = new List<Connection>();
-
-            if (string.IsNullOrEmpty(fromState))
-            {
-                connectionsToRemove.AddRange(Connections);
-            }
-            else if (string.IsNullOrEmpty(action))
-            {
-                connectionsToRemove.AddRange(GetState(fromState).GetConnections());
-            }
-            else if (string.IsNullOrEmpty(toState))
-            {
-                connectionsToRemove.AddRange(this[fromState, action]);
-            }
-            else
-            {
-                connectionsToRemove.Add(this[fromState, action, toState]);
-            }
-
-            connectionsToRemove.ForEach(connection => connection?.From?.Remove(connection));
-        }
-
-        public void Always(string fromState, string action, string toState)
-        {
-            Clear(fromState, action);
-            Connect(fromState, action, toState, new ConnectionWeight(1.ToString()));
-        }
-
-        public void SetDistribution(string fromState, string action, params (string, int)[] choices)
-        {
-            Clear(fromState, action);
-            UpdateDistribution(fromState, action, choices);
-        }
-
-        public void SetDistribution(string fromState, string action, params (string, ConnectionWeight)[] choices)
-        {
-            Clear(fromState, action);
-            UpdateDistribution(fromState, action, choices);
-        }
-
-        public void UpdateDistribution(string fromState, string action, params (string, int)[] choices)
-        {
-            var connectionWeights = choices
-                .Select(c => (c.Item1, new ConnectionWeight(c.Item2.ToString())))
-                .ToArray();
-            UpdateDistribution(fromState, action, connectionWeights);
-        }
-
-        public void UpdateDistribution(string fromState, string action,
-            params (string, ConnectionWeight)[] choices)
-        {
-            foreach (var (toState, weight) in choices)
-            {
-                Clear(fromState, action, toState);
-                Connect(fromState, action, toState, weight);
-            }
         }
 
         public override string ToString()
@@ -317,25 +329,6 @@ namespace Aptacode.StateNet
         public override bool Equals(object obj)
         {
             return obj is INetwork other && Equals(other);
-        }
-
-        public void Remove(State state)
-        {
-            States.Remove(state);
-
-            var connections = Connections
-                .Where(connection => connection.From.Equals(state) || connection.To.Equals(state))
-                .ToList();
-
-            connections.ForEach(connection => connection.From.Remove(connection));
-        }
-
-        public void Remove(Input input)
-        {
-            Inputs.Remove(input);
-
-            var connections = Connections.Where(connection => connection.Input.Equals(input)).ToList();
-            connections.ForEach(connection => connection.From.Remove(connection));
         }
     }
 }

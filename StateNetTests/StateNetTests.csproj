@@ -17,6 +17,10 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\Build\Release\</OutputPath>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="nunit" Version="3.10.1" />

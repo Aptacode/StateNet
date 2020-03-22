@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
@@ -35,7 +36,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         public void TestAddingNewConnectedState()
         {
             //Arrange
-            var network = new TwoStateStartToEndNetwork();
+            INetwork network = new TwoStateStartToEndNetwork();
             var states = new List<State>(network.GetStates());
 
             //Act
