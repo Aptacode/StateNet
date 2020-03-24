@@ -44,9 +44,8 @@ namespace Aptacode.StateNet.Network
             return GetState(state).GetConnections();
         }
 
-        public IEnumerable<Connection> this[string sourceState, string action] =>
-            GetState(sourceState).GetConnections()
-                .Where(connection => connection.Input.Equals(GetInput(action)));
+        public IEnumerable<Connection> this[string sourceState, string input] =>
+            GetConnections(sourceState, input);
 
         public Connection this[string sourceState, string action, string destinationState]
         {
@@ -104,7 +103,7 @@ namespace Aptacode.StateNet.Network
 
         public bool IsValid()
         {
-            return GetEndStates().Any();
+            return StartState != null && GetEndStates().Any();
         }
 
         public IEnumerable<Connection> Connections =>
@@ -254,9 +253,15 @@ namespace Aptacode.StateNet.Network
                 new Connection(GetState(fromState), GetInput(input), GetState(toState), connectionWeight);
         }
 
-        public IEnumerable<Connection> GetConnections(State state, string input)
+        public IEnumerable<Connection> GetConnections(string state, string input)
         {
-            return this[state, input];
+            var selectedState = GetState(state, false);
+            var selectedInput = GetInput(input, false);
+
+            return selectedState == null || selectedInput == null
+                ? new List<Connection>()
+                : selectedState.GetConnections()
+                    .Where(connection => connection.Input.Equals(selectedInput));
         }
 
         public IEnumerable<State> GetOrderedStates()

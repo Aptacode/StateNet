@@ -26,7 +26,7 @@ namespace Aptacode.StateNet.Interfaces
 
         IEnumerable<Connection> GetConnections();
         IEnumerable<Connection> GetConnections(string state);
-        IEnumerable<Connection> GetConnections(State state, string input);
+        IEnumerable<Connection> GetConnections(string state, string input);
 
         void Always(string sourceState, string input, string destinationState);
         void Clear(string sourceState);
