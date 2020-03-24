@@ -14,17 +14,23 @@ namespace Aptacode.StateNet.Tests.Network
         {
             get
             {
-                yield return new TestCaseData("", DummyStates.Create(), DummyInputs.Create(), DummyConnections.Generate(), 0, false);
-                yield return new TestCaseData("", DummyStates.Create("a"), DummyInputs.Create("next"), DummyConnections.Generate(), 1, false);
-                yield return new TestCaseData("", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"), DummyConnections.Generate(), 2, false);
-                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"), DummyConnections.Generate(("a", "next", "b", 1)), 1, true);
-                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"), DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1)), 0, true);
+                yield return new TestCaseData("", DummyStates.Create(), DummyInputs.Create(),
+                    DummyConnections.Generate(), 0, false);
+                yield return new TestCaseData("", DummyStates.Create("a"), DummyInputs.Create("next"),
+                    DummyConnections.Generate(), 1, false);
+                yield return new TestCaseData("", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
+                    DummyConnections.Generate(), 2, false);
+                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
+                    DummyConnections.Generate(("a", "next", "b", 1)), 1, true);
+                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1)), 0, true);
             }
         }
 
         [Test]
         [TestCaseSource(nameof(NetworkCreationTestCases))]
-        public void NetworkCreationTests(string startState, IEnumerable<State> states, IEnumerable<Input> inputs, IEnumerable<Connection> connections, int endStateCount, bool isValid)
+        public void NetworkCreationTests(string startState, IEnumerable<State> states, IEnumerable<Input> inputs,
+            IEnumerable<Connection> connections, int endStateCount, bool isValid)
         {
             var network = DummyProgrammaticNetworks.CreateNetwork(startState, states, inputs, connections);
 
@@ -39,45 +45,7 @@ namespace Aptacode.StateNet.Tests.Network
 
             Assert.AreEqual(endStateCount, network.GetEndStates().Count());
             Assert.AreEqual(isValid, network.IsValid());
-
         }
-
-
-        [Test]
-        public void GetConnections_DoesNotCreateNewStateOrInput()
-        {
-            IStateNetwork network = new StateNetwork();
-            var connections = network.GetConnections("a", "next");
-
-            Assert.AreEqual(0, connections.Count());
-            Assert.AreEqual(0, network.GetStates().Count());
-            Assert.AreEqual(0, network.GetInputs().Count());
-        }
-
-        [Test]
-        public void GetConnections_ReturnsCorrectConnection()
-        {
-            var inputConnections = 
-                DummyConnections.Generate(
-                ("a", "next", "b", 1),
-                            ("a", "next", "c", 1),
-                            ("b", "next", "a", 1));
-
-            //Create a network with 3 states (a, b, c), 1 input (next) and three connections
-            var network = DummyProgrammaticNetworks.CreateNetwork(
-                "a",
-                DummyStates.Create("a", "b", "c"),
-                DummyInputs.Create("next"),
-                inputConnections);
-
-            var expectedConnections = inputConnections.Where(connection => connection.From.Name == "a");
-            var actualConnections = network["a", "next"];
-
-            Assert.That(expectedConnections, Is.SupersetOf(actualConnections));
-            Assert.That(expectedConnections, Is.SubsetOf(actualConnections));
-
-        }
-
 
         #region States
 
@@ -100,7 +68,7 @@ namespace Aptacode.StateNet.Tests.Network
             var stateA = network["a"];
             var stateB = network.CreateState("b");
             var stateC = network.GetState("c");
-            var stateD = network.GetState("d", true);
+            var stateD = network.GetState("d");
             var stateE = network.GetState("e", false);
 
             Assert.IsTrue(network.GetStates().Contains(stateA));
@@ -119,7 +87,7 @@ namespace Aptacode.StateNet.Tests.Network
             Assert.AreEqual(stateA, network["a"]);
             Assert.AreEqual(stateA, network.CreateState("a"));
             Assert.AreEqual(stateA, network.GetState("a"));
-            Assert.AreEqual(stateA, network.GetState("a", true));
+            Assert.AreEqual(stateA, network.GetState("a"));
             Assert.AreEqual(stateA, network.GetState("a", false));
         }
 
@@ -129,13 +97,15 @@ namespace Aptacode.StateNet.Tests.Network
             var network = DummyProgrammaticNetworks.CreateNetwork(
                 "a",
                 DummyStates.Create("a", "b", "c"),
-                DummyInputs.Create("next", "back"), 
+                DummyInputs.Create("next", "back"),
                 DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
 
             network.RemoveState("a");
 
             Assert.IsNull(network.GetState("a", false));
-            Assert.That(network.Connections.Where(connection => connection.From.Name == "a" || connection.To.Name == "a"), Is.Empty);
+            Assert.That(
+                network.Connections.Where(connection => connection.From.Name == "a" || connection.To.Name == "a"),
+                Is.Empty);
         }
 
         [Test]
@@ -147,8 +117,8 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyInputs.Create("next", "back"),
                 DummyConnections.Generate(("b", "next", "c", 1)));
 
-            var stateA = network.GetState("a"); 
-            var stateB = network.GetState("b"); 
+            var stateA = network.GetState("a");
+            var stateB = network.GetState("b");
             var stateC = network.GetState("c");
 
             Assert.IsTrue(stateA.IsEnd());
@@ -183,7 +153,7 @@ namespace Aptacode.StateNet.Tests.Network
             IStateNetwork network = new StateNetwork();
             var InputA = network.CreateInput("b");
             var InputB = network.GetInput("c");
-            var InputC = network.GetInput("d", true);
+            var InputC = network.GetInput("d");
             var InputD = network.GetInput("e", false);
 
             Assert.IsTrue(network.GetInputs().Contains(InputA));
@@ -200,7 +170,7 @@ namespace Aptacode.StateNet.Tests.Network
 
             Assert.AreEqual(InputA, network.CreateInput("a"));
             Assert.AreEqual(InputA, network.GetInput("a"));
-            Assert.AreEqual(InputA, network.GetInput("a", true));
+            Assert.AreEqual(InputA, network.GetInput("a"));
             Assert.AreEqual(InputA, network.GetInput("a", false));
         }
 
@@ -223,9 +193,74 @@ namespace Aptacode.StateNet.Tests.Network
 
         #region Connections
 
-        
+        [Test]
+        public void GetConnections_DoesNotCreateNewStateOrInput()
+        {
+            IStateNetwork network = new StateNetwork();
+            var connections = network.GetConnections("a", "next");
+
+            Assert.AreEqual(0, connections.Count());
+            Assert.AreEqual(0, network.GetStates().Count());
+            Assert.AreEqual(0, network.GetInputs().Count());
+        }
+
+        [Test]
+        public void GetConnections_ReturnsAllConnections()
+        {
+            var allConnections =
+                DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1));
+            var network = DummyProgrammaticNetworks.CreateNetwork(
+                "a",
+                DummyStates.Create("a", "b", "c"),
+                DummyInputs.Create("next", "back"),
+                allConnections);
+
+            Assert.That(allConnections, Is.SupersetOf(network.Connections));
+            Assert.That(allConnections, Is.SubsetOf(network.Connections));
+
+            Assert.That(allConnections, Is.SupersetOf(network.GetConnections()));
+            Assert.That(allConnections, Is.SubsetOf(network.GetConnections()));
+        }
+
+        [Test]
+        public void GetConnections_ReturnsCorrectConnections()
+        {
+            var allConnections =
+                DummyConnections.Generate(
+                    ("a", "back", "a", 1),
+                    ("a", "next", "b", 1),
+                    ("a", "next", "c", 1),
+                    ("b", "back", "a", 1));
+
+            //Create a network with 3 states (a, b, c), 1 input (next) and three connections
+            var network = DummyProgrammaticNetworks.CreateNetwork(
+                "a",
+                DummyStates.Create("a", "b", "c"),
+                DummyInputs.Create("next"),
+                allConnections);
+
+            var ExpectedStateFilteredConnections = allConnections.Where(connection => connection.From.Name == "a");
+            var ActualstateFilteredConnections = network.GetConnections("a");
+
+            Assert.That(ExpectedStateFilteredConnections, Is.SupersetOf(ActualstateFilteredConnections));
+            Assert.That(ExpectedStateFilteredConnections, Is.SubsetOf(ActualstateFilteredConnections));
+
+
+            var ExpectedStateAndInputFilteredConnections = allConnections.Where(connection =>
+                connection.From.Name == "a" && connection.Input.Name == "next");
+            var ActualstateAndInputFilteredConnections = network.GetConnections("a", "next");
+
+            Assert.That(ExpectedStateAndInputFilteredConnections,
+                Is.SupersetOf(ActualstateAndInputFilteredConnections));
+            Assert.That(ExpectedStateAndInputFilteredConnections, Is.SubsetOf(ActualstateAndInputFilteredConnections));
+
+            var expectedConnections = allConnections.Where(connection =>
+                connection.From.Name == "a" && connection.Input.Name == "next" && connection.To.Name == "b");
+            var actualConnection = network.GetConnection("a", "next", "b");
+
+            Assert.That(expectedConnections.Contains(actualConnection));
+        }
 
         #endregion
-
     }
 }

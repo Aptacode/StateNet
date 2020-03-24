@@ -13,6 +13,9 @@ namespace Aptacode.StateNet.Tests.Mocks
             Stop
         }
 
-        public static IEnumerable<Input> Create(params string[] inputs) => inputs.Select(input => new Input(input));
+        public static IEnumerable<Input> Create(params string[] inputs)
+        {
+            return inputs.Select(input => new Input(input));
+        }
     }
 }

@@ -14,6 +14,9 @@ namespace Aptacode.StateNet.Tests.Mocks
             Stopped
         }
 
-        public static IEnumerable<State> Create(params string[] states) => states.Select(state => new State(state));
+        public static IEnumerable<State> Create(params string[] states)
+        {
+            return states.Select(state => new State(state));
+        }
     }
 }

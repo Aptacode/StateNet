@@ -33,25 +33,56 @@ namespace Aptacode.StateNet.Network
             {
                 var connectionInfo = (ConnectionAttribute) attribute;
                 field.TryGetValue(this, out State state);
-
-                AddNewConnection(state.Name, connectionInfo.InputName, connectionInfo.TargetName,
-                    connectionInfo.ConnectionDescription);
+                Connect(state.Name, connectionInfo.InputName, connectionInfo.TargetName,
+                    new ConnectionWeight(connectionInfo.ConnectionDescription));
             });
         }
 
         /// <summary>
-        /// Returns true if the Network:
-        /// - Has a start state
+        ///     Returns true if the Network:
+        ///     - Has a start state
         /// </summary>
         /// <returns></returns>
         public bool IsValid()
         {
-            bool isStartStateValid = StartState != null;
+            var isStartStateValid = StartState != null;
 
             return isStartStateValid;
         }
 
+        #region Attributes
+
+        private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)
+        {
+            var typeInfo = GetType().GetTypeInfo();
+
+            foreach (var fieldInfo in typeInfo.GetRuntimeFields())
+            {
+                foreach (var attr in fieldInfo.GetCustomAttributes(false))
+                {
+                    if (attr.GetType() == targetType)
+                    {
+                        doWhenFound(fieldInfo, attr);
+                    }
+                }
+            }
+
+            foreach (var propertyInfo in typeInfo.GetRuntimeProperties())
+            {
+                foreach (var attr in propertyInfo.GetCustomAttributes(false))
+                {
+                    if (attr.GetType() == targetType)
+                    {
+                        doWhenFound(propertyInfo, attr);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region States
+
         public State StartState { get; private set; }
 
         public void SetStart(string state)
@@ -60,16 +91,16 @@ namespace Aptacode.StateNet.Network
         }
 
         /// <summary>
-        /// Return the state with the given name
-        /// Create new state if missing
+        ///     Return the state with the given name
+        ///     Create new state if missing
         /// </summary>
         /// <param name="sourceState"></param>
         /// <returns></returns>
-        public State this[string sourceState] => GetState(sourceState, true);
+        public State this[string sourceState] => GetState(sourceState);
 
         /// <summary>
-        /// Return the state with the given name
-        /// Create new state if missing
+        ///     Return the state with the given name
+        ///     Create new state if missing
         /// </summary>
         /// <param name="name"></param>
         /// <param name="createIfMissing"></param>
@@ -93,18 +124,18 @@ namespace Aptacode.StateNet.Network
         }
 
         /// <summary>
-        /// Return the state with the given name
-        /// Create new state if missing
+        ///     Return the state with the given name
+        ///     Create new state if missing
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public State CreateState(string name)
         {
-            return GetState(name, true);
+            return GetState(name);
         }
-        
+
         /// <summary>
-        /// Remove the state which matches the given name and all of its connections
+        ///     Remove the state which matches the given name and all of its connections
         /// </summary>
         /// <param name="state"></param>
         public void RemoveState(string state)
@@ -115,8 +146,8 @@ namespace Aptacode.StateNet.Network
             }
 
             var connections = Connections
-                .Where(connection => 
-                    connection.From.Name.Equals(state) || 
+                .Where(connection =>
+                    connection.From.Name.Equals(state) ||
                     connection.To.Name.Equals(state))
                 .ToList();
 
@@ -130,7 +161,7 @@ namespace Aptacode.StateNet.Network
 
         private static IEnumerable<T> Traverse<T>(T item, Func<T, IEnumerable<T>> childSelector)
         {
-            var items = new List<T> { item };
+            var items = new List<T> {item};
 
             var stack = new Stack<T>();
             stack.Push(item);
@@ -166,6 +197,7 @@ namespace Aptacode.StateNet.Network
         #endregion
 
         #region Inputs
+
         public IEnumerable<Input> GetInputs()
         {
             return Inputs.Values.OrderBy(input => input.Name);
@@ -195,10 +227,13 @@ namespace Aptacode.StateNet.Network
 
             return input;
         }
+
         public void RemoveInput(string input)
         {
-            if(Inputs.ContainsKey(input))
+            if (Inputs.ContainsKey(input))
+            {
                 Inputs.Remove(input);
+            }
 
             var connections = Connections.Where(connection => connection.Input.Name.Equals(input)).ToList();
             connections.ForEach(connection => connection.From.Remove(connection));
@@ -206,68 +241,52 @@ namespace Aptacode.StateNet.Network
 
         public Input CreateInput(string name)
         {
-            return GetInput(name, true);
+            return GetInput(name);
         }
+
         #endregion
-        
+
         #region Connections
+
+        public IEnumerable<Connection> Connections =>
+            States.Values.Select(state => state.GetConnections())
+                .Aggregate((IEnumerable<Connection>) new List<Connection>(), (a, b) => a.Concat(b));
+
+
         public IEnumerable<Connection> GetConnections()
         {
-            return Connections.OrderBy(c => c.From.Name)
+            return Connections
+                .OrderBy(c => c.From.Name)
                 .ThenBy(c => c.Input.Name)
                 .ThenBy(c => c.To.Name);
         }
-        public IEnumerable<Connection> Connections =>
-            States.Values.Select(state => state.GetConnections())
-                .Aggregate((IEnumerable<Connection>)new List<Connection>(), (a, b) => a.Concat(b));
-
-
 
         public IEnumerable<Connection> GetConnections(string state)
         {
-            var connections = new List<Connection>();
-            connections.AddRange(GetState(state)?.GetConnections());
-            return connections;
+            return GetConnections().Where(connection => connection.From.Name.Equals(state));
         }
+
 
         public IEnumerable<Connection> this[string sourceState, string input] =>
             GetConnections(sourceState, input);
 
-        public Connection this[string sourceState, string action, string destinationState]
+        public Connection this[string source, string input, string destination]
         {
-            get
-            {
-                return GetConnections(sourceState)
-                    .FirstOrDefault(connection =>
-                        connection.Input.Equals(GetInput(action)) &&
-                        connection.To.Equals(GetState(destinationState)));
-            }
-            set
-            {
-                var selectedState = GetState(sourceState);
-                var oldConnection = this[sourceState, action, destinationState];
-                if (oldConnection != null)
-                {
-                    selectedState.Remove(oldConnection);
-                }
-
-                if (value != null)
-                {
-                    selectedState.Add(value);
-                }
-            }
-        }
-        private void AddNewConnection(string startStateName, string actionName, string targetStateName,
-            string connectionDescription = "1")
-        {
-            Connect(startStateName, actionName, targetStateName, new ConnectionWeight(connectionDescription));
+            get => GetConnection(source, input, destination);
+            set => Connect(value.From, value.Input, value.To, value.ConnectionWeight);
         }
 
-        public void Connect(string fromState, string input, string toState, ConnectionWeight connectionWeight = null)
+        public void Connect(string source, string input, string destination, ConnectionWeight connectionWeight = null)
         {
+            var selectedState = GetState(source);
+            var oldConnection = GetConnection(source, input, destination);
+            if (oldConnection != null)
+            {
+                selectedState.Remove(oldConnection);
+            }
+
             connectionWeight = connectionWeight ?? new ConnectionWeight(1);
-            this[fromState, input, toState] =
-                new Connection(GetState(fromState), GetInput(input), GetState(toState), connectionWeight);
+            selectedState.Add(new Connection(selectedState, GetInput(input), GetState(destination), connectionWeight));
         }
 
         public IEnumerable<Connection> GetConnections(string state, string input)
@@ -279,6 +298,14 @@ namespace Aptacode.StateNet.Network
                 ? new List<Connection>()
                 : selectedState.GetConnections()
                     .Where(connection => connection.Input.Equals(selectedInput));
+        }
+
+        public Connection GetConnection(string source, string input, string destination)
+        {
+            return GetConnections(source)
+                .FirstOrDefault(connection =>
+                    connection.Input.Equals(GetInput(input)) &&
+                    connection.To.Equals(GetState(destination)));
         }
 
         public void Clear(string fromState)
@@ -384,34 +411,7 @@ namespace Aptacode.StateNet.Network
                    Connections.SequenceEqual(other.Connections) &&
                    StartState.Equals(other.StartState);
         }
+
         #endregion
-
-        private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)
-        {
-            var typeInfo = GetType().GetTypeInfo();
-
-            foreach (var fieldInfo in typeInfo.GetRuntimeFields())
-            {
-                foreach (var attr in fieldInfo.GetCustomAttributes(false))
-                {
-                    if (attr.GetType() == targetType)
-                    {
-                        doWhenFound(fieldInfo, attr);
-                    }
-                }
-            }
-
-            foreach (var propertyInfo in typeInfo.GetRuntimeProperties())
-            {
-                foreach (var attr in propertyInfo.GetCustomAttributes(false))
-                {
-                    if (attr.GetType() == targetType)
-                    {
-                        doWhenFound(propertyInfo, attr);
-                    }
-                }
-            }
-        }
-
     }
 }
