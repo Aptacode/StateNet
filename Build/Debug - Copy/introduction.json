@@ -1,0 +1,254 @@
+{
+  "StartState": {
+    "Name": "Introduction"
+  },
+  "States": [
+   {
+      "Name": "End"
+    },
+    {
+      "Name": "Introduction_AboutToStart"
+    },
+    {
+      "Name": "Introduction_ExperimentOverview"
+    },
+    {
+      "Name": "Introduction_ExperimentPurpose"
+    },
+    {
+      "Name": "Introduction_InformedConsent"
+    },
+    {
+      "Name": "Introduction_Login"
+    },
+    {
+      "Name": "Introduction_PersonalInformation"
+    },
+    {
+      "Name": "Introduction_Responding"
+    },
+    {
+      "Name": "Introduction_UsingTheSoftware"
+    }
+  ],
+  "Inputs": [
+    {
+      "Name": "Fail"
+    },
+    {
+      "Name": "Pass"
+    }
+  ],
+  "Connections": [
+    {
+      "From": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_Responding"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "End"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_Login"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Login"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Responding"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Responding"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_Responding"
+      },
+      "Weight": {
+        "Expression": "1"
+      }
+    }
+  ]
+}

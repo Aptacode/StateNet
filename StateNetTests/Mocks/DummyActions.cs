@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Mocks
 {
-    public class DummyActions
+    public class DummyInputs
     {
         public enum Actions
         {
@@ -11,12 +13,6 @@ namespace Aptacode.StateNet.Tests.Mocks
             Stop
         }
 
-        public static IEnumerable<string> Create(int count)
-        {
-            for (var i = 0; i < count; i++)
-            {
-                yield return i.ToString();
-            }
-        }
+        public static IEnumerable<Input> Create(params string[] inputs) => inputs.Select(input => new Input(input));
     }
 }

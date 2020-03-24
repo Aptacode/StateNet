@@ -6,7 +6,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 {
     public static class DummyProgrammaticNetworks
     {
-        public static IStateNetwork CreateNetwork(string startState, IEnumerable<string>states, IEnumerable<string> inputs, params (string, string, string, int)[] connections)
+        public static IStateNetwork CreateNetwork(string startState, IEnumerable<State>states, IEnumerable<Input> inputs, IEnumerable<Connection> connections)
         {
             IStateNetwork stateNetwork = new StateNetwork();
 
@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 
             foreach (var connection in connections)
             {
-                stateNetwork.Connect(connection.Item1, connection.Item2, connection.Item3, new ConnectionWeight(connection.Item4));
+                stateNetwork.Connect(connection.From, connection.Input, connection.To, connection.ConnectionWeight);
             }
 
             if(!string.IsNullOrEmpty(startState))

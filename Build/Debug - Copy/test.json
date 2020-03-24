@@ -1,0 +1,2965 @@
+{
+  "StartState": {
+    "Name": "Start"
+  },
+  "States": [
+    {
+      "Name": "End"
+    },
+    {
+      "Name": "Introduction_AboutToStart"
+    },
+    {
+      "Name": "Introduction_ExperimentOverview"
+    },
+    {
+      "Name": "Introduction_ExperimentPurpose"
+    },
+    {
+      "Name": "Introduction_InformedConsent"
+    },
+    {
+      "Name": "Introduction_Login"
+    },
+    {
+      "Name": "Introduction_PersonalInformation"
+    },
+    {
+      "Name": "Introduction_Responding"
+    },
+    {
+      "Name": "Introduction_UsingTheSoftware"
+    },
+    {
+      "Name": "MatchToSampleTesting_BA_1"
+    },
+    {
+      "Name": "MatchToSampleTesting_BA_2"
+    },
+    {
+      "Name": "MatchToSampleTesting_BA_3"
+    },
+    {
+      "Name": "MatchToSampleTesting_BCCB_1"
+    },
+    {
+      "Name": "MatchToSampleTesting_BCCB_2"
+    },
+    {
+      "Name": "MatchToSampleTesting_BCCB_3"
+    },
+    {
+      "Name": "MatchToSampleTesting_CA_1"
+    },
+    {
+      "Name": "MatchToSampleTesting_CA_2"
+    },
+    {
+      "Name": "MatchToSampleTesting_CA_3"
+    },
+    {
+      "Name": "MatchtoSampleTraining_AB_1"
+    },
+    {
+      "Name": "MatchtoSampleTraining_AB_2"
+    },
+    {
+      "Name": "MatchtoSampleTraining_AB_3"
+    },
+    {
+      "Name": "MatchToSampleTraining_ABAC_1"
+    },
+    {
+      "Name": "MatchToSampleTraining_ABAC_2"
+    },
+    {
+      "Name": "MatchToSampleTraining_AC_1"
+    },
+    {
+      "Name": "MatchToSampleTraining_AC_2"
+    },
+    {
+      "Name": "MatchToSampleTraining_AC_3"
+    },
+    {
+      "Name": "Outro_Congratulations"
+    },
+    {
+      "Name": "Outro_Debrief"
+    },
+    {
+      "Name": "Outro_FinalPage"
+    },
+    {
+      "Name": "Outro_SocialValidity"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Reflexivity"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Reflexivity_WithDefinition"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Symmetry"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Symmetry_WithDefinition"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Transitivity"
+    },
+    {
+      "Name": "PostTest_DesignProtocol_Transitivity_WithDefinition"
+    },
+    {
+      "Name": "PostTest_Instructions_DesignProtocol"
+    },
+    {
+      "Name": "PostTest_Instructions_LabelProtocol"
+    },
+    {
+      "Name": "PostTest_Instructions_Sorting"
+    },
+    {
+      "Name": "PostTest_Introduction"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Reflexivity"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Reflexivity_WithDefinition"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Symmetry"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Symmetry_WithDefinition"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Transitivity"
+    },
+    {
+      "Name": "PostTest_LabelProtocol_Transitivity_WithDefinition"
+    },
+    {
+      "Name": "PostTest_Sorting"
+    },
+    {
+      "Name": "PostTest_Sorting_Generalisation"
+    },
+    {
+      "Name": "PostTest_Sorting_Instructions"
+    },
+    {
+      "Name": "PostTest_Start_DesignProtocol1"
+    },
+    {
+      "Name": "PostTest_Start_DesignProtocol2"
+    },
+    {
+      "Name": "PostTest_Start_DesignProtocol3"
+    },
+    {
+      "Name": "PostTest_Start_LabelProtocol1"
+    },
+    {
+      "Name": "PostTest_Start_LabelProtocol2"
+    },
+    {
+      "Name": "PostTest_Start_LabelProtocol3"
+    },
+    {
+      "Name": "PreTest_DesignProtocol_Reflexivity"
+    },
+    {
+      "Name": "PreTest_DesignProtocol_Symmetry"
+    },
+    {
+      "Name": "PreTest_DesignProtocol_Transitivity"
+    },
+    {
+      "Name": "PreTest_Instructions_DesignProtocol"
+    },
+    {
+      "Name": "PreTest_Instructions_LabelProtocol"
+    },
+    {
+      "Name": "PreTest_Instructions_Sorting"
+    },
+    {
+      "Name": "PreTest_LabelProtocol_Reflexivity"
+    },
+    {
+      "Name": "PreTest_LabelProtocol_Symmetry"
+    },
+    {
+      "Name": "PreTest_LabelProtocol_Transitivity"
+    },
+    {
+      "Name": "PreTest_Sorting"
+    },
+    {
+      "Name": "PreTest_Start_DesignProtocol1"
+    },
+    {
+      "Name": "PreTest_Start_DesignProtocol2"
+    },
+    {
+      "Name": "PreTest_Start_DesignProtocol3"
+    },
+    {
+      "Name": "PreTest_Start_LabelProtocol1"
+    },
+    {
+      "Name": "PreTest_Start_LabelProtocol2"
+    },
+    {
+      "Name": "PreTest_Start_LabelProtocol3"
+    },
+    {
+      "Name": "Start"
+    },
+    {
+      "Name": "StartExperiment"
+    },
+    {
+      "Name": "TestRun_DesignAnimation"
+    },
+    {
+      "Name": "TestRun_End"
+    },
+    {
+      "Name": "TestRun_Instructions_DesignProtocol"
+    },
+    {
+      "Name": "TestRun_Instructions_LabelProtocol"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS_NoPromptNoFeedback"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS_NoPromptWithFeedback"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS_Replay"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS_Trial"
+    },
+    {
+      "Name": "TestRun_Instructions_MTS_WithPromptWithFeedback"
+    },
+    {
+      "Name": "TestRun_Instructions_Sorting"
+    },
+    {
+      "Name": "TestRun_LabelAnimation"
+    },
+    {
+      "Name": "TestRun_MTSDemo_1"
+    },
+    {
+      "Name": "TestRun_MTSDemo_2"
+    },
+    {
+      "Name": "TestRun_MTSDemo_3"
+    },
+    {
+      "Name": "TestRun_MTSTrial_1"
+    },
+    {
+      "Name": "TestRun_MTSTrial_2"
+    },
+    {
+      "Name": "TestRun_MTSTrial_3"
+    },
+    {
+      "Name": "TestRun_Replay_MTS"
+    },
+    {
+      "Name": "TestRun_Sorting"
+    },
+    {
+      "Name": "TicTacToe_1"
+    },
+    {
+      "Name": "TicTacToe_2"
+    },
+    {
+      "Name": "TrainingAndTesting_Introduction_MTS"
+    }
+  ],
+  "Inputs": [
+    {
+      "Name": "Fail"
+    },
+    {
+      "Name": "Pass"
+    }
+  ],
+  "Connections": [
+    {
+      "From": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_Responding"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_Login"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_InformedConsent"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Login"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentOverview"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_ExperimentPurpose"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Responding"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_Responding"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_PersonalInformation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Introduction_UsingTheSoftware"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_Responding"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchtoSampleTraining_AB_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchtoSampleTraining_AB_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TicTacToe_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BA_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_ABAC_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Introduction"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_ABAC_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Introduction"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Introduction"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_BCCB_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Introduction"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_AC_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_AC_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TicTacToe_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTesting_CA_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TicTacToe_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchtoSampleTraining_AB_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BA_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_ABAC_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_ABAC_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_ABAC_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_ABAC_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "MatchToSampleTraining_AC_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_CA_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_Congratulations"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Outro_Debrief"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_Congratulations"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Outro_Debrief"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_Debrief"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Outro_FinalPage"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_Debrief"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Outro_FinalPage"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_FinalPage"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "End"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_FinalPage"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "End"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_SocialValidity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Outro_FinalPage"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Outro_SocialValidity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Outro_FinalPage"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Reflexivity_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Reflexivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Reflexivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Symmetry_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Sorting_Instructions"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Symmetry_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Sorting_Instructions"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Symmetry_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Sorting_Instructions"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Transitivity_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Transitivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_DesignProtocol_Transitivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_DesignProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Instructions_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Introduction"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Introduction"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Reflexivity_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Reflexivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Reflexivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Symmetry_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Symmetry_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Symmetry_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Transitivity_WithDefinition"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Transitivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_LabelProtocol_Transitivity_WithDefinition"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Start_LabelProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting_Generalisation"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Outro_Congratulations"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting_Generalisation"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Outro_Congratulations"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting_Instructions"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_Sorting_Generalisation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Sorting_Instructions"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_Sorting_Generalisation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_DesignProtocol3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_DesignProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PostTest_Start_LabelProtocol3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PostTest_LabelProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_DesignProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_DesignProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "StartExperiment"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Instructions_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Reflexivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Symmetry"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_LabelProtocol_Transitivity"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Start_LabelProtocol3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TrainingAndTesting_Introduction_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TrainingAndTesting_Introduction_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_DesignProtocol3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_DesignProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_LabelProtocol_Reflexivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_LabelProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_LabelProtocol_Transitivity"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "PreTest_LabelProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "PreTest_Start_LabelProtocol3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_LabelProtocol_Symmetry"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Start"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_Login"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Start"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "Introduction_Login"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "StartExperiment"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "PreTest_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_DesignAnimation"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_DesignAnimation"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_End"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "StartExperiment"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_End"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "StartExperiment"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_LabelAnimation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_DesignProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_DesignAnimation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "Introduction_AboutToStart"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_LabelProtocol"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_LabelAnimation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSDemo_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_NoPromptNoFeedback"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSTrial_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_NoPromptWithFeedback"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSTrial_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_Replay"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_Replay"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_Trial"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_Trial"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_Replay"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_Trial"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_WithPromptWithFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_WithPromptWithFeedback"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_Trial"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_MTS_WithPromptWithFeedback"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSTrial_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_DesignAnimation"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Instructions_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_LabelAnimation"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_LabelProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_LabelAnimation"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_DesignProtocol"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSDemo_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_MTSDemo_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_MTSDemo_3"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_MTSDemo_2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSDemo_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_Replay"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptWithFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_WithPromptWithFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptWithFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptNoFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptWithFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptNoFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_NoPromptNoFeedback"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_3"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Replay_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_MTSTrial_3"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Replay_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Replay_MTS"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS_Trial"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Replay_MTS"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_End"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Sorting"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_Sorting"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TestRun_Sorting"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "TestRun_Instructions_MTS"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TicTacToe_1"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_AC_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TicTacToe_1"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTraining_AC_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TicTacToe_2"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TicTacToe_2"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchToSampleTesting_BCCB_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TrainingAndTesting_Introduction_MTS"
+      },
+      "Input": {
+        "Name": "Fail"
+      },
+      "To": {
+        "Name": "MatchtoSampleTraining_AB_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "TrainingAndTesting_Introduction_MTS"
+      },
+      "Input": {
+        "Name": "Pass"
+      },
+      "To": {
+        "Name": "MatchtoSampleTraining_AB_1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    }
+  ]
+}

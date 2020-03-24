@@ -10,32 +10,32 @@ namespace Aptacode.StateNet.Tests
 {
     public class EnumEngineTests
     {
-        private EnumStateNetwork<DummyStates.States, DummyActions.Actions> GetTestNetwork()
+        private EnumStateNetwork<DummyStates.States, DummyInputs.Actions> GetTestNetwork()
         {
-            var network = new EnumStateNetwork<DummyStates.States, DummyActions.Actions>();
+            var network = new EnumStateNetwork<DummyStates.States, DummyInputs.Actions>();
 
-            network.CreateInput(DummyActions.Actions.Play);
-            network.CreateInput(DummyActions.Actions.Pause);
-            network.CreateInput(DummyActions.Actions.Stop);
+            network.CreateInput(DummyInputs.Actions.Play);
+            network.CreateInput(DummyInputs.Actions.Pause);
+            network.CreateInput(DummyInputs.Actions.Stop);
 
             network.SetStart(DummyStates.States.Ready);
 
-            network.Always(DummyStates.States.Ready, DummyActions.Actions.Play, DummyStates.States.Playing);
+            network.Always(DummyStates.States.Ready, DummyInputs.Actions.Play, DummyStates.States.Playing);
 
-            network.Clear(DummyStates.States.Ready, DummyActions.Actions.Pause);
-            network.Always(DummyStates.States.Ready, DummyActions.Actions.Stop, DummyStates.States.Stopped);
+            network.Clear(DummyStates.States.Ready, DummyInputs.Actions.Pause);
+            network.Always(DummyStates.States.Ready, DummyInputs.Actions.Stop, DummyStates.States.Stopped);
 
-            network.Clear(DummyStates.States.Playing, DummyActions.Actions.Play);
-            network.Always(DummyStates.States.Playing, DummyActions.Actions.Pause, DummyStates.States.Paused);
-            network.Always(DummyStates.States.Playing, DummyActions.Actions.Stop, DummyStates.States.Stopped);
+            network.Clear(DummyStates.States.Playing, DummyInputs.Actions.Play);
+            network.Always(DummyStates.States.Playing, DummyInputs.Actions.Pause, DummyStates.States.Paused);
+            network.Always(DummyStates.States.Playing, DummyInputs.Actions.Stop, DummyStates.States.Stopped);
 
-            network.Always(DummyStates.States.Paused, DummyActions.Actions.Play, DummyStates.States.Playing);
-            network.Clear(DummyStates.States.Paused, DummyActions.Actions.Pause);
-            network.Always(DummyStates.States.Paused, DummyActions.Actions.Stop, DummyStates.States.Stopped);
+            network.Always(DummyStates.States.Paused, DummyInputs.Actions.Play, DummyStates.States.Playing);
+            network.Clear(DummyStates.States.Paused, DummyInputs.Actions.Pause);
+            network.Always(DummyStates.States.Paused, DummyInputs.Actions.Stop, DummyStates.States.Stopped);
 
-            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Play);
-            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Pause);
-            network.Clear(DummyStates.States.Stopped, DummyActions.Actions.Stop);
+            network.Clear(DummyStates.States.Stopped, DummyInputs.Actions.Play);
+            network.Clear(DummyStates.States.Stopped, DummyInputs.Actions.Pause);
+            network.Clear(DummyStates.States.Stopped, DummyInputs.Actions.Stop);
             return network;
         }
 
@@ -45,14 +45,14 @@ namespace Aptacode.StateNet.Tests
             var network = GetTestNetwork();
 
             var engine =
-                new EnumStateNetEngine<DummyStates.States, DummyActions.Actions>(new SystemRandomNumberGenerator(),
+                new EnumStateNetEngine<DummyStates.States, DummyInputs.Actions>(new SystemRandomNumberGenerator(),
                     network);
 
             engine.Start();
-            engine.Apply(DummyActions.Actions.Play);
-            engine.Apply(DummyActions.Actions.Pause);
-            engine.Apply(DummyActions.Actions.Play);
-            engine.Apply(DummyActions.Actions.Stop);
+            engine.Apply(DummyInputs.Actions.Play);
+            engine.Apply(DummyInputs.Actions.Pause);
+            engine.Apply(DummyInputs.Actions.Play);
+            engine.Apply(DummyInputs.Actions.Stop);
 
             var expectedLog = new List<string> {"Ready", "Playing", "Paused", "Playing", "Stopped"};
 

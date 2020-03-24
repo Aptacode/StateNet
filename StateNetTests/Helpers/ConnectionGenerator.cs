@@ -4,7 +4,7 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Helpers
 {
-    public static class ConnectionGenerator
+    public static class DummyConnections
     {
         public static List<Connection> Generate(string fromState = "defaultState", string input = "defaultInput",
             params int[] choices)

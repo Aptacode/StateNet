@@ -1,0 +1,116 @@
+{
+  "StartState": {
+    "Name": "Start"
+  },
+  "States": [
+    {
+      "Name": "D1"
+    },
+    {
+      "Name": "D2"
+    },
+    {
+      "Name": "End"
+    },
+    {
+      "Name": "Start"
+    }
+  ],
+  "Inputs": [
+    {
+      "Name": "Left"
+    },
+    {
+      "Name": "Next"
+    },
+    {
+      "Name": "Right"
+    }
+  ],
+  "Connections": [
+    {
+      "From": {
+        "Name": "D1"
+      },
+      "Input": {
+        "Name": "Next"
+      },
+      "To": {
+        "Name": "D1"
+      },
+      "ConnectionWeight": {
+        "Expression": "StateVisitCount(\"D2\") < 2 ? 1 : 0"
+      }
+    },
+    {
+      "From": {
+        "Name": "D1"
+      },
+      "Input": {
+        "Name": "Next"
+      },
+      "To": {
+        "Name": "End"
+      },
+      "ConnectionWeight": {
+        "Expression": "StateVisitCount(\"D2\") >= 2 ? 1 : 0"
+      }
+    },
+    {
+      "From": {
+        "Name": "D2"
+      },
+      "Input": {
+        "Name": "Next"
+      },
+      "To": {
+        "Name": "D1"
+      },
+      "ConnectionWeight": {
+        "Expression": "StateVisitCount(\"D2\") > 2 ? 1 : 0"
+      }
+    },
+    {
+      "From": {
+        "Name": "D2"
+      },
+      "Input": {
+        "Name": "Next"
+      },
+      "To": {
+        "Name": "D2"
+      },
+      "ConnectionWeight": {
+        "Expression": "StateVisitCount(\"D2\") <= 2 ? 1 : 0"
+      }
+    },
+    {
+      "From": {
+        "Name": "Start"
+      },
+      "Input": {
+        "Name": "Left"
+      },
+      "To": {
+        "Name": "D1"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    },
+    {
+      "From": {
+        "Name": "Start"
+      },
+      "Input": {
+        "Name": "Right"
+      },
+      "To": {
+        "Name": "D2"
+      },
+      "ConnectionWeight": {
+        "Expression": "1"
+      }
+    }
+  ]
+}

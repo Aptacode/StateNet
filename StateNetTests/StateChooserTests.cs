@@ -13,15 +13,15 @@ namespace Aptacode.StateNet.Tests
         {
             get
             {
-                yield return new TestCaseData(ConnectionGenerator.Generate(), 0,
+                yield return new TestCaseData(DummyConnections.Generate(), 0,
                     "An empty distribution should return 0 weight");
-                yield return new TestCaseData(ConnectionGenerator.Generate(("a", "next", "b", 1)), 1,
+                yield return new TestCaseData(DummyConnections.Generate(("a", "next", "b", 1)), 1,
                     "Total Weight = 1");
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 0), ("b", "next", "a", 1)), 1, "Total Weight = 1");
+                    DummyConnections.Generate(("a", "next", "b", 0), ("b", "next", "a", 1)), 1, "Total Weight = 1");
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 1), ("b", "next", "a", 2)), 3, "Total Weight = 3");
-                yield return new TestCaseData(ConnectionGenerator.Generate(("a", "next", "b", -1)), 0,
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 2)), 3, "Total Weight = 3");
+                yield return new TestCaseData(DummyConnections.Generate(("a", "next", "b", -1)), 0,
                     "Negative weights should count as 0");
             }
         }
@@ -31,16 +31,16 @@ namespace Aptacode.StateNet.Tests
             get
             {
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
                     1, 0);
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
                     2, 1);
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "c", 1), ("c", "next", "d", 1)),
                     3, 2);
                 yield return new TestCaseData(
-                    ConnectionGenerator.Generate(("a", "next", "b", 1), ("b", "next", "c", 2), ("c", "next", "d", 1)),
+                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "c", 2), ("c", "next", "d", 1)),
                     3, 1);
             }
         }

@@ -13,7 +13,7 @@ namespace Aptacode.StateNet.Tests.ConnectionTests
             var to = "B";
             var weight = 1;
 
-            var connection = ConnectionGenerator.Generate(from, input, to, weight);
+            var connection = DummyConnections.Generate(from, input, to, weight);
 
             Assert.AreEqual(from, connection.From.Name);
             Assert.AreEqual(input, connection.Input.Name);
