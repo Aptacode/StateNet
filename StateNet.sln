@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateNet", "StateNet\StateN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateNetTests", "StateNetTests\StateNetTests.csproj", "{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{6EEAF0C5-2FE0-4B49-955D-00E8204C57E9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFDemo", "WPFDemo\WPFDemo.csproj", "{841DFBF2-9A11-4D26-AC91-8E5A1401B06E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F2F08E3E-0CA4-4740-B242-0911B6B202A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkCreationTool", "NetworkCreationTool\NetworkCreationTool.csproj", "{D4D34728-8E06-45E2-809D-A5EEB67522CE}"
@@ -29,10 +25,6 @@ Global
 		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA51A87B-A5C9-4C4D-BA7F-6BBCBED52C1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{841DFBF2-9A11-4D26-AC91-8E5A1401B06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{841DFBF2-9A11-4D26-AC91-8E5A1401B06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{841DFBF2-9A11-4D26-AC91-8E5A1401B06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{841DFBF2-9A11-4D26-AC91-8E5A1401B06E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D4D34728-8E06-45E2-809D-A5EEB67522CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D4D34728-8E06-45E2-809D-A5EEB67522CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4D34728-8E06-45E2-809D-A5EEB67522CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -42,7 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{841DFBF2-9A11-4D26-AC91-8E5A1401B06E} = {6EEAF0C5-2FE0-4B49-955D-00E8204C57E9}
 		{D4D34728-8E06-45E2-809D-A5EEB67522CE} = {F2F08E3E-0CA4-4740-B242-0911B6B202A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
