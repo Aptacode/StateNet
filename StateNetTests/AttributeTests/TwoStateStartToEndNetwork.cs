@@ -1,8 +1,9 @@
 ﻿using Aptacode.StateNet.Attributes;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
 {
-    public class TwoStateStartToEndNetwork : Network
+    public class TwoStateStartToEndNetwork : StateNetwork
     {
         [StartState("Start")]
         [Connection("Next", "End")]

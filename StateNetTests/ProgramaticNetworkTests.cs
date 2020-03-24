@@ -1,30 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
     public static class DummyProgrammaticNetworks
     {
-        public static INetwork CreateEmptyNetwork()
+        public static IStateNetwork CreateEmptyNetwork()
         {
-            return new Network();
+            return new StateNetwork();
         }
 
-        public static INetwork CreateSingleStateNetwork()
+        public static IStateNetwork CreateSingleStateNetwork()
         {
-            INetwork network = new Network();
+            IStateNetwork stateNetwork = new StateNetwork();
             var state0 = new State("0");
-            network.SetStart(state0);
-            return network;
+            stateNetwork.SetStart(state0);
+            return stateNetwork;
         }
 
-        public static INetwork CreateSingleConnectionNetwork()
+        public static IStateNetwork CreateSingleConnectionNetwork()
         {
             var state0 = new State("0");
             var state1 = new State("1");
-            var network = new Network();
+            var network = new StateNetwork();
 
             network.SetStart(state0);
             network.Always(state0, "next", state1);
@@ -32,13 +33,13 @@ namespace Aptacode.StateNet.Tests
             return network;
         }
 
-        public static INetwork CreateSelfConnectionNetwork()
+        public static IStateNetwork CreateSelfConnectionNetwork()
         {
             var state0 = new State("0");
             var state1 = new State("1");
             var state2 = new State("2");
 
-            var network = new Network();
+            var network = new StateNetwork();
 
             network.SetStart(state0);
             network.Connect(state0, "next", state1);
@@ -66,7 +67,8 @@ namespace Aptacode.StateNet.Tests
 
         [Test]
         [TestCaseSource(nameof(ProgrammaticNetworkCreationTestCases))]
-        public void ProgrammaticNetworkCreation(Network network, int states, int inputs, int connections, int endStates,
+        public void ProgrammaticNetworkCreation(StateNetwork network, int states, int inputs, int connections,
+            int endStates,
             bool isValid)
         {
             Assert.AreEqual(states, network.GetStates().Count());

@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using Aptacode.StateNet;
-using Aptacode.StateNet.Connections;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.JSon;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -26,7 +25,7 @@ namespace NetworkCreationTool
 
         private ObservableCollection<State> _disconnectedStates;
         private DelegateCommand _disconnectStateCommand;
-        private Network _network;
+        private StateNetwork _network;
 
         private string _newInputName;
 
@@ -109,7 +108,7 @@ namespace NetworkCreationTool
                 else
                 {
                     SelectedConnectedStateExpression = _network[SelectedState, SelectedInput, SelectedConnectedState]
-                        .Weight.Expression;
+                        .ConnectionWeight.Expression;
                 }
             }
         }

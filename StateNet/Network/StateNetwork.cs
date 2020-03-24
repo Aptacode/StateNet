@@ -4,18 +4,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Aptacode.StateNet.Attributes;
-using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Network
 {
-    public class Network : INetwork
+    public class StateNetwork : IStateNetwork
     {
         protected readonly Dictionary<string, Input> Inputs = new Dictionary<string, Input>();
         protected readonly Dictionary<string, State> States = new Dictionary<string, State>();
 
-        public Network()
+        public StateNetwork()
         {
             ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute),
                 (memberInfo, attribute) =>
@@ -45,23 +44,23 @@ namespace Aptacode.StateNet
             return GetState(state).GetConnections();
         }
 
-        public IEnumerable<Connection> this[string fromState, string action] =>
-            GetState(fromState).GetConnections()
+        public IEnumerable<Connection> this[string sourceState, string action] =>
+            GetState(sourceState).GetConnections()
                 .Where(connection => connection.Input.Equals(GetInput(action)));
 
-        public Connection this[string fromState, string action, string toState]
+        public Connection this[string sourceState, string action, string destinationState]
         {
             get
             {
-                return GetConnections(fromState)
+                return GetConnections(sourceState)
                     .FirstOrDefault(connection =>
                         connection.Input.Equals(GetInput(action)) &&
-                        connection.To.Equals(GetState(toState)));
+                        connection.To.Equals(GetState(destinationState)));
             }
             set
             {
-                var selectedState = GetState(fromState);
-                var oldConnection = this[fromState, action, toState];
+                var selectedState = GetState(sourceState);
+                var oldConnection = this[sourceState, action, destinationState];
                 if (oldConnection != null)
                 {
                     selectedState.Remove(oldConnection);
@@ -98,34 +97,6 @@ namespace Aptacode.StateNet
                 .ThenBy(c => c.To.Name);
         }
 
-        public IEnumerable<State> GetOrderedStates()
-        {
-            return Traverse<State>(StartState, (state) => GetConnections(state).Select(c => c.To));
-        }
-
-        public static IEnumerable<T> Traverse<T>(T item, Func<T, IEnumerable<T>> childSelector)
-        {
-            var items = new List<T>(){item};
-
-            var stack = new Stack<T>();
-            stack.Push(item);
-            while (stack.Any())
-            {
-                var next = stack.Pop();
-
-                foreach (var child in childSelector(next))
-                {
-                    if (!items.Contains(child))
-                    {
-                        items.Add(child);
-                        stack.Push(child);
-                    }
-                }
-            }
-
-            return items;
-        }
-
         public IEnumerable<State> GetEndStates()
         {
             return States.Values.Where(state => state.IsEnd());
@@ -147,9 +118,9 @@ namespace Aptacode.StateNet
             StartState = GetState(state);
         }
 
-        public State this[string state] => GetState(state);
+        public State this[string sourceState] => GetState(sourceState);
 
-        public bool Equals(INetwork other)
+        public bool Equals(IStateNetwork other)
         {
             return other != null &&
                    GetInputs().SequenceEqual(other.GetInputs()) &&
@@ -221,10 +192,10 @@ namespace Aptacode.StateNet
             connection?.From?.Remove(connection);
         }
 
-        public void Always(string fromState, string action, string toState)
+        public void Always(string sourceState, string action, string toState)
         {
-            Clear(fromState, action);
-            Connect(fromState, action, toState, new ConnectionWeight(1.ToString()));
+            Clear(sourceState, action);
+            Connect(sourceState, action, toState, new ConnectionWeight(1.ToString()));
         }
 
         public void SetDistribution(string fromState, string input, params (string, int)[] choices)
@@ -276,6 +247,46 @@ namespace Aptacode.StateNet
             connections.ForEach(connection => connection.From.Remove(connection));
         }
 
+        public void Connect(string fromState, string input, string toState, ConnectionWeight connectionWeight = null)
+        {
+            connectionWeight = connectionWeight ?? new ConnectionWeight(1);
+            this[fromState, input, toState] =
+                new Connection(GetState(fromState), GetInput(input), GetState(toState), connectionWeight);
+        }
+
+        public IEnumerable<Connection> GetConnections(State state, string input)
+        {
+            return this[state, input];
+        }
+
+        public IEnumerable<State> GetOrderedStates()
+        {
+            return Traverse(StartState, state => GetConnections(state).Select(c => c.To));
+        }
+
+        public static IEnumerable<T> Traverse<T>(T item, Func<T, IEnumerable<T>> childSelector)
+        {
+            var items = new List<T> {item};
+
+            var stack = new Stack<T>();
+            stack.Push(item);
+            while (stack.Any())
+            {
+                var next = stack.Pop();
+
+                foreach (var child in childSelector(next))
+                {
+                    if (!items.Contains(child))
+                    {
+                        items.Add(child);
+                        stack.Push(child);
+                    }
+                }
+            }
+
+            return items;
+        }
+
         private void AddNewConnection(string startStateName, string actionName, string targetStateName,
             string connectionDescription = "1")
         {
@@ -307,12 +318,6 @@ namespace Aptacode.StateNet
                     }
                 }
             }
-        }
-
-        public void Connect(string fromState, string input, string toState, ConnectionWeight weight = null)
-        {
-            weight = weight ?? new ConnectionWeight(1);
-            this[fromState, input, toState] = new Connection(GetState(fromState), GetInput(input), GetState(toState), weight);
         }
 
         public override string ToString()
@@ -350,7 +355,7 @@ namespace Aptacode.StateNet
 
         public override bool Equals(object obj)
         {
-            return obj is INetwork other && Equals(other);
+            return obj is IStateNetwork other && Equals(other);
         }
     }
 }

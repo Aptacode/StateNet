@@ -1,7 +1,6 @@
 ﻿using System;
-using Aptacode.StateNet.Events;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Network
 {
     public sealed class Input : IEquatable<Input>
     {
@@ -14,8 +13,6 @@ namespace Aptacode.StateNet
         ///     The state name
         /// </summary>
         public string Name { get; }
-
-        public static Input Empty { get; } = new Input(string.Empty);
 
         public override string ToString()
         {

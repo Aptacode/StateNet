@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests.ConnectionWeight
+namespace Aptacode.StateNet.Tests.ConnectionTests
 {
     public class ConnectionWeightTests
     {
@@ -30,9 +32,12 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         {
             get
             {
-                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(2, 2), 0);
-                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1), 0);
-                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1, 1), 1);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0",
+                    StateHistoryGenerator.Generate(2, 2), 0);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0", StateHistoryGenerator.Generate(1),
+                    0);
+                yield return new TestCaseData("StateVisitCount(\"1\") > 1 ? 1 : 0",
+                    StateHistoryGenerator.Generate(1, 1), 1);
             }
         }
 
@@ -75,14 +80,14 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         [TestCaseSource(nameof(ChangingSetWeightTestCases))]
         public void GetWeight_Returns_ConstructorWeight(int setWeight, int expectedValue)
         {
-            Assert.AreEqual(expectedValue, new Connections.ConnectionWeight(setWeight).GetWeight(null));
+            Assert.AreEqual(expectedValue, new ConnectionWeight(setWeight).Evaluate(null));
         }
 
         [Test]
         [TestCaseSource(nameof(ChangingHistoryTestCases))]
-        public void SetWeight_IsNotAffectedBy_History(int setWeight, EngineLog log)
+        public void SetWeight_IsNotAffectedBy_History(int setWeight, EngineHistory log)
         {
-            Assert.AreEqual(setWeight, new Connections.ConnectionWeight(setWeight).GetWeight(log));
+            Assert.AreEqual(setWeight, new ConnectionWeight(setWeight).Evaluate(log));
         }
 
         [Test]
@@ -90,9 +95,9 @@ namespace Aptacode.StateNet.Tests.ConnectionWeight
         [TestCaseSource(nameof(VisitCountWeightFromStringTestCases))]
         [TestCaseSource(nameof(InvalidDescription))]
         public void ConnectionWeightParser_FromString_ReturnsExpectedWeight_GivenHistory(string input,
-            EngineLog engineLog, int expectedWeight)
+            EngineHistory engineLog, int expectedWeight)
         {
-            Assert.AreEqual(expectedWeight, new Connections.ConnectionWeight(input).GetWeight(engineLog));
+            Assert.AreEqual(expectedWeight, new ConnectionWeight(input).Evaluate(engineLog));
         }
     }
 }

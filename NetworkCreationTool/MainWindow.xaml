@@ -4,68 +4,82 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkCreationTool"
+        xmlns:wpfGraphControl="http://mlsagl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
+        Title="MainWindow" Height="720" Width="1280" Loaded="MainWindow_OnLoaded">
 
-        </Grid.ColumnDefinitions>
+    <TabControl>
+        <TabItem Header="View">
+            <DockPanel x:Name="GraphViewerPanel" />
+        </TabItem>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <TabItem Header="Modify">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
 
-        <Label Content="Source state" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" />
-        <Border Margin="10" Background="Gray" Grid.Column="0" Grid.Row="1">
-            <DockPanel LastChildFill="True">
-                <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                    <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewStateCommand}" />
-                    <TextBox Text="{Binding NewStateName}" />
-                </DockPanel>
-                <Button DockPanel.Dock="Bottom" Content="Remove" Command="{Binding RemoveStateCommand}" />
-                <ListBox ItemsSource="{Binding AllStates}" SelectedValue="{Binding SelectedState}" />
-            </DockPanel>
-        </Border>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <Label Content="Destination state" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" />
-        <Border Margin="10" Background="Gray" Grid.Column="1" Grid.Row="1">
-            <DockPanel LastChildFill="True">
-
-                <DockPanel DockPanel.Dock="Top">
-                    <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveInputCommand}" />
-                    <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewInputCommand}" />
-                    <ComboBox DockPanel.Dock="Left" Width="200" ItemsSource="{Binding AllInputs}"
-                              SelectedValue="{Binding SelectedInput}" />
-                    <TextBox DockPanel.Dock="Right" Text="{Binding NewInputName}" />
-                </DockPanel>
-
-                <DockPanel>
-                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Content="Connect" Command="{Binding ConnectStateCommand}" />
-                        <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding DisconnectedStates}"
-                                  SelectedValue="{Binding SelectedDisconnectedState}" />
+                <Label Content="Source state" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" />
+                <Border Margin="10" Background="Gray" Grid.Column="0" Grid.Row="1">
+                    <DockPanel LastChildFill="True">
+                        <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewStateCommand}" />
+                            <TextBox Text="{Binding NewStateName}" />
+                        </DockPanel>
+                        <Button DockPanel.Dock="Bottom" Content="Remove" Command="{Binding RemoveStateCommand}" />
+                        <ListBox ItemsSource="{Binding AllStates}" SelectedValue="{Binding SelectedState}" />
                     </DockPanel>
+                </Border>
 
-                    <Button DockPanel.Dock="Bottom" Content="Disconnect" Command="{Binding DisconnectStateCommand}" />
+                <Label Content="Destination state" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" />
+                <Border Margin="10" Background="Gray" Grid.Column="1" Grid.Row="1">
+                    <DockPanel LastChildFill="True">
+                        <DockPanel DockPanel.Dock="Top">
+                            <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveInputCommand}" />
+                            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewInputCommand}" />
+                            <ComboBox DockPanel.Dock="Left" Width="200" ItemsSource="{Binding AllInputs}"
+                                      SelectedValue="{Binding SelectedInput}" />
+                            <TextBox DockPanel.Dock="Right" Text="{Binding NewInputName}" />
+                        </DockPanel>
 
-                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Content="Update"
-                                Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
-                        <TextBox DockPanel.Dock="Left" Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}" />
+                        <DockPanel>
+                            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                                <Button DockPanel.Dock="Right" Content="Connect"
+                                        Command="{Binding ConnectStateCommand}" />
+                                <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding DisconnectedStates}"
+                                          SelectedValue="{Binding SelectedDisconnectedState}" />
+                            </DockPanel>
+
+                            <Button DockPanel.Dock="Bottom" Content="Disconnect"
+                                    Command="{Binding DisconnectStateCommand}" />
+
+                            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                                <Button DockPanel.Dock="Right" Content="Update"
+                                        Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
+                                <TextBox DockPanel.Dock="Left"
+                                         Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}" />
+                            </DockPanel>
+
+                            <ListBox ItemsSource="{Binding ConnectedStates}"
+                                     SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
+                        </DockPanel>
                     </DockPanel>
+                </Border>
 
-                    <ListBox ItemsSource="{Binding ConnectedStates}"
-                             SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
-                </DockPanel>
-            </DockPanel>
-        </Border>
+                <TreeView x:Name="TreeView" Grid.Column="2" Grid.Row="1" />
+            </Grid>
+        </TabItem>
 
-        <TreeView x:Name="TreeView" Grid.Column="2" Grid.Row="1" />
-    </Grid>
+    </TabControl>
+
+
 </Window>

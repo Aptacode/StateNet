@@ -1,11 +1,12 @@
 ﻿using Aptacode.StateNet.Attributes;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.JSon;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests
 {
-    public class SimpleDummyNetwork : Network
+    public class SimpleDummyNetwork : StateNetwork
     {
         [StartState("Start")]
         [Connection("Next", "End")]

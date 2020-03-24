@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
@@ -8,9 +10,9 @@ namespace Aptacode.StateNet.Tests
 {
     public class EnumEngineTests
     {
-        private EnumNetwork<DummyStates.States, DummyActions.Actions> GetTestNetwork()
+        private EnumStateNetwork<DummyStates.States, DummyActions.Actions> GetTestNetwork()
         {
-            var network = new EnumNetwork<DummyStates.States, DummyActions.Actions>();
+            var network = new EnumStateNetwork<DummyStates.States, DummyActions.Actions>();
 
             network.CreateInput(DummyActions.Actions.Play);
             network.CreateInput(DummyActions.Actions.Pause);
@@ -43,7 +45,8 @@ namespace Aptacode.StateNet.Tests
             var network = GetTestNetwork();
 
             var engine =
-                new EnumEngine<DummyStates.States, DummyActions.Actions>(new SystemRandomNumberGenerator(), network);
+                new EnumStateNetEngine<DummyStates.States, DummyActions.Actions>(new SystemRandomNumberGenerator(),
+                    network);
 
             engine.Start();
             engine.Apply(DummyActions.Actions.Play);
@@ -53,7 +56,7 @@ namespace Aptacode.StateNet.Tests
 
             var expectedLog = new List<string> {"Ready", "Playing", "Paused", "Playing", "Stopped"};
 
-            Assert.That(() => engine.GetLog().StateLog.Select(state => state.Name),
+            Assert.That(() => engine.History.States.Select(state => state.Name),
                 Is.EquivalentTo(expectedLog).After(500).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }

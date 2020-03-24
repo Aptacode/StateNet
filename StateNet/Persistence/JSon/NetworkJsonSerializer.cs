@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using Aptacode.StateNet.Network;
+using Newtonsoft.Json;
 
 namespace Aptacode.StateNet.Persistence.JSon
 {
@@ -11,23 +13,23 @@ namespace Aptacode.StateNet.Persistence.JSon
 
         public string Filename { get; set; }
 
-        public Network Read()
+        public StateNetwork Read()
         {
-            Network network = null;
+            StateNetwork stateNetwork = null;
 
             using (var streamReader = new StreamReader(Filename))
             {
-                network = NetworkToJSon.FromJSon(streamReader.ReadToEnd());
+                stateNetwork = NetworkToJSon.FromJSon(streamReader.ReadToEnd());
             }
 
-            return network;
+            return stateNetwork;
         }
 
-        public void Write(Network network)
+        public void Write(StateNetwork stateNetwork)
         {
             using (var streamWriter = new StreamWriter(Filename))
             {
-                streamWriter.Write(NetworkToJSon.ToJson(network));
+                streamWriter.Write(NetworkToJSon.ToJson(stateNetwork).ToString(Formatting.Indented));
             }
         }
     }

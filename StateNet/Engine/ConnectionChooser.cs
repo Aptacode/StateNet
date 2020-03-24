@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Connections;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Engine
 {
-    public class StateChooser
+    public class ConnectionChooser
     {
-        private readonly EngineLog _engineLog;
+        private readonly EngineHistory _engineHistory;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
         /// <summary>
         ///     Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
-        /// <param name="engineLog"></param>
-        public StateChooser(IRandomNumberGenerator randomNumberGenerator, EngineLog engineLog)
+        /// <param name="engineHistory"></param>
+        public ConnectionChooser(IRandomNumberGenerator randomNumberGenerator, EngineHistory engineHistory)
         {
             _randomNumberGenerator = randomNumberGenerator;
-            _engineLog = engineLog;
+            _engineHistory = engineHistory;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Aptacode.StateNet
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        public string Choose(IEnumerable<Connection> connections)
+        public Connection Choose(IEnumerable<Connection> connections)
         {
             var connectionWeights = GetConnectionWeights(connections).ToList();
 
@@ -60,17 +60,17 @@ namespace Aptacode.StateNet
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        private IEnumerable<(State, int)> GetConnectionWeights(IEnumerable<Connection> connections)
+        private IEnumerable<(Connection, int)> GetConnectionWeights(IEnumerable<Connection> connections)
         {
             return connections.Select(connection =>
-                (connection.To, connection.Weight.GetWeight(_engineLog)));
+                (connection, connection.ConnectionWeight.Evaluate(_engineHistory)));
         }
 
         /// <summary>
         ///     Calculates the sum of each connection in the given StateDistribution
         /// </summary>
         /// <param name="weights"></param>
-        private int TotalWeight(IEnumerable<(State, int)> weights)
+        private int TotalWeight(IEnumerable<(Connection, int)> weights)
         {
             return weights
                 .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);

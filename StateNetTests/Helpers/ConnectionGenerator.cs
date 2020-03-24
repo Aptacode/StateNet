@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Connections;
+using System.Linq;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Helpers
 {
@@ -12,22 +13,20 @@ namespace Aptacode.StateNet.Tests.Helpers
             for (var i = 0; i < choices.Length; i++)
             {
                 output.Add(new Connection(new State(fromState), new Input(input), new State(i.ToString()),
-                    new Connections.ConnectionWeight(choices[i])));
+                    new ConnectionWeight(choices[i])));
             }
 
             return output;
         }
 
-        public static List<Connection> Generate(params int[] choices)
+        public static IEnumerable<Connection> Generate(params (string, string, string, int)[] choices)
         {
-            var output = new List<Connection>();
-            for (var i = 0; i < choices.Length; i++)
-            {
-                output.Add(new Connection(new State("defaultState"), new Input("defaultInput"), new State(i.ToString()),
-                    new Connections.ConnectionWeight(choices[i])));
-            }
+            return choices.Select(choice => Generate(choice.Item1, choice.Item2, choice.Item3, choice.Item4));
+        }
 
-            return output;
+        public static Connection Generate(string from, string input, string to, int weight)
+        {
+            return new Connection(new State(from), new Input(input), new State(to), new ConnectionWeight(weight));
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Aptacode.StateNet;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.JSon;
+using Microsoft.Msagl.Core.Routing;
+using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.WpfGraphControl;
 
 namespace NetworkCreationTool
 {
@@ -11,8 +14,12 @@ namespace NetworkCreationTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Network _network;
+        private StateNetwork _network;
         private TreeViewItem _rootItem;
+
+        private GraphViewer graphViewer;
+
+        private IViewerNode selectedItem;
 
         public MainWindow()
         {
@@ -48,7 +55,8 @@ namespace NetworkCreationTool
 
             parentTreeViewItem.Items.Clear();
 
-            foreach (var connection in _network.GetState(parentState).GetConnections().GroupBy(connection => connection.To))
+            foreach (var connection in _network.GetState(parentState).GetConnections()
+                .GroupBy(connection => connection.To))
             {
                 var child = new TreeViewItem
                 {
@@ -59,6 +67,69 @@ namespace NetworkCreationTool
                 child.Items.Add(null);
                 parentTreeViewItem.Items.Add(child);
             }
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            graphViewer = new GraphViewer();
+            graphViewer.BindToPanel(GraphViewerPanel);
+            GraphViewerPanel.ClipToBounds = true;
+            graphViewer.MouseDown += GraphViewer_MouseDown;
+
+            var Graph = new Graph("Test");
+
+            _network = new NetworkJsonSerializer("./test.json").Read();
+
+            foreach (var state in _network.GetOrderedStates())
+            {
+                var node = Graph.AddNode(state.Name);
+
+                foreach (var networkConnection in _network.GetConnections(state))
+                {
+                    Graph.AddEdge(networkConnection.From.Name, networkConnection.Input.Name, networkConnection.To.Name);
+                }
+            }
+
+            Graph.Attr.LayerDirection = LayerDirection.BT;
+            Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.UseObstacleRectangles = true;
+            Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.RouteMultiEdgesAsBundles = true;
+            Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.RectilinearToCenter;
+            graphViewer.Graph = Graph;
+        }
+
+        private void GraphViewer_MouseDown(object sender, MsaglMouseEventArgs e)
+        {
+            outputSelectedItem();
+        }
+
+        private void outputSelectedItem()
+        {
+            var node = graphViewer.ObjectUnderMouseCursor as IViewerNode;
+
+            if (selectedItem == node)
+            {
+                return;
+            }
+
+            SetColor(Color.Black);
+
+            selectedItem = node;
+
+            SetColor(Color.Green);
+        }
+
+        private void SetColor(Color color)
+        {
+            if (selectedItem == null)
+            {
+                return;
+            }
+
+            var drawingNode = (Node) selectedItem.DrawingObject;
+
+            drawingNode.Attr.Color = color;
+
+            graphViewer.Invalidate(selectedItem);
         }
     }
 }

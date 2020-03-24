@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Connections;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Network
 {
-    public class EnumNetwork<TStates, TInputs> : Network
+    public class EnumStateNetwork<TStates, TInputs> : StateNetwork
         where TStates : Enum
         where TInputs : Enum
     {
@@ -43,8 +42,10 @@ namespace Aptacode.StateNet
             return GetConnections(state.ToString());
         }
 
-        public void Connect(TStates fromState, TInputs input, TStates toState, ConnectionWeight weight = null) =>
-            this.Connect(fromState.ToString(), input.ToString(), toState.ToString(), weight);
+        public void Connect(TStates fromState, TInputs input, TStates toState, ConnectionWeight connectionWeight = null)
+        {
+            Connect(fromState.ToString(), input.ToString(), toState.ToString(), connectionWeight);
+        }
 
         public void Always(TStates fromState, TInputs input, TStates toSate)
         {

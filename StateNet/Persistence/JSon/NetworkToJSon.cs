@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Connections;
+using Aptacode.StateNet.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,11 +14,14 @@ namespace Aptacode.StateNet.Persistence.JSon
         public static readonly string InputsPropertyName = "Inputs";
         public static readonly string ConnectionsPropertyName = "Connections";
 
-        public static Network FromJSon(string jsonInput)
+        public static StateNetwork FromJSon(string jsonInput)
         {
-            var network = new Network();
+            return FromJSon(JObject.Parse(jsonInput));
+        }
 
-            var jObject = JObject.Parse(jsonInput);
+        public static StateNetwork FromJSon(JObject jObject)
+        {
+            var network = new StateNetwork();
 
             var startStateJson = jObject.Property(StartStatePropertyName).Value.ToString();
             var statesJson = jObject.Property(StatesPropertyName).Value.ToString();
@@ -35,23 +38,21 @@ namespace Aptacode.StateNet.Persistence.JSon
             network.SetStart(startState);
             states.ForEach(state => network.CreateState(state));
             inputs.ForEach(input => network.CreateInput(input));
-            connections.ForEach(connection => network.Connect(connection.From, connection.Input, connection.To, connection.Weight));
+            connections.ForEach(connection =>
+                network.Connect(connection.From, connection.Input, connection.To, connection.ConnectionWeight));
 
             return network;
         }
 
-        public static string ToJson(Network network)
+        public static JObject ToJson(StateNetwork stateNetwork)
         {
-            var jObject = new JObject
+            return new JObject
             {
-                {StartStatePropertyName, JToken.FromObject(network.StartState)},
-                {StatesPropertyName, JToken.FromObject(network.GetStates())},
-                {InputsPropertyName, JToken.FromObject(network.GetInputs())},
-                {ConnectionsPropertyName, JToken.FromObject(network.GetConnections())}
+                {StartStatePropertyName, JToken.FromObject(stateNetwork.StartState)},
+                {StatesPropertyName, JToken.FromObject(stateNetwork.GetStates())},
+                {InputsPropertyName, JToken.FromObject(stateNetwork.GetInputs())},
+                {ConnectionsPropertyName, JToken.FromObject(stateNetwork.GetConnections())}
             };
-
-
-            return jObject.ToString(Formatting.Indented);
         }
 
         public class StateConverter : JsonConverter<State>

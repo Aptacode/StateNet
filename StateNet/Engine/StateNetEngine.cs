@@ -3,26 +3,26 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Aptacode.StateNet.Events;
+using Aptacode.StateNet.Engine.Events;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Engine
 {
-    public class Engine : IEngine
+    public class StateNetEngine : IStateNetEngine
     {
         private readonly Dictionary<State, List<Action>> _callbackDictionary;
-        private readonly EngineLog _engineLog;
+        private readonly ConnectionChooser _connectionChooser;
         private readonly ConcurrentQueue<Input> _inputQueue;
-        private readonly INetwork _network;
-        private readonly StateChooser _stateChooser;
+        private readonly IStateNetwork _stateNetwork;
         private readonly CancellationToken cancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
 
-        public Engine(IRandomNumberGenerator randomNumberGenerator, INetwork network)
+        public StateNetEngine(IRandomNumberGenerator randomNumberGenerator, IStateNetwork stateNetwork)
         {
-            _network = network;
-            _engineLog = new EngineLog();
-            _stateChooser = new StateChooser(randomNumberGenerator, _engineLog);
+            History = new EngineHistory();
+            _stateNetwork = stateNetwork;
+            _connectionChooser = new ConnectionChooser(randomNumberGenerator, History);
             _callbackDictionary = new Dictionary<State, List<Action>>();
             _inputQueue = new ConcurrentQueue<Input>();
             cancellationTokenSource = new CancellationTokenSource();
@@ -31,11 +31,13 @@ namespace Aptacode.StateNet
 
         public State CurrentState { get; private set; }
 
-        public event EngineEvent OnFinished;
+        public EngineHistory History { get; }
 
-        public event EngineEvent OnStarted;
+        public event EventHandler<EngineStartedEventArgs> OnStarted;
 
-        public event TransitionEvent OnTransition;
+        public event EventHandler<EngineFinishedEventArgs> OnFinished;
+
+        public event EventHandler<EngineTransitionEventArgs> OnTransition;
 
         public void Subscribe(State state, Action callback)
         {
@@ -56,22 +58,18 @@ namespace Aptacode.StateNet
             }
         }
 
-        public EngineLog GetLog()
-        {
-            return _engineLog;
-        }
-
         public void Start()
         {
-            if (!_network.IsValid())
+            if (!_stateNetwork.IsValid())
             {
                 return;
             }
 
-            OnStarted?.Invoke(this);
-            CurrentState = _network.StartState;
+            CurrentState = _stateNetwork.StartState;
 
-            _engineLog.Add(Input.Empty, CurrentState);
+            OnStarted?.Invoke(this, new EngineStartedEventArgs(CurrentState));
+
+            History.SetStart(CurrentState);
 
             new TaskFactory().StartNew(async () =>
             {
@@ -95,9 +93,9 @@ namespace Aptacode.StateNet
 
         public bool Apply(string inputName)
         {
-            var input = _network.GetInput(inputName, false);
+            var input = _stateNetwork.GetInput(inputName, false);
 
-            if (Input.Empty.Equals(input))
+            if (input == null)
             {
                 return false;
             }
@@ -132,15 +130,19 @@ namespace Aptacode.StateNet
                 return;
             }
 
-            _engineLog.Add(input, nextState);
+            History.Log(CurrentState, input, nextState);
 
-            new TaskFactory().StartNew(() => OnTransition?.Invoke(this, CurrentState, input, nextState), cancellationToken).ConfigureAwait(false);
+            new TaskFactory()
+                .StartNew(
+                    () => OnTransition?.Invoke(this, new EngineTransitionEventArgs(CurrentState, input, nextState)),
+                    cancellationToken)
+                .ConfigureAwait(false);
 
             CurrentState = nextState;
 
             if (CurrentState.IsEnd())
             {
-                OnFinished?.Invoke(this);
+                OnFinished?.Invoke(this, new EngineFinishedEventArgs(CurrentState));
             }
             else
             {
@@ -150,8 +152,8 @@ namespace Aptacode.StateNet
 
         private State GetNextState(State state, string input)
         {
-            var stateName = _stateChooser.Choose(_network[state, input]);
-            return _network[stateName];
+            var connections = _stateNetwork.GetConnections(state, input);
+            return _connectionChooser.Choose(connections).To;
         }
     }
 }

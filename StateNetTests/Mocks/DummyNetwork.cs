@@ -1,8 +1,9 @@
 ﻿using Aptacode.StateNet.Attributes;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Mocks
 {
-    public class DummyNetwork : Network
+    public class DummyNetwork : StateNetwork
     {
         [StateName("D1")]
         [Connection("Next", "D1", "StateVisitCount(\"D2\") < 2 ? 1 : 0")]

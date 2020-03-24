@@ -1,8 +1,10 @@
-﻿namespace Aptacode.StateNet.Persistence
+﻿using Aptacode.StateNet.Network;
+
+namespace Aptacode.StateNet.Persistence
 {
     public interface INetworkSerializer
     {
-        Network Read();
-        void Write(Network network);
+        StateNetwork Read();
+        void Write(StateNetwork stateNetwork);
     }
 }

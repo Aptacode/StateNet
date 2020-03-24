@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 using NUnit.Framework;
 
@@ -8,26 +10,26 @@ namespace Aptacode.StateNet.Tests
 {
     public class EngineTests
     {
-        private INetwork GetTestNetwork()
+        private IStateNetwork GetTestNetwork()
         {
-            INetwork network = new Network();
+            IStateNetwork stateNetwork = new StateNetwork();
 
-            network.SetStart("ready");
+            stateNetwork.SetStart("ready");
 
-            network.Always("ready", "Play", "playing");
-            network.Always("ready", "Stop", "stopped");
-            network.Always("playing", "Pause", "paused");
-            network.Always("playing", "Stop", "stopped");
-            network.Always("paused", "Play", "playing");
-            network.Always("paused", "Stop", "stopped");
+            stateNetwork.Always("ready", "Play", "playing");
+            stateNetwork.Always("ready", "Stop", "stopped");
+            stateNetwork.Always("playing", "Pause", "paused");
+            stateNetwork.Always("playing", "Stop", "stopped");
+            stateNetwork.Always("paused", "Play", "playing");
+            stateNetwork.Always("paused", "Stop", "stopped");
 
-            return network;
+            return stateNetwork;
         }
 
         [Test]
         public void EngineLogTests()
         {
-            var engine = new Engine(new SystemRandomNumberGenerator(), GetTestNetwork());
+            var engine = new StateNetEngine(new SystemRandomNumberGenerator(), GetTestNetwork());
 
             engine.Start();
             engine.Apply("Play");
@@ -35,11 +37,21 @@ namespace Aptacode.StateNet.Tests
             engine.Apply("Play");
             engine.Apply("Stop");
 
-            var expectedLog = new List<(string, string)>
-                {("", "ready"), ("Play", "playing"), ("Pause", "paused"), ("Play", "playing"), ("Stop", "stopped")};
+            var expectedStateLog = new List<string>
+            {
+                "ready", "playing", "paused", "playing", "stopped"
+            };
 
-            Assert.That(() => engine.GetLog().Log.Select(pair => (pair.Item1.Name, pair.Item2.Name)),
-                Is.EquivalentTo(expectedLog).After(200).MilliSeconds.PollEvery(1).MilliSeconds);
+            var expectedInputLog = new List<string>
+            {
+                "Play", "Pause", "Play", "Stop"
+            };
+
+            Assert.That(() => engine.History.States.Select(state => state.Name),
+                Is.EquivalentTo(expectedStateLog).After(200).MilliSeconds.PollEvery(1).MilliSeconds);
+
+            Assert.That(() => engine.History.Inputs.Select(input => input.Name),
+                Is.EquivalentTo(expectedInputLog).After(200).MilliSeconds.PollEvery(1).MilliSeconds);
         }
     }
 }

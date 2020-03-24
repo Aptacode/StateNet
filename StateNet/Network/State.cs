@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aptacode.StateNet.Connections;
 
-namespace Aptacode.StateNet
+namespace Aptacode.StateNet.Network
 {
     public sealed class State : IEquatable<State>
     {
@@ -21,8 +20,6 @@ namespace Aptacode.StateNet
         ///     The state name
         /// </summary>
         public string Name { get; }
-
-        public static State Invalid { get; } = new State(string.Empty);
 
         public override string ToString()
         {

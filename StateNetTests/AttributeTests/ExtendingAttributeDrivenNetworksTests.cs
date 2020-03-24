@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.AttributeTests
@@ -36,11 +37,11 @@ namespace Aptacode.StateNet.Tests.AttributeTests
         public void TestAddingNewConnectedState()
         {
             //Arrange
-            INetwork network = new TwoStateStartToEndNetwork();
-            var states = new List<State>(network.GetStates());
+            IStateNetwork stateNetwork = new TwoStateStartToEndNetwork();
+            var states = new List<State>(stateNetwork.GetStates());
 
             //Act
-            var newState = network.GetState("NewState");
+            var newState = stateNetwork.GetState("NewState");
 
             //TODO - make use AddNewConnection, then make assertions. Only after checking if this type of runtime connection addition is desirable 
 

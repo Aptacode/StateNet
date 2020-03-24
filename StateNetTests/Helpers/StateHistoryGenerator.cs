@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Helpers
 {
@@ -9,12 +10,23 @@ namespace Aptacode.StateNet.Tests.Helpers
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        public static EngineLog Generate(params int[] sequence)
+        public static EngineHistory Generate(params int[] sequence)
         {
-            var log = new EngineLog();
-            sequence.Select(v => (Input.Empty, new State(v.ToString()))).ToList()
-                .ForEach(pair => log.Add(pair.Empty, pair.Item2));
-            return log;
+            var history = new EngineHistory();
+
+            if (sequence.Length == 0)
+            {
+                return history;
+            }
+
+            history.SetStart(new State(sequence[0].ToString()));
+
+            for (var i = 1; i < sequence.Length; i++)
+            {
+                history.Log(new State((i - 1).ToString()), new Input("next"), new State(i.ToString()));
+            }
+
+            return history;
         }
     }
 }

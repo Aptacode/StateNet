@@ -1,12 +1,13 @@
 ﻿using System;
+using Aptacode.StateNet.Engine;
 
-namespace Aptacode.StateNet.Connections
+namespace Aptacode.StateNet.Network
 {
     public class ConnectionWeight : IEquatable<ConnectionWeight>
     {
         private string _expression;
 
-        private Func<EngineLog, int> _weightFunction;
+        private Func<EngineHistory, int> _weightFunction;
 
         public ConnectionWeight() : this(1)
         {
@@ -54,7 +55,7 @@ namespace Aptacode.StateNet.Connections
             return other != null && Expression.Equals(other.Expression);
         }
 
-        public int GetWeight(EngineLog log)
+        public int Evaluate(EngineHistory log)
         {
             var result = _weightFunction(log);
             return result >= 0 ? result : 0;
