@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Interfaces
 {
-    public interface IStateNetwork : IEquatable<IStateNetwork>
+    public interface IStateNetworkEditor
     {
-        bool IsValid();
-
         #region States
 
-        State StartState { get; set; }
-
-        State GetState(string name);
+        void SetStart(string name);
+        State GetState(string name, bool createIfMissing = true);
         State CreateState(string name);
         void RemoveState(string name);
 
@@ -23,10 +19,9 @@ namespace Aptacode.StateNet.Interfaces
 
         #region Inputs
 
-        Input GetInput(string name);
+        Input GetInput(string name, bool createIfMissing = true);
         Input CreateInput(string name);
         void RemoveInput(string name);
-
         IEnumerable<Input> GetInputs();
         IEnumerable<Input> GetInputs(string state);
 
@@ -34,18 +29,21 @@ namespace Aptacode.StateNet.Interfaces
 
         #region Connections
 
-        IEnumerable<Connection> Connections { get; }
-        IEnumerable<Connection> this[string source] { get; }
-        IEnumerable<Connection> this[string source, string input] { get; }
-        Connection this[string source, string input, string destination] { get; set; }
-
         IEnumerable<Connection> GetConnections();
         IEnumerable<Connection> GetConnections(string source);
         IEnumerable<Connection> GetConnections(string source, string input);
         Connection GetConnection(string source, string input, string destination);
 
+        void Always(string source, string input, string destination);
+        void Clear(string source);
+        void Clear(string source, string input);
+        void Clear(string source, string input, string destination);
+        void SetDistribution(string source, string input, params (string, int)[] choices);
+        void SetDistribution(string source, string input, params (string, ConnectionWeight)[] choices);
+        void UpdateDistribution(string source, string input, params (string, int)[] choices);
         void Connect(string source, string input, string destination, ConnectionWeight connectionWeight);
         void Disconnect(string source, string input, string destination);
+        void UpdateDistribution(string source, string input, params (string, ConnectionWeight)[] choices);
 
         #endregion
     }

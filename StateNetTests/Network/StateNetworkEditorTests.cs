@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Tests.Helpers;
@@ -8,81 +7,51 @@ using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.Network
 {
-    public class ProgrammaticNetworkTests
+    public class StateNetworkEditorTests
     {
-        public static IEnumerable<TestCaseData> NetworkCreationTestCases
-        {
-            get
-            {
-                yield return new TestCaseData("", DummyStates.Create(), DummyInputs.Create(),
-                    DummyConnections.Generate(), 0, false);
-                yield return new TestCaseData("", DummyStates.Create("a"), DummyInputs.Create("next"),
-                    DummyConnections.Generate(), 1, false);
-                yield return new TestCaseData("", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(), 2, false);
-                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(("a", "next", "b", 1)), 1, true);
-                yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1)), 0, true);
-            }
-        }
-
-        [Test]
-        [TestCaseSource(nameof(NetworkCreationTestCases))]
-        public void NetworkCreationTests(string startState, IEnumerable<State> states, IEnumerable<Input> inputs,
-            IEnumerable<Connection> connections, int endStateCount, bool isValid)
-        {
-            var network = DummyProgrammaticNetworks.CreateNetwork(startState, states, inputs, connections);
-
-            Assert.That(states, Is.SupersetOf(network.GetStates()));
-            Assert.That(states, Is.SubsetOf(network.GetStates()));
-
-            Assert.That(inputs, Is.SupersetOf(network.GetInputs()));
-            Assert.That(inputs, Is.SubsetOf(network.GetInputs()));
-
-            Assert.That(connections, Is.SupersetOf(network.GetConnections()));
-            Assert.That(connections, Is.SubsetOf(network.GetConnections()));
-
-            Assert.AreEqual(endStateCount, network.GetEndStates().Count());
-            Assert.AreEqual(isValid, network.IsValid());
-        }
-
         #region States
 
         [Test]
         public void GetStates()
         {
-            IStateNetwork network = new StateNetwork();
-            var stateA = network.CreateState("a");
-            var stateB = network.CreateState("b");
-            var stateC = network.CreateState("c");
-            Assert.IsTrue(network.GetStates().Contains(stateA));
-            Assert.IsTrue(network.GetStates().Contains(stateB));
-            Assert.IsTrue(network.GetStates().Contains(stateC));
+            var network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
+            var stateA = networkEditor.CreateState("a");
+            var stateB = networkEditor.CreateState("b");
+            var stateC = networkEditor.CreateState("c");
+            Assert.IsTrue(networkEditor.GetStates().Contains(stateA));
+            Assert.IsTrue(networkEditor.GetStates().Contains(stateB));
+            Assert.IsTrue(networkEditor.GetStates().Contains(stateC));
         }
 
         [Test]
         public void GetState_CreatesNewStateIfMissing()
         {
-            IStateNetwork network = new StateNetwork();
-            var stateA = network.GetState("a");
-            var stateB = network.CreateState("a");
-            var stateC = network.GetState("a");
+            var network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
+            var stateB = networkEditor.CreateState("b");
+            var stateC = networkEditor.GetState("c");
+            var stateD = networkEditor.GetState("d");
+            var stateE = networkEditor.GetState("e", false);
 
-            Assert.IsNull(stateA);
             Assert.IsTrue(network.GetStates().Contains(stateB));
-            Assert.AreEqual(stateB, stateC);
+            Assert.IsTrue(network.GetStates().Contains(stateC));
+            Assert.IsTrue(network.GetStates().Contains(stateD));
+            Assert.IsFalse(network.GetStates().Contains(stateE));
         }
 
         [Test]
         public void GetState_ReturnsState()
         {
-            IStateNetwork network = new StateNetwork();
+            var network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
+
             var stateA = network.CreateState("a");
 
-            Assert.AreEqual(stateA, network.CreateState("a"));
-            Assert.AreEqual(stateA, network.GetState("a"));
-            Assert.AreEqual(stateA, network.GetState("a"));
+            Assert.AreEqual(stateA, networkEditor.CreateState("a"));
+            Assert.AreEqual(stateA, networkEditor.GetState("a"));
+            Assert.AreEqual(stateA, networkEditor.GetState("a"));
+            Assert.AreEqual(stateA, networkEditor.GetState("a", false));
         }
 
         [Test]
@@ -94,7 +63,9 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyInputs.Create("next", "back"),
                 DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
 
-            network.RemoveState("a");
+            var networkEditor = new StateNetworkEditor(network);
+
+            networkEditor.RemoveState("a");
 
             Assert.IsNull(network.GetState("a"));
             Assert.That(
@@ -111,17 +82,20 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyInputs.Create("next", "back"),
                 DummyConnections.Generate(("b", "next", "c", 1)));
 
-            var stateA = network.GetState("a");
-            var stateB = network.GetState("b");
-            var stateC = network.GetState("c");
+            var networkEditor = new StateNetworkEditor(network);
+
+
+            var stateA = networkEditor.GetState("a");
+            var stateB = networkEditor.GetState("b");
+            var stateC = networkEditor.GetState("c");
 
             Assert.IsTrue(stateA.IsEnd());
             Assert.IsFalse(stateB.IsEnd());
             Assert.IsTrue(stateC.IsEnd());
 
-            Assert.That(network.GetEndStates().Contains(stateA));
-            Assert.That(!network.GetEndStates().Contains(stateB));
-            Assert.That(network.GetEndStates().Contains(stateC));
+            Assert.That(networkEditor.GetEndStates().Contains(stateA));
+            Assert.That(!networkEditor.GetEndStates().Contains(stateB));
+            Assert.That(networkEditor.GetEndStates().Contains(stateC));
         }
 
         #endregion
@@ -132,38 +106,46 @@ namespace Aptacode.StateNet.Tests.Network
         public void GetInputs()
         {
             IStateNetwork network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
+
             var inputA = network.CreateInput("a");
             var inputB = network.CreateInput("b");
             var inputC = network.CreateInput("c");
 
-            Assert.IsTrue(network.GetInputs().Contains(inputA));
-            Assert.IsTrue(network.GetInputs().Contains(inputB));
-            Assert.IsTrue(network.GetInputs().Contains(inputC));
+            Assert.IsTrue(networkEditor.GetInputs().Contains(inputA));
+            Assert.IsTrue(networkEditor.GetInputs().Contains(inputB));
+            Assert.IsTrue(networkEditor.GetInputs().Contains(inputC));
         }
 
         [Test]
         public void GetInputs_CreatesNewInputIfMissing()
         {
             IStateNetwork network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
 
-            var InputA = network.GetInput("a");
-            var InputB = network.CreateInput("a");
-            var InputC = network.GetInput("a");
+            var InputA = networkEditor.CreateInput("b");
+            var InputB = networkEditor.GetInput("c");
+            var InputC = networkEditor.GetInput("d");
+            var InputD = networkEditor.GetInput("e", false);
 
-            Assert.IsNull(InputA);
+            Assert.IsTrue(network.GetInputs().Contains(InputA));
             Assert.IsTrue(network.GetInputs().Contains(InputB));
-            Assert.AreEqual(InputB, InputC);
+            Assert.IsTrue(network.GetInputs().Contains(InputC));
+            Assert.IsFalse(network.GetInputs().Contains(InputD));
         }
 
         [Test]
         public void GetInputs_ReturnsInput()
         {
             IStateNetwork network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
+
             var InputA = network.CreateInput("a");
 
-            Assert.AreEqual(InputA, network.CreateInput("a"));
-            Assert.AreEqual(InputA, network.GetInput("a"));
-            Assert.AreEqual(InputA, network.GetInput("a"));
+            Assert.AreEqual(InputA, networkEditor.CreateInput("a"));
+            Assert.AreEqual(InputA, networkEditor.GetInput("a"));
+            Assert.AreEqual(InputA, networkEditor.GetInput("a"));
+            Assert.AreEqual(InputA, networkEditor.GetInput("a", false));
         }
 
         [Test]
@@ -174,8 +156,9 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
                 DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
+            var networkEditor = new StateNetworkEditor(network);
 
-            network.RemoveInput("next");
+            networkEditor.RemoveInput("next");
 
             Assert.IsNull(network.GetInput("next"));
             Assert.That(network.Connections.Where(connection => connection.Input.Name == "next"), Is.Empty);
@@ -189,7 +172,9 @@ namespace Aptacode.StateNet.Tests.Network
         public void GetConnections_DoesNotCreateNewStateOrInput()
         {
             IStateNetwork network = new StateNetwork();
-            var connections = network.GetConnections("a", "next");
+            var networkEditor = new StateNetworkEditor(network);
+
+            var connections = networkEditor.GetConnections("a", "next");
 
             Assert.AreEqual(0, connections.Count());
             Assert.AreEqual(0, network.GetStates().Count());
@@ -206,12 +191,14 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
                 allConnections);
+            var networkEditor = new StateNetworkEditor(network);
 
-            Assert.That(allConnections, Is.SupersetOf(network.Connections));
-            Assert.That(allConnections, Is.SubsetOf(network.Connections));
 
-            Assert.That(allConnections, Is.SupersetOf(network.GetConnections()));
-            Assert.That(allConnections, Is.SubsetOf(network.GetConnections()));
+            Assert.That(allConnections, Is.SupersetOf(networkEditor.GetConnections()));
+            Assert.That(allConnections, Is.SubsetOf(networkEditor.GetConnections()));
+
+            Assert.That(allConnections, Is.SupersetOf(networkEditor.GetConnections()));
+            Assert.That(allConnections, Is.SubsetOf(networkEditor.GetConnections()));
         }
 
         [Test]
@@ -231,8 +218,11 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyInputs.Create("next"),
                 allConnections);
 
+            var networkEditor = new StateNetworkEditor(network);
+
+
             var ExpectedStateFilteredConnections = allConnections.Where(connection => connection.From.Name == "a");
-            var ActualstateFilteredConnections = network.GetConnections("a");
+            var ActualstateFilteredConnections = networkEditor.GetConnections("a");
 
             Assert.That(ExpectedStateFilteredConnections, Is.SupersetOf(ActualstateFilteredConnections));
             Assert.That(ExpectedStateFilteredConnections, Is.SubsetOf(ActualstateFilteredConnections));
@@ -240,7 +230,7 @@ namespace Aptacode.StateNet.Tests.Network
 
             var ExpectedStateAndInputFilteredConnections = allConnections.Where(connection =>
                 connection.From.Name == "a" && connection.Input.Name == "next");
-            var ActualstateAndInputFilteredConnections = network.GetConnections("a", "next");
+            var ActualstateAndInputFilteredConnections = networkEditor.GetConnections("a", "next");
 
             Assert.That(ExpectedStateAndInputFilteredConnections,
                 Is.SupersetOf(ActualstateAndInputFilteredConnections));
@@ -248,7 +238,7 @@ namespace Aptacode.StateNet.Tests.Network
 
             var expectedConnections = allConnections.Where(connection =>
                 connection.From.Name == "a" && connection.Input.Name == "next" && connection.To.Name == "b");
-            var actualConnection = network.GetConnection("a", "next", "b");
+            var actualConnection = networkEditor.GetConnection("a", "next", "b");
 
             Assert.That(expectedConnections.Contains(actualConnection));
         }

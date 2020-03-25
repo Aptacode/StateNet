@@ -227,18 +227,18 @@ namespace Aptacode.StateNet.NetworkCreationTool
                 LoadConnections();
             }));
 
-        public DelegateCommand DisconnectStateCommand =>
-            _disconnectStateCommand ?? (_disconnectStateCommand = new DelegateCommand(() =>
-            {
-                if (SelectedConnectedState == null)
-                {
-                    return;
-                }
+        //public DelegateCommand DisconnectStateCommand =>
+        //    _disconnectStateCommand ?? (_disconnectStateCommand = new DelegateCommand(() =>
+        //    {
+        //        if (SelectedConnectedState == null)
+        //        {
+        //            return;
+        //        }
 
-                _network.Clear(SelectedState, SelectedInput, SelectedConnectedState);
+        //        _network.Clear(SelectedState, SelectedInput, SelectedConnectedState);
 
-                LoadConnections();
-            }));
+        //        LoadConnections();
+        //    }));
 
         private void Current_Exit(object sender, ExitEventArgs e)
         {

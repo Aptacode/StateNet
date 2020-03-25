@@ -22,6 +22,7 @@ namespace Aptacode.StateNet.Persistence.JSon
         public static StateNetwork FromJSon(JObject jObject)
         {
             var network = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(network);
 
             var startStateJson = jObject.Property(StartStatePropertyName).Value.ToString();
             var statesJson = jObject.Property(StatesPropertyName).Value.ToString();
@@ -35,11 +36,11 @@ namespace Aptacode.StateNet.Persistence.JSon
             var connections = JsonConvert
                 .DeserializeObject<List<Connection>>(connectionsJson).ToList();
 
-            network.SetStart(startState);
-            states.ForEach(state => network.CreateState(state));
-            inputs.ForEach(input => network.CreateInput(input));
+            networkEditor.SetStart(startState);
+            states.ForEach(state => networkEditor.CreateState(state));
+            inputs.ForEach(input => networkEditor.CreateInput(input));
             connections.ForEach(connection =>
-                network.Connect(connection.From, connection.Input, connection.To, connection.ConnectionWeight));
+                networkEditor.Connect(connection.From, connection.Input, connection.To, connection.ConnectionWeight));
 
             return network;
         }

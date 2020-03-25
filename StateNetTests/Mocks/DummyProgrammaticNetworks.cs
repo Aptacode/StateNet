@@ -28,7 +28,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 
             if (!string.IsNullOrEmpty(startState))
             {
-                stateNetwork.SetStart(startState);
+                stateNetwork.StartState = stateNetwork.CreateState(startState);
             }
 
             return stateNetwork;

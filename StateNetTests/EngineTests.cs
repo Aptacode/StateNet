@@ -13,15 +13,16 @@ namespace Aptacode.StateNet.Tests
         private IStateNetwork GetTestNetwork()
         {
             IStateNetwork stateNetwork = new StateNetwork();
+            var networkEditor = new StateNetworkEditor(stateNetwork);
 
-            stateNetwork.SetStart("ready");
+            networkEditor.SetStart("ready");
 
-            stateNetwork.Always("ready", "Play", "playing");
-            stateNetwork.Always("ready", "Stop", "stopped");
-            stateNetwork.Always("playing", "Pause", "paused");
-            stateNetwork.Always("playing", "Stop", "stopped");
-            stateNetwork.Always("paused", "Play", "playing");
-            stateNetwork.Always("paused", "Stop", "stopped");
+            networkEditor.Always("ready", "Play", "playing");
+            networkEditor.Always("ready", "Stop", "stopped");
+            networkEditor.Always("playing", "Pause", "paused");
+            networkEditor.Always("playing", "Stop", "stopped");
+            networkEditor.Always("paused", "Play", "playing");
+            networkEditor.Always("paused", "Stop", "stopped");
 
             return stateNetwork;
         }

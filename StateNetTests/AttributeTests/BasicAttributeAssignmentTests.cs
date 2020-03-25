@@ -60,7 +60,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             var connections = network[network.StartState];
 
             //Assert
-            Assert.AreEqual(1, connections.GetConnections().Count(), "Should have only one connection");
+            Assert.AreEqual(1, connections.Count(), "Should have only one connection");
             Assert.IsTrue(network.IsValid());
         }
     }

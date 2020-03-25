@@ -25,7 +25,7 @@ namespace Aptacode.StateNet.Tests.AttributeTests
             Assert.AreEqual("End", network.EndTestState.Name);
 
             //Act
-            var newState = network.GetState("NewState");
+            var newState = network.CreateState("NewState");
 
             //Assert
             Assert.AreEqual(3, network.GetStates().Count());

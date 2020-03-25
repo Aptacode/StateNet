@@ -93,7 +93,7 @@ namespace Aptacode.StateNet.Engine
 
         public bool Apply(string inputName)
         {
-            var input = _stateNetwork.GetInput(inputName, false);
+            var input = _stateNetwork.GetInput(inputName);
 
             if (input == null)
             {
