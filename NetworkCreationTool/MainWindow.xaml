@@ -10,7 +10,10 @@
 
     <TabControl>
         <TabItem Header="View">
-            <WPFControls:StateNetwork DataContext="{Binding StateNetworkViewModel}" />
+            <DockPanel LastChildFill="True">
+                <WPFControls:StateEditor DockPanel.Dock="Right" Width="400"/>
+                <WPFControls:StateNetwork DockPanel.Dock="Left" DataContext="{Binding StateNetworkViewModel}" />
+            </DockPanel>
         </TabItem>
 
         <TabItem Header="Modify">

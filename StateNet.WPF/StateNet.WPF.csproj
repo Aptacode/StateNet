@@ -87,6 +87,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\StateNetworkViewModel.cs" />
+    <Compile Include="Views\StateEditor.xaml.cs">
+      <DependentUpon>StateEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StateNetwork.xaml.cs">
       <DependentUpon>StateNetwork.xaml</DependentUpon>
     </Compile>
@@ -108,6 +111,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\StateEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\StateNetwork.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
