@@ -3,10 +3,11 @@ using System.Linq;
 using System.Windows;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.JSon;
+using Aptacode.StateNet.WPF.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
 
-namespace NetworkCreationTool
+namespace Aptacode.StateNet.NetworkCreationTool
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -45,6 +46,8 @@ namespace NetworkCreationTool
 
         private State _selectedState;
 
+        private StateNetworkViewModel _stateNetworkViewModel;
+
         private DelegateCommand _updateSelectedConnectedStateExpressionCommand;
 
         public MainWindowViewModel()
@@ -55,9 +58,21 @@ namespace NetworkCreationTool
             ConnectedStates = new ObservableCollection<State>();
             DisconnectedStates = new ObservableCollection<State>();
 
-            Load();
-
             Application.Current.Exit += Current_Exit;
+
+            StateNetworkViewModel = new StateNetworkViewModel();
+        }
+
+        public StateNetwork Network
+        {
+            get => _network;
+            set => SetProperty(ref _network, value);
+        }
+
+        public StateNetworkViewModel StateNetworkViewModel
+        {
+            get => _stateNetworkViewModel;
+            set => SetProperty(ref _stateNetworkViewModel, value);
         }
 
         public ObservableCollection<State> AllStates
@@ -232,8 +247,8 @@ namespace NetworkCreationTool
 
         public void Load()
         {
-            _network = _networkSerializer.Read();
-            Refresh();
+            StateNetworkViewModel.Network = _networkSerializer.Read();
+            //         Refresh();
         }
 
         public void Save()

@@ -1,7 +1,6 @@
-﻿<Application x:Class="NetworkCreationTool.App"
+﻿<Application x:Class="Aptacode.StateNet.NetworkCreationTool.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:NetworkCreationTool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 

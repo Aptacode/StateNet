@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace NetworkCreationTool
+namespace Aptacode.StateNet.NetworkCreationTool
 {
     /// <summary>
     ///     Interaction logic for App.xaml
