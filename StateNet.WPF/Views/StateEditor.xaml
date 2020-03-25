@@ -8,25 +8,26 @@
              d:DesignHeight="600" d:DesignWidth="600">
     <Border BorderThickness="2" BorderBrush="Black">
         <DockPanel LastChildFill="True">
-            <TextBox DockPanel.Dock="Top" Height="50" Margin="5" Text="{Binding StateName, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox DockPanel.Dock="Top" Height="50" Margin="5" Text="{Binding StateName, Mode=TwoWay}"
+                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
             <Grid DockPanel.Dock="Bottom" Height="150">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <ComboBox Grid.Column="0" Grid.Row="0" Margin="5"/>
-                <ComboBox Grid.Column="1" Grid.Row="0" Margin="5"/>
-                <ComboBox Grid.Column="2" Grid.Row="0" Margin="5"/>
-                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="5" Content="Add"/>
-                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Margin="5" Content="Remove"/>
+                <ComboBox Grid.Column="0" Grid.Row="0" Margin="5" />
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="5" />
+                <ComboBox Grid.Column="2" Grid.Row="0" Margin="5" />
+                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="5" Content="Add" />
+                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Margin="5" Content="Remove" />
 
             </Grid>
             <Border DockPanel.Dock="Top" BorderThickness="2" Margin="-2,2,-2,2" BorderBrush="Black">
@@ -35,14 +36,14 @@
                         <DataTemplate>
                             <Grid DockPanel.Dock="Bottom" Height="150" Margin="10">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
 
-                                <ComboBox Grid.Column="0" Margin="10"/>
-                                <ComboBox Grid.Column="1" Margin="10"/>
-                                <ComboBox Grid.Column="2" Margin="10"/>
+                                <ComboBox Grid.Column="0" Margin="10" />
+                                <ComboBox Grid.Column="1" Margin="10" />
+                                <ComboBox Grid.Column="2" Margin="10" />
 
                             </Grid>
                         </DataTemplate>

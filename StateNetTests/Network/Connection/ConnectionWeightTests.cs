@@ -4,7 +4,7 @@ using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests.ConnectionTests
+namespace Aptacode.StateNet.Tests.Network.Connection
 {
     public class ConnectionWeightTests
     {

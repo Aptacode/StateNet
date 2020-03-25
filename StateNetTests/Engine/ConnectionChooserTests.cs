@@ -5,7 +5,7 @@ using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests
+namespace Aptacode.StateNet.Tests.Engine
 {
     public class ConnectionChooserTests
     {

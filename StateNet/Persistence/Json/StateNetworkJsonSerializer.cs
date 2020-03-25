@@ -1,18 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Aptacode.StateNet.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aptacode.StateNet.Persistence.JSon
+namespace Aptacode.StateNet.Persistence.Json
 {
-    public static class NetworkToJSon
+    public class StateNetworkJsonSerializer : INetworkSerializer
     {
         public static readonly string StartStatePropertyName = "StartState";
         public static readonly string StatesPropertyName = "States";
         public static readonly string InputsPropertyName = "Inputs";
         public static readonly string ConnectionsPropertyName = "Connections";
+
+        public StateNetworkJsonSerializer(string filename)
+        {
+            Filename = filename;
+        }
+
+        public string Filename { get; set; }
+
+        public StateNetwork Read()
+        {
+            StateNetwork stateNetwork = null;
+
+            using (var streamReader = new StreamReader(Filename))
+            {
+                stateNetwork = FromJSon(streamReader.ReadToEnd());
+            }
+
+            return stateNetwork;
+        }
+
+        public void Write(StateNetwork stateNetwork)
+        {
+            using (var streamWriter = new StreamWriter(Filename))
+            {
+                streamWriter.Write(ToJson(stateNetwork).ToString(Formatting.Indented));
+            }
+        }
 
         public static StateNetwork FromJSon(string jsonInput)
         {
@@ -40,7 +67,7 @@ namespace Aptacode.StateNet.Persistence.JSon
             states.ForEach(state => networkEditor.CreateState(state));
             inputs.ForEach(input => networkEditor.CreateInput(input));
             connections.ForEach(connection =>
-                networkEditor.Connect(connection.From, connection.Input, connection.To, connection.ConnectionWeight));
+                networkEditor.Connect(connection.Source, connection.Input, connection.Target, connection.ConnectionWeight));
 
             return network;
         }
@@ -54,22 +81,6 @@ namespace Aptacode.StateNet.Persistence.JSon
                 {InputsPropertyName, JToken.FromObject(stateNetwork.GetInputs())},
                 {ConnectionsPropertyName, JToken.FromObject(stateNetwork.GetConnections())}
             };
-        }
-
-        public class StateConverter : JsonConverter<State>
-        {
-            public override void WriteJson(JsonWriter writer, State value, JsonSerializer serializer)
-            {
-                writer.WriteValue(value.ToString());
-            }
-
-            public override State ReadJson(JsonReader reader, Type objectType, State existingValue,
-                bool hasExistingValue, JsonSerializer serializer)
-            {
-                var s = (string) reader.Value;
-
-                return new State(s);
-            }
         }
     }
 }

@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <ContentPresenter Content="{Binding GraphViewerPanel}"/>
+    <ContentPresenter Content="{Binding GraphViewerPanel}" />
 </UserControl>

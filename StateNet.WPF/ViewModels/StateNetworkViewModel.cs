@@ -45,6 +45,60 @@ namespace Aptacode.StateNet.WPF.ViewModels
             _graphViewer.Invalidate(_selectedNode);
         }
 
+        private void UpdateGraph(Graph graph, StateNetwork network)
+        {
+            //Remove redundant nodes and edges
+            foreach (var graphNode in graph.Nodes.ToList())
+            {
+                var state = network.GetState(graphNode.LabelText);
+
+
+                if (state == null)
+                {
+                    graph.RemoveNode(graphNode);
+                }
+                else
+                {
+                    foreach (var outEdge in graphNode.OutEdges
+                        .ToList()
+                        .Where(outEdge => network.GetConnection(state.Name, outEdge.LabelText, outEdge.Target) == null))
+                    {
+                        graph.RemoveEdge(outEdge);
+                    }
+                }
+            }
+
+            //Add New states and connections
+            foreach (var state in network.GetOrderedStates())
+            {
+                var node = graph.FindNode(state.Name) ?? graph.AddNode(state.Name);
+
+                foreach (var networkConnection in network.GetConnections(state))
+                {
+                    if (node.OutEdges.Count(edge =>
+                        edge.LabelText == networkConnection.Input.Name &&
+                        edge.Target == networkConnection.Target.Name) == 0)
+                    {
+                        graph.AddEdge(networkConnection.Source.Name, networkConnection.Input.Name,
+                            networkConnection.Target.Name);
+                    }
+                }
+            }
+        }
+
+        public void Update()
+        {
+            UpdateGraph(_graph, _network);
+
+            _graphViewer.NeedToCalculateLayout = true;
+            _graphViewer.Graph = _graphViewer.Graph;
+            _graphViewer.NeedToCalculateLayout = false;
+            _graphViewer.Graph = _graphViewer.Graph;
+
+            _graph.GeometryGraph.UpdateBoundingBox();
+            _graphViewer.Invalidate();
+        }
+
         #region Properties
 
         private GraphViewer _graphViewer;
@@ -128,56 +182,5 @@ namespace Aptacode.StateNet.WPF.ViewModels
         }
 
         #endregion
-
-        private void UpdateGraph(Graph graph, StateNetwork network)
-        {
-            //Remove redundant nodes and edges
-            foreach (var graphNode in graph.Nodes.ToList())
-            {
-                var state = network.GetState(graphNode.LabelText);
-
-                
-                if (state == null)
-                    graph.RemoveNode(graphNode);
-                else
-                {
-                    foreach (var outEdge in graphNode.OutEdges
-                        .ToList()
-                        .Where(outEdge => network.GetConnection(state.Name, outEdge.LabelText, outEdge.Target) == null))
-                    {
-                        graph.RemoveEdge(outEdge);
-                    }
-                }
-            }
-
-            //Add New states and connections
-            foreach (var state in network.GetOrderedStates())
-            {
-                var node = graph.FindNode(state.Name) ?? graph.AddNode(state.Name);
-
-                foreach (var networkConnection in network.GetConnections(state))
-                {
-                    if (node.OutEdges.Count(edge =>
-                        edge.LabelText == networkConnection.Input.Name &&
-                        edge.Target == networkConnection.To.Name) == 0)
-                    {
-                        graph.AddEdge(networkConnection.From.Name, networkConnection.Input.Name, networkConnection.To.Name);
-                    }
-                }
-            }
-        }
-
-        public void Update()
-        {
-            UpdateGraph(_graph, _network);
-
-            _graphViewer.NeedToCalculateLayout = true;
-            _graphViewer.Graph = _graphViewer.Graph;
-            _graphViewer.NeedToCalculateLayout = false;
-            _graphViewer.Graph = _graphViewer.Graph;
-
-            _graph.GeometryGraph.UpdateBoundingBox();
-            _graphViewer.Invalidate();
-        }
     }
 }

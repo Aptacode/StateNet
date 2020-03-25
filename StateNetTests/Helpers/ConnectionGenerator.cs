@@ -6,13 +6,13 @@ namespace Aptacode.StateNet.Tests.Helpers
 {
     public static class DummyConnections
     {
-        public static List<Connection> Generate(string fromState = "defaultState", string input = "defaultInput",
+        public static List<Connection> Generate(string source = "defaultState", string input = "defaultInput",
             params int[] choices)
         {
             var output = new List<Connection>();
             for (var i = 0; i < choices.Length; i++)
             {
-                output.Add(new Connection(new State(fromState), new Input(input), new State(i.ToString()),
+                output.Add(new Connection(new State(source), new Input(input), new State(i.ToString()),
                     new ConnectionWeight(choices[i])));
             }
 

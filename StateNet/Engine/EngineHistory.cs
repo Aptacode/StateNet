@@ -21,7 +21,7 @@ namespace Aptacode.StateNet.Engine
                 }
 
                 return new List<State> {StartState}.Concat(TransitionLog.ToArray()
-                    .Select(transition => transition.Destination));
+                    .Select(transition => transition.Target));
             }
         }
 
@@ -30,9 +30,9 @@ namespace Aptacode.StateNet.Engine
             StartState = source;
         }
 
-        public void Log(State source, Input input, State destination)
+        public void Log(State source, Input input, State target)
         {
-            TransitionLog.Add(new Transition(source, input, destination));
+            TransitionLog.Add(new Transition(source, input, target));
         }
 
         public int StateVisitCount(string name)
@@ -45,18 +45,18 @@ namespace Aptacode.StateNet.Engine
             return TransitionLog.Count(transition => transition.Input.Name == name);
         }
 
-        public int TransitionInCount(string inputName, string stateName)
+        public int TransitionInCount(string input, string state)
         {
             return TransitionLog.Count(transition =>
-                transition.Input.Name == inputName &&
-                transition.Destination.Name == stateName);
+                transition.Input.Name == input &&
+                transition.Target.Name == state);
         }
 
-        public int TransitionOutCount(string stateName, string inputName)
+        public int TransitionOutCount(string state, string input)
         {
             return TransitionLog.Count(transition =>
-                transition.Source.Name == stateName &&
-                transition.Input.Name == inputName);
+                transition.Source.Name == state &&
+                transition.Input.Name == input);
         }
     }
 }

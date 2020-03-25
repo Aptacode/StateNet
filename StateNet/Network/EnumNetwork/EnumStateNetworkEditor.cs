@@ -15,10 +15,10 @@ namespace Aptacode.StateNet.Network.EnumNetwork
 
         public IEnumerable<Connection> this[TStates state, TInputs input] => this[state.ToString(), input.ToString()];
 
-        public Connection this[TStates fromState, TInputs input, TStates toState]
+        public Connection this[TStates source, TInputs input, TStates target]
         {
-            get => this[fromState.ToString(), input.ToString(), toState.ToString()];
-            set => this[fromState.ToString(), input.ToString(), toState.ToString()] = value;
+            get => this[source.ToString(), input.ToString(), target.ToString()];
+            set => this[source.ToString(), input.ToString(), target.ToString()] = value;
         }
 
         public void SetStart(TStates state)
@@ -46,53 +46,53 @@ namespace Aptacode.StateNet.Network.EnumNetwork
             return GetConnections(state.ToString());
         }
 
-        public void Connect(TStates fromState, TInputs input, TStates toState, ConnectionWeight connectionWeight = null)
+        public void Connect(TStates source, TInputs input, TStates target, ConnectionWeight connectionWeight = null)
         {
-            Connect(fromState.ToString(), input.ToString(), toState.ToString(), connectionWeight);
+            Connect(source.ToString(), input.ToString(), target.ToString(), connectionWeight);
         }
 
-        public void Always(TStates fromState, TInputs input, TStates toSate)
+        public void Always(TStates source, TInputs input, TStates toSate)
         {
-            Always(fromState.ToString(), input.ToString(), toSate.ToString());
+            Always(source.ToString(), input.ToString(), toSate.ToString());
         }
 
-        public void Clear(TStates fromState)
+        public void Clear(TStates source)
         {
-            Clear(fromState.ToString());
+            Clear(source.ToString());
         }
 
-        public void Clear(TStates fromState, TInputs input)
+        public void Clear(TStates source, TInputs input)
         {
-            Clear(fromState.ToString(), input.ToString());
+            Clear(source.ToString(), input.ToString());
         }
 
-        public void Clear(TStates fromState, TInputs input, TStates toSate)
+        public void Clear(TStates source, TInputs input, TStates toSate)
         {
-            Clear(fromState.ToString(), input.ToString(), toSate.ToString());
+            Clear(source.ToString(), input.ToString(), toSate.ToString());
         }
 
-        public void SetDistribution(TStates fromState, TInputs action, params (TStates, int)[] choices)
+        public void SetDistribution(TStates source, TInputs action, params (TStates, int)[] choices)
         {
-            SetDistribution(fromState.ToString(), action.ToString(),
+            SetDistribution(source.ToString(), action.ToString(),
                 choices.Select(c => (c.Item1.ToString(), c.Item2)).ToArray());
         }
 
-        public void SetDistribution(TStates fromState, TInputs action, params (TStates, ConnectionWeight)[] choices)
+        public void SetDistribution(TStates source, TInputs action, params (TStates, ConnectionWeight)[] choices)
         {
-            SetDistribution(fromState.ToString(), action.ToString(),
+            SetDistribution(source.ToString(), action.ToString(),
                 choices.Select(c => (c.Item1.ToString(), c.Item2)).ToArray());
         }
 
-        public void UpdateDistribution(TStates fromState, TInputs action, params (TStates, int)[] choices)
+        public void UpdateDistribution(TStates source, TInputs action, params (TStates, int)[] choices)
         {
-            UpdateDistribution(fromState.ToString(), action.ToString(),
+            UpdateDistribution(source.ToString(), action.ToString(),
                 choices.Select(c => (c.Item1.ToString(), c.Item2)).ToArray());
         }
 
         public void
-            UpdateDistribution(TStates fromState, TInputs action, params (TStates, ConnectionWeight)[] choices)
+            UpdateDistribution(TStates source, TInputs action, params (TStates, ConnectionWeight)[] choices)
         {
-            UpdateDistribution(fromState.ToString(), action.ToString(),
+            UpdateDistribution(source.ToString(), action.ToString(),
                 choices.Select(c => (c.Item1.ToString(), c.Item2)).ToArray());
         }
 

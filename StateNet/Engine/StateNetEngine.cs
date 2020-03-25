@@ -153,7 +153,7 @@ namespace Aptacode.StateNet.Engine
         private State GetNextState(State state, string input)
         {
             var connections = _stateNetwork.GetConnections(state, input);
-            return _connectionChooser.Choose(connections).To;
+            return _connectionChooser.Choose(connections).Target;
         }
     }
 }

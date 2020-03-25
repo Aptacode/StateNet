@@ -6,9 +6,9 @@ using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests
+namespace Aptacode.StateNet.Tests.Engine
 {
-    public class EngineTests
+    public class StateNetEngineTests
     {
         private IStateNetwork GetTestNetwork()
         {

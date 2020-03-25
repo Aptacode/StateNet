@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Aptacode.StateNet.Network;
-using Aptacode.StateNet.Persistence.JSon;
+using Aptacode.StateNet.Persistence.Json;
 using Aptacode.StateNet.WPF.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -11,7 +11,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
 {
     public class MainWindowViewModel : BindableBase
     {
-        private readonly NetworkJsonSerializer _networkSerializer;
+        private readonly StateNetworkJsonSerializer _stateNetworkSerializer;
 
         private DelegateCommand _addNewInputCommand;
 
@@ -52,7 +52,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public MainWindowViewModel()
         {
-            _networkSerializer = new NetworkJsonSerializer("./test.json");
+            _stateNetworkSerializer = new StateNetworkJsonSerializer("./test.json");
             AllStates = new ObservableCollection<State>();
             AllInputs = new ObservableCollection<Input>();
             ConnectedStates = new ObservableCollection<State>();
@@ -253,7 +253,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public void Load()
         {
-            Network = _networkSerializer.Read();
+            Network = _stateNetworkSerializer.Read();
             Refresh();
         }
 
@@ -289,7 +289,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
             }
 
             var connections = _network[SelectedState, SelectedInput];
-            ConnectedStates.AddRange(connections.Select(connection => connection.To).Distinct());
+            ConnectedStates.AddRange(connections.Select(connection => connection.Target).Distinct());
             DisconnectedStates.AddRange(AllStates.Where(state => !ConnectedStates.Contains(state)));
         }
     }

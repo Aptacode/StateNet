@@ -4,9 +4,9 @@ namespace Aptacode.StateNet.Engine.Events
 {
     public class EngineTransitionEventArgs : EngineEventArgs
     {
-        public EngineTransitionEventArgs(State source, Input input, State destination)
+        public EngineTransitionEventArgs(State source, Input input, State target)
         {
-            Transition = new Transition(source, input, destination);
+            Transition = new Transition(source, input, target);
         }
 
         public EngineTransitionEventArgs(Transition transition)

@@ -109,16 +109,16 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Connection> this[string source, string input] => GetConnections(source, input);
 
-        public Connection this[string source, string input, string destination]
+        public Connection this[string source, string input, string target]
         {
-            get => GetConnection(source, input, destination);
-            set => Connect(value.From, value.Input, value.To, value.ConnectionWeight);
+            get => GetConnection(source, input, target);
+            set => Connect(value.Source, value.Input, value.Target, value.ConnectionWeight);
         }
 
-        public void Connect(string source, string input, string destination,
+        public void Connect(string source, string input, string target,
             ConnectionWeight connectionWeight = null)
         {
-            _stateNetwork.Connect(source, input, destination, connectionWeight);
+            _stateNetwork.Connect(source, input, target, connectionWeight);
         }
 
         public IEnumerable<Connection> GetConnections(string source, string input)
@@ -126,36 +126,36 @@ namespace Aptacode.StateNet.Network
             return _stateNetwork.GetConnections(source, input);
         }
 
-        public Connection GetConnection(string source, string input, string destination)
+        public Connection GetConnection(string source, string input, string target)
         {
-            return _stateNetwork.GetConnection(source, input, destination);
+            return _stateNetwork.GetConnection(source, input, target);
         }
 
-        public void Disconnect(string source, string input, string destination)
+        public void Disconnect(string source, string input, string target)
         {
-            _stateNetwork.Disconnect(source, input, destination);
+            _stateNetwork.Disconnect(source, input, target);
         }
 
         public void Clear(string source)
         {
-            GetConnections(source).ToList().ForEach(connection => connection?.From?.Remove(connection));
+            GetConnections(source).ToList().ForEach(connection => connection?.Source?.Remove(connection));
         }
 
         public void Clear(string source, string input)
         {
-            GetConnections(source, input).ToList().ForEach(connection => connection?.From?.Remove(connection));
+            GetConnections(source, input).ToList().ForEach(connection => connection?.Source?.Remove(connection));
         }
 
-        public void Clear(string source, string input, string destination)
+        public void Clear(string source, string input, string target)
         {
-            var connection = GetConnection(source, input, destination);
-            connection?.From?.Remove(connection);
+            var connection = GetConnection(source, input, target);
+            connection?.Source?.Remove(connection);
         }
 
-        public void Always(string source, string input, string destination)
+        public void Always(string source, string input, string target)
         {
             Clear(source, input);
-            Connect(source, input, destination, new ConnectionWeight(1.ToString()));
+            Connect(source, input, target, new ConnectionWeight(1.ToString()));
         }
 
         public void SetDistribution(string source, string input, params (string, int)[] choices)
@@ -181,10 +181,10 @@ namespace Aptacode.StateNet.Network
         public void UpdateDistribution(string source, string input,
             params (string, ConnectionWeight)[] choices)
         {
-            foreach (var (destination, weight) in choices)
+            foreach (var (target, weight) in choices)
             {
-                Clear(source, input, destination);
-                Connect(source, input, destination, weight);
+                Clear(source, input, target);
+                Connect(source, input, target, weight);
             }
         }
 

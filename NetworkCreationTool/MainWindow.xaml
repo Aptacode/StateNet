@@ -11,7 +11,7 @@
     <TabControl>
         <TabItem Header="View">
             <DockPanel LastChildFill="True">
-                <WPFControls:StateEditor DockPanel.Dock="Right" Width="400"/>
+                <WPFControls:StateEditor DockPanel.Dock="Right" Width="400" />
                 <WPFControls:StateNetwork DockPanel.Dock="Left" DataContext="{Binding StateNetworkViewModel}" />
             </DockPanel>
         </TabItem>
@@ -43,7 +43,7 @@
                     </DockPanel>
                 </Border>
 
-                <Label Content="Destination state" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" />
+                <Label Content="target state" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" />
                 <Border Margin="10" Background="Gray" Grid.Column="1" Grid.Row="1">
                     <DockPanel LastChildFill="True">
                         <DockPanel DockPanel.Dock="Top">

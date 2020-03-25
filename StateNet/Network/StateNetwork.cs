@@ -96,6 +96,9 @@ namespace Aptacode.StateNet.Network
         /// <returns></returns>
         public State GetState(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             States.TryGetValue(name, out var state);
             return state;
         }
@@ -108,6 +111,9 @@ namespace Aptacode.StateNet.Network
         /// <returns></returns>
         public State CreateState(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             var newState = GetState(name);
             if (newState != null)
             {
@@ -125,6 +131,9 @@ namespace Aptacode.StateNet.Network
         /// <param name="name"></param>
         public void RemoveState(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return;
+
             if (States.ContainsKey(name))
             {
                 States.Remove(name);
@@ -132,16 +141,16 @@ namespace Aptacode.StateNet.Network
 
             var connections = Connections
                 .Where(connection =>
-                    connection.From.Name.Equals(name) ||
-                    connection.To.Name.Equals(name))
+                    connection.Source.Name.Equals(name) ||
+                    connection.Target.Name.Equals(name))
                 .ToList();
 
-            connections.ForEach(connection => connection.From.Remove(connection));
+            connections.ForEach(connection => connection.Source.Remove(connection));
         }
 
         public IEnumerable<State> GetOrderedStates()
         {
-            var orderedStates = Traverse(StartState, state => GetConnections(state).Select(c => c.To)).ToList();
+            var orderedStates = Traverse(StartState, state => GetConnections(state).Select(c => c.Target)).ToList();
             orderedStates.AddRange(GetStates().Where(s => !orderedStates.Contains(s)));
 
             return orderedStates;
@@ -200,23 +209,32 @@ namespace Aptacode.StateNet.Network
 
         public Input GetInput(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             Inputs.TryGetValue(name, out var input);
             return input;
         }
 
         public void RemoveInput(string input)
         {
+            if (string.IsNullOrEmpty(input))
+                return;
+
             if (Inputs.ContainsKey(input))
             {
                 Inputs.Remove(input);
             }
 
             var connections = Connections.Where(connection => connection.Input.Name.Equals(input)).ToList();
-            connections.ForEach(connection => connection.From.Remove(connection));
+            connections.ForEach(connection => connection.Source.Remove(connection));
         }
 
         public Input CreateInput(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             var newInput = GetInput(name);
             if (newInput != null)
             {
@@ -248,36 +266,41 @@ namespace Aptacode.StateNet.Network
         public IEnumerable<Connection> this[string sourceState, string input] =>
             GetConnections(sourceState, input);
 
-        public Connection this[string source, string input, string destination]
+        public Connection this[string source, string input, string target]
         {
-            get => GetConnection(source, input, destination);
-            set => Connect(value.From, value.Input, value.To, value.ConnectionWeight);
+            get => GetConnection(source, input, target);
+            set => Connect(value.Source, value.Input, value.Target, value.ConnectionWeight);
         }
 
-        public void Connect(string source, string input, string destination, ConnectionWeight connectionWeight = null)
+        public void Connect(string source, string input, string target, ConnectionWeight connectionWeight = null)
         {
-            var selectedState = CreateState(source);
-            var oldConnection = GetConnection(source, input, destination);
+            var selectedSource = CreateState(source);
+            var selectedInput = CreateInput(input);
+            var selectedTarget = CreateState(target);
+
+            if (selectedSource == null || selectedInput == null || selectedTarget == null)
+                return;
+
+            var oldConnection = GetConnection(source, input, target);
 
             if (oldConnection != null)
             {
-                selectedState.Remove(oldConnection);
+                selectedSource.Remove(oldConnection);
             }
 
             connectionWeight = connectionWeight ?? new ConnectionWeight(1);
-            selectedState.Add(new Connection(selectedState, CreateInput(input), CreateState(destination),
-                connectionWeight));
+            selectedSource.Add(new Connection(selectedSource, selectedInput, selectedTarget, connectionWeight));
         }
 
-        public void Disconnect(string fromState, string input, string toState)
+        public void Disconnect(string source, string input, string target)
         {
-            var connection = GetConnection(fromState, input, toState);
-            connection?.From?.Remove(connection);
+            var connection = GetConnection(source, input, target);
+            connection?.Source?.Remove(connection);
         }
 
         public IEnumerable<Connection> GetConnections(string source)
         {
-            return GetConnections().Where(connection => connection.From.Name.Equals(source));
+            return GetConnections().Where(connection => connection.Source.Name.Equals(source));
         }
 
         public IEnumerable<Connection> GetConnections(string source, string input)
@@ -285,10 +308,10 @@ namespace Aptacode.StateNet.Network
             return GetConnections(source).Where(connection => connection.Input.Name.Equals(input));
         }
 
-        public Connection GetConnection(string source, string input, string destination)
+        public Connection GetConnection(string source, string input, string target)
         {
             return GetConnections(source, input)
-                .FirstOrDefault(connection => connection.To.Name.Equals(destination));
+                .FirstOrDefault(connection => connection.Target.Name.Equals(target));
         }
 
         public IEnumerable<Connection> GetOrderedConnections()

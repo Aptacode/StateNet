@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.Network
 {
-    public class ProgrammaticNetworkTests
+    public class StateNetworkTests
     {
         public static IEnumerable<TestCaseData> NetworkCreationTestCases
         {
@@ -30,7 +30,7 @@ namespace Aptacode.StateNet.Tests.Network
         [Test]
         [TestCaseSource(nameof(NetworkCreationTestCases))]
         public void NetworkCreationTests(string startState, IEnumerable<State> states, IEnumerable<Input> inputs,
-            IEnumerable<Connection> connections, int endStateCount, bool isValid)
+            IEnumerable<StateNet.Network.Connection> connections, int endStateCount, bool isValid)
         {
             var network = DummyProgrammaticNetworks.CreateNetwork(startState, states, inputs, connections);
 
@@ -98,7 +98,7 @@ namespace Aptacode.StateNet.Tests.Network
 
             Assert.IsNull(network.GetState("a"));
             Assert.That(
-                network.Connections.Where(connection => connection.From.Name == "a" || connection.To.Name == "a"),
+                network.Connections.Where(connection => connection.Source.Name == "a" || connection.Target.Name == "a"),
                 Is.Empty);
         }
 
@@ -231,7 +231,7 @@ namespace Aptacode.StateNet.Tests.Network
                 DummyInputs.Create("next"),
                 allConnections);
 
-            var ExpectedStateFilteredConnections = allConnections.Where(connection => connection.From.Name == "a");
+            var ExpectedStateFilteredConnections = allConnections.Where(connection => connection.Source.Name == "a");
             var ActualstateFilteredConnections = network.GetConnections("a");
 
             Assert.That(ExpectedStateFilteredConnections, Is.SupersetOf(ActualstateFilteredConnections));
@@ -239,7 +239,7 @@ namespace Aptacode.StateNet.Tests.Network
 
 
             var ExpectedStateAndInputFilteredConnections = allConnections.Where(connection =>
-                connection.From.Name == "a" && connection.Input.Name == "next");
+                connection.Source.Name == "a" && connection.Input.Name == "next");
             var ActualstateAndInputFilteredConnections = network.GetConnections("a", "next");
 
             Assert.That(ExpectedStateAndInputFilteredConnections,
@@ -247,7 +247,7 @@ namespace Aptacode.StateNet.Tests.Network
             Assert.That(ExpectedStateAndInputFilteredConnections, Is.SubsetOf(ActualstateAndInputFilteredConnections));
 
             var expectedConnections = allConnections.Where(connection =>
-                connection.From.Name == "a" && connection.Input.Name == "next" && connection.To.Name == "b");
+                connection.Source.Name == "a" && connection.Input.Name == "next" && connection.Target.Name == "b");
             var actualConnection = network.GetConnection("a", "next", "b");
 
             Assert.That(expectedConnections.Contains(actualConnection));

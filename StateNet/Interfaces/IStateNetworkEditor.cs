@@ -32,17 +32,17 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<Connection> GetConnections();
         IEnumerable<Connection> GetConnections(string source);
         IEnumerable<Connection> GetConnections(string source, string input);
-        Connection GetConnection(string source, string input, string destination);
+        Connection GetConnection(string source, string input, string target);
 
-        void Always(string source, string input, string destination);
+        void Always(string source, string input, string target);
         void Clear(string source);
         void Clear(string source, string input);
-        void Clear(string source, string input, string destination);
+        void Clear(string source, string input, string target);
         void SetDistribution(string source, string input, params (string, int)[] choices);
         void SetDistribution(string source, string input, params (string, ConnectionWeight)[] choices);
         void UpdateDistribution(string source, string input, params (string, int)[] choices);
-        void Connect(string source, string input, string destination, ConnectionWeight connectionWeight);
-        void Disconnect(string source, string input, string destination);
+        void Connect(string source, string input, string target, ConnectionWeight connectionWeight);
+        void Disconnect(string source, string input, string target);
         void UpdateDistribution(string source, string input, params (string, ConnectionWeight)[] choices);
 
         #endregion

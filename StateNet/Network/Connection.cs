@@ -4,29 +4,29 @@ namespace Aptacode.StateNet.Network
 {
     public sealed class Connection : IEquatable<Connection>
     {
-        public Connection(State fromState, Input input, State toState, ConnectionWeight connectionWeight)
+        public Connection(State source, Input input, State target, ConnectionWeight connectionWeight)
         {
-            From = fromState;
+            Source = source;
             Input = input;
-            To = toState;
+            Target = target;
             ConnectionWeight = connectionWeight;
         }
 
-        public State From { get; set; }
+        public State Source { get; set; }
         public Input Input { get; set; }
-        public State To { get; set; }
+        public State Target { get; set; }
         public ConnectionWeight ConnectionWeight { get; set; }
 
         public override string ToString()
         {
-            return $"{From}({Input})->({To}:{ConnectionWeight})";
+            return $"{Source}({Input})->({Target}:{ConnectionWeight})";
         }
 
         #region Overrides
 
         public override int GetHashCode()
         {
-            return (From, Input, To, Weight: ConnectionWeight).GetHashCode();
+            return (Source, Input, Target, Weight: ConnectionWeight).GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -36,7 +36,7 @@ namespace Aptacode.StateNet.Network
 
         public bool Equals(Connection other)
         {
-            return other != null && From.Equals(other.From) && Input.Equals(other.Input) && To.Equals(other.To) &&
+            return other != null && Source.Equals(other.Source) && Input.Equals(other.Input) && Target.Equals(other.Target) &&
                    ConnectionWeight.Equals(other.ConnectionWeight);
         }
 

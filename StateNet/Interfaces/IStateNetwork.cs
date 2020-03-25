@@ -36,15 +36,15 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<Connection> Connections { get; }
         IEnumerable<Connection> this[string source] { get; }
         IEnumerable<Connection> this[string source, string input] { get; }
-        Connection this[string source, string input, string destination] { get; set; }
+        Connection this[string source, string input, string target] { get; set; }
 
         IEnumerable<Connection> GetConnections();
         IEnumerable<Connection> GetConnections(string source);
         IEnumerable<Connection> GetConnections(string source, string input);
-        Connection GetConnection(string source, string input, string destination);
+        Connection GetConnection(string source, string input, string target);
 
-        void Connect(string source, string input, string destination, ConnectionWeight connectionWeight);
-        void Disconnect(string source, string input, string destination);
+        void Connect(string source, string input, string target, ConnectionWeight connectionWeight);
+        void Disconnect(string source, string input, string target);
 
         #endregion
     }
