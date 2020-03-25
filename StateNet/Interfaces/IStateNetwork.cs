@@ -11,7 +11,6 @@ namespace Aptacode.StateNet.Interfaces
         #region States
 
         State StartState { get; set; }
-
         State GetState(string name);
         State CreateState(string name);
         void RemoveState(string name);

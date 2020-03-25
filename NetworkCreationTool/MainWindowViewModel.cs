@@ -66,7 +66,11 @@ namespace Aptacode.StateNet.NetworkCreationTool
         public StateNetwork Network
         {
             get => _network;
-            set => SetProperty(ref _network, value);
+            set
+            {
+                SetProperty(ref _network, value);
+                StateNetworkViewModel.Network = _network;
+            }
         }
 
         public StateNetworkViewModel StateNetworkViewModel
@@ -175,12 +179,14 @@ namespace Aptacode.StateNet.NetworkCreationTool
         public DelegateCommand AddNewStateCommand =>
             _addNewStateCommand ?? (_addNewStateCommand = new DelegateCommand(() =>
             {
-                if (SelectedState == null)
+                if (string.IsNullOrEmpty(NewStateName))
                 {
                     return;
                 }
 
                 _network.CreateState(NewStateName);
+                NewStateName = string.Empty;
+
                 Refresh();
             }));
 
@@ -227,18 +233,18 @@ namespace Aptacode.StateNet.NetworkCreationTool
                 LoadConnections();
             }));
 
-        //public DelegateCommand DisconnectStateCommand =>
-        //    _disconnectStateCommand ?? (_disconnectStateCommand = new DelegateCommand(() =>
-        //    {
-        //        if (SelectedConnectedState == null)
-        //        {
-        //            return;
-        //        }
+        public DelegateCommand DisconnectStateCommand =>
+            _disconnectStateCommand ?? (_disconnectStateCommand = new DelegateCommand(() =>
+            {
+                if (SelectedConnectedState == null)
+                {
+                    return;
+                }
 
-        //        _network.Clear(SelectedState, SelectedInput, SelectedConnectedState);
+                _network.Disconnect(SelectedState, SelectedInput, SelectedConnectedState);
 
-        //        LoadConnections();
-        //    }));
+                LoadConnections();
+            }));
 
         private void Current_Exit(object sender, ExitEventArgs e)
         {
@@ -247,13 +253,13 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public void Load()
         {
-            StateNetworkViewModel.Network = _networkSerializer.Read();
-            //         Refresh();
+            Network = _networkSerializer.Read();
+            Refresh();
         }
 
         public void Save()
         {
-            _networkSerializer.Write(_network);
+            //_networkSerializer.Write(_network);
         }
 
         public void Refresh()
@@ -264,13 +270,12 @@ namespace Aptacode.StateNet.NetworkCreationTool
             DisconnectedStates.Clear();
 
             AllStates.AddRange(_network.GetOrderedStates());
-            //Add All States which are not connect to anyother
-            _network.GetStates().Where(s => !AllStates.Contains(s)).ToList().ForEach(s => AllStates.Add(s));
-
             AllInputs.AddRange(_network.GetInputs());
 
             NewStateName = string.Empty;
             NewInputName = string.Empty;
+
+            StateNetworkViewModel.Update();
         }
 
         public void LoadConnections()

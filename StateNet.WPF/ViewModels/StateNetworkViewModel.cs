@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using Aptacode.StateNet.Network;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Drawing;
@@ -99,33 +100,26 @@ namespace Aptacode.StateNet.WPF.ViewModels
         private void LoadNetwork()
         {
             _graph = CreateGraph("New Graph");
-            LoadGraph(_graph, _network);
+            UpdateGraph(_graph, _network);
             DisplayGraph(_graph, _graphViewer);
         }
 
         private Graph CreateGraph(string name)
         {
-            var graph = new Graph(name);
-
-            graph.Attr.LayerDirection = LayerDirection.BT;
-            graph.LayoutAlgorithmSettings.EdgeRoutingSettings.UseObstacleRectangles = true;
-            graph.LayoutAlgorithmSettings.EdgeRoutingSettings.RouteMultiEdgesAsBundles = true;
-            graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.RectilinearToCenter;
-
-            return graph;
-        }
-
-        private void LoadGraph(Graph graph, StateNetwork network)
-        {
-            foreach (var state in network.GetOrderedStates())
+            return new Graph(name)
             {
-                var node = graph.AddNode(state.Name);
+                Attr = {LayerDirection = LayerDirection.BT},
 
-                foreach (var networkConnection in network.GetConnections(state))
+                LayoutAlgorithmSettings =
                 {
-                    graph.AddEdge(networkConnection.From.Name, networkConnection.Input.Name, networkConnection.To.Name);
+                    EdgeRoutingSettings =
+                    {
+                        UseObstacleRectangles = true,
+                        RouteMultiEdgesAsBundles = true,
+                        EdgeRoutingMode = EdgeRoutingMode.RectilinearToCenter
+                    }
                 }
-            }
+            };
         }
 
         private void DisplayGraph(Graph graph, GraphViewer graphViewer)
@@ -134,5 +128,56 @@ namespace Aptacode.StateNet.WPF.ViewModels
         }
 
         #endregion
+
+        private void UpdateGraph(Graph graph, StateNetwork network)
+        {
+            //Remove redundant nodes and edges
+            foreach (var graphNode in graph.Nodes.ToList())
+            {
+                var state = network.GetState(graphNode.LabelText);
+
+                
+                if (state == null)
+                    graph.RemoveNode(graphNode);
+                else
+                {
+                    foreach (var outEdge in graphNode.OutEdges
+                        .ToList()
+                        .Where(outEdge => network.GetConnection(state.Name, outEdge.LabelText, outEdge.Target) == null))
+                    {
+                        graph.RemoveEdge(outEdge);
+                    }
+                }
+            }
+
+            //Add New states and connections
+            foreach (var state in network.GetOrderedStates())
+            {
+                var node = graph.FindNode(state.Name) ?? graph.AddNode(state.Name);
+
+                foreach (var networkConnection in network.GetConnections(state))
+                {
+                    if (node.OutEdges.Count(edge =>
+                        edge.LabelText == networkConnection.Input.Name &&
+                        edge.Target == networkConnection.To.Name) == 0)
+                    {
+                        graph.AddEdge(networkConnection.From.Name, networkConnection.Input.Name, networkConnection.To.Name);
+                    }
+                }
+            }
+        }
+
+        public void Update()
+        {
+            UpdateGraph(_graph, _network);
+
+            _graphViewer.NeedToCalculateLayout = true;
+            _graphViewer.Graph = _graphViewer.Graph;
+            _graphViewer.NeedToCalculateLayout = false;
+            _graphViewer.Graph = _graphViewer.Graph;
+
+            _graph.GeometryGraph.UpdateBoundingBox();
+            _graphViewer.Invalidate();
+        }
     }
 }

@@ -141,7 +141,10 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<State> GetOrderedStates()
         {
-            return Traverse(StartState, state => GetConnections(state).Select(c => c.To));
+            var orderedStates = Traverse(StartState, state => GetConnections(state).Select(c => c.To)).ToList();
+            orderedStates.AddRange(GetStates().Where(s => !orderedStates.Contains(s)));
+
+            return orderedStates;
         }
 
         private static IEnumerable<T> Traverse<T>(T item, Func<T, IEnumerable<T>> childSelector)
