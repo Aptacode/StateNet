@@ -36,7 +36,7 @@
 
             </Grid>
             <Border DockPanel.Dock="Top" BorderThickness="2" Margin="-2,2,-2,2" BorderBrush="Black">
-                <ListBox Padding="5" ItemsSource="{Binding Connections}" SelectedValue="{Binding SelectedConnection}"
+                <ListBox Padding="5" ItemsSource="{Binding Connections}" SelectedItem="{Binding SelectedConnection, Mode=TwoWay}"
                          HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
