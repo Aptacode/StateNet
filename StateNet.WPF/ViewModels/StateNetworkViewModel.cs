@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Controls;
-using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Interfaces;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.WpfGraphControl;
@@ -10,6 +11,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
 {
     public class StateNetworkViewModel : BindableBase
     {
+        #region Events
+
+        public EventHandler<SelectedStateEventArgs> OnStateSelected;
+
+        #endregion
+
         private void GraphViewer_MouseDown(object sender, MsaglMouseEventArgs e)
         {
             outputSelectedItem();
@@ -23,6 +30,9 @@ namespace Aptacode.StateNet.WPF.ViewModels
             {
                 return;
             }
+
+            var selectedState = _network.GetState(node?.Node?.LabelText);
+            OnStateSelected?.Invoke(this, new SelectedStateEventArgs(selectedState));
 
             SetColor(Color.Black);
 
@@ -45,64 +55,15 @@ namespace Aptacode.StateNet.WPF.ViewModels
             _graphViewer.Invalidate(_selectedNode);
         }
 
-        private void UpdateGraph(Graph graph, StateNetwork network)
-        {
-            //Remove redundant nodes and edges
-            foreach (var graphNode in graph.Nodes.ToList())
-            {
-                var state = network.GetState(graphNode.LabelText);
-
-
-                if (state == null)
-                {
-                    graph.RemoveNode(graphNode);
-                }
-                else
-                {
-                    foreach (var outEdge in graphNode.OutEdges
-                        .ToList()
-                        .Where(outEdge => network.GetConnection(state.Name, outEdge.LabelText, outEdge.Target) == null))
-                    {
-                        graph.RemoveEdge(outEdge);
-                    }
-                }
-            }
-
-            //Add New states and connections
-            foreach (var state in network.GetOrderedStates())
-            {
-                var node = graph.FindNode(state.Name) ?? graph.AddNode(state.Name);
-
-                foreach (var networkConnection in network.GetConnections(state))
-                {
-                    if (node.OutEdges.Count(edge =>
-                        edge.LabelText == networkConnection.Input.Name &&
-                        edge.Target == networkConnection.Target.Name) == 0)
-                    {
-                        graph.AddEdge(networkConnection.Source.Name, networkConnection.Input.Name,
-                            networkConnection.Target.Name);
-                    }
-                }
-            }
-        }
-
         public void Update()
         {
-            UpdateGraph(_graph, _network);
-
-            _graphViewer.NeedToCalculateLayout = true;
-            _graphViewer.Graph = _graphViewer.Graph;
-            _graphViewer.NeedToCalculateLayout = false;
-            _graphViewer.Graph = _graphViewer.Graph;
-
-            _graph.GeometryGraph.UpdateBoundingBox();
+            _graphViewer.Graph = CreateGraph("TestGraph");
             _graphViewer.Invalidate();
         }
 
         #region Properties
 
         private GraphViewer _graphViewer;
-        private Graph _graph;
         private IViewerNode _selectedNode;
 
         private DockPanel _graphViewerPanel;
@@ -113,9 +74,9 @@ namespace Aptacode.StateNet.WPF.ViewModels
             set => SetProperty(ref _graphViewerPanel, value);
         }
 
-        private StateNetwork _network;
+        private IStateNetwork _network;
 
-        public StateNetwork Network
+        public IStateNetwork Network
         {
             get => _network;
             set
@@ -153,14 +114,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         private void LoadNetwork()
         {
-            _graph = CreateGraph("New Graph");
-            UpdateGraph(_graph, _network);
-            DisplayGraph(_graph, _graphViewer);
+            _graphViewer.Graph = CreateGraph("TestGraph");
         }
 
         private Graph CreateGraph(string name)
         {
-            return new Graph(name)
+            var newGraph = new Graph(name)
             {
                 Attr = {LayerDirection = LayerDirection.BT},
 
@@ -174,11 +133,24 @@ namespace Aptacode.StateNet.WPF.ViewModels
                     }
                 }
             };
-        }
+            //Add New states and connections
+            foreach (var state in _network.GetOrderedStates())
+            {
+                var node = newGraph.AddNode(state.Name);
 
-        private void DisplayGraph(Graph graph, GraphViewer graphViewer)
-        {
-            graphViewer.Graph = graph;
+                foreach (var networkConnection in _network.GetConnections(state))
+                {
+                    if (node.OutEdges.Count(edge =>
+                        edge.LabelText == networkConnection.Input.Name &&
+                        edge.Target == networkConnection.Target.Name) == 0)
+                    {
+                        newGraph.AddEdge(networkConnection.Source.Name, networkConnection.Input.Name,
+                            networkConnection.Target.Name);
+                    }
+                }
+            }
+
+            return newGraph;
         }
 
         #endregion

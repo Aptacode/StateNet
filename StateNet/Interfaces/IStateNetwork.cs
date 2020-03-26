@@ -17,6 +17,9 @@ namespace Aptacode.StateNet.Interfaces
 
         IEnumerable<State> GetStates();
         IEnumerable<State> GetEndStates();
+        IEnumerable<State> GetOrderedStates();
+
+        bool UpdateStateName(string oldStateName, string newStateName);
 
         #endregion
 

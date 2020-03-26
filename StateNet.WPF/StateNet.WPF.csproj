@@ -86,7 +86,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\StateUpdatedEventArgs.cs" />
+    <Compile Include="ViewModels\SelectedStateEventArgs.cs" />
     <Compile Include="ViewModels\StateNetworkViewModel.cs" />
+    <Compile Include="ViewModels\StateEditorViewModel.cs" />
     <Compile Include="Views\StateEditor.xaml.cs">
       <DependentUpon>StateEditor.xaml</DependentUpon>
     </Compile>

@@ -23,7 +23,8 @@ namespace Aptacode.StateNet.Tests.Mocks
 
             foreach (var connection in connections)
             {
-                stateNetwork.Connect(connection.Source, connection.Input, connection.Target, connection.ConnectionWeight);
+                stateNetwork.Connect(connection.Source, connection.Input, connection.Target,
+                    connection.ConnectionWeight);
             }
 
             if (!string.IsNullOrEmpty(startState))

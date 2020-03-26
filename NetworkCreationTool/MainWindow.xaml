@@ -10,79 +10,14 @@
 
     <TabControl>
         <TabItem Header="View">
-            <DockPanel LastChildFill="True">
-                <WPFControls:StateEditor DockPanel.Dock="Right" Width="400" />
-                <WPFControls:StateNetwork DockPanel.Dock="Left" DataContext="{Binding StateNetworkViewModel}" />
-            </DockPanel>
-        </TabItem>
-
-        <TabItem Header="Modify">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Label Content="Source state" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" />
-                <Border Margin="10" Background="Gray" Grid.Column="0" Grid.Row="1">
-                    <DockPanel LastChildFill="True">
-                        <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewStateCommand}" />
-                            <TextBox Text="{Binding NewStateName}" />
-                        </DockPanel>
-                        <Button DockPanel.Dock="Bottom" Content="Remove" Command="{Binding RemoveStateCommand}" />
-                        <ListBox ItemsSource="{Binding AllStates}" SelectedValue="{Binding SelectedState}" />
-                    </DockPanel>
-                </Border>
-
-                <Label Content="target state" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" />
-                <Border Margin="10" Background="Gray" Grid.Column="1" Grid.Row="1">
-                    <DockPanel LastChildFill="True">
-                        <DockPanel DockPanel.Dock="Top">
-                            <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveInputCommand}" />
-                            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddNewInputCommand}" />
-                            <ComboBox DockPanel.Dock="Left" Width="200" ItemsSource="{Binding AllInputs}"
-                                      SelectedValue="{Binding SelectedInput}" />
-                            <TextBox DockPanel.Dock="Right" Text="{Binding NewInputName}" />
-                        </DockPanel>
-
-                        <DockPanel>
-                            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                                <Button DockPanel.Dock="Right" Content="Connect"
-                                        Command="{Binding ConnectStateCommand}" />
-                                <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding DisconnectedStates}"
-                                          SelectedValue="{Binding SelectedDisconnectedState}" />
-                            </DockPanel>
-
-                            <Button DockPanel.Dock="Bottom" Content="Disconnect"
-                                    Command="{Binding DisconnectStateCommand}" />
-
-                            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                                <Button DockPanel.Dock="Right" Content="Update"
-                                        Command="{Binding UpdateSelectedConnectedStateExpressionCommand}" />
-                                <TextBox DockPanel.Dock="Left"
-                                         Text="{Binding SelectedConnectedStateExpression, Mode=TwoWay}" />
-                            </DockPanel>
-
-                            <ListBox ItemsSource="{Binding ConnectedStates}"
-                                     SelectedValue="{Binding SelectedConnectedState, Mode=TwoWay}" />
-                        </DockPanel>
-                    </DockPanel>
-                </Border>
-
-                <TreeView x:Name="TreeView" Grid.Column="2" Grid.Row="1" />
+                <WPFControls:StateNetwork Grid.Column="0" DataContext="{Binding StateNetworkViewModel}" />
+                <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}" />
             </Grid>
         </TabItem>
-
     </TabControl>
-
-
 </Window>

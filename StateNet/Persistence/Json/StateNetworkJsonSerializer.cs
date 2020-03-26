@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Aptacode.StateNet.Persistence.Json
 {
-    public class StateNetworkJsonSerializer : INetworkSerializer
+    public class StateNetworkJsonSerializer : IStateNetworkSerializer
     {
         public static readonly string StartStatePropertyName = "StartState";
         public static readonly string StatesPropertyName = "States";
@@ -21,9 +22,9 @@ namespace Aptacode.StateNet.Persistence.Json
 
         public string Filename { get; set; }
 
-        public StateNetwork Read()
+        public IStateNetwork Read()
         {
-            StateNetwork stateNetwork = null;
+            IStateNetwork stateNetwork = null;
 
             using (var streamReader = new StreamReader(Filename))
             {
@@ -33,7 +34,7 @@ namespace Aptacode.StateNet.Persistence.Json
             return stateNetwork;
         }
 
-        public void Write(StateNetwork stateNetwork)
+        public void Write(IStateNetwork stateNetwork)
         {
             using (var streamWriter = new StreamWriter(Filename))
             {
@@ -41,12 +42,12 @@ namespace Aptacode.StateNet.Persistence.Json
             }
         }
 
-        public static StateNetwork FromJSon(string jsonInput)
+        public static IStateNetwork FromJSon(string jsonInput)
         {
             return FromJSon(JObject.Parse(jsonInput));
         }
 
-        public static StateNetwork FromJSon(JObject jObject)
+        public static IStateNetwork FromJSon(JObject jObject)
         {
             var network = new StateNetwork();
             var networkEditor = new StateNetworkEditor(network);
@@ -67,12 +68,13 @@ namespace Aptacode.StateNet.Persistence.Json
             states.ForEach(state => networkEditor.CreateState(state));
             inputs.ForEach(input => networkEditor.CreateInput(input));
             connections.ForEach(connection =>
-                networkEditor.Connect(connection.Source, connection.Input, connection.Target, connection.ConnectionWeight));
+                networkEditor.Connect(connection.Source, connection.Input, connection.Target,
+                    connection.ConnectionWeight));
 
             return network;
         }
 
-        public static JObject ToJson(StateNetwork stateNetwork)
+        public static JObject ToJson(IStateNetwork stateNetwork)
         {
             return new JObject
             {

@@ -36,7 +36,8 @@ namespace Aptacode.StateNet.Network
 
         public bool Equals(Connection other)
         {
-            return other != null && Source.Equals(other.Source) && Input.Equals(other.Input) && Target.Equals(other.Target) &&
+            return other != null && Source.Equals(other.Source) && Input.Equals(other.Input) &&
+                   Target.Equals(other.Target) &&
                    ConnectionWeight.Equals(other.ConnectionWeight);
         }
 

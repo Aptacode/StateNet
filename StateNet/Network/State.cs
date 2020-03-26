@@ -19,7 +19,7 @@ namespace Aptacode.StateNet.Network
         /// <summary>
         ///     The state name
         /// </summary>
-        public string Name { get; }
+        public string Name { get; internal set; }
 
         public override string ToString()
         {

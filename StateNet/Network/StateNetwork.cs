@@ -54,6 +54,35 @@ namespace Aptacode.StateNet.Network
             return isStartStateValid;
         }
 
+        public bool UpdateStateName(string oldStateName, string newStateName)
+        {
+            if (!States.TryGetValue(oldStateName, out var selectedState))
+            {
+                return false;
+            }
+
+            States.Remove(oldStateName);
+
+            selectedState.Name = newStateName;
+
+            States.Add(newStateName, selectedState);
+
+            foreach (var connection in GetConnections().ToList())
+            {
+                if (connection.Source.Name.Equals(oldStateName))
+                {
+                    connection.Source = selectedState;
+                }
+
+                if (connection.Target.Name.Equals(oldStateName))
+                {
+                    connection.Target = selectedState;
+                }
+            }
+
+            return true;
+        }
+
         #region Attributes
 
         private void ActOnFieldAndPropertyAttributes(Type targetType, Action<MemberInfo, object> doWhenFound)
@@ -97,7 +126,9 @@ namespace Aptacode.StateNet.Network
         public State GetState(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 return null;
+            }
 
             States.TryGetValue(name, out var state);
             return state;
@@ -112,7 +143,9 @@ namespace Aptacode.StateNet.Network
         public State CreateState(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 return null;
+            }
 
             var newState = GetState(name);
             if (newState != null)
@@ -132,7 +165,9 @@ namespace Aptacode.StateNet.Network
         public void RemoveState(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 return;
+            }
 
             if (States.ContainsKey(name))
             {
@@ -210,7 +245,9 @@ namespace Aptacode.StateNet.Network
         public Input GetInput(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 return null;
+            }
 
             Inputs.TryGetValue(name, out var input);
             return input;
@@ -219,7 +256,9 @@ namespace Aptacode.StateNet.Network
         public void RemoveInput(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return;
+            }
 
             if (Inputs.ContainsKey(input))
             {
@@ -233,7 +272,9 @@ namespace Aptacode.StateNet.Network
         public Input CreateInput(string name)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 return null;
+            }
 
             var newInput = GetInput(name);
             if (newInput != null)
@@ -279,7 +320,9 @@ namespace Aptacode.StateNet.Network
             var selectedTarget = CreateState(target);
 
             if (selectedSource == null || selectedInput == null || selectedTarget == null)
+            {
                 return;
+            }
 
             var oldConnection = GetConnection(source, input, target);
 
