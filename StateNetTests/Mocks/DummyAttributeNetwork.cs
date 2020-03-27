@@ -3,7 +3,7 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Mocks
 {
-    public class DummyNetwork : StateNetwork
+    public class DummyAttributeNetwork : StateNetwork
     {
         [StartState("Start")]
         [Connection("Left", "D1")]
@@ -21,7 +21,6 @@ namespace Aptacode.StateNet.Tests.Mocks
 
         public State Decision2TestState { get; set; }
 
-        [StateName("End")]
-        public State EndTestState { get; set; }
+        [StateName("End")] public State EndTestState { get; set; }
     }
 }

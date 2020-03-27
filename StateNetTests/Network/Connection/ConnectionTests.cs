@@ -1,4 +1,4 @@
-﻿using Aptacode.StateNet.Tests.Helpers;
+﻿using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.Network.Connection

@@ -6,7 +6,15 @@ namespace Aptacode.StateNet.Tests.Mocks
 {
     public static class DummyProgrammaticNetworks
     {
-        public static IStateNetwork CreateNetwork(string startState, IEnumerable<State> states,
+        /// <summary>
+        ///     Creates a network with the provided list of states, inputs and connections
+        /// </summary>
+        /// <param name="startState"></param>
+        /// <param name="states"></param>
+        /// <param name="inputs"></param>
+        /// <param name="connections"></param>
+        /// <returns></returns>
+        public static IStateNetwork Create(string startState, IEnumerable<State> states,
             IEnumerable<Input> inputs, IEnumerable<Connection> connections)
         {
             IStateNetwork stateNetwork = new StateNetwork();

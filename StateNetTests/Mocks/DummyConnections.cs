@@ -3,7 +3,7 @@ using System.Linq;
 using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Network;
 
-namespace Aptacode.StateNet.Tests.Helpers
+namespace Aptacode.StateNet.Tests.Mocks
 {
     public static class DummyConnections
     {
@@ -36,7 +36,9 @@ namespace Aptacode.StateNet.Tests.Helpers
 
             foreach (var connection in connections)
             {
-                connectionDistribution.Add(new Connection(new State(connection.Item1), new Input(connection.Item2), new State(connection.Item3), new ConnectionWeight(connection.Item4)), connection.Item4);
+                connectionDistribution.Add(
+                    new Connection(new State(connection.Item1), new Input(connection.Item2),
+                        new State(connection.Item3), new ConnectionWeight(connection.Item4)), connection.Item4);
             }
 
             return connectionDistribution;

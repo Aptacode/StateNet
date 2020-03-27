@@ -9,7 +9,7 @@ namespace Aptacode.StateNet.Tests.Persistence.Json
         [Test]
         public void CanConvertNetworkToStringAndBack()
         {
-            var inputNetwork = new DummyNetwork();
+            var inputNetwork = new DummyAttributeNetwork();
 
             var jsonString = StateNetworkJsonSerializer.ToJson(inputNetwork);
             var outputNetwork = StateNetworkJsonSerializer.FromJSon(jsonString);
@@ -20,7 +20,7 @@ namespace Aptacode.StateNet.Tests.Persistence.Json
         [Test]
         public void CanSaveAndLoadNetworkFromFile()
         {
-            var inputNetwork = new DummyNetwork();
+            var inputNetwork = new DummyAttributeNetwork();
 
             var serializer = new StateNetworkJsonSerializer("./test.json");
             serializer.Write(inputNetwork);

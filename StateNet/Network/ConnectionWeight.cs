@@ -3,11 +3,18 @@ using Aptacode.StateNet.Engine;
 
 namespace Aptacode.StateNet.Network
 {
+    /// <summary>
+    /// Evaluates a string Expression given the EngineHistory to return an integer weight
+    /// </summary>
     public class ConnectionWeight : IEquatable<ConnectionWeight>
     {
         private string _expression;
-
         private Func<EngineHistory, int> _weightFunction;
+        private static ScriptEvaluator Evaluator { get; } = new ScriptEvaluator();
+
+        public static readonly int DefaultWeight = 0;
+        public static readonly string DefaultExpression = DefaultWeight.ToString();
+        public static readonly Func<EngineHistory, int> DefaultWeightFunction = (_) => DefaultWeight;
 
         public ConnectionWeight() : this(1)
         {
@@ -22,43 +29,72 @@ namespace Aptacode.StateNet.Network
             Expression = expression;
         }
 
-        private static StatefulScriptCompiler<int> Compiler { get; } = new StatefulScriptCompiler<int>();
-
         public string Expression
         {
             get => _expression;
             set
             {
-                _expression = string.IsNullOrEmpty(value) ? 1.ToString() : value;
+                _expression = value;
 
-                if (int.TryParse(_expression, out var weight))
+                if (GetStaticWeightFunction(value, out _weightFunction))
                 {
-                    _weightFunction = _ => weight;
+                    return;
                 }
-                else
+
+                if (GetWeightFunction(value, out _weightFunction))
                 {
-                    try
-                    {
-                        _weightFunction = Compiler.Compile(_expression);
-                    }
-                    catch (Exception exception)
-                    {
-                        _expression = "0";
-                        _weightFunction = _ => 0;
-                    }
+                    return;
                 }
+
+                _expression = DefaultExpression;
+                _weightFunction = DefaultWeightFunction;
             }
         }
+        /// <summary>
+        /// Evaluates the weightFunction given the EngineHistory to return an integer weight
+        /// </summary>
+        /// <param name="history"></param>
+        /// <returns></returns>
+        public int Evaluate(EngineHistory history)
+        {
+            var result = _weightFunction(history);
+            return result >= 0 ? result : 0;
+        }
+
+        #region WeightFunctions
+        private static bool GetStaticWeightFunction(string expression, out Func<EngineHistory, int> weightFunction)
+        {
+            if (int.TryParse(expression, out var weight))
+            {
+                weightFunction = (_) => weight;
+                return true;
+            }
+
+            weightFunction = null;
+            return false;
+        }
+
+        private static bool GetWeightFunction(string expression, out Func<EngineHistory, int> weightFunction)
+        {
+            try
+            {
+                weightFunction = Evaluator.Compile(expression);
+                return true;
+            }
+            catch (Exception)
+            {
+                weightFunction = null;
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Equality
 
         public bool Equals(ConnectionWeight other)
         {
             return other != null && Expression.Equals(other.Expression);
-        }
-
-        public int Evaluate(EngineHistory log)
-        {
-            var result = _weightFunction(log);
-            return result >= 0 ? result : 0;
         }
 
         public override int GetHashCode()
@@ -70,10 +106,14 @@ namespace Aptacode.StateNet.Network
         {
             return obj is ConnectionWeight other && Equals(other);
         }
+        #endregion
 
+        #region ToString
         public override string ToString()
         {
             return Expression;
         }
+
+        #endregion
     }
 }

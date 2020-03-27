@@ -11,12 +11,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
     {
         private readonly IStateNetwork _network;
 
-        #region Events
-
-        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
-
-        #endregion
-
         public ConnectionViewModel(IStateNetwork network, Connection connection)
         {
             _network = network;
@@ -30,6 +24,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
             Target = Connection.Target;
             Expression = Connection.ConnectionWeight.Expression;
         }
+
+        #region Events
+
+        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
+
+        #endregion
 
         #region Properties
 

@@ -5,19 +5,19 @@ using Microsoft.CodeAnalysis.Scripting;
 
 namespace Aptacode.StateNet.Network
 {
-    public class StatefulScriptCompiler<T>
+    public class ScriptEvaluator
     {
-        private readonly Script<T> script;
+        private readonly Script<int> script;
 
-        public StatefulScriptCompiler()
+        public ScriptEvaluator()
         {
             var options = ScriptOptions.Default;
-            script = CSharpScript.Create<T>($"default ({typeof(T).FullName})", options, typeof(EngineHistory));
+            script = CSharpScript.Create<int>($"default ({typeof(int).FullName})", options, typeof(EngineHistory));
         }
 
-        public Func<EngineHistory, T> Compile(string source)
+        public Func<EngineHistory, int> Compile(string source)
         {
-            var runner = script.ContinueWith<T>($"return {source};").CreateDelegate();
+            var runner = script.ContinueWith<int>($"return {source};").CreateDelegate();
             return globals => runner(globals ?? new EngineHistory()).Result;
         }
     }

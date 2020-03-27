@@ -3,6 +3,7 @@ using System.Linq;
 using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Tests.Helpers;
+using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.Engine
@@ -27,7 +28,7 @@ namespace Aptacode.StateNet.Tests.Engine
                     3, 1);
             }
         }
-        
+
         [Test]
         [TestCaseSource(nameof(RandomChoiceTestCases))]
         public void NodeChooser_ChooseValue(IEnumerable<Connection> connectionDistribution,

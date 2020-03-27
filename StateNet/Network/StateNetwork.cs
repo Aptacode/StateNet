@@ -292,7 +292,7 @@ namespace Aptacode.StateNet.Network
         #region Connections
 
         public IEnumerable<Connection> Connections =>
-            _states.Values.Select(state => state.GetConnections())
+            _states.Values.Select(state => state.GetOutputConnections())
                 .Aggregate((IEnumerable<Connection>) new List<Connection>(), (a, b) => a.Concat(b));
 
 
@@ -313,7 +313,10 @@ namespace Aptacode.StateNet.Network
             set => Connect(value.Source, value.Input, value.Target, value.ConnectionWeight);
         }
 
-        public void Connect(string source, string input, string target) => Connect(source, input, target, new ConnectionWeight(1));
+        public void Connect(string source, string input, string target)
+        {
+            Connect(source, input, target, new ConnectionWeight(1));
+        }
 
         public void Connect(string source, string input, string target, ConnectionWeight connectionWeight)
         {
@@ -361,7 +364,7 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Connection> GetOrderedConnections()
         {
-            return GetOrderedStates().Select(state => state.GetConnections()).Aggregate((a, b) => a.Concat(b));
+            return GetOrderedStates().Select(state => state.GetOutputConnections()).Aggregate((a, b) => a.Concat(b));
         }
 
         #endregion

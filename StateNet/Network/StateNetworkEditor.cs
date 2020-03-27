@@ -32,7 +32,10 @@ namespace Aptacode.StateNet.Network
             return createIfMissing ? _stateNetwork.CreateState(name) : _stateNetwork.GetState(name);
         }
 
-        public State GetState(string name) => GetState(name, true);
+        public State GetState(string name)
+        {
+            return GetState(name, true);
+        }
 
         /// <summary>
         ///     Return the state with the given name
@@ -83,7 +86,10 @@ namespace Aptacode.StateNet.Network
             return createIfMissing ? _stateNetwork.CreateInput(name) : _stateNetwork.GetInput(name);
         }
 
-        public Input GetInput(string name) => GetInput(name, true);
+        public Input GetInput(string name)
+        {
+            return GetInput(name, true);
+        }
 
         public void RemoveInput(string name)
         {
@@ -120,9 +126,16 @@ namespace Aptacode.StateNet.Network
         }
 
         public void Connect(string source, string input, string target,
-            ConnectionWeight connectionWeight) => _stateNetwork.Connect(GetState(source, true), GetInput(input, true), GetState(target, true), connectionWeight);
+            ConnectionWeight connectionWeight)
+        {
+            _stateNetwork.Connect(GetState(source, true), GetInput(input, true), GetState(target, true),
+                connectionWeight);
+        }
 
-        public void Connect(string source, string input, string target) => Connect(source, input, target, new ConnectionWeight(1));
+        public void Connect(string source, string input, string target)
+        {
+            Connect(source, input, target, new ConnectionWeight(1));
+        }
 
         public IEnumerable<Connection> GetConnections(string source, string input)
         {

@@ -14,6 +14,11 @@ namespace Aptacode.StateNet.Tests.Mocks
             Stopped
         }
 
+        /// <summary>
+        ///     Creates a list of States from the given array of strings
+        /// </summary>
+        /// <param name="states"></param>
+        /// <returns></returns>
         public static IEnumerable<State> Create(params string[] states)
         {
             return states.Select(state => new State(state));

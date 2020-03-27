@@ -2,8 +2,11 @@
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
 
-namespace Aptacode.StateNet.Tests.Helpers
+namespace Aptacode.StateNet.Tests.Mocks
 {
+    /// <summary>
+    ///     Mock random number generator which returns a pre determined sequence of numbers
+    /// </summary>
     public class DummyRandomNumberGenerator : IRandomNumberGenerator
     {
         private readonly List<int> _sequence;
@@ -17,7 +20,12 @@ namespace Aptacode.StateNet.Tests.Helpers
 
         public int Generate(int min, int max)
         {
-            return _sequence[_callCount++];
+            if (_callCount >= _sequence.Count)
+            {
+                _callCount = 0;
+            }
+
+            return _sequence.ElementAt(_callCount++);
         }
     }
 }

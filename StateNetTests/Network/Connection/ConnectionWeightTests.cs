@@ -23,8 +23,8 @@ namespace Aptacode.StateNet.Tests.Network.Connection
         {
             get
             {
-                yield return new TestCaseData("ten", StateHistoryGenerator.Generate(), 0);
-                yield return new TestCaseData("1.5", StateHistoryGenerator.Generate(), 0);
+                yield return new TestCaseData("ten", StateHistoryGenerator.Generate(), ConnectionWeight.DefaultWeight);
+                yield return new TestCaseData("1.5", StateHistoryGenerator.Generate(), ConnectionWeight.DefaultWeight);
             }
         }
 
@@ -46,7 +46,7 @@ namespace Aptacode.StateNet.Tests.Network.Connection
             get
             {
                 yield return new TestCaseData(0, 0);
-                yield return new TestCaseData(-1, 0);
+                yield return new TestCaseData(-1, ConnectionWeight.DefaultWeight);
                 yield return new TestCaseData(1, 1);
                 yield return new TestCaseData(100, 100);
             }
@@ -57,7 +57,7 @@ namespace Aptacode.StateNet.Tests.Network.Connection
             get
             {
                 yield return new TestCaseData(1, 0, 0);
-                yield return new TestCaseData(1, -1, 0);
+                yield return new TestCaseData(1, -1, 1);
                 yield return new TestCaseData(0, 1, 1);
                 yield return new TestCaseData(-1, 1, 1);
                 yield return new TestCaseData(1, 1, 1);

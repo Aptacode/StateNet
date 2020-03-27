@@ -10,17 +10,18 @@ namespace Aptacode.StateNet.WPF.ViewModels
 {
     public class StateEditorViewModel : BindableBase
     {
-        #region Events
-        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
-
-        #endregion
-
         public StateEditorViewModel()
         {
             Connections = new ObservableCollection<ConnectionViewModel>();
             Inputs = new ObservableCollection<Input>();
             States = new ObservableCollection<State>();
         }
+
+        #region Events
+
+        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
+
+        #endregion
 
         public void Clear()
         {
@@ -46,7 +47,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
             Connections.AddRange(
                 State
-                    .GetConnections()
+                    .GetOutputConnections()
                     .ToList()
                     .Select(connection => new ConnectionViewModel(_network, connection)));
 

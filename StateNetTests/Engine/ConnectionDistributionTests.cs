@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Tests.Helpers;
+using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Aptacode.StateNet.Tests.Engine
@@ -11,11 +11,18 @@ namespace Aptacode.StateNet.Tests.Engine
         {
             get
             {
-                yield return new TestCaseData(DummyConnections.CreateDistribution(), 0, "An empty distribution should return 0 weight");
-                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", 1)), 1, "Total Weight = 1");
-                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", 0), ("b", "next", "a", 1)), 1, "Total Weight = 1");
-                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", 1), ("b", "next", "a", 2)), 3, "Total Weight = 3");
-                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", -1)), 0, "Negative weights should count as 0");
+                yield return new TestCaseData(DummyConnections.CreateDistribution(), 0,
+                    "An empty distribution should return 0 weight");
+                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", 1)), 1,
+                    "Total Weight = 1");
+                yield return new TestCaseData(
+                    DummyConnections.CreateDistribution(("a", "next", "b", 0), ("b", "next", "a", 1)), 1,
+                    "Total Weight = 1");
+                yield return new TestCaseData(
+                    DummyConnections.CreateDistribution(("a", "next", "b", 1), ("b", "next", "a", 2)), 3,
+                    "Total Weight = 3");
+                yield return new TestCaseData(DummyConnections.CreateDistribution(("a", "next", "b", -1)), 0,
+                    "Negative weights should count as 0");
             }
         }
 

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine
 {
     /// <summary>
-    /// Chooses a connection based on its evaluated weight
+    ///     Chooses a connection based on its evaluated weight
     /// </summary>
     public class ConnectionChooser
     {
@@ -14,8 +13,8 @@ namespace Aptacode.StateNet.Engine
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
         /// <summary>
-        /// Evaluates the weights of a list of connections based on the EngineHistory
-        /// And then randomly chooses a connection influenced by the its weight
+        ///     Evaluates the weights of a list of connections based on the EngineHistory
+        ///     And then randomly chooses a connection influenced by the its weight
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
         /// <param name="engineHistory"></param>
@@ -26,8 +25,8 @@ namespace Aptacode.StateNet.Engine
         }
 
         /// <summary>
-        /// Evaluates the weights for a list of connections based on the EngineHistory
-        /// Chooses a connection randomly influenced by those weights
+        ///     Evaluates the weights for a list of connections based on the EngineHistory
+        ///     Chooses a connection randomly influenced by those weights
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>

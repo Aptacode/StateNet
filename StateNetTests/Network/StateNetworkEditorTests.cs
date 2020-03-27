@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
-using Aptacode.StateNet.Tests.Helpers;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
@@ -57,7 +56,7 @@ namespace Aptacode.StateNet.Tests.Network
         [Test]
         public void RemoveState()
         {
-            var network = DummyProgrammaticNetworks.CreateNetwork(
+            var network = DummyProgrammaticNetworks.Create(
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
@@ -76,7 +75,7 @@ namespace Aptacode.StateNet.Tests.Network
         [Test]
         public void GetEndStates()
         {
-            var network = DummyProgrammaticNetworks.CreateNetwork(
+            var network = DummyProgrammaticNetworks.Create(
                 "b",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
@@ -151,7 +150,7 @@ namespace Aptacode.StateNet.Tests.Network
         [Test]
         public void RemoveInput()
         {
-            var network = DummyProgrammaticNetworks.CreateNetwork(
+            var network = DummyProgrammaticNetworks.Create(
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
@@ -186,7 +185,7 @@ namespace Aptacode.StateNet.Tests.Network
         {
             var allConnections =
                 DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1));
-            var network = DummyProgrammaticNetworks.CreateNetwork(
+            var network = DummyProgrammaticNetworks.Create(
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
@@ -212,7 +211,7 @@ namespace Aptacode.StateNet.Tests.Network
                     ("b", "back", "a", 1));
 
             //Create a network with 3 states (a, b, c), 1 input (next) and three connections
-            var network = DummyProgrammaticNetworks.CreateNetwork(
+            var network = DummyProgrammaticNetworks.Create(
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next"),

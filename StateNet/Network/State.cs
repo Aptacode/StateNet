@@ -5,10 +5,10 @@ namespace Aptacode.StateNet.Network
 {
     public sealed class State : IEquatable<State>
     {
-        private readonly List<Connection> _connections = new List<Connection>();
+        private readonly List<Connection> _outputConnections = new List<Connection>();
 
         /// <summary>
-        ///     Represents a single state in the network
+        /// Represents a single state in the network and all of the output connections it has
         /// </summary>
         /// <param name="name">The name of the state</param>
         public State(string name)
@@ -17,7 +17,7 @@ namespace Aptacode.StateNet.Network
         }
 
         /// <summary>
-        ///     The state name
+        /// The state name
         /// </summary>
         public string Name { get; internal set; }
 
@@ -31,27 +31,31 @@ namespace Aptacode.StateNet.Network
             return instance?.Name;
         }
 
-        public IEnumerable<Connection> GetConnections()
+        #region Connections
+
+        public IEnumerable<Connection> GetOutputConnections()
         {
-            return _connections;
+            return _outputConnections;
         }
 
         internal void Remove(Connection connection)
         {
-            _connections.Remove(connection);
+            _outputConnections.Remove(connection);
         }
 
         internal void Add(Connection connection)
         {
-            _connections.Add(connection);
+            _outputConnections.Add(connection);
         }
 
         public bool IsEnd()
         {
-            return _connections.Count == 0;
+            return _outputConnections.Count == 0;
         }
 
-        #region Overrides
+        #endregion
+
+        #region Equality
 
         public override int GetHashCode()
         {
@@ -68,6 +72,6 @@ namespace Aptacode.StateNet.Network
             return other != null && Name.Equals(other.Name);
         }
 
-        #endregion Overrides
+        #endregion Equality
     }
 }

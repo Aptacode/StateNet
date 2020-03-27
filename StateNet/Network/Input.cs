@@ -10,7 +10,7 @@ namespace Aptacode.StateNet.Network
         }
 
         /// <summary>
-        ///     The state name
+        /// The Input name
         /// </summary>
         public string Name { get; set; }
 
@@ -24,7 +24,7 @@ namespace Aptacode.StateNet.Network
             return instance?.Name;
         }
 
-        #region Overrides
+        #region Equality
 
         public override int GetHashCode()
         {
@@ -41,6 +41,6 @@ namespace Aptacode.StateNet.Network
             return other != null && Name.Equals(other.Name);
         }
 
-        #endregion Overrides
+        #endregion Equality
     }
 }
