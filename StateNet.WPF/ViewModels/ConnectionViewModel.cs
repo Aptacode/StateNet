@@ -13,7 +13,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #region Events
 
-        public EventHandler<StateUpdatedEventArgs> OnStateUpdated;
+        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
 
         #endregion
 

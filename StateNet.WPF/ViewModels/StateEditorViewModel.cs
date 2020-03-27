@@ -11,8 +11,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
     public class StateEditorViewModel : BindableBase
     {
         #region Events
-
-        public EventHandler<StateUpdatedEventArgs> OnStateUpdated;
+        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
 
         #endregion
 

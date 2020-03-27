@@ -5,7 +5,7 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Interfaces
 {
-    public interface IStateNetEngine
+    public interface IStateNetEngine : IDisposable
     {
         State CurrentState { get; }
         EngineHistory History { get; }

@@ -155,5 +155,10 @@ namespace Aptacode.StateNet.Engine
             var connections = _stateNetwork.GetConnections(state, input);
             return _connectionChooser.Choose(connections).Target;
         }
+
+        public void Dispose()
+        {
+            cancellationTokenSource?.Dispose();
+        }
     }
 }

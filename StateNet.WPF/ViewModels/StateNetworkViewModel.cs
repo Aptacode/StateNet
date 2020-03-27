@@ -12,8 +12,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
     public class StateNetworkViewModel : BindableBase
     {
         #region Events
-
-        public EventHandler<SelectedStateEventArgs> OnStateSelected;
+        public EventHandler<SelectedStateEventArgs> OnStateSelected { get; set; }
 
         #endregion
 
