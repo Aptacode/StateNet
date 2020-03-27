@@ -36,9 +36,9 @@ namespace Aptacode.StateNet.Network
 
                 Connect(
                     state.Name,
-                    connectionInfo.InputName,
-                    connectionInfo.TargetName,
-                    new ConnectionWeight(connectionInfo.ConnectionDescription));
+                    connectionInfo.Input,
+                    connectionInfo.Target,
+                    new ConnectionWeight(connectionInfo.Expression));
             });
         }
 

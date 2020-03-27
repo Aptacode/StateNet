@@ -9,23 +9,6 @@ namespace Aptacode.StateNet.Tests.Engine
 {
     public class ConnectionChooserTests
     {
-        public static IEnumerable<TestCaseData> TotalWeightTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(DummyConnections.Generate(), 0,
-                    "An empty distribution should return 0 weight");
-                yield return new TestCaseData(DummyConnections.Generate(("a", "next", "b", 1)), 1,
-                    "Total Weight = 1");
-                yield return new TestCaseData(
-                    DummyConnections.Generate(("a", "next", "b", 0), ("b", "next", "a", 1)), 1, "Total Weight = 1");
-                yield return new TestCaseData(
-                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 2)), 3, "Total Weight = 3");
-                yield return new TestCaseData(DummyConnections.Generate(("a", "next", "b", -1)), 0,
-                    "Negative weights should count as 0");
-            }
-        }
-
         public static IEnumerable<TestCaseData> RandomChoiceTestCases
         {
             get
@@ -44,20 +27,7 @@ namespace Aptacode.StateNet.Tests.Engine
                     3, 1);
             }
         }
-
-        [Test]
-        [TestCaseSource(nameof(TotalWeightTestCases))]
-        public void NodeChooser_TotalWeight(IEnumerable<Connection> connectionDistribution, int expectedValue,
-            string message = "")
-        {
-            var chooser =
-                new ConnectionChooser(new DummyRandomNumberGenerator(), StateHistoryGenerator.Generate());
-
-            Assert.AreEqual(expectedValue,
-                chooser.SumWeights(connectionDistribution), message);
-        }
-
-
+        
         [Test]
         [TestCaseSource(nameof(RandomChoiceTestCases))]
         public void NodeChooser_ChooseValue(IEnumerable<Connection> connectionDistribution,

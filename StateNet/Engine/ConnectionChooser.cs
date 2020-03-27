@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine
 {
+    /// <summary>
+    /// Chooses a connection based on its evaluated weight
+    /// </summary>
     public class ConnectionChooser
     {
         private readonly EngineHistory _engineHistory;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
         /// <summary>
-        ///     Chooses a state from a given StateDistribution based on the past states stored in its StateHistory
+        /// Evaluates the weights of a list of connections based on the EngineHistory
+        /// And then randomly chooses a connection influenced by the its weight
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
         /// <param name="engineHistory"></param>
@@ -22,16 +26,17 @@ namespace Aptacode.StateNet.Engine
         }
 
         /// <summary>
-        ///     Return the next state based on the given StateDistribution and the current StateHistory
+        /// Evaluates the weights for a list of connections based on the EngineHistory
+        /// Chooses a connection randomly influenced by those weights
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
         public Connection Choose(IEnumerable<Connection> connections)
         {
-            var connectionWeights = GetConnectionWeights(connections).ToList();
+            var connectionWeightDistribution = GetConnectionDistribution(connections);
 
             //If the total weight is 0 no state can be entered
-            var totalWeight = SumWeights(connectionWeights);
+            var totalWeight = connectionWeightDistribution.SumWeights();
             if (totalWeight == 0)
             {
                 return null;
@@ -42,7 +47,7 @@ namespace Aptacode.StateNet.Engine
 
             //Iterate over each connection weight keeping a running total of their sum in the weightCounter
             //Return the state where weightCounter >= choice
-            using (var iterator = connectionWeights.GetEnumerator())
+            using (var iterator = connectionWeightDistribution.GetEnumerator())
             {
                 var weightCounter = 0;
                 while (weightCounter < choice && iterator.MoveNext())
@@ -55,34 +60,21 @@ namespace Aptacode.StateNet.Engine
         }
 
         /// <summary>
-        ///     Calculates the weight of each connections in the StateDistribution given the current state history and returns a
+        ///     Calculates the weight of each connection given the current EngineHistory and returns a
         ///     list of State,Weight pairs
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        private IEnumerable<(Connection, int)> GetConnectionWeights(IEnumerable<Connection> connections)
+        private ConnectionDistribution GetConnectionDistribution(IEnumerable<Connection> connections)
         {
-            return connections.Select(connection =>
-                (connection, connection.ConnectionWeight.Evaluate(_engineHistory)));
+            var connectionDistribution = new ConnectionDistribution();
+
+            foreach (var connection in connections)
+            {
+                connectionDistribution.Add(connection, connection.ConnectionWeight.Evaluate(_engineHistory));
+            }
+
+            return connectionDistribution;
         }
-
-        /// <summary>
-        ///     Calculates the sum of each connection in the given StateDistribution
-        /// </summary>
-        /// <param name="weights"></param>
-        private static int SumWeights(IEnumerable<(Connection, int)> weights)
-        {
-            return weights
-                .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);
-        }
-
-
-        /// <summary>
-        ///     Calculates the sum of each connections weight in the StateDistribution given the current StateHistory
-        /// </summary>
-        /// <param name="connections"></param>
-        /// <returns></returns>
-        public int SumWeights(IEnumerable<Connection> connections) =>
-            SumWeights(GetConnectionWeights(connections));
     }
 }

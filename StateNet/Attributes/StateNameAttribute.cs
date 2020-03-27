@@ -2,6 +2,9 @@
 
 namespace Aptacode.StateNet.Attributes
 {
+    /// <summary>
+    /// Defines a state property's name
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class StateNameAttribute : Attribute
     {

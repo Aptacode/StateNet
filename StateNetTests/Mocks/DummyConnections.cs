@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Helpers
@@ -27,6 +28,18 @@ namespace Aptacode.StateNet.Tests.Helpers
         public static Connection Generate(string from, string input, string to, int weight)
         {
             return new Connection(new State(from), new Input(input), new State(to), new ConnectionWeight(weight));
+        }
+
+        public static ConnectionDistribution CreateDistribution(params (string, string, string, int)[] connections)
+        {
+            var connectionDistribution = new ConnectionDistribution();
+
+            foreach (var connection in connections)
+            {
+                connectionDistribution.Add(new Connection(new State(connection.Item1), new Input(connection.Item2), new State(connection.Item3), new ConnectionWeight(connection.Item4)), connection.Item4);
+            }
+
+            return connectionDistribution;
         }
     }
 }
