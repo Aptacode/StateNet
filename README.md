@@ -24,9 +24,16 @@ StateNet works by defining a network of states interlinked by the inputs that ca
 
 #### How to Configure the Network
 Determine all of the states you need and consider the relationship between them to determine the inputs for your system.
-There are two approaches to configure the network:
+There are three approaches to configure the network:
 
-#### 1) Object oriented
+#### 2) Network Creation Tool
+
+<p align="center">
+  <img width="1920" height="1080" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+</p>
+
+
+#### 2) Object oriented
 - Create a class which derives from 'Network'
 - Define each State as a property on the class
 - Use attributes on the State properties to define the relationships between them
@@ -55,7 +62,7 @@ There are two approaches to configure the network:
   }
 ```
 
-#### 2) Programmatic
+#### 3) Programmatic
 ```csharp
 	IStateNetwork stateNetwork = new StateNetwork();
 	var networkEditor = new StateNetworkEditor(stateNetwork);
