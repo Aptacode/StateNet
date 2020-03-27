@@ -17,6 +17,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #endregion
 
+        private Color selectedNodeColor = Color.Black;
+
         private void GraphViewer_MouseDown(object sender, MsaglMouseEventArgs e)
         {
             outputSelectedItem();
@@ -25,20 +27,24 @@ namespace Aptacode.StateNet.WPF.ViewModels
         private void outputSelectedItem()
         {
             var node = _graphViewer.ObjectUnderMouseCursor as IViewerNode;
+            var selectedState = _network.GetState(node?.Node?.LabelText);
+            var previousState = _network.GetState(_selectedNode?.Node?.LabelText);
+            var selectedColor = (previousState == _network.StartState) ? Color.Green : Color.Black;
+            SetColor(selectedColor);
 
-            if (_selectedNode == node)
+            if (_selectedNode == node || selectedState == null)
             {
                 return;
             }
 
-            var selectedState = _network.GetState(node?.Node?.LabelText);
             OnStateSelected?.Invoke(this, new SelectedStateEventArgs(selectedState));
 
-            SetColor(Color.Black);
+            selectedColor = selectedState.Equals(_network.StartState) ? Color.Green : Color.Blue;
 
             _selectedNode = node;
 
-            SetColor(Color.Green);
+            SetColor(selectedColor);
+            selectedNodeColor = selectedColor;
         }
 
         private void SetColor(Color color)
@@ -119,6 +125,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         private Graph CreateGraph(string name)
         {
+            _selectedNode = null;
+
             var newGraph = new Graph(name)
             {
                 Attr = {LayerDirection = LayerDirection.BT},
@@ -148,6 +156,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
                             networkConnection.Target.Name);
                     }
                 }
+            }
+
+            if (_network.StartState != null)
+            {
+                var drawingNode = (Node)newGraph.FindNode(_network.StartState.Name);
+                drawingNode.Attr.Color = Color.Green;
             }
 
             return newGraph;

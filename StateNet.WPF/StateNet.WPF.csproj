@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.Msagl.WpfGraphControl, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutomaticGraphLayout.WpfGraphControl.1.1.6\lib\net472\Microsoft.Msagl.WpfGraphControl.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Prism, Version=7.2.0.1422, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.2.0.1422\lib\net45\Prism.dll</HintPath>
     </Reference>

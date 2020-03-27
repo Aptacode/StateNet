@@ -12,6 +12,8 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button Content="New State" Command="{Binding NewStateCommand}" />
                 <Button Content="Delete State" Command="{Binding DeleteStateCommand}" />
+                <Button Content="New Input" Command="{Binding NewInputCommand}" />
+                <CheckBox Content="Is Start State" IsChecked="{Binding IsStartState}"/>
             </StackPanel>
 
             <TextBox DockPanel.Dock="Top" Height="50" Margin="5"

@@ -46,6 +46,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
             StateName = State.Name;
 
+            IsStartState = State.Equals(_network.StartState);
+
             Connections.AddRange(
                 State
                     .GetOutputConnections()
@@ -169,6 +171,30 @@ namespace Aptacode.StateNet.WPF.ViewModels
             get => _newConnectionSelectedExpression;
             set => SetProperty(ref _newConnectionSelectedExpression, value);
         }
+        private bool _isStartState;
+
+        public bool IsStartState
+        {
+            get => _isStartState;
+            set
+            {
+                SetProperty(ref _isStartState, value);
+
+                if (State == null)
+                    return;
+
+                if (_isStartState)
+                {
+                    _network.StartState = State;
+                }
+                else
+                {
+                    if (State.Equals(_network.StartState))
+                        _network.StartState = null;
+                }
+
+            }
+        }
 
         #endregion
 
@@ -226,6 +252,16 @@ namespace Aptacode.StateNet.WPF.ViewModels
                 OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(null));
             }));
 
+        private DelegateCommand _newInputCommand;
+
+        public DelegateCommand NewInputCommand =>
+            _newInputCommand ?? (_newInputCommand = new DelegateCommand(() =>
+            {
+                var newInput = Microsoft.VisualBasic.Interaction.InputBox("Enter a new input", "New Input", "");
+                _network.CreateInput(newInput);
+                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(null));
+            }));
+        
         #endregion
     }
 }
