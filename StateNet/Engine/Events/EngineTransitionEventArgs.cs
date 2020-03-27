@@ -1,4 +1,5 @@
-﻿using Aptacode.StateNet.Network;
+﻿using Aptacode.StateNet.Engine.History;
+using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine.Events
 {

@@ -1,6 +1,6 @@
 ﻿using Aptacode.StateNet.Network;
 
-namespace Aptacode.StateNet.Engine
+namespace Aptacode.StateNet.Engine.History
 {
     public class Transition
     {
@@ -11,8 +11,8 @@ namespace Aptacode.StateNet.Engine
             Target = target;
         }
 
-        public State Source { get; set; }
-        public Input Input { get; set; }
-        public State Target { get; set; }
+        public State Source { get; }
+        public Input Input { get; }
+        public State Target { get; }
     }
 }

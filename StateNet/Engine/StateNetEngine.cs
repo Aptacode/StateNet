@@ -3,7 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Aptacode.StateNet.Engine.Connections;
 using Aptacode.StateNet.Engine.Events;
+using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aptacode.StateNet.Network
+namespace Aptacode.StateNet.Network.Connections
 {
     public sealed class Connection : IEquatable<Connection>
     {

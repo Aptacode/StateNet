@@ -6,6 +6,7 @@ using System.Text;
 using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Extensions;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network.Connections;
 
 namespace Aptacode.StateNet.Network
 {

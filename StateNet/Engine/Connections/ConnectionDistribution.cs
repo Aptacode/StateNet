@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 
-namespace Aptacode.StateNet.Engine
+namespace Aptacode.StateNet.Engine.Connections
 {
     public class ConnectionDistribution
     {

@@ -10,7 +10,7 @@ namespace Aptacode.StateNet.Network
         }
 
         /// <summary>
-        /// The Input name
+        ///     The Input name
         /// </summary>
         public string Name { get; set; }
 

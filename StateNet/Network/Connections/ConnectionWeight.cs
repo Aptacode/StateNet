@@ -1,19 +1,18 @@
 ﻿using System;
-using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Engine.History;
 
-namespace Aptacode.StateNet.Network
+namespace Aptacode.StateNet.Network.Connections
 {
     /// <summary>
-    /// Evaluates a string Expression given the EngineHistory to return an integer weight
+    ///     Evaluates a string Expression given the EngineHistory to return an integer weight
     /// </summary>
     public class ConnectionWeight : IEquatable<ConnectionWeight>
     {
-        private string _expression;
-        private Func<EngineHistory, int> _weightFunction;
-
         public static readonly int DefaultWeight = 0;
         public static readonly string DefaultExpression = DefaultWeight.ToString();
-        public static readonly Func<EngineHistory, int> DefaultWeightFunction = (_) => DefaultWeight;
+        public static readonly Func<EngineHistory, int> DefaultWeightFunction = _ => DefaultWeight;
+        private string _expression;
+        private Func<EngineHistory, int> _weightFunction;
 
         public ConnectionWeight() : this(1)
         {
@@ -49,8 +48,9 @@ namespace Aptacode.StateNet.Network
                 _weightFunction = DefaultWeightFunction;
             }
         }
+
         /// <summary>
-        /// Evaluates the weightFunction given the EngineHistory to return an integer weight
+        ///     Evaluates the weightFunction given the EngineHistory to return an integer weight
         /// </summary>
         /// <param name="history"></param>
         /// <returns></returns>
@@ -60,12 +60,22 @@ namespace Aptacode.StateNet.Network
             return result >= 0 ? result : 0;
         }
 
+        #region ToString
+
+        public override string ToString()
+        {
+            return Expression;
+        }
+
+        #endregion
+
         #region WeightFunctions
+
         private static bool GetStaticWeightFunction(string expression, out Func<EngineHistory, int> weightFunction)
         {
             if (int.TryParse(expression, out var weight))
             {
-                weightFunction = (_) => weight;
+                weightFunction = _ => weight;
                 return true;
             }
 
@@ -104,13 +114,6 @@ namespace Aptacode.StateNet.Network
         public override bool Equals(object obj)
         {
             return obj is ConnectionWeight other && Equals(other);
-        }
-        #endregion
-
-        #region ToString
-        public override string ToString()
-        {
-            return Expression;
         }
 
         #endregion

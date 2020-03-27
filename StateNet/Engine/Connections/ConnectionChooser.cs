@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Interfaces;
-using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 
-namespace Aptacode.StateNet.Engine
+namespace Aptacode.StateNet.Engine.Connections
 {
     /// <summary>
     ///     Chooses a connection based on its evaluated weight

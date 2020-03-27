@@ -1,6 +1,6 @@
 ﻿using System;
-using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Engine.Events;
+using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Interfaces

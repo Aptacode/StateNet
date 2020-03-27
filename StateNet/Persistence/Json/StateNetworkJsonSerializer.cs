@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

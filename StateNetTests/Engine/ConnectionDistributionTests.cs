@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Engine.Connections;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 

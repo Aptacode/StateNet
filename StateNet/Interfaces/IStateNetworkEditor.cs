@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 
 namespace Aptacode.StateNet.Interfaces
 {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Aptacode.StateNet.Network;
 
-namespace Aptacode.StateNet.Engine
+namespace Aptacode.StateNet.Engine.History
 {
     public class EngineHistory
     {

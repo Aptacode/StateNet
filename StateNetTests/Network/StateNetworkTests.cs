@@ -29,7 +29,7 @@ namespace Aptacode.StateNet.Tests.Network
         [Test]
         [TestCaseSource(nameof(NetworkCreationTestCases))]
         public void NetworkCreationTests(string startState, IEnumerable<State> states, IEnumerable<Input> inputs,
-            IEnumerable<StateNet.Network.Connection> connections, int endStateCount, bool isValid)
+            IEnumerable<StateNet.Network.Connections.Connection> connections, int endStateCount, bool isValid)
         {
             var network = DummyProgrammaticNetworks.Create(startState, states, inputs, connections);
 

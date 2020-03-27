@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 
 namespace Aptacode.StateNet.Tests.Mocks
 {

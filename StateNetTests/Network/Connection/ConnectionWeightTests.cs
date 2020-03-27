@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Engine.History;
+using Aptacode.StateNet.Network.Connections;
 using Aptacode.StateNet.Tests.Helpers;
 using NUnit.Framework;
 

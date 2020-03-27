@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Engine.Connections;
+using Aptacode.StateNet.Network.Connections;
 using Aptacode.StateNet.Tests.Helpers;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
