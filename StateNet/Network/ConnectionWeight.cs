@@ -10,7 +10,6 @@ namespace Aptacode.StateNet.Network
     {
         private string _expression;
         private Func<EngineHistory, int> _weightFunction;
-        private static ScriptEvaluator Evaluator { get; } = new ScriptEvaluator();
 
         public static readonly int DefaultWeight = 0;
         public static readonly string DefaultExpression = DefaultWeight.ToString();
@@ -78,7 +77,7 @@ namespace Aptacode.StateNet.Network
         {
             try
             {
-                weightFunction = Evaluator.Compile(expression);
+                weightFunction = ConnectionWeightScriptCompiler.Compile(expression);
                 return true;
             }
             catch (Exception)
