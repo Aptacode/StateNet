@@ -1,5 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Aptacode.StateNet.Interfaces;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.Json;
 using Aptacode.StateNet.WPF.ViewModels;
 using Prism.Commands;
@@ -29,6 +31,16 @@ namespace Aptacode.StateNet.NetworkCreationTool
             set => SetProperty(ref _stateEditorViewModel, value);
         }
 
+        public void New()
+        {
+            _selectedFilePath = string.Empty;
+            _network = new StateNetwork();
+            var startState = _network.CreateState("Start");
+            _network.StartState = startState;
+            StateNetworkViewModel.Network = _network;
+            StateEditorViewModel.Network = _network;
+        }
+
         public void Load()
         {
             _selectedFilePath = SelectFile();
@@ -37,20 +49,33 @@ namespace Aptacode.StateNet.NetworkCreationTool
                 return;
             }
 
-            _stateNetworkSerializer = new StateNetworkJsonSerializer(_selectedFilePath);
-            _network = _stateNetworkSerializer.Read();
+            _network = new StateNetworkJsonSerializer(_selectedFilePath).Read();
             StateNetworkViewModel.Network = _network;
             StateEditorViewModel.Network = _network;
         }
 
         public void Save()
         {
-            if (string.IsNullOrEmpty(_selectedFilePath))
+            while (string.IsNullOrEmpty(_selectedFilePath))
             {
-                return;
+                _selectedFilePath = SaveNew();
             }
 
-            _stateNetworkSerializer.Write(_network);
+            new StateNetworkJsonSerializer(_selectedFilePath).Write(_network);
+        }
+
+        public string SaveNew()
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "NewNetwork"; // Default file name
+            dlg.DefaultExt = ".json"; // Default file extension
+            dlg.Filter = "Json Files (*.json) |*.json;"; // Filter files by extension
+
+            // Show save file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            return result == true ? dlg.FileName : string.Empty;
         }
 
         public string SelectFile()
@@ -72,7 +97,6 @@ namespace Aptacode.StateNet.NetworkCreationTool
         #region Properties
 
         private IStateNetwork _network;
-        private StateNetworkJsonSerializer _stateNetworkSerializer;
         private StateEditorViewModel _stateEditorViewModel;
         private string _selectedFilePath;
 
@@ -91,7 +115,13 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public DelegateCommand SaveButtonCommand =>
             _saveButtonCommand ?? (_saveButtonCommand = new DelegateCommand(Save));
+       
+        private DelegateCommand _newButtonCommand;
 
+        public DelegateCommand NewButtonCommand =>
+            _newButtonCommand ?? (_newButtonCommand = new DelegateCommand(New));
+
+        
         #endregion
     }
 }

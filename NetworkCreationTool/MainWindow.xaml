@@ -11,6 +11,7 @@
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
+                <Button Command="{Binding NewButtonCommand}" Content="New" />
                 <Button Command="{Binding LoadButtonCommand}" Content="Load" />
                 <Button Command="{Binding SaveButtonCommand}" Content="Save" />
             </ToolBar>

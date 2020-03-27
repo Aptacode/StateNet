@@ -186,6 +186,9 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<State> GetOrderedStates()
         {
+            if (StartState == null)
+                return new List<State>();
+
             var orderedStates = Traverse(StartState, state => GetConnections(state).Select(c => c.Target)).ToList();
             orderedStates.AddRange(GetStates().Where(s => !orderedStates.Contains(s)));
 
