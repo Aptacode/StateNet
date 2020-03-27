@@ -6,18 +6,23 @@
         xmlns:wpfGraphControl="http://mlsagl"
         xmlns:WPFControls="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280" Loaded="MainWindow_OnLoaded">
+        Title="MainWindow" Height="720" Width="1280">
 
-    <TabControl>
-        <TabItem Header="View">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <WPFControls:StateNetwork Grid.Column="0" DataContext="{Binding StateNetworkViewModel}" />
-                <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}" />
-            </Grid>
-        </TabItem>
-    </TabControl>
+    <DockPanel LastChildFill="True">
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Command="{Binding LoadButtonCommand}" Content="Load" />
+                <Button Command="{Binding SaveButtonCommand}" Content="Save" />
+            </ToolBar>
+        </ToolBarTray>
+        <Grid DockPanel.Dock="Bottom" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <WPFControls:StateNetwork Grid.Column="0" DataContext="{Binding StateNetworkViewModel}" />
+            <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}" />
+        </Grid>
+    </DockPanel>
+
 </Window>

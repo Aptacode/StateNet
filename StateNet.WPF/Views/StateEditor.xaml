@@ -8,35 +8,29 @@
              d:DesignHeight="600" d:DesignWidth="600">
     <Border BorderThickness="2" BorderBrush="Black">
         <DockPanel LastChildFill="True">
-            <TextBox DockPanel.Dock="Top" Height="50" Margin="5" Text="{Binding StateName, Mode=TwoWay}"
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <Button Content="New State" Command="{Binding NewStateCommand}" />
+                <Button Content="Delete State" Command="{Binding DeleteStateCommand}" />
+            </StackPanel>
+
+            <TextBox DockPanel.Dock="Top" Height="50" Margin="5"
+                     Text="{Binding StateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-
-            <Grid DockPanel.Dock="Bottom" Height="150">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <DockPanel LastChildFill="True" Height="50" Margin="2" Background="AliceBlue">
-                    <ComboBox DockPanel.Dock="Left" Width="100" Margin="2" ItemsSource="{Binding Inputs}"
-                              SelectedItem="{Binding NewConnectionSelectedInput}" HorizontalContentAlignment="Center"
-                              VerticalContentAlignment="Center" />
-                    <ComboBox DockPanel.Dock="Left" Width="100" Margin="2" ItemsSource="{Binding States}"
-                              SelectedItem="{Binding NewConnectionSelectedTarget}" HorizontalContentAlignment="Center"
-                              VerticalContentAlignment="Center" />
-                    <TextBox Margin="2" Text="{Binding NewConnectionSelectedExpression}"
-                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                </DockPanel>
-
-                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="5" Content="Add"
-                        Command="{Binding AddButtonCommand}" />
-                <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Margin="5" Content="Remove"
-                        Command="{Binding RemoveButtonCommand}" />
-
-            </Grid>
+            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True" Height="50" Margin="2" Background="AliceBlue">
+                <ComboBox DockPanel.Dock="Left" Width="100" Margin="2" ItemsSource="{Binding Inputs}"
+                          SelectedItem="{Binding NewConnectionSelectedInput}" HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center" />
+                <ComboBox DockPanel.Dock="Left" Width="100" Margin="2" ItemsSource="{Binding States}"
+                          SelectedItem="{Binding NewConnectionSelectedTarget}" HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center" />
+                <Button DockPanel.Dock="Right" Margin="5" Content="Add" Padding="5"
+                        Command="{Binding AddNewConnectionButtonCommand}" />
+                <TextBox Margin="2" Text="{Binding NewConnectionSelectedExpression}"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            </DockPanel>
             <Border DockPanel.Dock="Top" BorderThickness="2" Margin="-2,2,-2,2" BorderBrush="Black">
-                <ListBox Padding="5" ItemsSource="{Binding Connections}" SelectedItem="{Binding SelectedConnection, Mode=TwoWay}"
+                <ListBox Padding="5" ItemsSource="{Binding Connections}" SelectedItem="{Binding SelectedConnection}"
                          HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -47,6 +41,8 @@
                                 <ComboBox DockPanel.Dock="Left" Width="100" Margin="2" ItemsSource="{Binding States}"
                                           SelectedItem="{Binding Target}" HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center" />
+                                <Button DockPanel.Dock="Right" Margin="5" Content="Remove" Padding="5"
+                                        Command="{Binding RemoveButtonCommand}" />
                                 <TextBox Margin="2" Text="{Binding Expression}" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center" />
                             </DockPanel>

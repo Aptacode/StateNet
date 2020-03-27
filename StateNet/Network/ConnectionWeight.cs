@@ -41,7 +41,7 @@ namespace Aptacode.StateNet.Network
                     {
                         _weightFunction = Compiler.Compile(_expression);
                     }
-                    catch
+                    catch (Exception exception)
                     {
                         _expression = "0";
                         _weightFunction = _ => 0;

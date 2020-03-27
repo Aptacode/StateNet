@@ -14,10 +14,5 @@ namespace Aptacode.StateNet.NetworkCreationTool
         }
 
         public MainWindowViewModel ViewModel => DataContext as MainWindowViewModel;
-
-        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            ViewModel.Load();
-        }
     }
 }

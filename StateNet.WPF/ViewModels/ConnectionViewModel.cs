@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace Aptacode.StateNet.WPF.ViewModels
@@ -130,6 +131,20 @@ namespace Aptacode.StateNet.WPF.ViewModels
             get => _inputs;
             set => SetProperty(ref _inputs, value);
         }
+
+        #endregion
+
+        #region Commands
+
+        private DelegateCommand _removeButtonCommand;
+
+        public DelegateCommand RemoveButtonCommand =>
+            _removeButtonCommand ?? (_removeButtonCommand = new DelegateCommand(() =>
+            {
+                _network.Disconnect(Connection.Source, Connection.Input, Connection.Target);
+
+                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(Source));
+            }));
 
         #endregion
     }

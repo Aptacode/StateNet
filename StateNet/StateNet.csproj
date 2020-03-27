@@ -16,8 +16,8 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1.2</Version>
-    <AssemblyVersion>1.1.1.2</AssemblyVersion>
+    <Version>1.1.1.3</Version>
+    <AssemblyVersion>1.1.1.3</AssemblyVersion>
     <LangVersion>7.3</LangVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
   </PropertyGroup>

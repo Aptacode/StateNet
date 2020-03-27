@@ -10,20 +10,17 @@ namespace Aptacode.StateNet.WPF.ViewModels
 {
     public class StateEditorViewModel : BindableBase
     {
-        private readonly IStateNetwork _network;
-
         #region Events
 
         public EventHandler<StateUpdatedEventArgs> OnStateUpdated;
 
         #endregion
 
-        public StateEditorViewModel(IStateNetwork network)
+        public StateEditorViewModel()
         {
-            _network = network;
             Connections = new ObservableCollection<ConnectionViewModel>();
-            Inputs = new ObservableCollection<Input>(_network.GetInputs());
-            States = new ObservableCollection<State>(_network.GetOrderedStates());
+            Inputs = new ObservableCollection<Input>();
+            States = new ObservableCollection<State>();
         }
 
         public void Clear()
@@ -40,7 +37,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public void Update()
         {
             Clear();
-            if (State == null)
+
+            if (State == null || _network == null)
             {
                 return;
             }
@@ -55,7 +53,11 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
             foreach (var connectionViewModel in Connections)
             {
-                connectionViewModel.OnStateUpdated += (s, e) => OnStateUpdated?.Invoke(this, e);
+                connectionViewModel.OnStateUpdated += (s, e) =>
+                {
+                    Update();
+                    OnStateUpdated?.Invoke(this, e);
+                };
             }
 
             Inputs.AddRange(_network.GetInputs());
@@ -63,6 +65,18 @@ namespace Aptacode.StateNet.WPF.ViewModels
         }
 
         #region Properties
+
+        public IStateNetwork _network;
+
+        public IStateNetwork Network
+        {
+            get => _network;
+            set
+            {
+                SetProperty(ref _network, value);
+                Update();
+            }
+        }
 
         private State _state;
 
@@ -161,7 +175,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         private DelegateCommand _addButtonCommand;
 
-        public DelegateCommand AddButtonCommand =>
+        public DelegateCommand AddNewConnectionButtonCommand =>
             _addButtonCommand ?? (_addButtonCommand = new DelegateCommand(() =>
             {
                 if (NewConnectionSelectedInput == null || NewConnectionSelectedTarget == null)
@@ -169,7 +183,9 @@ namespace Aptacode.StateNet.WPF.ViewModels
                     return;
                 }
 
-                NewConnectionSelectedExpression = string.IsNullOrEmpty(NewConnectionSelectedExpression) ? "1" : NewConnectionSelectedExpression;
+                NewConnectionSelectedExpression = string.IsNullOrEmpty(NewConnectionSelectedExpression)
+                    ? "1"
+                    : NewConnectionSelectedExpression;
 
                 _network.Connect(State, NewConnectionSelectedInput, NewConnectionSelectedTarget,
                     new ConnectionWeight(NewConnectionSelectedExpression));
@@ -178,19 +194,35 @@ namespace Aptacode.StateNet.WPF.ViewModels
                 OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(State));
             }));
 
-        private DelegateCommand _removeButtonCommand;
+        private DelegateCommand _newStateCommand;
 
-        public DelegateCommand RemoveButtonCommand =>
-            _removeButtonCommand ?? (_removeButtonCommand = new DelegateCommand(() =>
+        public DelegateCommand NewStateCommand =>
+            _newStateCommand ?? (_newStateCommand = new DelegateCommand(() =>
             {
-                if (SelectedConnection == null)
+                var newStateName = "New State";
+                var newStateCount = 1;
+                while (_network.GetState(newStateName + newStateCount) != null)
+                {
+                    newStateCount++;
+                }
+
+                State = _network.CreateState(newStateName + newStateCount);
+                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(State));
+            }));
+
+        private DelegateCommand _deleteStateCommand;
+
+        public DelegateCommand DeleteStateCommand =>
+            _deleteStateCommand ?? (_deleteStateCommand = new DelegateCommand(() =>
+            {
+                if (State == null)
                 {
                     return;
                 }
 
-                _network.Disconnect(SelectedConnection.Source, SelectedConnection.Input, SelectedConnection.Target);
-                Update();
-                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(State));
+                _network.RemoveState(State);
+                State = null;
+                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(null));
             }));
 
         #endregion
