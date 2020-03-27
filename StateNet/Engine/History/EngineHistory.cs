@@ -30,6 +30,10 @@ namespace Aptacode.StateNet.Engine.History
                     return new List<State>();
                 }
 
+                if (!_transitionLog.Any())
+                    return new List<State>() {StartState};
+
+
                 return new List<State> { StartState }.Concat(_transitionLog.ToArray()
                     .Select(transition => transition.Target));
             }
@@ -48,6 +52,9 @@ namespace Aptacode.StateNet.Engine.History
 
         public void Log(State source, Input input, State target)
         {
+            if (StartState == null)
+                StartState = source;
+
             _transitionLog.Add(new Transition(source, input, target));
         }
 

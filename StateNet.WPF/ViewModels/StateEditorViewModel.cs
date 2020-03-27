@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.Network.Connections;
 using Prism.Commands;
 using Prism.Mvvm;
 

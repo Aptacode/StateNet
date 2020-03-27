@@ -50,7 +50,7 @@ namespace Aptacode.StateNet.Engine.Connections
 
             //Iterate over each connection weight keeping a running total of their sum in the weightCounter
             //Return the state where weightCounter >= choice
-            using (var iterator = connectionWeightDistribution.GetEnumerator())
+            using (var iterator = connectionWeightDistribution.GetWeights().GetEnumerator())
             {
                 var weightCounter = 0;
                 while (weightCounter < choice && iterator.MoveNext())
