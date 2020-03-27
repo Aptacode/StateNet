@@ -29,7 +29,7 @@ There are three approaches to configure the network:
 #### 2) Network Creation Tool
 
 <p align="center">
-  <img width="1920" height="1080" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+  <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
 
 
