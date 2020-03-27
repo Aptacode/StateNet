@@ -6,7 +6,7 @@
         xmlns:wpfGraphControl="http://mlsagl"
         xmlns:WPFControls="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="Network Creation Tool" Height="720" Width="1280">
 
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">

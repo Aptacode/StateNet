@@ -5,6 +5,11 @@ namespace Aptacode.StateNet.Tests.Mocks
 {
     public class DummyNetwork : StateNetwork
     {
+        [StartState("Start")]
+        [Connection("Left", "D1")]
+        [Connection("Right", "D2")]
+        public State StartTestState { get; set; }
+
         [StateName("D1")]
         [Connection("Next", "D1", "StateVisitCount(\"D2\") < 2 ? 1 : 0")]
         [Connection("Next", "End", "StateVisitCount(\"D2\") >= 2 ? 1 : 0")]
@@ -16,11 +21,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 
         public State Decision2TestState { get; set; }
 
-        [StateName("End")] public State EndTestState { get; set; }
-
-        [StartState("Start")]
-        [Connection("Left", "D1")]
-        [Connection("Right", "D2")]
-        public State StartTestState { get; set; }
+        [StateName("End")]
+        public State EndTestState { get; set; }
     }
 }
