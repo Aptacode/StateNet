@@ -14,15 +14,15 @@ namespace Aptacode.StateNet.Tests.Network
             get
             {
                 yield return new TestCaseData("", DummyStates.Create(), DummyInputs.Create(),
-                    DummyConnections.Generate(), 0, false);
+                    DummyConnections.Create(), 0, false);
                 yield return new TestCaseData("", DummyStates.Create("a"), DummyInputs.Create("next"),
-                    DummyConnections.Generate(), 1, false);
+                    DummyConnections.Create(), 1, false);
                 yield return new TestCaseData("", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(), 2, false);
+                    DummyConnections.Create(), 2, false);
                 yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(("a", "next", "b", 1)), 1, true);
+                    DummyConnections.Create(("a", "next", "b", 1)), 1, true);
                 yield return new TestCaseData("a", DummyStates.Create("a", "b"), DummyInputs.Create("next", "back"),
-                    DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1)), 0, true);
+                    DummyConnections.Create(("a", "next", "b", 1), ("b", "next", "a", 1)), 0, true);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Aptacode.StateNet.Tests.Network
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
-                DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
+                DummyConnections.Create(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
 
             network.RemoveState("a");
 
@@ -108,7 +108,7 @@ namespace Aptacode.StateNet.Tests.Network
                 "b",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
-                DummyConnections.Generate(("b", "next", "c", 1)));
+                DummyConnections.Create(("b", "next", "c", 1)));
 
             var stateA = network.GetState("a");
             var stateB = network.GetState("b");
@@ -172,7 +172,7 @@ namespace Aptacode.StateNet.Tests.Network
                 "a",
                 DummyStates.Create("a", "b", "c"),
                 DummyInputs.Create("next", "back"),
-                DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
+                DummyConnections.Create(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1)));
 
             network.RemoveInput("next");
 
@@ -199,7 +199,7 @@ namespace Aptacode.StateNet.Tests.Network
         public void GetConnections_ReturnsAllConnections()
         {
             var allConnections =
-                DummyConnections.Generate(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1));
+                DummyConnections.Create(("a", "next", "b", 1), ("b", "next", "a", 1), ("b", "back", "c", 1));
             var network = DummyProgrammaticNetworks.Create(
                 "a",
                 DummyStates.Create("a", "b", "c"),
@@ -217,7 +217,7 @@ namespace Aptacode.StateNet.Tests.Network
         public void GetConnections_ReturnsCorrectConnections()
         {
             var allConnections =
-                DummyConnections.Generate(
+                DummyConnections.Create(
                     ("a", "back", "a", 1),
                     ("a", "next", "b", 1),
                     ("a", "next", "c", 1),

@@ -3,7 +3,7 @@ using Aptacode.StateNet.Engine.Connections;
 using Aptacode.StateNet.Tests.Mocks;
 using NUnit.Framework;
 
-namespace Aptacode.StateNet.Tests.Engine
+namespace Aptacode.StateNet.Tests.Engine.Connections
 {
     public class ConnectionDistributionTests
     {

@@ -10,7 +10,7 @@ namespace Aptacode.StateNet.Engine.Connections
     /// </summary>
     public class ConnectionChooser
     {
-        private readonly EngineHistory _engineHistory;
+        private readonly IEngineHistory _engineHistory;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Aptacode.StateNet.Engine.Connections
         /// </summary>
         /// <param name="randomNumberGenerator"></param>
         /// <param name="engineHistory"></param>
-        public ConnectionChooser(IRandomNumberGenerator randomNumberGenerator, EngineHistory engineHistory)
+        public ConnectionChooser(IRandomNumberGenerator randomNumberGenerator, IEngineHistory engineHistory)
         {
             _randomNumberGenerator = randomNumberGenerator;
             _engineHistory = engineHistory;
@@ -33,6 +33,9 @@ namespace Aptacode.StateNet.Engine.Connections
         /// <returns></returns>
         public Connection Choose(IEnumerable<Connection> connections)
         {
+            if (connections == null)
+                return null;
+
             var connectionWeightDistribution = GetConnectionDistribution(connections);
 
             //If the total weight is 0 no state can be entered

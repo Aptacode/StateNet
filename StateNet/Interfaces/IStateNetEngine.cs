@@ -1,6 +1,5 @@
 ﻿using System;
 using Aptacode.StateNet.Engine.Events;
-using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Interfaces
@@ -8,7 +7,7 @@ namespace Aptacode.StateNet.Interfaces
     public interface IStateNetEngine : IDisposable
     {
         State CurrentState { get; }
-        EngineHistory History { get; }
+        IEngineHistory History { get; }
         bool Apply(string inputName);
         void Start();
         void Stop();

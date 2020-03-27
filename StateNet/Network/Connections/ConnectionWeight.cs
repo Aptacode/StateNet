@@ -1,5 +1,6 @@
 ﻿using System;
 using Aptacode.StateNet.Engine.History;
+using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet.Network.Connections
 {
@@ -10,9 +11,9 @@ namespace Aptacode.StateNet.Network.Connections
     {
         public static readonly int DefaultWeight = 0;
         public static readonly string DefaultExpression = DefaultWeight.ToString();
-        public static readonly Func<EngineHistory, int> DefaultWeightFunction = _ => DefaultWeight;
+        public static readonly Func<IEngineHistory, int> DefaultWeightFunction = _ => DefaultWeight;
         private string _expression;
-        private Func<EngineHistory, int> _weightFunction;
+        private Func<IEngineHistory, int> _weightFunction;
 
         public ConnectionWeight() : this(1)
         {
@@ -54,7 +55,7 @@ namespace Aptacode.StateNet.Network.Connections
         /// </summary>
         /// <param name="history"></param>
         /// <returns></returns>
-        public int Evaluate(EngineHistory history)
+        public int Evaluate(IEngineHistory history)
         {
             var result = _weightFunction(history);
             return result >= 0 ? result : 0;
@@ -71,7 +72,7 @@ namespace Aptacode.StateNet.Network.Connections
 
         #region WeightFunctions
 
-        private static bool GetStaticWeightFunction(string expression, out Func<EngineHistory, int> weightFunction)
+        private static bool GetStaticWeightFunction(string expression, out Func<IEngineHistory, int> weightFunction)
         {
             if (int.TryParse(expression, out var weight))
             {
@@ -83,7 +84,7 @@ namespace Aptacode.StateNet.Network.Connections
             return false;
         }
 
-        private static bool GetWeightFunction(string expression, out Func<EngineHistory, int> weightFunction)
+        private static bool GetWeightFunction(string expression, out Func<IEngineHistory, int> weightFunction)
         {
             try
             {

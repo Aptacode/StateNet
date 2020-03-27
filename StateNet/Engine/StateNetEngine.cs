@@ -33,7 +33,7 @@ namespace Aptacode.StateNet.Engine
 
         public State CurrentState { get; private set; }
 
-        public EngineHistory History { get; }
+        public IEngineHistory History { get; }
 
         public event EventHandler<EngineStartedEventArgs> OnStarted;
 

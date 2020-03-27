@@ -8,7 +8,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 {
     public static class DummyConnections
     {
-        public static List<Connection> Generate(string source = "defaultState", string input = "defaultInput",
+        public static List<Connection> Create(string source = "defaultState", string input = "defaultInput",
             params int[] choices)
         {
             var output = new List<Connection>();
@@ -21,12 +21,12 @@ namespace Aptacode.StateNet.Tests.Mocks
             return output;
         }
 
-        public static IEnumerable<Connection> Generate(params (string, string, string, int)[] choices)
+        public static IEnumerable<Connection> Create(params (string, string, string, int)[] choices)
         {
-            return choices.Select(choice => Generate(choice.Item1, choice.Item2, choice.Item3, choice.Item4));
+            return choices.Select(choice => Create(choice.Item1, choice.Item2, choice.Item3, choice.Item4));
         }
 
-        public static Connection Generate(string from, string input, string to, int weight)
+        public static Connection Create(string from, string input, string to, int weight)
         {
             return new Connection(new State(from), new Input(input), new State(to), new ConnectionWeight(weight));
         }

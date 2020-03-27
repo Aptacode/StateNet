@@ -1,15 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine.History
 {
-    public class EngineHistory
+    public class EngineHistory : IEngineHistory
     {
         private readonly List<Transition> _transitionLog = new List<Transition>();
-        public State StartState { get; private set; }
 
+        #region Inputs
         public IEnumerable<Input> Inputs => _transitionLog.Select(transition => transition.Input);
+
+        public int InputAppliedCount(string name)
+        {
+            return _transitionLog.Count(transition => transition.Input.Name == name);
+        }
+        #endregion
+
+        #region States
+        public State StartState { get; private set; }
 
         public IEnumerable<State> States
         {
@@ -20,7 +30,7 @@ namespace Aptacode.StateNet.Engine.History
                     return new List<State>();
                 }
 
-                return new List<State> {StartState}.Concat(_transitionLog.ToArray()
+                return new List<State> { StartState }.Concat(_transitionLog.ToArray()
                     .Select(transition => transition.Target));
             }
         }
@@ -29,20 +39,16 @@ namespace Aptacode.StateNet.Engine.History
         {
             StartState = source;
         }
-
-        public void Log(State source, Input input, State target)
-        {
-            _transitionLog.Add(new Transition(source, input, target));
-        }
-
         public int StateVisitCount(string name)
         {
             return States.Count(state => state.Name == name);
         }
 
-        public int InputAppliedCount(string name)
+        #endregion
+
+        public void Log(State source, Input input, State target)
         {
-            return _transitionLog.Count(transition => transition.Input.Name == name);
+            _transitionLog.Add(new Transition(source, input, target));
         }
 
         public int TransitionInCount(string input, string state)

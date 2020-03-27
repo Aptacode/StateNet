@@ -1,4 +1,5 @@
 ﻿using Aptacode.StateNet.Engine.History;
+using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Tests.Helpers
@@ -10,7 +11,7 @@ namespace Aptacode.StateNet.Tests.Helpers
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        public static EngineHistory Generate(params int[] sequence)
+        public static IEngineHistory Generate(params int[] sequence)
         {
             var history = new EngineHistory();
 
