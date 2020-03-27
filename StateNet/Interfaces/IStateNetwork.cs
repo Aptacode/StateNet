@@ -46,6 +46,7 @@ namespace Aptacode.StateNet.Interfaces
         IEnumerable<Connection> GetConnections(string source, string input);
         Connection GetConnection(string source, string input, string target);
 
+        void Connect(string source, string input, string target);
         void Connect(string source, string input, string target, ConnectionWeight connectionWeight);
         void Disconnect(string source, string input, string target);
 

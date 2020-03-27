@@ -31,7 +31,7 @@ namespace Aptacode.StateNet.Engine
             var connectionWeights = GetConnectionWeights(connections).ToList();
 
             //If the total weight is 0 no state can be entered
-            var totalWeight = TotalWeight(connectionWeights);
+            var totalWeight = SumWeights(connectionWeights);
             if (totalWeight == 0)
             {
                 return null;
@@ -70,7 +70,7 @@ namespace Aptacode.StateNet.Engine
         ///     Calculates the sum of each connection in the given StateDistribution
         /// </summary>
         /// <param name="weights"></param>
-        private int TotalWeight(IEnumerable<(Connection, int)> weights)
+        private static int SumWeights(IEnumerable<(Connection, int)> weights)
         {
             return weights
                 .Sum(f => f.Item2 >= 0 ? f.Item2 : 0);
@@ -82,9 +82,7 @@ namespace Aptacode.StateNet.Engine
         /// </summary>
         /// <param name="connections"></param>
         /// <returns></returns>
-        public int TotalWeight(IEnumerable<Connection> connections)
-        {
-            return TotalWeight(GetConnectionWeights(connections));
-        }
+        public int SumWeights(IEnumerable<Connection> connections) =>
+            SumWeights(GetConnectionWeights(connections));
     }
 }

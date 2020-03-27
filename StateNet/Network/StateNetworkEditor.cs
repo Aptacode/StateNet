@@ -17,7 +17,7 @@ namespace Aptacode.StateNet.Network
 
         public void SetStart(string name)
         {
-            _stateNetwork.StartState = GetState(name);
+            _stateNetwork.StartState = GetState(name, true);
         }
 
         /// <summary>
@@ -27,10 +27,12 @@ namespace Aptacode.StateNet.Network
         /// <param name="name"></param>
         /// <param name="createIfMissing"></param>
         /// <returns></returns>
-        public State GetState(string name, bool createIfMissing = true)
+        public State GetState(string name, bool createIfMissing)
         {
             return createIfMissing ? _stateNetwork.CreateState(name) : _stateNetwork.GetState(name);
         }
+
+        public State GetState(string name) => GetState(name, true);
 
         /// <summary>
         ///     Return the state with the given name
@@ -76,10 +78,12 @@ namespace Aptacode.StateNet.Network
             return _stateNetwork.GetInputs(name);
         }
 
-        public Input GetInput(string name, bool createIfMissing = true)
+        public Input GetInput(string name, bool createIfMissing)
         {
             return createIfMissing ? _stateNetwork.CreateInput(name) : _stateNetwork.GetInput(name);
         }
+
+        public Input GetInput(string name) => GetInput(name, true);
 
         public void RemoveInput(string name)
         {
@@ -116,10 +120,9 @@ namespace Aptacode.StateNet.Network
         }
 
         public void Connect(string source, string input, string target,
-            ConnectionWeight connectionWeight = null)
-        {
-            _stateNetwork.Connect(source, input, target, connectionWeight);
-        }
+            ConnectionWeight connectionWeight) => _stateNetwork.Connect(GetState(source, true), GetInput(input, true), GetState(target, true), connectionWeight);
+
+        public void Connect(string source, string input, string target) => Connect(source, input, target, new ConnectionWeight(1));
 
         public IEnumerable<Connection> GetConnections(string source, string input)
         {
@@ -155,7 +158,7 @@ namespace Aptacode.StateNet.Network
         public void Always(string source, string input, string target)
         {
             Clear(source, input);
-            Connect(source, input, target, new ConnectionWeight(1.ToString()));
+            Connect(source, input, target);
         }
 
         public void SetDistribution(string source, string input, params (string, int)[] choices)

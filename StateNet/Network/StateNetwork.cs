@@ -11,8 +11,8 @@ namespace Aptacode.StateNet.Network
 {
     public class StateNetwork : IStateNetwork
     {
-        public readonly Dictionary<string, Input> Inputs = new Dictionary<string, Input>();
-        public readonly Dictionary<string, State> States = new Dictionary<string, State>();
+        private readonly Dictionary<string, Input> _inputs = new Dictionary<string, Input>();
+        private readonly Dictionary<string, State> _states = new Dictionary<string, State>();
 
         public StateNetwork()
         {
@@ -56,16 +56,16 @@ namespace Aptacode.StateNet.Network
 
         public bool UpdateStateName(string oldStateName, string newStateName)
         {
-            if (!States.TryGetValue(oldStateName, out var selectedState))
+            if (!_states.TryGetValue(oldStateName, out var selectedState))
             {
                 return false;
             }
 
-            States.Remove(oldStateName);
+            _states.Remove(oldStateName);
 
             selectedState.Name = newStateName;
 
-            States.Add(newStateName, selectedState);
+            _states.Add(newStateName, selectedState);
 
             foreach (var connection in GetConnections().ToList())
             {
@@ -130,7 +130,7 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            States.TryGetValue(name, out var state);
+            _states.TryGetValue(name, out var state);
             return state;
         }
 
@@ -154,7 +154,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newState = new State(name);
-            States.Add(name, newState);
+            _states.Add(name, newState);
             return newState;
         }
 
@@ -169,9 +169,9 @@ namespace Aptacode.StateNet.Network
                 return;
             }
 
-            if (States.ContainsKey(name))
+            if (_states.ContainsKey(name))
             {
-                States.Remove(name);
+                _states.Remove(name);
             }
 
             var connections = Connections
@@ -218,12 +218,12 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<State> GetEndStates()
         {
-            return States.Values.Where(state => state.IsEnd());
+            return _states.Values.Where(state => state.IsEnd());
         }
 
         public IEnumerable<State> GetStates()
         {
-            return States.Values.OrderBy(state => state.Name);
+            return _states.Values.OrderBy(state => state.Name);
         }
 
         #endregion
@@ -232,7 +232,7 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Input> GetInputs()
         {
-            return Inputs.Values.OrderBy(input => input.Name);
+            return _inputs.Values.OrderBy(input => input.Name);
         }
 
         public IEnumerable<Input> GetInputs(string state)
@@ -249,7 +249,7 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            Inputs.TryGetValue(name, out var input);
+            _inputs.TryGetValue(name, out var input);
             return input;
         }
 
@@ -260,9 +260,9 @@ namespace Aptacode.StateNet.Network
                 return;
             }
 
-            if (Inputs.ContainsKey(input))
+            if (_inputs.ContainsKey(input))
             {
-                Inputs.Remove(input);
+                _inputs.Remove(input);
             }
 
             var connections = Connections.Where(connection => connection.Input.Name.Equals(input)).ToList();
@@ -283,7 +283,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newInput = new Input(name);
-            Inputs.Add(name, newInput);
+            _inputs.Add(name, newInput);
             return newInput;
         }
 
@@ -292,7 +292,7 @@ namespace Aptacode.StateNet.Network
         #region Connections
 
         public IEnumerable<Connection> Connections =>
-            States.Values.Select(state => state.GetConnections())
+            _states.Values.Select(state => state.GetConnections())
                 .Aggregate((IEnumerable<Connection>) new List<Connection>(), (a, b) => a.Concat(b));
 
 
@@ -313,7 +313,9 @@ namespace Aptacode.StateNet.Network
             set => Connect(value.Source, value.Input, value.Target, value.ConnectionWeight);
         }
 
-        public void Connect(string source, string input, string target, ConnectionWeight connectionWeight = null)
+        public void Connect(string source, string input, string target) => Connect(source, input, target, new ConnectionWeight(1));
+
+        public void Connect(string source, string input, string target, ConnectionWeight connectionWeight)
         {
             var selectedSource = CreateState(source);
             var selectedInput = CreateInput(input);
@@ -396,7 +398,7 @@ namespace Aptacode.StateNet.Network
 
         public override int GetHashCode()
         {
-            return (Connections, States, Inputs, StartState).GetHashCode();
+            return (Connections, States: _states, Inputs: _inputs, StartState).GetHashCode();
         }
 
         public override bool Equals(object obj)

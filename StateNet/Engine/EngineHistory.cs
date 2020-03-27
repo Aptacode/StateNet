@@ -6,10 +6,10 @@ namespace Aptacode.StateNet.Engine
 {
     public class EngineHistory
     {
-        public readonly List<Transition> TransitionLog = new List<Transition>();
+        private readonly List<Transition> _transitionLog = new List<Transition>();
         public State StartState { get; private set; }
 
-        public IEnumerable<Input> Inputs => TransitionLog.Select(transition => transition.Input);
+        public IEnumerable<Input> Inputs => _transitionLog.Select(transition => transition.Input);
 
         public IEnumerable<State> States
         {
@@ -20,7 +20,7 @@ namespace Aptacode.StateNet.Engine
                     return new List<State>();
                 }
 
-                return new List<State> {StartState}.Concat(TransitionLog.ToArray()
+                return new List<State> {StartState}.Concat(_transitionLog.ToArray()
                     .Select(transition => transition.Target));
             }
         }
@@ -32,7 +32,7 @@ namespace Aptacode.StateNet.Engine
 
         public void Log(State source, Input input, State target)
         {
-            TransitionLog.Add(new Transition(source, input, target));
+            _transitionLog.Add(new Transition(source, input, target));
         }
 
         public int StateVisitCount(string name)
@@ -42,19 +42,19 @@ namespace Aptacode.StateNet.Engine
 
         public int InputAppliedCount(string name)
         {
-            return TransitionLog.Count(transition => transition.Input.Name == name);
+            return _transitionLog.Count(transition => transition.Input.Name == name);
         }
 
         public int TransitionInCount(string input, string state)
         {
-            return TransitionLog.Count(transition =>
+            return _transitionLog.Count(transition =>
                 transition.Input.Name == input &&
                 transition.Target.Name == state);
         }
 
         public int TransitionOutCount(string state, string input)
         {
-            return TransitionLog.Count(transition =>
+            return _transitionLog.Count(transition =>
                 transition.Source.Name == state &&
                 transition.Input.Name == input);
         }

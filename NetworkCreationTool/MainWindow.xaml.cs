@@ -12,7 +12,5 @@ namespace Aptacode.StateNet.NetworkCreationTool
             InitializeComponent();
             DataContext = new MainWindowViewModel();
         }
-
-        public MainWindowViewModel ViewModel => DataContext as MainWindowViewModel;
     }
 }

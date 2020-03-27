@@ -61,13 +61,12 @@ namespace Aptacode.StateNet.NetworkCreationTool
                 Filter = "Json Files (*.json) |*.json;"
             };
 
-            switch (fileDialog.ShowDialog())
+            if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                case DialogResult.OK:
-                    return fileDialog.FileName;
-                default:
-                    return string.Empty;
+                return fileDialog.FileName;
             }
+
+            return string.Empty;
         }
 
         #region Properties

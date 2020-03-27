@@ -3,7 +3,7 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.WPF.ViewModels
 {
-    public class StateUpdatedEventArgs : EventArgs
+    public class StateUpdatedEventArgs : EventArgs, IEquatable<StateUpdatedEventArgs>
     {
         public StateUpdatedEventArgs(State state)
         {

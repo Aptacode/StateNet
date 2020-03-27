@@ -8,7 +8,9 @@ namespace Aptacode.StateNet.Interfaces
         #region States
 
         void SetStart(string name);
-        State GetState(string name, bool createIfMissing = true);
+        State GetState(string name, bool createIfMissing);
+        State GetState(string name);
+
         State CreateState(string name);
         void RemoveState(string name);
 
@@ -19,7 +21,9 @@ namespace Aptacode.StateNet.Interfaces
 
         #region Inputs
 
-        Input GetInput(string name, bool createIfMissing = true);
+        Input GetInput(string name, bool createIfMissing);
+        Input GetInput(string name);
+
         Input CreateInput(string name);
         void RemoveInput(string name);
         IEnumerable<Input> GetInputs();
@@ -41,6 +45,7 @@ namespace Aptacode.StateNet.Interfaces
         void SetDistribution(string source, string input, params (string, int)[] choices);
         void SetDistribution(string source, string input, params (string, ConnectionWeight)[] choices);
         void UpdateDistribution(string source, string input, params (string, int)[] choices);
+        void Connect(string source, string input, string target);
         void Connect(string source, string input, string target, ConnectionWeight connectionWeight);
         void Disconnect(string source, string input, string target);
         void UpdateDistribution(string source, string input, params (string, ConnectionWeight)[] choices);

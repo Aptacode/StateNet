@@ -54,8 +54,7 @@ namespace Aptacode.StateNet.Tests.Engine
                 new ConnectionChooser(new DummyRandomNumberGenerator(), StateHistoryGenerator.Generate());
 
             Assert.AreEqual(expectedValue,
-                chooser.TotalWeight(
-                    connectionDistribution), message);
+                chooser.SumWeights(connectionDistribution), message);
         }
 
 

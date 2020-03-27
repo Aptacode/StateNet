@@ -26,15 +26,11 @@ namespace Aptacode.StateNet.Network.EnumNetwork
             SetStart(state.ToString());
         }
 
-        public Input GetInput(TInputs name, bool createIfMissing = true)
-        {
-            return GetInput(name.ToString(), createIfMissing);
-        }
+        public Input GetInput(TInputs name, bool createIfMissing) => GetInput(name.ToString(), createIfMissing);
+        public State GetState(TStates name, bool createIfMissing) => GetState(name.ToString(), createIfMissing);
 
-        public State GetState(TStates name, bool createIfMissing = true)
-        {
-            return GetState(name.ToString(), createIfMissing);
-        }
+        public Input GetInput(TInputs name) => GetInput(name.ToString(), true);
+        public State GetState(TStates name) => GetState(name.ToString(), true);
 
         public IEnumerable<Input> GetInputs(TStates state)
         {
@@ -46,11 +42,13 @@ namespace Aptacode.StateNet.Network.EnumNetwork
             return GetConnections(state.ToString());
         }
 
-        public void Connect(TStates source, TInputs input, TStates target, ConnectionWeight connectionWeight = null)
+        public void Connect(TStates source, TInputs input, TStates target, ConnectionWeight connectionWeight)
         {
             Connect(source.ToString(), input.ToString(), target.ToString(), connectionWeight);
         }
 
+        public void Connect(TStates source, TInputs input, TStates target) =>
+            Connect(source, input, target, new ConnectionWeight(1));
         public void Always(TStates source, TInputs input, TStates toSate)
         {
             Always(source.ToString(), input.ToString(), toSate.ToString());
