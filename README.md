@@ -16,14 +16,14 @@ https://discord.gg/D8MSXJB
 
 ### Overview
 
-The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Since its inception the library has grown versatile with many potential usecases.
+The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Since its inception the library has grown versatile with many usecases.
 
 ### Usage
 
-StateNet works by defining a network of states interlinked by the actions which can be applied to them. 
+StateNet works by defining a network of states interlinked by the inputs that can be applied to them. 
 
 #### How to Configure the Network
-Determine all of the states you need and consider the relationship between them to determine the actions for your system.
+Determine all of the states you need and consider the relationship between them to determine the inputs for your system.
 There are two approaches to configure the network:
 
 #### 1) Object oriented
@@ -34,65 +34,41 @@ There are two approaches to configure the network:
 ```csharp
   public class CustomNetwork : Network
   {
-      [StateStart("Start")]
-      [Connection("Left", "D1")]
-      [Connection("Right", "D2")]
-      public State StartTestState;
+	[StartState("Start")]
+	[Connection("Left", "D1")]
+	[Connection("Right", "D2")]
+	public State StartTestState { get; set; }
 
-      [StateName("D1")]
-      [Connection("Next", "D1", "Static:1")]
-      [Connection("Next", "End", "Static:0")]
-      public State Decision1TestState;
+	[StateName("D1")]
+	[Connection("Next", "D1", "StateVisitCount(\"D2\") < 2 ? 1 : 0")]
+	[Connection("Next", "End", "StateVisitCount(\"D2\") >= 2 ? 1 : 0")]
+	public State Decision1TestState { get; set; }
 
-      [StateName("D2")]
-      [Connection("Next", "D1", "VisitCount:D2,2,0,0,2")]
-      [Connection("Next", "D2", "VisitCount:D2,2,1,1,0")]
-      public State Decision2TestState;
+	[StateName("D2")]
+	[Connection("Next", "D1", "StateVisitCount(\"D2\") > 2 ? 1 : 0")]
+	[Connection("Next", "D2", "StateVisitCount(\"D2\") <= 2 ? 1 : 0")]
 
-      [StateName("End")]
-      public State EndTestState;
+	public State Decision2TestState { get; set; }
+
+	[StateName("End")]
+	public State EndTestState { get; set; }
   }
 ```
 
 #### 2) Programmatic
-Note* You can create a strongly typed network using enumerations OR a string based network.
 ```csharp
+	IStateNetwork stateNetwork = new StateNetwork();
+	var networkEditor = new StateNetworkEditor(stateNetwork);
 
-	//Strongly typed enumeration network
-	//**********************************
-	//Declare two enums consisting of each state and action
-	public enum States { Ready, Playing, Paused, Stopped }
-	public enum Actions { Play, Pause, Stop }
+	networkEditor.SetStart("ready");
 
-	//Create a new network
-	var network1 = new EnumNetwork<States, Actions>();
+	networkEditor.Always("ready", "Play", "playing");
+	networkEditor.Always("ready", "Stop", "stopped");
+	networkEditor.Always("playing", "Pause", "paused");
+	networkEditor.Always("playing", "Stop", "stopped");
+	networkEditor.Always("paused", "Play", "playing");
+	networkEditor.Always("paused", "Stop", "stopped");
 
-	//Get each state
-	var Ready = network1[States.Ready];
-	var Playing = network1[States.Playing];
-	var Paused = network1[States.Paused];
-	var Stopped = network1[States.Stopped];
-	
-	//Set the start state
-	network1.StartState = Ready;
-
-	//Define the relationships between each state
-	network1[Ready, Actions.Play].Always(Playing);
-	network1[Playing, Actions.Pause].Always(Paused);
-	network1[Playing, Actions.Stop].Always(Stopped);
-	network1[Paused, Actions.Play].Always(Playing);
-	network1[Paused, Actions.Stop].Always(Stopped);
-	
-	//String based network
-	//**********************************
-	var network2 = new Network();
-	network2.StartState = network2["Ready"];
-
-	network2["Ready", "Play"].Always(network2["Playing"]);
-	network2["Playing", "Pause"].Always(network2["Paused"]);
-	network2["Playing", "Stop"].Always(network2["Stopped"]);
-	network2["Paused", "Play"].Always(network2["Playing"]);
-	network2["Paused", "Stop"].Always(network2["Stopped"]);
 ```
 
 #### Running the engine
