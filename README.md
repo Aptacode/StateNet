@@ -27,7 +27,7 @@ Determine all of the states you need and consider the relationship between them 
 There are three approaches to configure the network:
 
 #### 2) Network Creation Tool
-
+Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
   <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
