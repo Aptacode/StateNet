@@ -23,10 +23,11 @@ The original goal of StateNet was to create a simple way to define and control t
 StateNet works by defining a network of states interlinked by the inputs that can be applied to them. 
 
 #### How to Configure the Network
-Determine all of the states you need and consider the relationship between them to determine the inputs for your system.
+List all of the states your application needs and consider the relationship between them to determine the inputs for your system.
+Create a connection by assigning a weight to each input that can be applied to a state.
 There are three approaches to configure the network:
 
-#### 2) Network Creation Tool
+#### 1) Network Creation Tool
 Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
   <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
