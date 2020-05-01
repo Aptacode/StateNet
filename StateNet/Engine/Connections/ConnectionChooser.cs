@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network.Connections;
 
@@ -34,7 +33,9 @@ namespace Aptacode.StateNet.Engine.Connections
         public Connection Choose(IEnumerable<Connection> connections)
         {
             if (connections == null)
+            {
                 return null;
+            }
 
             var connectionWeightDistribution = GetConnectionDistribution(connections);
 

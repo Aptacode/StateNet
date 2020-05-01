@@ -1,170 +1,86 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 using Aptacode.StateNet.Interfaces;
-using Microsoft.Msagl.Core.Routing;
-using Microsoft.Msagl.Drawing;
-using Microsoft.Msagl.WpfGraphControl;
+using Aptacode.StateNet.Network;
 using Prism.Mvvm;
 
 namespace Aptacode.StateNet.WPF.ViewModels
 {
     public class StateNetworkViewModel : BindableBase
     {
+        public StateNetworkViewModel(IStateNetwork model)
+        {
+            States = new ObservableCollection<StateViewModel>();
+            Inputs = new ObservableCollection<InputViewModel>();
+            Model = model;
+        }
+
         #region Events
 
-        public EventHandler<SelectedStateEventArgs> OnStateSelected { get; set; }
+        public event EventHandler<IStateNetwork> OnNetworkModified; 
 
         #endregion
 
-        private Color selectedNodeColor = Color.Black;
+        #region Methods
 
-        private void GraphViewer_MouseDown(object sender, MsaglMouseEventArgs e)
+        public void Load()
         {
-            outputSelectedItem();
-        }
+            States.Clear();
+            Inputs.Clear();
 
-        private void outputSelectedItem()
-        {
-            var node = _graphViewer.ObjectUnderMouseCursor as IViewerNode;
-            var selectedState = _network.GetState(node?.Node?.LabelText);
-            var previousState = _network.GetState(_selectedNode?.Node?.LabelText);
-            var selectedColor = (previousState == _network.StartState) ? Color.Green : Color.Black;
-            SetColor(selectedColor);
-
-            if (_selectedNode == node || selectedState == null)
+            if (_model == null)
             {
                 return;
             }
 
-            OnStateSelected?.Invoke(this, new SelectedStateEventArgs(selectedState));
+            States.AddRange(_model.GetOrderedStates().Select(state => new StateViewModel(state, true)));
+            Inputs.AddRange(_model.GetInputs().Select(input => new InputViewModel(input)));
 
-            selectedColor = selectedState.Equals(_network.StartState) ? Color.Green : Color.Blue;
-
-            _selectedNode = node;
-
-            SetColor(selectedColor);
-            selectedNodeColor = selectedColor;
+            OnNetworkModified?.Invoke(this, Model);
         }
 
-        private void SetColor(Color color)
+        public void Delete(Input input)
         {
-            if (_selectedNode == null)
-            {
-                return;
-            }
-
-            var drawingNode = (Node) _selectedNode.DrawingObject;
-
-            drawingNode.Attr.Color = color;
-
-            _graphViewer.Invalidate(_selectedNode);
+            Model.RemoveInput(input);
+            Load();
         }
 
-        public void Update()
+        public void Add(Input input)
         {
-            _graphViewer.Graph = CreateGraph("TestGraph");
-            _graphViewer.Invalidate();
+            Model.CreateInput(input);
+            Load();
         }
+
+        public void Delete(State state)
+        {
+            Model.RemoveState(state);
+            Load();
+        }
+
+        public void Add(State state)
+        {
+            Model.CreateState(state);
+            Load();
+        }
+
+        #endregion
 
         #region Properties
 
-        private GraphViewer _graphViewer;
-        private IViewerNode _selectedNode;
+        public ObservableCollection<StateViewModel> States { get; set; }
+        public ObservableCollection<InputViewModel> Inputs { get; set; }
 
-        private DockPanel _graphViewerPanel;
+        private IStateNetwork _model;
 
-        public DockPanel GraphViewerPanel
+        public IStateNetwork Model
         {
-            get => _graphViewerPanel;
-            set => SetProperty(ref _graphViewerPanel, value);
-        }
-
-        private IStateNetwork _network;
-
-        public IStateNetwork Network
-        {
-            get => _network;
+            get => _model;
             set
             {
-                SetProperty(ref _network, value);
-                LoadNetwork();
+                SetProperty(ref _model, value);
+                Load();
             }
-        }
-
-        #endregion
-
-        #region Setup
-
-        public StateNetworkViewModel()
-        {
-            SetupGraphViewerPanel();
-            SetupGraphViewer();
-        }
-
-        private void SetupGraphViewerPanel()
-        {
-            GraphViewerPanel = new DockPanel {ClipToBounds = true};
-        }
-
-        private void SetupGraphViewer()
-        {
-            _graphViewer = new GraphViewer();
-            _graphViewer.BindToPanel(GraphViewerPanel);
-            _graphViewer.MouseDown += GraphViewer_MouseDown;
-        }
-
-        #endregion
-
-        #region Load
-
-        private void LoadNetwork()
-        {
-            _graphViewer.Graph = CreateGraph("TestGraph");
-        }
-
-        private Graph CreateGraph(string name)
-        {
-            _selectedNode = null;
-
-            var newGraph = new Graph(name)
-            {
-                Attr = {LayerDirection = LayerDirection.BT},
-
-                LayoutAlgorithmSettings =
-                {
-                    EdgeRoutingSettings =
-                    {
-                        UseObstacleRectangles = true,
-                        RouteMultiEdgesAsBundles = true,
-                        EdgeRoutingMode = EdgeRoutingMode.RectilinearToCenter
-                    }
-                }
-            };
-            //Add New states and connections
-            foreach (var state in _network.GetOrderedStates())
-            {
-                var node = newGraph.AddNode(state.Name);
-
-                foreach (var networkConnection in _network.GetConnections(state))
-                {
-                    if (node.OutEdges.Count(edge =>
-                        edge.LabelText == networkConnection.Input.Name &&
-                        edge.Target == networkConnection.Target.Name) == 0)
-                    {
-                        newGraph.AddEdge(networkConnection.Source.Name, networkConnection.Input.Name,
-                            networkConnection.Target.Name);
-                    }
-                }
-            }
-
-            if (_network.StartState != null)
-            {
-                var drawingNode = (Node)newGraph.FindNode(_network.StartState.Name);
-                drawingNode.Attr.Color = Color.Green;
-            }
-
-            return newGraph;
         }
 
         #endregion

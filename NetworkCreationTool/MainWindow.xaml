@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:wpfGraphControl="http://mlsagl"
-        xmlns:WPFControls="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:views="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
         mc:Ignorable="d"
         Title="Network Creation Tool" Height="720" Width="1280">
     <Window.Resources>
@@ -34,16 +33,26 @@
         </ToolBarTray>
         <Grid DockPanel.Dock="Bottom" Margin="8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Network" Grid.Column="0" Margin="8">
-                <WPFControls:StateNetwork  DataContext="{Binding StateNetworkViewModel}"/>
+                <views:InputSelectorView DataContext="{Binding InputSelectorViewModel}" />
             </GroupBox>
 
             <GroupBox Header="State" Grid.Column="1" Margin="8">
-                <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}"/>
+                <views:StateSelectorView DataContext="{Binding StateSelectorViewModel}" />
+            </GroupBox>
+
+            <GroupBox Header="Connections" Grid.Column="2" Margin="8">
+                <views:ConnectionEditorView DataContext="{Binding ConnectionEditorViewModel}" />
+            </GroupBox>
+
+            <GroupBox Header="Network" Grid.Column="3" Margin="8">
+                <views:NetworkView DataContext="{Binding NetworkViewModel}" />
             </GroupBox>
         </Grid>
     </DockPanel>

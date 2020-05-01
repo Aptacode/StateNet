@@ -12,8 +12,8 @@ namespace Aptacode.StateNet.Network
 {
     public class StateNetwork : IStateNetwork
     {
-        private readonly Dictionary<string, Input> _inputs = new Dictionary<string, Input>();
-        private readonly Dictionary<string, State> _states = new Dictionary<string, State>();
+        private readonly HashSet<Input> _inputs = new HashSet<Input>();
+        private readonly HashSet<State> _states = new HashSet<State>();
 
         public StateNetwork()
         {
@@ -53,35 +53,6 @@ namespace Aptacode.StateNet.Network
             var isStartStateValid = StartState != null;
 
             return isStartStateValid;
-        }
-
-        public bool UpdateStateName(string oldStateName, string newStateName)
-        {
-            if (!_states.TryGetValue(oldStateName, out var selectedState))
-            {
-                return false;
-            }
-
-            _states.Remove(oldStateName);
-
-            selectedState.Name = newStateName;
-
-            _states.Add(newStateName, selectedState);
-
-            foreach (var connection in GetConnections().ToList())
-            {
-                if (connection.Source.Name.Equals(oldStateName))
-                {
-                    connection.Source = selectedState;
-                }
-
-                if (connection.Target.Name.Equals(oldStateName))
-                {
-                    connection.Target = selectedState;
-                }
-            }
-
-            return true;
         }
 
         #region Attributes
@@ -131,7 +102,7 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            _states.TryGetValue(name, out var state);
+            _states.TryGetValue(new State(name), out var state);
             return state;
         }
 
@@ -155,7 +126,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newState = new State(name);
-            _states.Add(name, newState);
+            _states.Add(newState);
             return newState;
         }
 
@@ -170,9 +141,10 @@ namespace Aptacode.StateNet.Network
                 return;
             }
 
-            if (_states.ContainsKey(name))
+            var state = new State(name);
+            if (_states.Contains(state))
             {
-                _states.Remove(name);
+                _states.Remove(state);
             }
 
             var connections = Connections
@@ -187,7 +159,9 @@ namespace Aptacode.StateNet.Network
         public IEnumerable<State> GetOrderedStates()
         {
             if (StartState == null)
+            {
                 return GetStates();
+            }
 
             var orderedStates = Traverse(StartState, state => GetConnections(state).Select(c => c.Target)).ToList();
             orderedStates.AddRange(GetStates().Where(s => !orderedStates.Contains(s)));
@@ -222,12 +196,12 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<State> GetEndStates()
         {
-            return _states.Values.Where(state => state.IsEnd());
+            return _states.Where(state => state.IsEnd());
         }
 
         public IEnumerable<State> GetStates()
         {
-            return _states.Values.OrderBy(state => state.Name);
+            return _states.OrderBy(state => state.Name);
         }
 
         #endregion
@@ -236,7 +210,7 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Input> GetInputs()
         {
-            return _inputs.Values.OrderBy(input => input.Name);
+            return _inputs.OrderBy(input => input.Name);
         }
 
         public IEnumerable<Input> GetInputs(string state)
@@ -253,18 +227,19 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            _inputs.TryGetValue(name, out var input);
+            _inputs.TryGetValue(new Input(name), out var input);
             return input;
         }
 
-        public void RemoveInput(string input)
+        public void RemoveInput(string name)
         {
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(name))
             {
                 return;
             }
 
-            if (_inputs.ContainsKey(input))
+            var input = new Input(name);
+            if (_inputs.Contains(input))
             {
                 _inputs.Remove(input);
             }
@@ -287,7 +262,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newInput = new Input(name);
-            _inputs.Add(name, newInput);
+            _inputs.Add(newInput);
             return newInput;
         }
 
@@ -296,9 +271,7 @@ namespace Aptacode.StateNet.Network
         #region Connections
 
         public IEnumerable<Connection> Connections =>
-            _states.Values.Select(state => state.GetOutputConnections())
-                .Aggregate((IEnumerable<Connection>) new List<Connection>(), (a, b) => a.Concat(b));
-
+            _states.Select(state => state.Connections).SelectMany(list => list);
 
         public IEnumerable<Connection> GetConnections()
         {
@@ -368,7 +341,7 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Connection> GetOrderedConnections()
         {
-            return GetOrderedStates().Select(state => state.GetOutputConnections()).Aggregate((a, b) => a.Concat(b));
+            return GetOrderedStates().Select(state => state.Connections).SelectMany(list => list);
         }
 
         #endregion

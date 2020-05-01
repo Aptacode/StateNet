@@ -19,7 +19,9 @@ namespace Aptacode.StateNet.Network.Connections
             return engineHistory =>
             {
                 if (engineHistory == null)
+                {
                     engineHistory = new EngineHistory();
+                }
 
                 return scriptRunner(engineHistory).Result;
             };

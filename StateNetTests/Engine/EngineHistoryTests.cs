@@ -36,7 +36,7 @@ namespace Aptacode.StateNet.Tests.Engine
 
             engineHistory.SetStart(a);
             Assert.IsTrue(!engineHistory.Inputs.Any());
-            Assert.IsTrue(engineHistory.States.Count() == 1); 
+            Assert.IsTrue(engineHistory.States.Count() == 1);
             Assert.AreEqual(a, engineHistory.StartState);
             Assert.AreEqual(1, engineHistory.StateVisitCount(a.Name));
             Assert.AreEqual(0, engineHistory.StateVisitCount(b.Name));
@@ -64,7 +64,7 @@ namespace Aptacode.StateNet.Tests.Engine
             Assert.AreEqual(0, engineHistory.TransitionOutCount(b.Name, next.Name));
             Assert.AreEqual(0, engineHistory.TransitionInCount(next.Name, c.Name));
             Assert.AreEqual(0, engineHistory.TransitionOutCount(c.Name, next.Name));
-         
+
             engineHistory.Log(b, back, c);
             Assert.IsTrue(engineHistory.Inputs.Count() == 2);
             Assert.IsTrue(engineHistory.States.Count() == 3);

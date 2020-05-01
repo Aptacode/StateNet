@@ -1,11 +1,12 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.Json;
 using Aptacode.StateNet.WPF.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Aptacode.StateNet.NetworkCreationTool
 {
@@ -13,23 +14,17 @@ namespace Aptacode.StateNet.NetworkCreationTool
     {
         public MainWindowViewModel()
         {
-            StateNetworkViewModel = new StateNetworkViewModel();
-            StateNetworkViewModel.OnStateSelected += (s, e) => { StateEditorViewModel.State = e.State; };
-            StateEditorViewModel = new StateEditorViewModel();
-            StateEditorViewModel.OnStateUpdated += (s, e) => { StateNetworkViewModel.Update(); };
+            NetworkViewModel = new NetworkViewModel();
+        }
+        #region EventHandlers
+
+        private void OnStateSelected(object sender, StateViewModel e)
+        {
+            ConnectionEditorViewModel.SelectedState = e;
         }
 
-        public StateNetworkViewModel StateNetworkViewModel
-        {
-            get => _stateNetworkViewModel;
-            set => SetProperty(ref _stateNetworkViewModel, value);
-        }
+        #endregion
 
-        public StateEditorViewModel StateEditorViewModel
-        {
-            get => _stateEditorViewModel;
-            set => SetProperty(ref _stateEditorViewModel, value);
-        }
 
         public void New()
         {
@@ -37,8 +32,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
             _network = new StateNetwork();
             var startState = _network.CreateState("Start");
             _network.StartState = startState;
-            StateNetworkViewModel.Network = _network;
-            StateEditorViewModel.Network = _network;
+            StateNetworkViewModel = new StateNetworkViewModel(_network);
         }
 
         public void Load()
@@ -50,8 +44,7 @@ namespace Aptacode.StateNet.NetworkCreationTool
             }
 
             _network = new StateNetworkJsonSerializer(_selectedFilePath).Read();
-            StateNetworkViewModel.Network = _network;
-            StateEditorViewModel.Network = _network;
+            StateNetworkViewModel = new StateNetworkViewModel(_network);
         }
 
         public void Save()
@@ -66,13 +59,13 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public string SaveNew()
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            var dlg = new SaveFileDialog();
             dlg.FileName = "NewNetwork"; // Default file name
             dlg.DefaultExt = ".json"; // Default file extension
             dlg.Filter = "Json Files (*.json) |*.json;"; // Filter files by extension
 
             // Show save file dialog box
-            bool? result = dlg.ShowDialog();
+            var result = dlg.ShowDialog();
 
             // Process save file dialog box results
             return result == true ? dlg.FileName : string.Empty;
@@ -96,11 +89,61 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         #region Properties
 
-        private IStateNetwork _network;
-        private StateEditorViewModel _stateEditorViewModel;
-        private string _selectedFilePath;
-
         private StateNetworkViewModel _stateNetworkViewModel;
+
+        public StateNetworkViewModel StateNetworkViewModel
+        {
+            get => _stateNetworkViewModel;
+            set
+            {
+                SetProperty(ref _stateNetworkViewModel, value);
+                StateSelectorViewModel = new StateSelectorViewModel(StateNetworkViewModel);
+                InputSelectorViewModel = new InputSelectorViewModel(StateNetworkViewModel);
+                ConnectionEditorViewModel = new ConnectionEditorViewModel(StateNetworkViewModel);
+                NetworkViewModel.StateNetwork = StateNetworkViewModel;
+                StateSelectorViewModel.OnStateSelected += OnStateSelected;
+            }
+        }
+
+        private StateSelectorViewModel _stateSelectorViewModel;
+
+        public StateSelectorViewModel StateSelectorViewModel
+        {
+            get => _stateSelectorViewModel;
+            set => SetProperty(ref _stateSelectorViewModel, value);
+        }
+
+        private InputSelectorViewModel _inputSelectorViewModel;
+
+        public InputSelectorViewModel InputSelectorViewModel
+        {
+            get => _inputSelectorViewModel;
+            set => SetProperty(ref _inputSelectorViewModel, value);
+        }
+
+        private ConnectionEditorViewModel _connectionEditorViewModel;
+
+        public ConnectionEditorViewModel ConnectionEditorViewModel
+        {
+            get => _connectionEditorViewModel;
+            set => SetProperty(ref _connectionEditorViewModel, value);
+        }
+
+        private NetworkViewModel _networkViewModel;
+
+        public NetworkViewModel NetworkViewModel
+        {
+            get => _networkViewModel;
+            set => SetProperty(ref _networkViewModel, value);
+        }
+
+        
+        #endregion
+
+        #region Properties
+
+        private IStateNetwork _network;
+        private string _selectedFilePath;
 
         #endregion
 
@@ -115,13 +158,12 @@ namespace Aptacode.StateNet.NetworkCreationTool
 
         public DelegateCommand SaveButtonCommand =>
             _saveButtonCommand ?? (_saveButtonCommand = new DelegateCommand(Save));
-       
+
         private DelegateCommand _newButtonCommand;
 
         public DelegateCommand NewButtonCommand =>
             _newButtonCommand ?? (_newButtonCommand = new DelegateCommand(New));
 
-        
         #endregion
     }
 }

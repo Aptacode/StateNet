@@ -1,151 +1,100 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Aptacode.StateNet.Interfaces;
-using Aptacode.StateNet.Network;
-using Aptacode.StateNet.Network.Connections;
-using Prism.Commands;
+﻿using Aptacode.StateNet.Network.Connections;
 using Prism.Mvvm;
 
 namespace Aptacode.StateNet.WPF.ViewModels
 {
     public class ConnectionViewModel : BindableBase
     {
-        private readonly IStateNetwork _network;
-
-        public ConnectionViewModel(IStateNetwork network, Connection connection)
+        public ConnectionViewModel(Connection model)
         {
-            _network = network;
-            Connection = connection;
-
-            Inputs = new ObservableCollection<Input>(_network.GetInputs());
-            States = new ObservableCollection<State>(_network.GetOrderedStates());
-
-            Source = Connection.Source;
-            Input = Connection.Input;
-            Target = Connection.Target;
-            Expression = Connection.ConnectionWeight.Expression;
+            Model = model;
         }
 
-        #region Events
+        #region Methods
 
-        public EventHandler<StateUpdatedEventArgs> OnStateUpdated { get; set; }
+        public void Load()
+        {
+            SourceViewModel = new StateViewModel(_model.Source, false);
+            InputViewModel = new InputViewModel(_model.Input);
+            TargetViewModel = new StateViewModel(_model.Target, false);
+            ConnectionWeight = _model.ConnectionWeight.Expression;
+        }
 
         #endregion
 
         #region Properties
 
-        private State _source;
-        private Input _input;
-        private State _target;
-        private string _expression;
-        private Connection _connection;
+        private Connection _model;
 
-        public State Source
+        public Connection Model
         {
-            get => _source;
+            get => _model;
             set
             {
-                SetProperty(ref _source, value);
-                Connection.Source = _source;
+                SetProperty(ref _model, value);
+                Load();
             }
         }
 
-        public Input Input
+
+        private StateViewModel _sourceViewModel;
+
+        public StateViewModel SourceViewModel
         {
-            get => _input;
+            get => _sourceViewModel;
+            set => SetProperty(ref _sourceViewModel, value);
+        }
+
+        private InputViewModel _inputViewModel;
+
+        public InputViewModel InputViewModel
+        {
+            get => _inputViewModel;
             set
             {
-                SetProperty(ref _input, value);
-
-                if (_input == null || Connection == null || Connection.Input == _input)
+                SetProperty(ref _inputViewModel, value);
+                if (Model == null)
                 {
                     return;
                 }
 
-                _network.Disconnect(Connection.Source, Connection.Input, Connection.Target);
-                Connection.Input = _input;
-                _network.Connect(Connection.Source, Connection.Input, Connection.Target, Connection.ConnectionWeight);
-
-                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(Source));
+                Model.Input = _inputViewModel.Model;
             }
         }
 
-        public State Target
+        private StateViewModel _targetViewModel;
+
+        public StateViewModel TargetViewModel
         {
-            get => _target;
+            get => _targetViewModel;
             set
             {
-                SetProperty(ref _target, value);
-
-                if (_target == null || Connection == null || Connection.Target == _target)
+                SetProperty(ref _targetViewModel, value);
+                if (Model == null)
                 {
                     return;
                 }
 
-                _network.Disconnect(Connection.Source, Connection.Input, Connection.Target);
-                Connection.Target = _target;
-                _network.Connect(Connection.Source, Connection.Input, Connection.Target, Connection.ConnectionWeight);
-
-                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(Source));
+                Model.Target = _targetViewModel.Model;
             }
         }
 
-        public string Expression
+        private string _connectionWeight;
+
+        public string ConnectionWeight
         {
-            get => _expression;
+            get => _connectionWeight;
             set
             {
-                SetProperty(ref _expression, value);
-
-                if (string.IsNullOrEmpty(_expression) || Connection == null ||
-                    Connection.ConnectionWeight.Expression == _expression)
+                SetProperty(ref _connectionWeight, value);
+                if (Model == null)
                 {
                     return;
                 }
 
-                _network.Disconnect(Connection.Source, Connection.Input, Connection.Target);
-                Connection.ConnectionWeight = new ConnectionWeight(_expression);
-                _network.Connect(Connection.Source, Connection.Input, Connection.Target, Connection.ConnectionWeight);
-
-                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(Source));
+                Model.ConnectionWeight = new ConnectionWeight(_connectionWeight);
             }
         }
-
-        public Connection Connection
-        {
-            get => _connection;
-            set => SetProperty(ref _connection, value);
-        }
-
-        private ObservableCollection<State> _states;
-
-        public ObservableCollection<State> States
-        {
-            get => _states;
-            set => SetProperty(ref _states, value);
-        }
-
-        private ObservableCollection<Input> _inputs;
-
-        public ObservableCollection<Input> Inputs
-        {
-            get => _inputs;
-            set => SetProperty(ref _inputs, value);
-        }
-
-        #endregion
-
-        #region Commands
-
-        private DelegateCommand _removeButtonCommand;
-
-        public DelegateCommand RemoveButtonCommand =>
-            _removeButtonCommand ?? (_removeButtonCommand = new DelegateCommand(() =>
-            {
-                _network.Disconnect(Connection.Source, Connection.Input, Connection.Target);
-
-                OnStateUpdated?.Invoke(this, new StateUpdatedEventArgs(Source));
-            }));
 
         #endregion
     }

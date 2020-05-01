@@ -17,24 +17,24 @@ namespace Aptacode.StateNet.Tests.Engine.Connections
                 yield return new TestCaseData(
                     DummyConnections.Create(
                         ("a", "next", "b", 1),
-                        ("b", "next", "c", 1), 
+                        ("b", "next", "c", 1),
                         ("c", "next", "d", 1)),
                     1, 0);
                 yield return new TestCaseData(
                     DummyConnections.Create(
                         ("a", "next", "b", 1),
-                        ("b", "next", "c", 1), 
+                        ("b", "next", "c", 1),
                         ("c", "next", "d", 1)),
                     2, 1);
                 yield return new TestCaseData(
                     DummyConnections.Create(
-                        ("a", "next", "b", 1), 
+                        ("a", "next", "b", 1),
                         ("b", "next", "c", 1),
                         ("c", "next", "d", 1)),
                     3, 2);
                 yield return new TestCaseData(
                     DummyConnections.Create(
-                        ("a", "next", "b", 1), 
+                        ("a", "next", "b", 1),
                         ("b", "next", "c", 2),
                         ("c", "next", "d", 1)),
                     3, 1);
@@ -42,7 +42,7 @@ namespace Aptacode.StateNet.Tests.Engine.Connections
         }
 
         /// <summary>
-        /// Tests that the ConnectionChooser, given a specific weight chooses the expected connection
+        ///     Tests that the ConnectionChooser, given a specific weight chooses the expected connection
         /// </summary>
         /// <param name="connectionDistribution"></param>
         /// <param name="weight"></param>

@@ -9,51 +9,12 @@ namespace Aptacode.StateNet.Engine.History
     {
         private readonly List<Transition> _transitionLog = new List<Transition>();
 
-        #region Inputs
-        public IEnumerable<Input> Inputs => _transitionLog.Select(transition => transition.Input);
-
-        public int InputAppliedCount(string name)
-        {
-            return _transitionLog.Count(transition => transition.Input.Name == name);
-        }
-        #endregion
-
-        #region States
-        public State StartState { get; private set; }
-
-        public IEnumerable<State> States
-        {
-            get
-            {
-                if (StartState == null)
-                {
-                    return new List<State>();
-                }
-
-                if (!_transitionLog.Any())
-                    return new List<State>() {StartState};
-
-
-                return new List<State> { StartState }.Concat(_transitionLog.ToArray()
-                    .Select(transition => transition.Target));
-            }
-        }
-
-        public void SetStart(State source)
-        {
-            StartState = source;
-        }
-        public int StateVisitCount(string name)
-        {
-            return States.Count(state => state.Name == name);
-        }
-
-        #endregion
-
         public void Log(State source, Input input, State target)
         {
             if (StartState == null)
+            {
                 StartState = source;
+            }
 
             _transitionLog.Add(new Transition(source, input, target));
         }
@@ -71,5 +32,52 @@ namespace Aptacode.StateNet.Engine.History
                 transition.Source.Name == state &&
                 transition.Input.Name == input);
         }
+
+        #region Inputs
+
+        public IEnumerable<Input> Inputs => _transitionLog.Select(transition => transition.Input);
+
+        public int InputAppliedCount(string name)
+        {
+            return _transitionLog.Count(transition => transition.Input.Name == name);
+        }
+
+        #endregion
+
+        #region States
+
+        public State StartState { get; private set; }
+
+        public IEnumerable<State> States
+        {
+            get
+            {
+                if (StartState == null)
+                {
+                    return new List<State>();
+                }
+
+                if (!_transitionLog.Any())
+                {
+                    return new List<State> {StartState};
+                }
+
+
+                return new List<State> {StartState}.Concat(_transitionLog.ToArray()
+                    .Select(transition => transition.Target));
+            }
+        }
+
+        public void SetStart(State source)
+        {
+            StartState = source;
+        }
+
+        public int StateVisitCount(string name)
+        {
+            return States.Count(state => state.Name == name);
+        }
+
+        #endregion
     }
 }

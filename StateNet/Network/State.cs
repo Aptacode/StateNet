@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Aptacode.StateNet.Network.Connections;
+using Newtonsoft.Json;
 
 namespace Aptacode.StateNet.Network
 {
@@ -20,7 +21,7 @@ namespace Aptacode.StateNet.Network
         /// <summary>
         ///     The state name
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
         public override string ToString()
         {
@@ -34,18 +35,20 @@ namespace Aptacode.StateNet.Network
 
         #region Connections
 
-        public IEnumerable<Connection> GetOutputConnections()
-        {
-            return _outputConnections;
-        }
+        [JsonIgnore] public IEnumerable<Connection> Connections => _outputConnections;
 
-        internal void Remove(Connection connection)
+        public void Remove(Connection connection)
         {
             _outputConnections.Remove(connection);
         }
 
-        internal void Add(Connection connection)
+        public void Add(Connection connection)
         {
+            if (!connection.Source.Equals(this))
+            {
+                return;
+            }
+
             _outputConnections.Add(connection);
         }
 

@@ -3,11 +3,11 @@
 namespace Aptacode.StateNet.WPF.Views
 {
     /// <summary>
-    ///     Interaction logic for NetworkView.xaml
+    ///     Interaction logic for InputSelectorView.xaml
     /// </summary>
-    public partial class StateEditor : UserControl
+    public partial class ConnectionEditorView : UserControl
     {
-        public StateEditor()
+        public ConnectionEditorView()
         {
             InitializeComponent();
         }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net4.7.2;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net4.7.2;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>Aptacode.StateNet</RootNamespace>
     <AssemblyName>Aptacode.StateNet</AssemblyName>
     <Authors>Timothy Jones</Authors>

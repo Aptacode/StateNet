@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="Aptacode.StateNet.WPF.Views.ConnectionEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviours="clr-namespace:Aptacode.StateNet.WPF.Mvvm.Behaviours"
+             xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel LastChildFill="True">
+        <Button Content="Delete" DockPanel.Dock="Bottom" Command="{Binding DeleteCommand}" Margin="8" />
+        <Button Content="Create" DockPanel.Dock="Bottom" Command="{Binding CreateCommand}" Margin="8" />
+
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Input" HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" />
+            <Label Grid.Column="1" Content="Target" HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" />
+            <Label Grid.Column="2" Content="Expression" HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" />
+        </Grid>
+
+        <Separator DockPanel.Dock="Top" />
+
+        <ListBox ItemsSource="{Binding SelectedState.Connections}" SelectedItem="{Binding SelectedConnection}"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Margin="4,0" Grid.Column="0"
+                                  ItemsSource="{Binding Path=DataContext.StateNetwork.Inputs, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
+                                  SelectedItem="{Binding InputViewModel, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Margin="4,0" Grid.Column="1"
+                                  ItemsSource="{Binding Path=DataContext.StateNetwork.States, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
+                                  SelectedItem="{Binding TargetViewModel, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBox Margin="4,0" Grid.Column="2"
+                                 Text="{Binding ConnectionWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <i:Interaction.Behaviors>
+                                <behaviours:DoubleClickTextBoxBehaviour />
+                            </i:Interaction.Behaviors>
+
+                            <TextBox.InputBindings>
+                                <KeyBinding
+                                    Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:InputSelectorView}}}"
+                                    Key="Enter" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</UserControl>

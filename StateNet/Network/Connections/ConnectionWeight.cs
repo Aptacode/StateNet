@@ -1,5 +1,4 @@
 ﻿using System;
-using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Interfaces;
 
 namespace Aptacode.StateNet.Network.Connections
