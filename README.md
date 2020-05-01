@@ -30,7 +30,7 @@ There are three approaches to configure the network:
 #### 1) Network Creation Tool
 Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
-  <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+  <img width="632" height="356" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
 
 

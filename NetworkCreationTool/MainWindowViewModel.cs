@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Persistence.Json;
@@ -10,6 +11,7 @@ using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Aptacode.StateNet.NetworkCreationTool
 {
+
     public class MainWindowViewModel : BindableBase
     {
         public MainWindowViewModel()
