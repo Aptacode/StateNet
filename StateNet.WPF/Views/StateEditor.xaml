@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="600">
-    <Border BorderThickness="2" BorderBrush="Black">
         <DockPanel LastChildFill="True">
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
@@ -54,5 +53,4 @@
             </Border>
 
         </DockPanel>
-    </Border>
 </UserControl>

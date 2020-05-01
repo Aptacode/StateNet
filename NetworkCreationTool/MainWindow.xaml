@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpfGraphControl="http://mlsagl"
         xmlns:WPFControls="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Network Creation Tool" Height="720" Width="1280">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="DeepOrange" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/materialdesigncolor.bluegrey.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.DeepOrange.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
@@ -16,13 +32,19 @@
                 <Button Command="{Binding SaveButtonCommand}" Content="Save" />
             </ToolBar>
         </ToolBarTray>
-        <Grid DockPanel.Dock="Bottom" Margin="5">
+        <Grid DockPanel.Dock="Bottom" Margin="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <WPFControls:StateNetwork Grid.Column="0" DataContext="{Binding StateNetworkViewModel}" />
-            <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}" />
+
+            <GroupBox Header="Network" Grid.Column="0" Margin="8">
+                <WPFControls:StateNetwork  DataContext="{Binding StateNetworkViewModel}"/>
+            </GroupBox>
+
+            <GroupBox Header="State" Grid.Column="1" Margin="8">
+                <WPFControls:StateEditor Grid.Column="1" DataContext="{Binding StateEditorViewModel}"/>
+            </GroupBox>
         </Grid>
     </DockPanel>
 
