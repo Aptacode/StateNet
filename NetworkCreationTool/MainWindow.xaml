@@ -39,7 +39,7 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-            <GroupBox Header="Network" Grid.Column="0" Margin="8">
+            <GroupBox Header="Inputs" Grid.Column="0" Margin="8">
                 <views:InputSelectorView DataContext="{Binding InputSelectorViewModel}" />
             </GroupBox>
 

@@ -11,7 +11,6 @@ using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Aptacode.StateNet.NetworkCreationTool
 {
-
     public class MainWindowViewModel : BindableBase
     {
         public MainWindowViewModel()
