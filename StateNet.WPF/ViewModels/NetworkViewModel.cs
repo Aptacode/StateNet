@@ -62,6 +62,9 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
                 foreach (var networkConnection in StateNetwork.Model.GetConnections(state))
                 {
+                    if(networkConnection.Source == null || networkConnection.Input == null || networkConnection.Target == null)
+                        continue;
+
                     if (node.OutEdges.Count(edge =>
                         edge.LabelText == networkConnection.Input.Name &&
                         edge.Target == networkConnection.Target.Name) == 0)

@@ -1,9 +1,10 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System.Windows.Forms;
 using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
-using Aptacode.StateNet.Persistence.Json;
 using Aptacode.StateNet.WPF.ViewModels;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -43,8 +44,8 @@ namespace Aptacode.StateNet.NetworkCreationTool
             {
                 return;
             }
-
-            _network = new StateNetworkJsonSerializer(_selectedFilePath).Read();
+            var jsonString = File.ReadAllText(_selectedFilePath);
+            _network = JsonConvert.DeserializeObject<StateNetwork>(jsonString);
             StateNetworkViewModel = new StateNetworkViewModel(_network);
         }
 
@@ -55,7 +56,8 @@ namespace Aptacode.StateNet.NetworkCreationTool
                 _selectedFilePath = SaveNew();
             }
 
-            new StateNetworkJsonSerializer(_selectedFilePath).Write(_network);
+            var jsonString = JsonConvert.SerializeObject(_network);
+            File.AppendAllText(_selectedFilePath, jsonString);
         }
 
         public string SaveNew()

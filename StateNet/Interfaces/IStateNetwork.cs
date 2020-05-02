@@ -7,6 +7,8 @@ namespace Aptacode.StateNet.Interfaces
 {
     public interface IStateNetwork : IEquatable<IStateNetwork>
     {
+        HashSet<Input> Inputs { get; }
+        HashSet<State> States { get; }
         bool IsValid();
 
         #region States
