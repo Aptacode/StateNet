@@ -11,6 +11,7 @@ namespace Aptacode.StateNet.Interfaces
         bool Apply(string inputName);
         void Start();
         void Stop();
+        bool IsRunning();
 
         #region Events
 
