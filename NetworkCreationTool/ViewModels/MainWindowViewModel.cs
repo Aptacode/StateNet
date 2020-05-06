@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Windows.Forms;
-using Aptacode.StateNet.Attributes;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.WPF.ViewModels;
@@ -10,7 +9,7 @@ using Prism.Mvvm;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-namespace Aptacode.StateNet.NetworkCreationTool
+namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
