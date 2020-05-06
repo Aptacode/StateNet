@@ -44,7 +44,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public void CreateConnection()
         {
-            Model.Add(new Connection(Model, null, Model, new ConnectionWeight(0)));
+            Model.Add(new Connection(Model, null, Model, new ConnectionWeight(1)));
             Load();
         }
 
