@@ -15,7 +15,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public StateViewModel(State model, bool loadConnections)
         {
-            Connections = new ObservableCollection<ConnectionViewModel>();
             Model = model;
             LoadConnections = loadConnections;
         }
@@ -45,6 +44,14 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public void CreateConnection()
         {
             Model.Add(new Connection(Model, null, Model, new ConnectionWeight(1)));
+            Load();
+        }
+
+        public void DeleteConnection(ConnectionViewModel selectedConnection)
+        {
+            if(selectedConnection != null)
+                Model.Remove(selectedConnection.Model);
+
             Load();
         }
 
@@ -90,7 +97,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
             }
         }
 
-        public ObservableCollection<ConnectionViewModel> Connections { get; set; }
+        public ObservableCollection<ConnectionViewModel> Connections { get; set; } = new ObservableCollection<ConnectionViewModel>();
 
         #endregion
 

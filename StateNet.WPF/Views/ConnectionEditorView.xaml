@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
-             xmlns:behaviours="clr-namespace:Apatacode.Wpf.Utilities.Behaviours;assembly=Apatacode.Wpf.Utilities"
+             xmlns:behaviours="clr-namespace:Aptacode.Wpf.Utilities.Behaviours;assembly=Aptacode.Wpf.Utilities"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel LastChildFill="True">
@@ -39,7 +39,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <ComboBox Margin="4,0" Grid.Column="0"
-                                  ItemsSource="{Binding Path=DataContext.StateNetwork.Inputs, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
+                                  ItemsSource="{Binding Path=DataContext.Inputs, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
                                   SelectedItem="{Binding InputViewModel, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -48,7 +48,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <ComboBox Margin="4,0" Grid.Column="1"
-                                  ItemsSource="{Binding Path=DataContext.StateNetwork.States, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
+                                  ItemsSource="{Binding Path=DataContext.States, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
                                   SelectedItem="{Binding TargetViewModel, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -67,7 +67,7 @@
 
                             <TextBox.InputBindings>
                                 <KeyBinding
-                                    Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:InputSelectorView}}}"
+                                    Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ConnectionEditorView}}}"
                                     Key="Enter" />
                             </TextBox.InputBindings>
                         </TextBox>

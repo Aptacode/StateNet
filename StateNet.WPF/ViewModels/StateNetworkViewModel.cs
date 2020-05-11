@@ -11,8 +11,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
     {
         public StateNetworkViewModel(IStateNetwork model)
         {
-            States = new ObservableCollection<StateViewModel>();
-            Inputs = new ObservableCollection<InputViewModel>();
             Model = model;
         }
 
@@ -68,8 +66,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #region Properties
 
-        public ObservableCollection<StateViewModel> States { get; set; }
-        public ObservableCollection<InputViewModel> Inputs { get; set; }
+        public ObservableCollection<StateViewModel> States { get; set; } = new ObservableCollection<StateViewModel>();
+        public ObservableCollection<InputViewModel> Inputs { get; set; } = new ObservableCollection<InputViewModel>();
 
         private IStateNetwork _model;
 

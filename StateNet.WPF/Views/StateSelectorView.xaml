@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:behaviours="clr-namespace:Apatacode.Wpf.Utilities.Behaviours;assembly=Apatacode.Wpf.Utilities"
+             xmlns:behaviours="clr-namespace:Aptacode.Wpf.Utilities.Behaviours;assembly=Aptacode.Wpf.Utilities"
              xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -25,7 +25,7 @@
 
                         <TextBox.InputBindings>
                             <KeyBinding
-                                Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:InputSelectorView}}}"
+                                Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:StateSelectorView}}}"
                                 Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>

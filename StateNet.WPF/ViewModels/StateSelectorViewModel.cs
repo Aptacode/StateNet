@@ -15,7 +15,9 @@ namespace Aptacode.StateNet.WPF.ViewModels
         #region Events
 
         public EventHandler<StateViewModel> OnStateSelected { get; set; }
+        public EventHandler<StateViewModel> OnStateRenamed { get; set; }
 
+        
         #endregion
 
         #region Methods
@@ -65,7 +67,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
         private DelegateCommand _updateCommand;
 
         public DelegateCommand UpdateCommand =>
-            _updateCommand ?? (_updateCommand = new DelegateCommand(() => { }));
+            _updateCommand ?? (_updateCommand = new DelegateCommand(() =>
+            {
+                OnStateRenamed?.Invoke(this, SelectedState);
+                SelectedState = null;
+                StateNetwork.Load();
+            }));
 
         private DelegateCommand _createCommand;
 

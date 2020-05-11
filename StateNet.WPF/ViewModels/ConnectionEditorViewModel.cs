@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -36,7 +37,15 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public StateViewModel SelectedState
         {
             get => _selectedState;
-            set => SetProperty(ref _selectedState, value);
+            set
+            {
+                SetProperty(ref _selectedState, value);
+                States.Clear();
+                Inputs.Clear();
+
+                States.AddRange(StateNetwork.States);
+                Inputs.AddRange(StateNetwork.Inputs);
+            }
         }
 
         private StateNetworkViewModel _stateNetwork;
@@ -46,6 +55,11 @@ namespace Aptacode.StateNet.WPF.ViewModels
             get => _stateNetwork;
             set => SetProperty(ref _stateNetwork, value);
         }
+
+
+        public ObservableCollection<StateViewModel> States { get; set; } = new ObservableCollection<StateViewModel>();
+        public ObservableCollection<InputViewModel> Inputs { get; set; } = new ObservableCollection<InputViewModel>();
+
 
         #endregion
 
@@ -60,6 +74,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
                 {
                     return;
                 }
+
+                SelectedState.DeleteConnection(SelectedConnection);
 
                 OnConnectionModified?.Invoke(this, SelectedConnection);
             }));

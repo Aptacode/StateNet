@@ -7,7 +7,7 @@ namespace Aptacode.StateNet.Engine.History
 {
     public class EngineHistory : IEngineHistory
     {
-        private readonly List<Transition> _transitionLog = new List<Transition>();
+        public List<Transition> TransitionLog { get; set; } = new List<Transition>();
 
         public void Log(State source, Input input, State target)
         {
@@ -16,30 +16,30 @@ namespace Aptacode.StateNet.Engine.History
                 StartState = source;
             }
 
-            _transitionLog.Add(new Transition(source, input, target));
+            TransitionLog.Add(new Transition(source, input, target));
         }
 
         public int TransitionInCount(string input, string state)
         {
-            return _transitionLog.Count(transition =>
+            return TransitionLog.Count(transition =>
                 transition.Input.Name == input &&
                 transition.Target.Name == state);
         }
 
         public int TransitionOutCount(string state, string input)
         {
-            return _transitionLog.Count(transition =>
+            return TransitionLog.Count(transition =>
                 transition.Source.Name == state &&
                 transition.Input.Name == input);
         }
 
         #region Inputs
 
-        public IEnumerable<Input> Inputs => _transitionLog.Select(transition => transition.Input);
+        public IEnumerable<Input> Inputs => TransitionLog.Select(transition => transition.Input);
 
         public int InputAppliedCount(string name)
         {
-            return _transitionLog.Count(transition => transition.Input.Name == name);
+            return TransitionLog.Count(transition => transition.Input.Name == name);
         }
 
         #endregion
@@ -57,13 +57,13 @@ namespace Aptacode.StateNet.Engine.History
                     return new List<State>();
                 }
 
-                if (!_transitionLog.Any())
+                if (!TransitionLog.Any())
                 {
                     return new List<State> {StartState};
                 }
 
 
-                return new List<State> {StartState}.Concat(_transitionLog.ToArray()
+                return new List<State> {StartState}.Concat(TransitionLog.ToArray()
                     .Select(transition => transition.Target));
             }
         }
