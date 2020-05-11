@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Aptacode.StateNet.Network;
+using System;
+using Aptacode.StateNet.Engine.History;
 
 namespace Aptacode.StateNet.Interfaces
 {
@@ -25,6 +27,7 @@ namespace Aptacode.StateNet.Interfaces
         int StateVisitCount(string name);
 
         IEnumerable<State> States { get; }
+        IEnumerable<Transition> TransitionLog { get; }
 
         #endregion
     }

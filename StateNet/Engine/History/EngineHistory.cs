@@ -7,7 +7,8 @@ namespace Aptacode.StateNet.Engine.History
 {
     public class EngineHistory : IEngineHistory
     {
-        public List<Transition> TransitionLog { get; set; } = new List<Transition>();
+        private readonly List<Transition> _transitionLog = new List<Transition>();
+        public IEnumerable<Transition> TransitionLog => _transitionLog;
 
         public void Log(State source, Input input, State target)
         {
@@ -16,7 +17,7 @@ namespace Aptacode.StateNet.Engine.History
                 StartState = source;
             }
 
-            TransitionLog.Add(new Transition(source, input, target));
+            _transitionLog.Add(new Transition(source, input, target));
         }
 
         public int TransitionInCount(string input, string state)
