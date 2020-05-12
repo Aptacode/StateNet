@@ -12,8 +12,7 @@
         <Button Content="Delete" DockPanel.Dock="Bottom" Command="{Binding DeleteCommand}" Margin="8" />
         <Button Content="Create" DockPanel.Dock="Bottom" Command="{Binding CreateCommand}" Margin="8" />
 
-        <ListBox Padding="5" ItemsSource="{Binding StateNetwork.Inputs}" SelectedItem="{Binding SelectedInput}"
-                 HorizontalContentAlignment="Stretch">
+        <ListBox Padding="5" ItemsSource="{Binding StateNetwork.Inputs}" SelectedItem="{Binding SelectedInput}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBox

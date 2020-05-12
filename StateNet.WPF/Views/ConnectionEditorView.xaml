@@ -12,22 +12,6 @@
         <Button Content="Delete" DockPanel.Dock="Bottom" Command="{Binding DeleteCommand}" Margin="8" />
         <Button Content="Create" DockPanel.Dock="Bottom" Command="{Binding CreateCommand}" Margin="8" />
 
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Input" HorizontalContentAlignment="Center"
-                   VerticalContentAlignment="Center" />
-            <Label Grid.Column="1" Content="Target" HorizontalContentAlignment="Center"
-                   VerticalContentAlignment="Center" />
-            <Label Grid.Column="2" Content="Expression" HorizontalContentAlignment="Center"
-                   VerticalContentAlignment="Center" />
-        </Grid>
-
-        <Separator DockPanel.Dock="Top" />
-
         <ListBox ItemsSource="{Binding SelectedState.Connections}" SelectedItem="{Binding SelectedConnection}"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
@@ -59,8 +43,7 @@
 
                         <TextBox Margin="4,0" Grid.Column="2"
                                  Text="{Binding ConnectionWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center">
+                                 Background="Transparent" BorderBrush="Transparent">
                             <i:Interaction.Behaviors>
                                 <behaviors:DoubleClickTextBoxBehaviour />
                             </i:Interaction.Behaviors>

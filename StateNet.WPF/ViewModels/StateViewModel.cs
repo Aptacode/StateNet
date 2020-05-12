@@ -91,16 +91,10 @@ namespace Aptacode.StateNet.WPF.ViewModels
             set
             {
                 SetProperty(ref _name, value);
-
-                if (Model != null)
-                {
-                    Model.Name = _name;
-                }
             }
         }
 
-        public ObservableCollection<ConnectionViewModel> Connections { get; set; } =
-            new ObservableCollection<ConnectionViewModel>();
+        public ObservableCollection<ConnectionViewModel> Connections { get; set; } = new ObservableCollection<ConnectionViewModel>();
 
         #endregion
 

@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #endregion
 
-        #region Properties
+        #region PropertiesI
 
         private ConnectionViewModel _selectedConnection;
 

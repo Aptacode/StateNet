@@ -24,8 +24,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public void Load()
         {
-            States.Clear();
-            Inputs.Clear();
+            Clear();
 
             if (_model == null)
             {
@@ -82,5 +81,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
         }
 
         #endregion
+
+        public void Clear()
+        {
+            States.Clear();
+            Inputs.Clear();
+
+        }
     }
 }
