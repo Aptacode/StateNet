@@ -25,6 +25,7 @@
                         <TextBox.InputBindings>
                             <KeyBinding
                                 Command="{Binding Path=DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:StateSelectorView}}}"
+                                CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource AncestorType={x:Type TextBox}}}"
                                 Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
