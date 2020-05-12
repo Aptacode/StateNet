@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.WPF", "StateNet.WP
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{B2EFCDC0-9EEE-41FC-A898-24217B54C180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apatacode.Wpf.Utilities", "Libraries\Aptacode.Wpf.Utilities\Apatacode.Wpf.Utilities\Apatacode.Wpf.Utilities.csproj", "{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aptacode.Wpf.Utilities", "Libraries\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj", "{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -127,7 +127,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Aptacode.Wpf.Utilities\Apatacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj">
+    <ProjectReference Include="..\Libraries\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj">
       <Project>{87656e1c-4fbc-4ba6-8ba2-c1742c7a8280}</Project>
       <Name>Aptacode.Wpf.Utilities</Name>
     </ProjectReference>

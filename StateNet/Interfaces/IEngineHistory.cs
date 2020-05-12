@@ -13,6 +13,9 @@ namespace Aptacode.StateNet.Interfaces
 
         int TransitionOutCount(string state, string input);
 
+        IEnumerable<Transition> GetLastTransitionsOut(string state, int count);
+        IEnumerable<Transition> LastTransitions(int count);
+
         #region Inputs
 
         int InputAppliedCount(string name);

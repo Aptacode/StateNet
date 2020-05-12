@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:Aptacode.StateNet.WPF.Views"
-             xmlns:behaviours="clr-namespace:Aptacode.Wpf.Utilities.Behaviours;assembly=Aptacode.Wpf.Utilities"
+             xmlns:behaviors="clr-namespace:Aptacode.Wpf.Utilities.Behaviors;assembly=Aptacode.Wpf.Utilities"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel LastChildFill="True">
@@ -62,7 +62,7 @@
                                  Background="Transparent" BorderBrush="Transparent" HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">
                             <i:Interaction.Behaviors>
-                                <behaviours:DoubleClickTextBoxBehaviour />
+                                <behaviors:DoubleClickTextBoxBehaviour />
                             </i:Interaction.Behaviors>
 
                             <TextBox.InputBindings>

@@ -58,7 +58,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
                     return;
                 }
 
-                Model.Input = _inputViewModel.Model;
+                Model.Input = _inputViewModel?.Model;
             }
         }
 
@@ -75,7 +75,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
                     return;
                 }
 
-                Model.Target = _targetViewModel.Model;
+                Model.Target = _targetViewModel?.Model;
             }
         }
 

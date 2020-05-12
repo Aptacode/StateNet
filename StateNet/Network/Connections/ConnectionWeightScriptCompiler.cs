@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Aptacode.StateNet.Engine.History;
 using Aptacode.StateNet.Interfaces;
@@ -8,6 +10,7 @@ using Microsoft.CodeAnalysis.Scripting.Hosting;
 
 namespace Aptacode.StateNet.Network.Connections
 {
+
     public sealed class ConnectionWeightScriptCompiler
     {
         private static readonly Script<int> Script = GetScript();

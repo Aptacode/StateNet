@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine.History
 {
+
     public class EngineHistory : IEngineHistory
     {
         private readonly List<Transition> _transitionLog = new List<Transition>();
@@ -18,6 +20,21 @@ namespace Aptacode.StateNet.Engine.History
             }
 
             _transitionLog.Add(new Transition(source, input, target));
+        }
+
+        public IEnumerable<Transition> GetLastTransitionsOut(string state, int count)
+        {
+            return TakeLast(TransitionLog.Where(t => t.Source == state), count);
+        }
+
+        public IEnumerable<Transition> LastTransitions(int count)
+        {
+            return TakeLast(TransitionLog, count);
+        }
+
+        public static IEnumerable<T> TakeLast<T>(IEnumerable<T> source, int N)
+        {
+            return source.Skip(Math.Max(0, source.Count() - N));
         }
 
         public int TransitionInCount(string input, string state)

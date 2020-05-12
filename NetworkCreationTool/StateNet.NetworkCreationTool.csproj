@@ -137,9 +137,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Aptacode.Wpf.Utilities\Apatacode.Wpf.Utilities\Apatacode.Wpf.Utilities.csproj">
+    <ProjectReference Include="..\Libraries\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj">
       <Project>{87656e1c-4fbc-4ba6-8ba2-c1742c7a8280}</Project>
-      <Name>Apatacode.Wpf.Utilities</Name>
+      <Name>Aptacode.Wpf.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\StateNet.WPF\StateNet.WPF.csproj">
       <Project>{629c4b29-f3b1-4307-a70a-936615639349}</Project>
