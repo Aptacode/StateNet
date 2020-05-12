@@ -16,7 +16,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #region Events
 
-        public event EventHandler<IStateNetwork> OnNetworkModified; 
+        public event EventHandler<IStateNetwork> OnNetworkModified;
 
         #endregion
 

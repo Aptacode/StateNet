@@ -8,8 +8,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <materialDesign:Card>
         <DockPanel LastChildFill="True">
-            <Button Content="Refresh" DockPanel.Dock="Bottom" Command="{Binding RefreshCommand}"/>
-                <ContentPresenter Content="{Binding GraphViewerPanel}" />
+            <Button Content="Refresh" DockPanel.Dock="Bottom" Command="{Binding RefreshCommand}" />
+            <ContentPresenter Content="{Binding GraphViewerPanel}" />
         </DockPanel>
     </materialDesign:Card>
 </UserControl>

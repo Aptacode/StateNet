@@ -11,6 +11,10 @@ namespace Aptacode.StateNet.Json
 {
     public class StateNetworkJsonConverter : JsonConverter
     {
+        public static readonly string StartStatePropertyName = "StartState";
+        public static readonly string StatesPropertyName = "States";
+        public static readonly string InputsPropertyName = "Inputs";
+        public static readonly string ConnectionsPropertyName = "Connections";
         public override bool CanWrite => false;
 
         public override bool CanConvert(Type objectType)
@@ -29,11 +33,6 @@ namespace Aptacode.StateNet.Json
         {
             ToJson(value as StateNetwork).WriteTo(writer);
         }
-
-        public static readonly string StartStatePropertyName = "StartState";
-        public static readonly string StatesPropertyName = "States";
-        public static readonly string InputsPropertyName = "Inputs";
-        public static readonly string ConnectionsPropertyName = "Connections";
 
         public static IStateNetwork FromJSon(JObject jObject)
         {

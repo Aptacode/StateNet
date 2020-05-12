@@ -31,10 +31,14 @@ namespace Aptacode.StateNet.Engine
             cancellationToken = cancellationTokenSource.Token;
         }
 
-        public State CurrentState { get; private set; } = null;
+        public State CurrentState { get; private set; }
 
         public IEngineHistory History { get; }
-        public bool IsRunning() => CurrentState?.IsEnd() == false;
+
+        public bool IsRunning()
+        {
+            return CurrentState?.IsEnd() == false;
+        }
 
         public event EventHandler<EngineStartedEventArgs> OnStarted;
 

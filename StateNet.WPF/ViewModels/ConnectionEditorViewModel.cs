@@ -60,7 +60,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public ObservableCollection<StateViewModel> States { get; set; } = new ObservableCollection<StateViewModel>();
         public ObservableCollection<InputViewModel> Inputs { get; set; } = new ObservableCollection<InputViewModel>();
 
-
         #endregion
 
         #region Commands

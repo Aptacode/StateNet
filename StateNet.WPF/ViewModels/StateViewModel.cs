@@ -49,8 +49,10 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public void DeleteConnection(ConnectionViewModel selectedConnection)
         {
-            if(selectedConnection != null)
+            if (selectedConnection != null)
+            {
                 Model.Remove(selectedConnection.Model);
+            }
 
             Load();
         }
@@ -97,7 +99,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
             }
         }
 
-        public ObservableCollection<ConnectionViewModel> Connections { get; set; } = new ObservableCollection<ConnectionViewModel>();
+        public ObservableCollection<ConnectionViewModel> Connections { get; set; } =
+            new ObservableCollection<ConnectionViewModel>();
 
         #endregion
 

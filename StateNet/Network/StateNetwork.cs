@@ -15,9 +15,6 @@ namespace Aptacode.StateNet.Network
     [JsonConverter(typeof(StateNetworkJsonConverter))]
     public class StateNetwork : IStateNetwork
     {
-        public HashSet<Input> Inputs { get; } = new HashSet<Input>();
-        public HashSet<State> States { get; } = new HashSet<State>();
-
         public StateNetwork()
         {
             ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute),
@@ -45,6 +42,9 @@ namespace Aptacode.StateNet.Network
                     new ConnectionWeight(connectionInfo.Expression));
             });
         }
+
+        public HashSet<Input> Inputs { get; } = new HashSet<Input>();
+        public HashSet<State> States { get; } = new HashSet<State>();
 
         /// <summary>
         ///     Returns true if the Network:
@@ -381,7 +381,7 @@ namespace Aptacode.StateNet.Network
 
         public override int GetHashCode()
         {
-            return (Connections, States: States, Inputs: Inputs, StartState).GetHashCode();
+            return (Connections, States, Inputs, StartState).GetHashCode();
         }
 
         public override bool Equals(object obj)

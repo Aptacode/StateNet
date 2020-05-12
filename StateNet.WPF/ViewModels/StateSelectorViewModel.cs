@@ -17,7 +17,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public EventHandler<StateViewModel> OnStateSelected { get; set; }
         public EventHandler<StateViewModel> OnStateRenamed { get; set; }
 
-        
         #endregion
 
         #region Methods

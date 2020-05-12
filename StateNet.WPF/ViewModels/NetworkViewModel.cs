@@ -6,7 +6,6 @@ using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.WpfGraphControl;
 using Prism.Commands;
 using Prism.Mvvm;
-using Color = Microsoft.Msagl.Drawing.Color;
 
 namespace Aptacode.StateNet.WPF.ViewModels
 {
@@ -17,10 +16,17 @@ namespace Aptacode.StateNet.WPF.ViewModels
             SetupGraphViewerPanel();
         }
 
+        #region Events
+
+        public EventHandler<StateViewModel> OnStateSelected { get; set; }
+
+        #endregion
+
         #region Methods
+
         private void SetupGraphViewerPanel()
         {
-            GraphViewerPanel = new DockPanel { ClipToBounds = true };
+            GraphViewerPanel = new DockPanel {ClipToBounds = true};
         }
 
         private void SetupGraphViewer()
@@ -29,12 +35,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
             _graphViewer.BindToPanel(GraphViewerPanel);
             _graphViewer.MouseDown += GraphViewer_MouseDown;
         }
+
         public void Load()
         {
             SetupGraphViewer();
             _graphViewer.Graph = CreateGraph("TestGraph");
             _graphViewer.Invalidate();
-
         }
 
         private Graph CreateGraph(string name)
@@ -43,7 +49,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
             var newGraph = new Graph(name)
             {
-                Attr = { LayerDirection = LayerDirection.BT },
+                Attr = {LayerDirection = LayerDirection.BT},
 
                 LayoutAlgorithmSettings =
                 {
@@ -62,8 +68,11 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
                 foreach (var networkConnection in StateNetwork.Model.GetConnections(state))
                 {
-                    if(networkConnection.Source == null || networkConnection.Input == null || networkConnection.Target == null)
+                    if (networkConnection.Source == null || networkConnection.Input == null ||
+                        networkConnection.Target == null)
+                    {
                         continue;
+                    }
 
                     if (node.OutEdges.Count(edge =>
                         edge.LabelText == networkConnection.Input.Name &&
@@ -86,13 +95,8 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         #endregion
 
-        #region Events
-
-        public EventHandler<StateViewModel> OnStateSelected { get; set; }
-
-        #endregion
-
         #region Properties
+
         private Color selectedNodeColor = Color.Black;
 
         private StateNetworkViewModel _stateNetwork;
@@ -158,7 +162,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
                 return;
             }
 
-            var drawingNode = (Node)_selectedNode.DrawingObject;
+            var drawingNode = (Node) _selectedNode.DrawingObject;
 
             drawingNode.Attr.Color = color;
 
@@ -179,7 +183,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public DelegateCommand RefreshCommand =>
             _refreshCommand ?? (_refreshCommand = new DelegateCommand(Update));
-
 
         #endregion
     }

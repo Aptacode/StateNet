@@ -6,7 +6,6 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Engine.History
 {
-
     public class EngineHistory : IEngineHistory
     {
         private readonly List<Transition> _transitionLog = new List<Transition>();
@@ -32,11 +31,6 @@ namespace Aptacode.StateNet.Engine.History
             return TakeLast(TransitionLog, count);
         }
 
-        public static IEnumerable<T> TakeLast<T>(IEnumerable<T> source, int N)
-        {
-            return source.Skip(Math.Max(0, source.Count() - N));
-        }
-
         public int TransitionInCount(string input, string state)
         {
             return TransitionLog.Count(transition =>
@@ -49,6 +43,11 @@ namespace Aptacode.StateNet.Engine.History
             return TransitionLog.Count(transition =>
                 transition.Source.Name == state &&
                 transition.Input.Name == input);
+        }
+
+        public static IEnumerable<T> TakeLast<T>(IEnumerable<T> source, int N)
+        {
+            return source.Skip(Math.Max(0, source.Count() - N));
         }
 
         #region Inputs

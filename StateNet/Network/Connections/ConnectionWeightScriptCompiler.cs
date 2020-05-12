@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Aptacode.StateNet.Engine.History;
@@ -10,7 +9,6 @@ using Microsoft.CodeAnalysis.Scripting.Hosting;
 
 namespace Aptacode.StateNet.Network.Connections
 {
-
     public sealed class ConnectionWeightScriptCompiler
     {
         private static readonly Script<int> Script = GetScript();
@@ -19,9 +17,9 @@ namespace Aptacode.StateNet.Network.Connections
         {
             var scriptOptions = ScriptOptions.Default;
             var mscorlib = typeof(object).GetTypeInfo().Assembly;
-            var systemCore = typeof(System.Linq.Enumerable).GetTypeInfo().Assembly;
+            var systemCore = typeof(Enumerable).GetTypeInfo().Assembly;
 
-            var references = new[] { mscorlib, systemCore };
+            var references = new[] {mscorlib, systemCore};
             scriptOptions = scriptOptions.AddReferences(references);
 
             using (var interactiveLoader = new InteractiveAssemblyLoader())
@@ -37,7 +35,8 @@ namespace Aptacode.StateNet.Network.Connections
                 scriptOptions = scriptOptions.AddImports("System.Collections.Generic");
 
                 // Initialize script with custom interactive assembly loader
-                return CSharpScript.Create<int>($"default ({typeof(int).FullName})", scriptOptions, typeof(IEngineHistory), interactiveLoader);
+                return CSharpScript.Create<int>($"default ({typeof(int).FullName})", scriptOptions,
+                    typeof(IEngineHistory), interactiveLoader);
             }
         }
 
