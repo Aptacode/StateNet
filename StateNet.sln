@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.NetworkCreationToo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.WPF", "StateNet.WPF\StateNet.WPF.csproj", "{629C4B29-F3B1-4307-A70A-936615639349}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{B2EFCDC0-9EEE-41FC-A898-24217B54C180}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aptacode.Wpf.Utilities", "Libraries\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj", "{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +35,6 @@ Global
 		{629C4B29-F3B1-4307-A70A-936615639349}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{629C4B29-F3B1-4307-A70A-936615639349}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{629C4B29-F3B1-4307-A70A-936615639349}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,7 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D4D34728-8E06-45E2-809D-A5EEB67522CE} = {F2F08E3E-0CA4-4740-B242-0911B6B202A9}
 		{629C4B29-F3B1-4307-A70A-936615639349} = {F2F08E3E-0CA4-4740-B242-0911B6B202A9}
-		{87656E1C-4FBC-4BA6-8BA2-C1742C7A8280} = {B2EFCDC0-9EEE-41FC-A898-24217B54C180}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB33CEE6-5D6E-4C2E-A020-433C5B26A297}

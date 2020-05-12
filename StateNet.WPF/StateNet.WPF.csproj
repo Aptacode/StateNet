@@ -34,6 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aptacode.CSharp.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aptacode.CSharp.Utilities.1.0.0\lib\net472\Aptacode.CSharp.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aptacode.Wpf.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aptacode.Wpf.Utilities.1.0.0\lib\net472\Aptacode.Wpf.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AutomaticGraphLayout, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\AutomaticGraphLayout.1.1.7\lib\netstandard2.0\AutomaticGraphLayout.dll</HintPath>
     </Reference>
@@ -127,10 +135,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities\Aptacode.Wpf.Utilities.csproj">
-      <Project>{87656e1c-4fbc-4ba6-8ba2-c1742c7a8280}</Project>
-      <Name>Aptacode.Wpf.Utilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StateNet\StateNet.csproj">
       <Project>{e77792b2-6683-4f76-95fb-3aa79f0bf1a8}</Project>
       <Name>StateNet</Name>
