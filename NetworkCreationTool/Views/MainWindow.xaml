@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:views="clr-namespace:Aptacode.StateNet.WPF.Views;assembly=Aptacode.StateNet.WPF"
+        xmlns:views="clr-namespace:Aptacode.StateNet.Wpf.Views;assembly=Aptacode.StateNet.Wpf"
         mc:Ignorable="d"
         Title="Network Creation Tool" Height="720" Width="1280">
     <Window.Resources>

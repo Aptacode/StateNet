@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
-using Aptacode.StateNet.WPF.ViewModels;
+using Aptacode.StateNet.Wpf.ViewModels;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -17,6 +17,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
         {
             NetworkViewModel = new NetworkViewModel();
         }
+
         #region EventHandlers
 
         private void OnStateSelected(object sender, StateViewModel e)
@@ -43,6 +44,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             {
                 return;
             }
+
             var jsonString = File.ReadAllText(_selectedFilePath);
             _network = JsonConvert.DeserializeObject<StateNetwork>(jsonString);
             StateNetworkViewModel = new StateNetworkViewModel(_network);
@@ -139,7 +141,6 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             set => SetProperty(ref _networkViewModel, value);
         }
 
-        
         #endregion
 
         #region Properties

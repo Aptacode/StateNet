@@ -143,9 +143,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StateNet.WPF\StateNet.WPF.csproj">
+    <ProjectReference Include="..\StateNet.WPF\StateNet.Wpf.csproj">
       <Project>{629c4b29-f3b1-4307-a70a-936615639349}</Project>
-      <Name>StateNet.WPF</Name>
+      <Name>StateNet.Wpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\StateNet\StateNet.csproj">
       <Project>{e77792b2-6683-4f76-95fb-3aa79f0bf1a8}</Project>

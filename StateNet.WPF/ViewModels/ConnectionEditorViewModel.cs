@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Prism.Commands;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class ConnectionEditorViewModel : BindableBase
     {

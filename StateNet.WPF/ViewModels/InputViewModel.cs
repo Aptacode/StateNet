@@ -2,7 +2,7 @@
 using Aptacode.StateNet.Network;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class InputViewModel : BindableBase, IEquatable<InputViewModel>
     {

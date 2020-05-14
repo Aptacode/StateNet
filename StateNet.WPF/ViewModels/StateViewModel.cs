@@ -5,7 +5,7 @@ using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Network.Connections;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class StateViewModel : BindableBase, IEquatable<StateViewModel>
     {
@@ -88,13 +88,11 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public string Name
         {
             get => _name;
-            set
-            {
-                SetProperty(ref _name, value);
-            }
+            set => SetProperty(ref _name, value);
         }
 
-        public ObservableCollection<ConnectionViewModel> Connections { get; set; } = new ObservableCollection<ConnectionViewModel>();
+        public ObservableCollection<ConnectionViewModel> Connections { get; set; } =
+            new ObservableCollection<ConnectionViewModel>();
 
         #endregion
 

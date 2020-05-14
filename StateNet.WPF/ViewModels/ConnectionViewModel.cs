@@ -1,7 +1,7 @@
 ﻿using Aptacode.StateNet.Network.Connections;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class ConnectionViewModel : BindableBase
     {

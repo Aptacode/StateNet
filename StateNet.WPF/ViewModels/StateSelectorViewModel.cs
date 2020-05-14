@@ -3,7 +3,7 @@ using Aptacode.StateNet.Network;
 using Prism.Commands;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class StateSelectorViewModel : BindableBase
     {
@@ -16,7 +16,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
 
         public EventHandler<StateViewModel> OnStateSelected { get; set; }
         public EventHandler<StateViewModel> OnStateRenamed { get; set; }
-
 
         #endregion
 
@@ -67,7 +66,7 @@ namespace Aptacode.StateNet.WPF.ViewModels
         private DelegateCommand<string> _updateCommand;
 
         public DelegateCommand<string> UpdateCommand =>
-            _updateCommand ?? (_updateCommand = new DelegateCommand<string>((string newName) =>
+            _updateCommand ?? (_updateCommand = new DelegateCommand<string>(newName =>
             {
                 var alteredState = SelectedState;
                 StateNetwork.Clear();
@@ -86,7 +85,6 @@ namespace Aptacode.StateNet.WPF.ViewModels
             {
                 StateNetwork.Add(new State($"State {StateNetwork.States.Count + 1}"));
             }));
-
 
         #endregion
     }

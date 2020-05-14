@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F2F08E3E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.NetworkCreationTool", "NetworkCreationTool\StateNet.NetworkCreationTool.csproj", "{D4D34728-8E06-45E2-809D-A5EEB67522CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.WPF", "StateNet.WPF\StateNet.WPF.csproj", "{629C4B29-F3B1-4307-A70A-936615639349}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.Wpf", "StateNet.Wpf\StateNet.Wpf.csproj", "{629C4B29-F3B1-4307-A70A-936615639349}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

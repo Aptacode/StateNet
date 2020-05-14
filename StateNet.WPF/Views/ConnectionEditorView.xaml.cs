@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Aptacode.StateNet.WPF.Views
+namespace Aptacode.StateNet.Wpf.Views
 {
     /// <summary>
     ///     Interaction logic for InputSelectorView.xaml

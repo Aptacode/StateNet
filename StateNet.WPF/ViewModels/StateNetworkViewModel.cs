@@ -5,7 +5,7 @@ using Aptacode.StateNet.Interfaces;
 using Aptacode.StateNet.Network;
 using Prism.Mvvm;
 
-namespace Aptacode.StateNet.WPF.ViewModels
+namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class StateNetworkViewModel : BindableBase
     {
@@ -19,6 +19,12 @@ namespace Aptacode.StateNet.WPF.ViewModels
         public event EventHandler<IStateNetwork> OnNetworkModified;
 
         #endregion
+
+        public void Clear()
+        {
+            States.Clear();
+            Inputs.Clear();
+        }
 
         #region Methods
 
@@ -81,12 +87,5 @@ namespace Aptacode.StateNet.WPF.ViewModels
         }
 
         #endregion
-
-        public void Clear()
-        {
-            States.Clear();
-            Inputs.Clear();
-
-        }
     }
 }
