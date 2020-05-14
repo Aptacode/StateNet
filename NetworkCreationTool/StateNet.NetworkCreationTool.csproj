@@ -40,6 +40,12 @@
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aptacode.CSharp.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aptacode.CSharp.Utilities.1.0.0\lib\net472\Aptacode.CSharp.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Aptacode.Wpf.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aptacode.Wpf.Utilities.1.0.0\lib\net472\Aptacode.Wpf.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="AutomaticGraphLayout, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutomaticGraphLayout.1.1.6\lib\netstandard2.0\AutomaticGraphLayout.dll</HintPath>
     </Reference>
