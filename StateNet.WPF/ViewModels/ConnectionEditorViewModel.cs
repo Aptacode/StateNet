@@ -10,6 +10,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         public ConnectionEditorViewModel(StateNetworkViewModel stateNetworkViewModel)
         {
             StateNetwork = stateNetworkViewModel;
+            Load();
         }
 
         #region Events
@@ -20,9 +21,26 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         #region Methods
 
+        public void Clear()
+        {
+            States.Clear();
+            Inputs.Clear();
+        }
+
+        public void Load()
+        {
+            States.AddRange(StateNetwork.States);
+            Inputs.AddRange(StateNetwork.Inputs);
+        }
+
+        public void Refresh()
+        {
+            Clear();
+            Load();
+        }
         #endregion
 
-        #region PropertiesI
+        #region Properties
 
         private ConnectionViewModel _selectedConnection;
 
@@ -40,11 +58,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _selectedState, value);
-                States.Clear();
-                Inputs.Clear();
-
-                States.AddRange(StateNetwork.States);
-                Inputs.AddRange(StateNetwork.Inputs);
+                Refresh();
             }
         }
 
@@ -67,7 +81,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         private DelegateCommand _deleteCommand;
 
         public DelegateCommand DeleteCommand =>
-            _deleteCommand ?? (_deleteCommand = new DelegateCommand(async () =>
+            _deleteCommand ?? (_deleteCommand = new DelegateCommand(() =>
             {
                 if (SelectedState == null)
                 {
@@ -88,7 +102,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         private DelegateCommand _createCommand;
 
         public DelegateCommand CreateCommand =>
-            _createCommand ?? (_createCommand = new DelegateCommand(async () =>
+            _createCommand ?? (_createCommand = new DelegateCommand(() =>
             {
                 if (SelectedState == null)
                 {

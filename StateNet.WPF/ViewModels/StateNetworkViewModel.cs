@@ -20,13 +20,15 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         #endregion
 
+
+
+        #region Methods
+
         public void Clear()
         {
             States.Clear();
             Inputs.Clear();
         }
-
-        #region Methods
 
         public void Load()
         {

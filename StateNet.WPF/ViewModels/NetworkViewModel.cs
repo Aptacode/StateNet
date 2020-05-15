@@ -39,7 +39,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         public void Load()
         {
             SetupGraphViewer();
-            _graphViewer.Graph = CreateGraph("TestGraph");
+            _graphViewer.Graph = CreateGraph("Design Graph");
             _graphViewer.Invalidate();
         }
 
@@ -171,7 +171,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         public void Update()
         {
-            _graphViewer.Graph = CreateGraph("TestGraph");
+            _graphViewer.Graph = CreateGraph("Design Graph");
             _graphViewer.Invalidate();
         }
 

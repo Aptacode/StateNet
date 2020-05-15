@@ -15,7 +15,7 @@ namespace Aptacode.StateNet.Json
         public static readonly string StatesPropertyName = "States";
         public static readonly string InputsPropertyName = "Inputs";
         public static readonly string ConnectionsPropertyName = "Connections";
-        public override bool CanWrite => false;
+        public override bool CanWrite => true;
 
         public override bool CanConvert(Type objectType)
         {
@@ -31,7 +31,9 @@ namespace Aptacode.StateNet.Json
         public override void WriteJson(JsonWriter writer,
             object value, JsonSerializer serializer)
         {
-            ToJson(value as StateNetwork).WriteTo(writer);
+            writer.Formatting = Formatting.Indented;
+            var jsonObject = ToJson(value as StateNetwork);
+            jsonObject.WriteTo(writer);
         }
 
         public static IStateNetwork FromJSon(JObject jObject)

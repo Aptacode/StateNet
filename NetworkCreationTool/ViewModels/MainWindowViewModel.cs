@@ -28,7 +28,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
         #endregion
 
 
-        public void New()
+        private void New()
         {
             _selectedFilePath = string.Empty;
             _network = new StateNetwork();
@@ -37,7 +37,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             StateNetworkViewModel = new StateNetworkViewModel(_network);
         }
 
-        public void Load()
+        private void Load()
         {
             _selectedFilePath = SelectFile();
             if (string.IsNullOrEmpty(_selectedFilePath))
@@ -50,7 +50,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             StateNetworkViewModel = new StateNetworkViewModel(_network);
         }
 
-        public void Save()
+        private void Save()
         {
             while (string.IsNullOrEmpty(_selectedFilePath))
             {
@@ -58,10 +58,10 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             }
 
             var jsonString = JsonConvert.SerializeObject(_network);
-            File.AppendAllText(_selectedFilePath, jsonString);
+            File.WriteAllText(_selectedFilePath, jsonString);
         }
 
-        public string SaveNew()
+        private string SaveNew()
         {
             var dlg = new SaveFileDialog();
             dlg.FileName = "NewNetwork"; // Default file name
@@ -75,7 +75,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
             return result == true ? dlg.FileName : string.Empty;
         }
 
-        public string SelectFile()
+        private string SelectFile()
         {
             var fileDialog = new OpenFileDialog
             {
@@ -83,15 +83,12 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
                 Filter = "Json Files (*.json) |*.json;"
             };
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                return fileDialog.FileName;
-            }
-
-            return string.Empty;
+            return fileDialog.ShowDialog() == DialogResult.OK ? fileDialog.FileName : string.Empty;
         }
 
         #region Properties
+        private IStateNetwork _network;
+        private string _selectedFilePath;
 
         private StateNetworkViewModel _stateNetworkViewModel;
 
@@ -143,12 +140,6 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
 
         #endregion
 
-        #region Properties
-
-        private IStateNetwork _network;
-        private string _selectedFilePath;
-
-        #endregion
 
         #region Commands
 
