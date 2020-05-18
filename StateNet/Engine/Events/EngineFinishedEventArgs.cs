@@ -2,13 +2,14 @@
 
 namespace Aptacode.StateNet.Engine.Events
 {
-    public class EngineStartedEventArgs : EngineEventArgs
+    public class EngineFinishedEventArgs : EngineEventArgs
     {
-        public EngineStartedEventArgs(State startState)
+        public EngineFinishedEventArgs(State endState)
         {
-            StartState = startState;
+            EndState = endState;
         }
 
-        public State StartState { get; set; }
+        public State EndState { get; set; }
+        public override string ToString() => $"Engine Finished Event: End State({EndState.ToString()})";
     }
 }

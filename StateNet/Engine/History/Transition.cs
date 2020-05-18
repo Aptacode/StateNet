@@ -14,5 +14,7 @@ namespace Aptacode.StateNet.Engine.History
         public State Source { get; }
         public Input Input { get; }
         public State Target { get; }
+
+        public override string ToString() => $"Transition: Source({Source.ToString()}) Input({Input.ToString()}) Target({Target.ToString()})";
     }
 }
