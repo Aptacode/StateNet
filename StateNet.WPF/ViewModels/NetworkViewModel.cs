@@ -97,7 +97,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         #region Properties
 
-        private Color selectedNodeColor = Color.Black;
+        private Color selectedNodeColor = Color.Blue;
 
         private StateNetworkViewModel _stateNetwork;
 
@@ -129,15 +129,15 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         private void GraphViewer_MouseDown(object sender, MsaglMouseEventArgs e)
         {
-            outputSelectedItem();
+            OutputSelectedItem();
         }
 
-        private void outputSelectedItem()
+        private void OutputSelectedItem()
         {
             var node = _graphViewer.ObjectUnderMouseCursor as IViewerNode;
             var selectedState = StateNetwork.Model.GetState(node?.Node?.LabelText);
             var previousState = StateNetwork.Model.GetState(_selectedNode?.Node?.LabelText);
-            var selectedColor = previousState == StateNetwork.Model.StartState ? Color.Green : Color.Black;
+            var selectedColor = previousState.Equals(StateNetwork.Model.StartState) ? Color.Green : Color.Black;
             SetColor(selectedColor);
 
             if (_selectedNode == node || selectedState == null)
@@ -147,7 +147,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
             OnStateSelected?.Invoke(this, StateNetwork.States.FirstOrDefault(s => s.Name == node?.Node?.LabelText));
 
-            selectedColor = selectedState.Equals(StateNetwork.Model.StartState) ? Color.Green : Color.Blue;
+            selectedColor = selectedState.Equals(StateNetwork.Model.StartState) ? Color.Green : selectedNodeColor;
 
             _selectedNode = node;
 

@@ -9,11 +9,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 {
     public class StateViewModel : BindableBase, IEquatable<StateViewModel>
     {
-        public StateViewModel(State model) : this(model, false)
-        {
-        }
-
-        public StateViewModel(State model, bool loadConnections)
+        public StateViewModel(State model, bool loadConnections = false)
         {
             Model = model;
             LoadConnections = loadConnections;

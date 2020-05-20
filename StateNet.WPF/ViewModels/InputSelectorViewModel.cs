@@ -40,7 +40,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         private DelegateCommand _deleteCommand;
 
         public DelegateCommand DeleteCommand =>
-            _deleteCommand ?? (_deleteCommand = new DelegateCommand(async () =>
+            _deleteCommand ?? (_deleteCommand = new DelegateCommand(() =>
             {
                 if (SelectedInput == null)
                 {
@@ -59,7 +59,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         private DelegateCommand _createCommand;
 
         public DelegateCommand CreateCommand =>
-            _createCommand ?? (_createCommand = new DelegateCommand(async () =>
+            _createCommand ?? (_createCommand = new DelegateCommand(() =>
             {
                 StateNetwork.Add(new Input($"Input {StateNetwork.Inputs.Count + 1}"));
             }));
