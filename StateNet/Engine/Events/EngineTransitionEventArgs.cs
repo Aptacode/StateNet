@@ -17,9 +17,13 @@ namespace Aptacode.StateNet.Engine.Events
 
         public Transition Transition { get; set; }
 
+<<<<<<< HEAD
         public override string ToString()
         {
             return $"Engine Transition Event: {Transition}";
         }
+=======
+        public override string ToString() => $"Engine Transition Event: {Transition.ToString()}";
+>>>>>>> a5b2b31a57b874631e2362be2b387ce6a95baaa4
     }
 }
