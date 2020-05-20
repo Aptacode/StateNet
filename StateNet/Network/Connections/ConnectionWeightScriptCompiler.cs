@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Scripting.Hosting;
 
 namespace Aptacode.StateNet.Network.Connections
 {
-    public sealed class ConnectionWeightScriptCompiler
+    public static class ConnectionWeightScriptCompiler
     {
         private static readonly Script<int> Script = GetScript();
 
-        public static Script<int> GetScript()
+        private static Script<int> GetScript()
         {
             var scriptOptions = ScriptOptions.Default;
             var mscorlib = typeof(object).GetTypeInfo().Assembly;

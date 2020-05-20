@@ -136,17 +136,19 @@ namespace Aptacode.StateNet.Engine
                 return;
             }
 
-            var nextState = GetNextState(CurrentState, input);
+            var lastState = CurrentState;
+            var nextState = GetNextState(lastState, input);
             if (nextState == null)
             {
                 return;
             }
 
-            History.Log(CurrentState, input, nextState);
+
+            History.Log(lastState, input, nextState);
 
             new TaskFactory()
                 .StartNew(
-                    () => OnTransition?.Invoke(this, new EngineTransitionEventArgs(CurrentState, input, nextState)),
+                    () => OnTransition?.Invoke(this, new EngineTransitionEventArgs(lastState, input, nextState)),
                     cancellationToken)
                 .ConfigureAwait(false);
 

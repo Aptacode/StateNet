@@ -11,11 +11,7 @@ namespace Aptacode.StateNet.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class ConnectionAttribute : Attribute
     {
-        public ConnectionAttribute(string input, string target) : this(input, target, "1")
-        {
-        }
-
-        public ConnectionAttribute(string input, string target, string expression)
+        public ConnectionAttribute(string input, string target, string expression = "1")
         {
             Target = target;
             Input = input;

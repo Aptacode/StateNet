@@ -21,7 +21,6 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         #endregion
 
 
-
         #region Methods
 
         public void Clear()

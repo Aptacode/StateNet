@@ -90,8 +90,9 @@ namespace Aptacode.StateNet.Network.Connections
                 weightFunction = ConnectionWeightScriptCompiler.Compile(expression);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Write(ex.ToString());
                 weightFunction = null;
                 return false;
             }

@@ -2,7 +2,8 @@
 
 namespace Aptacode.StateNet.Engine.Events
 {
-    public class EngineEventArgs : EventArgs
+    public abstract class EngineEventArgs : EventArgs
     {
+        public abstract override string ToString();
     }
 }

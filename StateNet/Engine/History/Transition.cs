@@ -14,5 +14,10 @@ namespace Aptacode.StateNet.Engine.History
         public State Source { get; }
         public Input Input { get; }
         public State Target { get; }
+
+        public override string ToString()
+        {
+            return $"Transition: Source({Source}) Input({Input}) Target({Target})";
+        }
     }
 }

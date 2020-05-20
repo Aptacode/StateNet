@@ -45,9 +45,10 @@ namespace Aptacode.StateNet.Engine.History
                 transition.Input.Name == input);
         }
 
-        public static IEnumerable<T> TakeLast<T>(IEnumerable<T> source, int N)
+        public static IEnumerable<T> TakeLast<T>(IEnumerable<T> source, int count)
         {
-            return source.Skip(Math.Max(0, source.Count() - N));
+            var sourceList = source.ToList();
+            return sourceList.Skip(Math.Max(0, sourceList.Count - count));
         }
 
         #region Inputs

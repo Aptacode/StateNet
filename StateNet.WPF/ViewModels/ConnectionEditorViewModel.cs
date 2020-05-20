@@ -38,6 +38,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             Clear();
             Load();
         }
+
         #endregion
 
         #region Properties

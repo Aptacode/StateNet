@@ -20,13 +20,13 @@ namespace Aptacode.StateNet.Extensions
                 return true;
             }
 
-            if (memberInfo.GetType().IsSubclassOf(typeof(FieldInfo)))
+            if (!memberInfo.GetType().IsSubclassOf(typeof(FieldInfo)))
             {
-                ((FieldInfo) memberInfo).SetValue(obj, value);
-                return true;
+                return false;
             }
 
-            return false;
+            ((FieldInfo) memberInfo).SetValue(obj, value);
+            return true;
         }
 
         public static bool TryGetValue<T>(this MemberInfo memberInfo, object obj, out T output)

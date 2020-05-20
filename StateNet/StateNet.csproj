@@ -16,8 +16,8 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1.4</Version>
-    <AssemblyVersion>1.1.1.4</AssemblyVersion>
+    <Version>1.1.1.5</Version>
+    <AssemblyVersion>1.1.1.5</AssemblyVersion>
     <LangVersion>7.3</LangVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
   </PropertyGroup>
@@ -52,6 +52,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.5.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
   </ItemGroup>
 
 </Project>
