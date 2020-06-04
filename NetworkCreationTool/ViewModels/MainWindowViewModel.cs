@@ -40,10 +40,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
         private void Load()
         {
             _selectedFilePath = SelectFile();
-            if (string.IsNullOrEmpty(_selectedFilePath))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(_selectedFilePath)) return;
 
             var jsonString = File.ReadAllText(_selectedFilePath);
             _network = JsonConvert.DeserializeObject<StateNetwork>(jsonString);
@@ -52,10 +49,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
 
         private void Save()
         {
-            while (string.IsNullOrEmpty(_selectedFilePath))
-            {
-                _selectedFilePath = SaveNew();
-            }
+            while (string.IsNullOrEmpty(_selectedFilePath)) _selectedFilePath = SaveNew();
 
             var jsonString = JsonConvert.SerializeObject(_network);
             File.WriteAllText(_selectedFilePath, jsonString);
@@ -87,6 +81,7 @@ namespace Aptacode.StateNet.NetworkCreationTool.ViewModels
         }
 
         #region Properties
+
         private IStateNetwork _network;
         private string _selectedFilePath;
 

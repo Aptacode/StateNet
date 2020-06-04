@@ -20,10 +20,7 @@ namespace Aptacode.StateNet.Tests.Mocks
 
         public int Generate(int min, int max)
         {
-            if (_callCount >= _sequence.Count)
-            {
-                _callCount = 0;
-            }
+            if (_callCount >= _sequence.Count) _callCount = 0;
 
             return _sequence.ElementAt(_callCount++);
         }

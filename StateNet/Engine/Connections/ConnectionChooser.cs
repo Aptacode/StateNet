@@ -32,19 +32,13 @@ namespace Aptacode.StateNet.Engine.Connections
         /// <returns></returns>
         public Connection Choose(IEnumerable<Connection> connections)
         {
-            if (connections == null)
-            {
-                return null;
-            }
+            if (connections == null) return null;
 
             var connectionWeightDistribution = GetConnectionDistribution(connections);
 
             //If the total weight is 0 no state can be entered
             var totalWeight = connectionWeightDistribution.SumWeights();
-            if (totalWeight == 0)
-            {
-                return null;
-            }
+            if (totalWeight == 0) return null;
 
             //Get a random number between 1 and the totalWeight + 1
             var choice = _randomNumberGenerator.Generate(1, totalWeight + 1);
@@ -54,10 +48,7 @@ namespace Aptacode.StateNet.Engine.Connections
             using (var iterator = connectionWeightDistribution.GetWeights().GetEnumerator())
             {
                 var weightCounter = 0;
-                while (weightCounter < choice && iterator.MoveNext())
-                {
-                    weightCounter += iterator.Current.Item2;
-                }
+                while (weightCounter < choice && iterator.MoveNext()) weightCounter += iterator.Current.Item2;
 
                 return iterator.Current.Item1;
             }
@@ -74,9 +65,7 @@ namespace Aptacode.StateNet.Engine.Connections
             var connectionDistribution = new ConnectionDistribution();
 
             foreach (var connection in connections)
-            {
                 connectionDistribution.Add(connection, connection.ConnectionWeight.Evaluate(_engineHistory));
-            }
 
             return connectionDistribution;
         }

@@ -70,17 +70,13 @@ namespace Aptacode.StateNet.Wpf.ViewModels
                 {
                     if (networkConnection.Source == null || networkConnection.Input == null ||
                         networkConnection.Target == null)
-                    {
                         continue;
-                    }
 
                     if (node.OutEdges.Count(edge =>
                         edge.LabelText == networkConnection.Input.Name &&
                         edge.Target == networkConnection.Target.Name) == 0)
-                    {
                         newGraph.AddEdge(networkConnection.Source.Name, networkConnection.Input.Name,
                             networkConnection.Target.Name);
-                    }
                 }
             }
 
@@ -140,10 +136,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             var selectedColor = previousState.Equals(StateNetwork.Model.StartState) ? Color.Green : Color.Black;
             SetColor(selectedColor);
 
-            if (_selectedNode == node || selectedState == null)
-            {
-                return;
-            }
+            if (_selectedNode == node || selectedState == null) return;
 
             OnStateSelected?.Invoke(this, StateNetwork.States.FirstOrDefault(s => s.Name == node?.Node?.LabelText));
 
@@ -157,10 +150,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         private void SetColor(Color color)
         {
-            if (_selectedNode == null)
-            {
-                return;
-            }
+            if (_selectedNode == null) return;
 
             var drawingNode = (Node) _selectedNode.DrawingObject;
 

@@ -37,10 +37,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _name, value);
-                if (Model != null)
-                {
-                    Model.Name = _name;
-                }
+                if (Model != null) Model.Name = _name;
             }
         }
 

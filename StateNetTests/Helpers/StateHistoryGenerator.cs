@@ -15,17 +15,12 @@ namespace Aptacode.StateNet.Tests.Helpers
         {
             var history = new EngineHistory();
 
-            if (sequence.Length == 0)
-            {
-                return history;
-            }
+            if (sequence.Length == 0) return history;
 
             history.SetStart(new State(sequence[0].ToString()));
 
             for (var i = 1; i < sequence.Length; i++)
-            {
                 history.Log(new State((i - 1).ToString()), new Input("next"), new State(i.ToString()));
-            }
 
             return history;
         }

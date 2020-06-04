@@ -24,10 +24,7 @@ namespace Aptacode.StateNet.Network.Connections
 
             using (var interactiveLoader = new InteractiveAssemblyLoader())
             {
-                foreach (var reference in references)
-                {
-                    interactiveLoader.RegisterDependency(reference);
-                }
+                foreach (var reference in references) interactiveLoader.RegisterDependency(reference);
 
                 // Add namespaces
                 scriptOptions = scriptOptions.AddImports("System");
@@ -48,10 +45,7 @@ namespace Aptacode.StateNet.Network.Connections
 
             return engineHistory =>
             {
-                if (engineHistory == null)
-                {
-                    engineHistory = new EngineHistory();
-                }
+                if (engineHistory == null) engineHistory = new EngineHistory();
 
                 return scriptRunner(engineHistory).Result;
             };

@@ -15,10 +15,10 @@
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Product>Aptacode.StateNet.Wpf</Product>
-    <Version>1.0.0.5</Version>
+    <Version>1.0.0.6</Version>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AssemblyVersion>1.0.0.5</AssemblyVersion>
-    <FileVersion>1.0.0.5</FileVersion>
+    <AssemblyVersion>1.0.0.6</AssemblyVersion>
+    <FileVersion>1.0.0.6</FileVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -46,11 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.CSharp.Utilities" Version="1.0.0" />
+    <PackageReference Include="Aptacode.Wpf.Utilities" Version="1.0.0.5" />
     <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
-    <PackageReference Include="Aptacode.CSharp.Utilities" version="1.0.0.1" />
-    <PackageReference Include="Aptacode.Wpf.Utilities" version="1.0.0.1" />
     <PackageReference Include="AutomaticGraphLayout" version="1.1.7" />
     <PackageReference Include="AutomaticGraphLayout.Drawing" version="1.1.7" />
     <PackageReference Include="AutomaticGraphLayout.WpfGraphControl" version="1.1.7" />

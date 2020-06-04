@@ -34,15 +34,9 @@ namespace Aptacode.StateNet.Network.Connections
             {
                 _expression = value;
 
-                if (GetStaticWeightFunction(value, out _weightFunction))
-                {
-                    return;
-                }
+                if (GetStaticWeightFunction(value, out _weightFunction)) return;
 
-                if (GetWeightFunction(value, out _weightFunction))
-                {
-                    return;
-                }
+                if (GetWeightFunction(value, out _weightFunction)) return;
 
                 _expression = DefaultExpression;
                 _weightFunction = DefaultWeightFunction;

@@ -29,10 +29,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
             Name = _model.Name;
 
-            if (_loadConnections)
-            {
-                Connections.AddRange(_model.Connections.Select(c => new ConnectionViewModel(c)));
-            }
+            if (_loadConnections) Connections.AddRange(_model.Connections.Select(c => new ConnectionViewModel(c)));
         }
 
         #endregion
@@ -45,10 +42,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         public void DeleteConnection(ConnectionViewModel selectedConnection)
         {
-            if (selectedConnection != null)
-            {
-                Model.Remove(selectedConnection.Model);
-            }
+            if (selectedConnection != null) Model.Remove(selectedConnection.Model);
 
             Load();
         }

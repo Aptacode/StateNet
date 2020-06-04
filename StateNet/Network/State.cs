@@ -44,10 +44,7 @@ namespace Aptacode.StateNet.Network
 
         public void Add(Connection connection)
         {
-            if (!connection.Source.Equals(this))
-            {
-                return;
-            }
+            if (!connection.Source.Equals(this)) return;
 
             _outputConnections.Add(connection);
         }

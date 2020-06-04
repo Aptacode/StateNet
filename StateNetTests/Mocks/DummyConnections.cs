@@ -13,10 +13,8 @@ namespace Aptacode.StateNet.Tests.Mocks
         {
             var output = new List<Connection>();
             for (var i = 0; i < choices.Length; i++)
-            {
                 output.Add(new Connection(new State(source), new Input(input), new State(i.ToString()),
                     new ConnectionWeight(choices[i])));
-            }
 
             return output;
         }
@@ -36,11 +34,9 @@ namespace Aptacode.StateNet.Tests.Mocks
             var connectionDistribution = new ConnectionDistribution();
 
             foreach (var connection in connections)
-            {
                 connectionDistribution.Add(
                     new Connection(new State(connection.Item1), new Input(connection.Item2),
                         new State(connection.Item3), new ConnectionWeight(connection.Item4)), connection.Item4);
-            }
 
             return connectionDistribution;
         }

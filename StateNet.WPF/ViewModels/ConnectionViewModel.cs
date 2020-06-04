@@ -14,9 +14,9 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         public void Load()
         {
-            SourceViewModel = new StateViewModel(_model.Source, false);
+            SourceViewModel = new StateViewModel(_model.Source);
             InputViewModel = new InputViewModel(_model.Input);
-            TargetViewModel = new StateViewModel(_model.Target, false);
+            TargetViewModel = new StateViewModel(_model.Target);
             ConnectionWeight = _model.ConnectionWeight.Expression;
         }
 
@@ -53,10 +53,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _inputViewModel, value);
-                if (Model == null)
-                {
-                    return;
-                }
+                if (Model == null) return;
 
                 Model.Input = _inputViewModel?.Model;
             }
@@ -70,10 +67,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _targetViewModel, value);
-                if (Model == null)
-                {
-                    return;
-                }
+                if (Model == null) return;
 
                 Model.Target = _targetViewModel?.Model;
             }
@@ -87,10 +81,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _connectionWeight, value);
-                if (Model == null)
-                {
-                    return;
-                }
+                if (Model == null) return;
 
                 Model.ConnectionWeight = new ConnectionWeight(_connectionWeight);
             }

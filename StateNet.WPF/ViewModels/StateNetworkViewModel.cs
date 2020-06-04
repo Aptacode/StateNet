@@ -33,10 +33,7 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         {
             Clear();
 
-            if (_model == null)
-            {
-                return;
-            }
+            if (_model == null) return;
 
             States.AddRange(_model.GetOrderedStates().Select(state => new StateViewModel(state, true)));
             Inputs.AddRange(_model.GetInputs().Select(input => new InputViewModel(input)));
