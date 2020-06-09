@@ -10,8 +10,7 @@ Discord Group for development / help
 https://discord.gg/D8MSXJB
 
 [![NuGet](https://img.shields.io/nuget/v/Aptacode.StateNet.svg?style=flat)](https://www.nuget.org/packages/Aptacode.StateNet/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bbdf96f5e1304d679e6addf01b2618a1)](https://www.codacy.com/manual/Timmoth/AptacodeStateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/AptacodeStateNet&amp;utm_campaign=Badge_Grade)
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5615809483d24f93aaaefcca36107299)](https://www.codacy.com/manual/Timmoth/Aptacode.StateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/Aptacode.StateNet&amp;utm_campaign=Badge_Grade)
 ### Overview
 
 The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Since its inception the library has grown versatile with many usecases.
