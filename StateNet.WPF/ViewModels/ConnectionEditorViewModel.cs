@@ -84,7 +84,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         public DelegateCommand DeleteCommand =>
             _deleteCommand ?? (_deleteCommand = new DelegateCommand(() =>
             {
-                if (SelectedState == null) return;
+                if (SelectedState == null)
+                {
+                    return;
+                }
 
                 SelectedState.DeleteConnection(SelectedConnection);
 
@@ -102,7 +105,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         public DelegateCommand CreateCommand =>
             _createCommand ?? (_createCommand = new DelegateCommand(() =>
             {
-                if (SelectedState == null) return;
+                if (SelectedState == null)
+                {
+                    return;
+                }
 
                 SelectedState.CreateConnection();
 

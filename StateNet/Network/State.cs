@@ -23,15 +23,9 @@ namespace Aptacode.StateNet.Network
         /// </summary>
         public string Name { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
-        public static implicit operator string(State instance)
-        {
-            return instance?.Name;
-        }
+        public static implicit operator string(State instance) => instance?.Name;
 
         #region Connections
 
@@ -44,34 +38,25 @@ namespace Aptacode.StateNet.Network
 
         public void Add(Connection connection)
         {
-            if (!connection.Source.Equals(this)) return;
+            if (!connection.Source.Equals(this))
+            {
+                return;
+            }
 
             _outputConnections.Add(connection);
         }
 
-        public bool IsEnd()
-        {
-            return _outputConnections.Count == 0;
-        }
+        public bool IsEnd() => _outputConnections.Count == 0;
 
         #endregion
 
         #region Equality
 
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
+        public override int GetHashCode() => Name.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is State other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is State other && Equals(other);
 
-        public bool Equals(State other)
-        {
-            return other != null && Name.Equals(other.Name);
-        }
+        public bool Equals(State other) => other != null && Name.Equals(other.Name);
 
         #endregion Equality
     }

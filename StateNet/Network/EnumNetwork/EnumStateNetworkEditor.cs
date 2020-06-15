@@ -10,9 +10,7 @@ namespace Aptacode.StateNet.Network.EnumNetwork
         where TStates : Enum
         where TInputs : Enum
     {
-        public EnumStateNetworkEditor(IStateNetwork stateNetwork) : base(stateNetwork)
-        {
-        }
+        public EnumStateNetworkEditor(IStateNetwork stateNetwork) : base(stateNetwork) { }
 
         public IEnumerable<Connection> this[TStates state, TInputs input] => this[state.ToString(), input.ToString()];
 
@@ -27,35 +25,17 @@ namespace Aptacode.StateNet.Network.EnumNetwork
             SetStart(state.ToString());
         }
 
-        public Input GetInput(TInputs name, bool createIfMissing)
-        {
-            return GetInput(name.ToString(), createIfMissing);
-        }
+        public Input GetInput(TInputs name, bool createIfMissing) => GetInput(name.ToString(), createIfMissing);
 
-        public State GetState(TStates name, bool createIfMissing)
-        {
-            return GetState(name.ToString(), createIfMissing);
-        }
+        public State GetState(TStates name, bool createIfMissing) => GetState(name.ToString(), createIfMissing);
 
-        public Input GetInput(TInputs name)
-        {
-            return GetInput(name.ToString(), true);
-        }
+        public Input GetInput(TInputs name) => GetInput(name.ToString(), true);
 
-        public State GetState(TStates name)
-        {
-            return GetState(name.ToString(), true);
-        }
+        public State GetState(TStates name) => GetState(name.ToString(), true);
 
-        public IEnumerable<Input> GetInputs(TStates state)
-        {
-            return GetInputs(state.ToString());
-        }
+        public IEnumerable<Input> GetInputs(TStates state) => GetInputs(state.ToString());
 
-        public IEnumerable<Connection> GetConnections(TStates state)
-        {
-            return GetConnections(state.ToString());
-        }
+        public IEnumerable<Connection> GetConnections(TStates state) => GetConnections(state.ToString());
 
         public void Connect(TStates source, TInputs input, TStates target, ConnectionWeight connectionWeight)
         {
@@ -122,14 +102,8 @@ namespace Aptacode.StateNet.Network.EnumNetwork
             RemoveInput(input.ToString());
         }
 
-        public Input CreateInput(TInputs input)
-        {
-            return CreateInput(input.ToString());
-        }
+        public Input CreateInput(TInputs input) => CreateInput(input.ToString());
 
-        public State CreateState(TStates state)
-        {
-            return CreateState(state.ToString());
-        }
+        public State CreateState(TStates state) => CreateState(state.ToString());
     }
 }

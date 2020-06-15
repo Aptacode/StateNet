@@ -17,29 +17,18 @@ namespace Aptacode.StateNet.Network.Connections
         public State Target { get; set; }
         public ConnectionWeight ConnectionWeight { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Source}({Input})->({Target}:{ConnectionWeight})";
-        }
+        public override string ToString() => $"{Source}({Input})->({Target}:{ConnectionWeight})";
 
         #region Overrides
 
-        public override int GetHashCode()
-        {
-            return (Source, Input, Target, Weight: ConnectionWeight).GetHashCode();
-        }
+        public override int GetHashCode() => (Source, Input, Target, Weight: ConnectionWeight).GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is Connection other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is Connection other && Equals(other);
 
-        public bool Equals(Connection other)
-        {
-            return other != null && Source.Equals(other.Source) && Input.Equals(other.Input) &&
-                   Target.Equals(other.Target) &&
-                   ConnectionWeight.Equals(other.ConnectionWeight);
-        }
+        public bool Equals(Connection other) =>
+            other != null && Source.Equals(other.Source) && Input.Equals(other.Input) &&
+            Target.Equals(other.Target) &&
+            ConnectionWeight.Equals(other.ConnectionWeight);
 
         #endregion Overrides
     }

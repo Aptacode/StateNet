@@ -9,9 +9,7 @@ namespace Aptacode.StateNet.Engine
     {
         public EnumStateNetEngine(IRandomNumberGenerator randomNumberGenerator, IStateNetwork stateNetwork) : base(
             randomNumberGenerator,
-            stateNetwork)
-        {
-        }
+            stateNetwork) { }
 
         public void Apply(TInput input)
         {

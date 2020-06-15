@@ -14,32 +14,17 @@ namespace Aptacode.StateNet.Network
         /// </summary>
         public string Name { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
-        public static implicit operator string(Input instance)
-        {
-            return instance?.Name;
-        }
+        public static implicit operator string(Input instance) => instance?.Name;
 
         #region Equality
 
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
+        public override int GetHashCode() => Name.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is Input other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is Input other && Equals(other);
 
-        public bool Equals(Input other)
-        {
-            return other != null && Name.Equals(other.Name);
-        }
+        public bool Equals(Input other) => other != null && Name.Equals(other.Name);
 
         #endregion Equality
     }

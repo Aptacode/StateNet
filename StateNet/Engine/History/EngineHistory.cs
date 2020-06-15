@@ -13,7 +13,10 @@ namespace Aptacode.StateNet.Engine.History
 
         public void Log(State source, Input input, State target)
         {
-            if (StartState == null) StartState = source;
+            if (StartState == null)
+            {
+                StartState = source;
+            }
 
             _transitionLog.Add(new Transition(source, input, target));
         }
@@ -23,10 +26,7 @@ namespace Aptacode.StateNet.Engine.History
             return TakeLast(TransitionLog.Where(t => t.Source == state), count);
         }
 
-        public IEnumerable<Transition> LastTransitions(int count)
-        {
-            return TakeLast(TransitionLog, count);
-        }
+        public IEnumerable<Transition> LastTransitions(int count) => TakeLast(TransitionLog, count);
 
         public int TransitionInCount(string input, string state)
         {
@@ -67,9 +67,15 @@ namespace Aptacode.StateNet.Engine.History
         {
             get
             {
-                if (StartState == null) return new List<State>();
+                if (StartState == null)
+                {
+                    return new List<State>();
+                }
 
-                if (!TransitionLog.Any()) return new List<State> {StartState};
+                if (!TransitionLog.Any())
+                {
+                    return new List<State> {StartState};
+                }
 
 
                 return new List<State> {StartState}.Concat(TransitionLog.ToArray()

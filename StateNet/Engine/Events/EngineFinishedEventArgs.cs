@@ -11,9 +11,6 @@ namespace Aptacode.StateNet.Engine.Events
 
         public State EndState { get; set; }
 
-        public override string ToString()
-        {
-            return $"Engine Finished Event: End State({EndState})";
-        }
+        public override string ToString() => $"Engine Finished Event: End State({EndState})";
     }
 }

@@ -29,7 +29,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
             Name = _model.Name;
 
-            if (_loadConnections) Connections.AddRange(_model.Connections.Select(c => new ConnectionViewModel(c)));
+            if (_loadConnections)
+            {
+                Connections.AddRange(_model.Connections.Select(c => new ConnectionViewModel(c)));
+            }
         }
 
         #endregion
@@ -42,7 +45,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         public void DeleteConnection(ConnectionViewModel selectedConnection)
         {
-            if (selectedConnection != null) Model.Remove(selectedConnection.Model);
+            if (selectedConnection != null)
+            {
+                Model.Remove(selectedConnection.Model);
+            }
 
             Load();
         }
@@ -88,20 +94,11 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         #region Equality
 
-        public override int GetHashCode()
-        {
-            return Model?.GetHashCode() ?? base.GetHashCode();
-        }
+        public override int GetHashCode() => Model?.GetHashCode() ?? base.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is StateViewModel other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is StateViewModel other && Equals(other);
 
-        public bool Equals(StateViewModel other)
-        {
-            return other != null && GetHashCode() == other.GetHashCode();
-        }
+        public bool Equals(StateViewModel other) => other != null && GetHashCode() == other.GetHashCode();
 
         #endregion Equality
     }

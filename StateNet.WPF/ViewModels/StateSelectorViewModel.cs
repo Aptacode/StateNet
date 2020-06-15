@@ -54,7 +54,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
         public DelegateCommand DeleteCommand =>
             _deleteCommand ?? (_deleteCommand = new DelegateCommand(() =>
             {
-                if (SelectedState == null) return;
+                if (SelectedState == null)
+                {
+                    return;
+                }
 
                 StateNetwork.Delete(SelectedState.Model);
             }));

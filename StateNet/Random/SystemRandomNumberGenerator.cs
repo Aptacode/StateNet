@@ -6,9 +6,6 @@ namespace Aptacode.StateNet.Random
     {
         private static readonly System.Random RandomGenerator = new System.Random();
 
-        public int Generate(int min, int max)
-        {
-            return RandomGenerator.Next(min, max);
-        }
+        public int Generate(int min, int max) => RandomGenerator.Next(min, max);
     }
 }

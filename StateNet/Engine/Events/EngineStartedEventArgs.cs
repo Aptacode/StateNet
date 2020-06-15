@@ -11,9 +11,6 @@ namespace Aptacode.StateNet.Engine.Events
 
         public State StartState { get; set; }
 
-        public override string ToString()
-        {
-            return $"Engine Started Event: Start State({StartState})";
-        }
+        public override string ToString() => $"Engine Started Event: Start State({StartState})";
     }
 }

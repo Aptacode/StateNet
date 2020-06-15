@@ -37,7 +37,10 @@ namespace Aptacode.StateNet.Wpf.ViewModels
             set
             {
                 SetProperty(ref _name, value);
-                if (Model != null) Model.Name = _name;
+                if (Model != null)
+                {
+                    Model.Name = _name;
+                }
             }
         }
 
@@ -45,20 +48,11 @@ namespace Aptacode.StateNet.Wpf.ViewModels
 
         #region Equality
 
-        public override int GetHashCode()
-        {
-            return Model?.GetHashCode() ?? base.GetHashCode();
-        }
+        public override int GetHashCode() => Model?.GetHashCode() ?? base.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is InputViewModel other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is InputViewModel other && Equals(other);
 
-        public bool Equals(InputViewModel other)
-        {
-            return other != null && GetHashCode() == other.GetHashCode();
-        }
+        public bool Equals(InputViewModel other) => other != null && GetHashCode() == other.GetHashCode();
 
         #endregion Equality
     }

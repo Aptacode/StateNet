@@ -17,16 +17,11 @@ namespace Aptacode.StateNet.Json
         public static readonly string ConnectionsPropertyName = "Connections";
         public override bool CanWrite => true;
 
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(StateNetwork).IsAssignableFrom(objectType);
-        }
+        public override bool CanConvert(Type objectType) => typeof(StateNetwork).IsAssignableFrom(objectType);
 
         public override object ReadJson(JsonReader reader,
-            Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            return FromJSon(JObject.Load(reader));
-        }
+            Type objectType, object existingValue, JsonSerializer serializer) =>
+            FromJSon(JObject.Load(reader));
 
         public override void WriteJson(JsonWriter writer,
             object value, JsonSerializer serializer)
@@ -63,15 +58,13 @@ namespace Aptacode.StateNet.Json
             return network;
         }
 
-        public static JObject ToJson(IStateNetwork stateNetwork)
-        {
-            return new JObject
+        public static JObject ToJson(IStateNetwork stateNetwork) =>
+            new JObject
             {
                 {StartStatePropertyName, JToken.FromObject(stateNetwork.StartState)},
                 {StatesPropertyName, JToken.FromObject(stateNetwork.GetStates())},
                 {InputsPropertyName, JToken.FromObject(stateNetwork.GetInputs())},
                 {ConnectionsPropertyName, JToken.FromObject(stateNetwork.GetConnections())}
             };
-        }
     }
 }

@@ -28,15 +28,10 @@ namespace Aptacode.StateNet.Network
         /// <param name="name"></param>
         /// <param name="createIfMissing"></param>
         /// <returns></returns>
-        public State GetState(string name, bool createIfMissing)
-        {
-            return createIfMissing ? _stateNetwork.CreateState(name) : _stateNetwork.GetState(name);
-        }
+        public State GetState(string name, bool createIfMissing) =>
+            createIfMissing ? _stateNetwork.CreateState(name) : _stateNetwork.GetState(name);
 
-        public State GetState(string name)
-        {
-            return GetState(name, true);
-        }
+        public State GetState(string name) => GetState(name, true);
 
         /// <summary>
         ///     Return the state with the given name
@@ -44,10 +39,7 @@ namespace Aptacode.StateNet.Network
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public State CreateState(string name)
-        {
-            return _stateNetwork.CreateState(name);
-        }
+        public State CreateState(string name) => _stateNetwork.CreateState(name);
 
         /// <summary>
         ///     Remove the state which matches the given name and all of its connections
@@ -58,63 +50,37 @@ namespace Aptacode.StateNet.Network
             _stateNetwork.RemoveState(name);
         }
 
-        public IEnumerable<State> GetEndStates()
-        {
-            return _stateNetwork.GetEndStates();
-        }
+        public IEnumerable<State> GetEndStates() => _stateNetwork.GetEndStates();
 
-        public IEnumerable<State> GetStates()
-        {
-            return _stateNetwork.GetStates();
-        }
+        public IEnumerable<State> GetStates() => _stateNetwork.GetStates();
 
         #endregion
 
         #region Inputs
 
-        public IEnumerable<Input> GetInputs()
-        {
-            return _stateNetwork.GetInputs();
-        }
+        public IEnumerable<Input> GetInputs() => _stateNetwork.GetInputs();
 
-        public IEnumerable<Input> GetInputs(string name)
-        {
-            return _stateNetwork.GetInputs(name);
-        }
+        public IEnumerable<Input> GetInputs(string name) => _stateNetwork.GetInputs(name);
 
-        public Input GetInput(string name, bool createIfMissing)
-        {
-            return createIfMissing ? _stateNetwork.CreateInput(name) : _stateNetwork.GetInput(name);
-        }
+        public Input GetInput(string name, bool createIfMissing) =>
+            createIfMissing ? _stateNetwork.CreateInput(name) : _stateNetwork.GetInput(name);
 
-        public Input GetInput(string name)
-        {
-            return GetInput(name, true);
-        }
+        public Input GetInput(string name) => GetInput(name, true);
 
         public void RemoveInput(string name)
         {
             _stateNetwork.RemoveInput(name);
         }
 
-        public Input CreateInput(string name)
-        {
-            return _stateNetwork.CreateInput(name);
-        }
+        public Input CreateInput(string name) => _stateNetwork.CreateInput(name);
 
         #endregion
 
         #region Connections
 
-        public IEnumerable<Connection> GetConnections()
-        {
-            return _stateNetwork.GetConnections();
-        }
+        public IEnumerable<Connection> GetConnections() => _stateNetwork.GetConnections();
 
-        public IEnumerable<Connection> GetConnections(string source)
-        {
-            return _stateNetwork.GetConnections(source);
-        }
+        public IEnumerable<Connection> GetConnections(string source) => _stateNetwork.GetConnections(source);
 
         public IEnumerable<Connection> this[string source] => GetConnections(source);
 
@@ -138,15 +104,11 @@ namespace Aptacode.StateNet.Network
             Connect(source, input, target, new ConnectionWeight(1));
         }
 
-        public IEnumerable<Connection> GetConnections(string source, string input)
-        {
-            return _stateNetwork.GetConnections(source, input);
-        }
+        public IEnumerable<Connection> GetConnections(string source, string input) =>
+            _stateNetwork.GetConnections(source, input);
 
-        public Connection GetConnection(string source, string input, string target)
-        {
-            return _stateNetwork.GetConnection(source, input, target);
-        }
+        public Connection GetConnection(string source, string input, string target) =>
+            _stateNetwork.GetConnection(source, input, target);
 
         public void Disconnect(string source, string input, string target)
         {

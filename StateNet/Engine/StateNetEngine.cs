@@ -35,10 +35,7 @@ namespace Aptacode.StateNet.Engine
 
         public IEngineHistory History { get; }
 
-        public bool IsRunning()
-        {
-            return CurrentState?.IsEnd() == false;
-        }
+        public bool IsRunning() => CurrentState?.IsEnd() == false;
 
         public event EventHandler<EngineStartedEventArgs> OnStarted;
 
@@ -59,12 +56,18 @@ namespace Aptacode.StateNet.Engine
 
         public void Unsubscribe(State state, Action callback)
         {
-            if (_callbackDictionary.TryGetValue(state, out var actions)) actions.Remove(callback);
+            if (_callbackDictionary.TryGetValue(state, out var actions))
+            {
+                actions.Remove(callback);
+            }
         }
 
         public void Start()
         {
-            if (!_stateNetwork.IsValid()) return;
+            if (!_stateNetwork.IsValid())
+            {
+                return;
+            }
 
             CurrentState = _stateNetwork.StartState;
 
@@ -76,7 +79,10 @@ namespace Aptacode.StateNet.Engine
             {
                 while (true)
                 {
-                    if (cancellationToken.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
 
                     NextTransition();
                     await Task.Delay(1, cancellationToken).ConfigureAwait(false);
@@ -93,7 +99,10 @@ namespace Aptacode.StateNet.Engine
         {
             var input = _stateNetwork.GetInput(inputName);
 
-            if (input == null) return false;
+            if (input == null)
+            {
+                return false;
+            }
 
             _inputQueue.Enqueue(input);
 
@@ -108,20 +117,28 @@ namespace Aptacode.StateNet.Engine
         private void NotifySubscribers(State state)
         {
             if (_callbackDictionary.ContainsKey(state))
+            {
                 _callbackDictionary[state]?.ForEach(callback =>
                 {
                     new TaskFactory().StartNew(() => callback?.Invoke(), cancellationToken)
                         .ConfigureAwait(false);
                 });
+            }
         }
 
         private void NextTransition()
         {
-            if (!_inputQueue.TryDequeue(out var input)) return;
+            if (!_inputQueue.TryDequeue(out var input))
+            {
+                return;
+            }
 
             var lastState = CurrentState;
             var nextState = GetNextState(lastState, input);
-            if (nextState == null) return;
+            if (nextState == null)
+            {
+                return;
+            }
 
 
             History.Log(lastState, input, nextState);
@@ -135,9 +152,13 @@ namespace Aptacode.StateNet.Engine
             CurrentState = nextState;
 
             if (CurrentState.IsEnd())
+            {
                 OnFinished?.Invoke(this, new EngineFinishedEventArgs(CurrentState));
+            }
             else
+            {
                 NotifySubscribers(CurrentState);
+            }
         }
 
         private State GetNextState(State state, string input)

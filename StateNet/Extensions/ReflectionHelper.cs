@@ -20,7 +20,10 @@ namespace Aptacode.StateNet.Extensions
                 return true;
             }
 
-            if (!memberInfo.GetType().IsSubclassOf(typeof(FieldInfo))) return false;
+            if (!memberInfo.GetType().IsSubclassOf(typeof(FieldInfo)))
+            {
+                return false;
+            }
 
             ((FieldInfo) memberInfo).SetValue(obj, value);
             return true;

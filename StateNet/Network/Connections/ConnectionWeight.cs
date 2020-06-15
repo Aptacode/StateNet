@@ -14,13 +14,9 @@ namespace Aptacode.StateNet.Network.Connections
         private string _expression;
         private Func<IEngineHistory, int> _weightFunction;
 
-        public ConnectionWeight() : this(1)
-        {
-        }
+        public ConnectionWeight() : this(1) { }
 
-        public ConnectionWeight(int weight) : this(weight.ToString())
-        {
-        }
+        public ConnectionWeight(int weight) : this(weight.ToString()) { }
 
         public ConnectionWeight(string expression)
         {
@@ -34,9 +30,15 @@ namespace Aptacode.StateNet.Network.Connections
             {
                 _expression = value;
 
-                if (GetStaticWeightFunction(value, out _weightFunction)) return;
+                if (GetStaticWeightFunction(value, out _weightFunction))
+                {
+                    return;
+                }
 
-                if (GetWeightFunction(value, out _weightFunction)) return;
+                if (GetWeightFunction(value, out _weightFunction))
+                {
+                    return;
+                }
 
                 _expression = DefaultExpression;
                 _weightFunction = DefaultWeightFunction;
@@ -56,10 +58,7 @@ namespace Aptacode.StateNet.Network.Connections
 
         #region ToString
 
-        public override string ToString()
-        {
-            return Expression;
-        }
+        public override string ToString() => Expression;
 
         #endregion
 
@@ -96,20 +95,11 @@ namespace Aptacode.StateNet.Network.Connections
 
         #region Equality
 
-        public bool Equals(ConnectionWeight other)
-        {
-            return other != null && Expression.Equals(other.Expression);
-        }
+        public bool Equals(ConnectionWeight other) => other != null && Expression.Equals(other.Expression);
 
-        public override int GetHashCode()
-        {
-            return Expression.GetHashCode();
-        }
+        public override int GetHashCode() => Expression.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return obj is ConnectionWeight other && Equals(other);
-        }
+        public override bool Equals(object obj) => obj is ConnectionWeight other && Equals(other);
 
         #endregion
     }

@@ -18,9 +18,6 @@ namespace Aptacode.StateNet.Engine.Connections
             return _connectionWeights.Sum(pair => pair.Item2 >= 0 ? pair.Item2 : 0);
         }
 
-        public IEnumerable<(Connection, int)> GetWeights()
-        {
-            return _connectionWeights;
-        }
+        public IEnumerable<(Connection, int)> GetWeights() => _connectionWeights;
     }
 }
