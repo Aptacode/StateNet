@@ -193,11 +193,11 @@ namespace Aptacode.StateNet.Tests.Network
             var networkEditor = new StateNetworkEditor(network);
 
 
-            Assert.That(allConnections, Is.SupersetOf(networkEditor.GetConnections()));
-            Assert.That(allConnections, Is.SubsetOf(networkEditor.GetConnections()));
+            Assert.That(allConnections.Select(c => c.ToString()), Is.SupersetOf(networkEditor.GetConnections().Select(c => c.ToString())));
+            Assert.That(allConnections.Select(c => c.ToString()), Is.SubsetOf(networkEditor.GetConnections().Select(c => c.ToString())));
 
-            Assert.That(allConnections, Is.SupersetOf(networkEditor.GetConnections()));
-            Assert.That(allConnections, Is.SubsetOf(networkEditor.GetConnections()));
+            Assert.That(allConnections.Select(c => c.ToString()), Is.SupersetOf(networkEditor.GetConnections().Select(c => c.ToString())));
+            Assert.That(allConnections.Select(c => c.ToString()), Is.SubsetOf(networkEditor.GetConnections().Select(c => c.ToString())));
         }
 
         [Test]
@@ -223,23 +223,23 @@ namespace Aptacode.StateNet.Tests.Network
             var ExpectedStateFilteredConnections = allConnections.Where(connection => connection.Source.Name == "a");
             var ActualstateFilteredConnections = networkEditor.GetConnections("a");
 
-            Assert.That(ExpectedStateFilteredConnections, Is.SupersetOf(ActualstateFilteredConnections));
-            Assert.That(ExpectedStateFilteredConnections, Is.SubsetOf(ActualstateFilteredConnections));
+            Assert.That(ExpectedStateFilteredConnections.Select(c => c.ToString()), Is.SupersetOf(ActualstateFilteredConnections.Select(c => c.ToString())));
+            Assert.That(ExpectedStateFilteredConnections.Select(c => c.ToString()), Is.SubsetOf(ActualstateFilteredConnections.Select(c => c.ToString())));
 
 
             var ExpectedStateAndInputFilteredConnections = allConnections.Where(connection =>
                 connection.Source.Name == "a" && connection.Input.Name == "next");
             var ActualstateAndInputFilteredConnections = networkEditor.GetConnections("a", "next");
 
-            Assert.That(ExpectedStateAndInputFilteredConnections,
-                Is.SupersetOf(ActualstateAndInputFilteredConnections));
-            Assert.That(ExpectedStateAndInputFilteredConnections, Is.SubsetOf(ActualstateAndInputFilteredConnections));
+            Assert.That(ExpectedStateAndInputFilteredConnections.Select(c => c.ToString()),
+                Is.SupersetOf(ActualstateAndInputFilteredConnections.Select(c => c.ToString())));
+            Assert.That(ExpectedStateAndInputFilteredConnections.Select(c => c.ToString()), Is.SubsetOf(ActualstateAndInputFilteredConnections.Select(c => c.ToString())));
 
             var expectedConnections = allConnections.Where(connection =>
                 connection.Source.Name == "a" && connection.Input.Name == "next" && connection.Target.Name == "b");
             var actualConnection = networkEditor.GetConnection("a", "next", "b");
 
-            Assert.That(expectedConnections.Contains(actualConnection));
+            Assert.That(expectedConnections.Select(c => c.ToString()).Contains(actualConnection.ToString()));
         }
 
         #endregion

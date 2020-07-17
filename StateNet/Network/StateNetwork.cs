@@ -15,6 +15,9 @@ namespace Aptacode.StateNet.Network
     [JsonConverter(typeof(StateNetworkJsonConverter))]
     public class StateNetwork : IStateNetwork
     {
+        private readonly HashSet<Input> Inputs = new HashSet<Input>();
+        private readonly HashSet<State> States = new HashSet<State>();
+
         public StateNetwork()
         {
             ActOnFieldAndPropertyAttributes(typeof(StateNameAttribute),
@@ -43,20 +46,12 @@ namespace Aptacode.StateNet.Network
             });
         }
 
-        public HashSet<Input> Inputs { get; } = new HashSet<Input>();
-        public HashSet<State> States { get; } = new HashSet<State>();
-
         /// <summary>
         ///     Returns true if the Network:
         ///     - Has a start state
         /// </summary>
         /// <returns></returns>
-        public bool IsValid()
-        {
-            var isStartStateValid = StartState != null;
-
-            return isStartStateValid;
-        }
+        public bool IsValid() => StartState != null;
 
         #region Attributes
 
@@ -65,11 +60,13 @@ namespace Aptacode.StateNet.Network
             var typeInfo = GetType().GetTypeInfo();
 
             foreach (var fieldInfo in typeInfo.GetRuntimeFields())
-            foreach (var attr in fieldInfo.GetCustomAttributes(false))
             {
-                if (attr.GetType() == targetType)
+                foreach (var attr in fieldInfo.GetCustomAttributes(false))
                 {
-                    doWhenFound(fieldInfo, attr);
+                    if (attr.GetType() == targetType)
+                    {
+                        doWhenFound(fieldInfo, attr);
+                    }
                 }
             }
 
@@ -174,7 +171,7 @@ namespace Aptacode.StateNet.Network
 
             var stack = new Stack<T>();
             stack.Push(item);
-            while (stack.Any())
+            while (stack.Count > 0)
             {
                 var next = stack.Pop();
 

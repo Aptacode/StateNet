@@ -58,7 +58,7 @@ namespace Aptacode.StateNet.Tests.Engine.Connections
 
             var expectedConnection = connectionDistribution.ElementAt(expectedConnectionIndex);
             var actualConnection = chooser.Choose(connectionDistribution);
-            Assert.AreEqual(expectedConnection, actualConnection, "Should choose the correct choice");
+            Assert.AreEqual(expectedConnection.ToString(), actualConnection.ToString(), "Should choose the correct choice");
         }
 
         [Test]

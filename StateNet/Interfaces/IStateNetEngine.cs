@@ -4,14 +4,12 @@ using Aptacode.StateNet.Network;
 
 namespace Aptacode.StateNet.Interfaces
 {
-    public interface IStateNetEngine : IDisposable
+    public interface IStateNetEngine
     {
         State CurrentState { get; }
         IEngineHistory History { get; }
         bool Apply(string inputName);
         void Start();
-        void Stop();
-        bool IsRunning();
 
         #region Events
 

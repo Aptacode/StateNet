@@ -26,8 +26,8 @@ namespace Aptacode.StateNet.Network.Connections
         public override bool Equals(object obj) => obj is Connection other && Equals(other);
 
         public bool Equals(Connection other) =>
-            other != null && Source.Equals(other.Source) && Input.Equals(other.Input) &&
-            Target.Equals(other.Target) &&
+            other != null && Source.Equals(other.Source) && Input == other.Input &&
+            Target == other.Target &&
             ConnectionWeight.Equals(other.ConnectionWeight);
 
         #endregion Overrides

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Aptacode.StateNet.Engine.Connections;
 using Aptacode.StateNet.Engine.Events;
 using Aptacode.StateNet.Engine.History;
@@ -15,10 +12,7 @@ namespace Aptacode.StateNet.Engine
     {
         private readonly Dictionary<State, List<Action>> _callbackDictionary;
         private readonly ConnectionChooser _connectionChooser;
-        private readonly ConcurrentQueue<Input> _inputQueue;
         private readonly IStateNetwork _stateNetwork;
-        private readonly CancellationToken cancellationToken;
-        private readonly CancellationTokenSource cancellationTokenSource;
 
         public StateNetEngine(IRandomNumberGenerator randomNumberGenerator, IStateNetwork stateNetwork)
         {
@@ -26,16 +20,11 @@ namespace Aptacode.StateNet.Engine
             _stateNetwork = stateNetwork;
             _connectionChooser = new ConnectionChooser(randomNumberGenerator, History);
             _callbackDictionary = new Dictionary<State, List<Action>>();
-            _inputQueue = new ConcurrentQueue<Input>();
-            cancellationTokenSource = new CancellationTokenSource();
-            cancellationToken = cancellationTokenSource.Token;
         }
 
         public State CurrentState { get; private set; }
 
         public IEngineHistory History { get; }
-
-        public bool IsRunning() => CurrentState?.IsEnd() == false;
 
         public event EventHandler<EngineStartedEventArgs> OnStarted;
 
@@ -74,25 +63,6 @@ namespace Aptacode.StateNet.Engine
             OnStarted?.Invoke(this, new EngineStartedEventArgs(CurrentState));
 
             History.SetStart(CurrentState);
-
-            new TaskFactory().StartNew(async () =>
-            {
-                while (true)
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    NextTransition();
-                    await Task.Delay(1, cancellationToken).ConfigureAwait(false);
-                }
-            }, cancellationToken).ConfigureAwait(false);
-        }
-
-        public void Stop()
-        {
-            cancellationTokenSource.Cancel();
         }
 
         public bool Apply(string inputName)
@@ -104,50 +74,16 @@ namespace Aptacode.StateNet.Engine
                 return false;
             }
 
-            _inputQueue.Enqueue(input);
-
-            return true;
-        }
-
-        public void Dispose()
-        {
-            cancellationTokenSource?.Dispose();
-        }
-
-        private void NotifySubscribers(State state)
-        {
-            if (_callbackDictionary.ContainsKey(state))
-            {
-                _callbackDictionary[state]?.ForEach(callback =>
-                {
-                    new TaskFactory().StartNew(() => callback?.Invoke(), cancellationToken)
-                        .ConfigureAwait(false);
-                });
-            }
-        }
-
-        private void NextTransition()
-        {
-            if (!_inputQueue.TryDequeue(out var input))
-            {
-                return;
-            }
-
             var lastState = CurrentState;
             var nextState = GetNextState(lastState, input);
             if (nextState == null)
             {
-                return;
+                return false;
             }
-
 
             History.Log(lastState, input, nextState);
 
-            new TaskFactory()
-                .StartNew(
-                    () => OnTransition?.Invoke(this, new EngineTransitionEventArgs(lastState, input, nextState)),
-                    cancellationToken)
-                .ConfigureAwait(false);
+            OnTransition?.Invoke(this, new EngineTransitionEventArgs(lastState, input, nextState));
 
             CurrentState = nextState;
 
@@ -158,6 +94,18 @@ namespace Aptacode.StateNet.Engine
             else
             {
                 NotifySubscribers(CurrentState);
+            }
+
+            return true;
+        }
+
+        public bool IsRunning() => CurrentState?.IsEnd() == false;
+
+        private void NotifySubscribers(State state)
+        {
+            if (_callbackDictionary.ContainsKey(state))
+            {
+                _callbackDictionary[state]?.ForEach(callback => { callback?.Invoke(); });
             }
         }
 
