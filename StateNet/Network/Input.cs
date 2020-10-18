@@ -14,7 +14,15 @@ namespace Aptacode.StateNet.Network
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Returns the name of the input
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => Name;
+        /// <summary>
+        /// Allows an input to be used interchangeably as a string
+        /// </summary>
+        /// <param name="instance"></param>
 
         public static implicit operator string(Input instance) => instance?.Name;
 

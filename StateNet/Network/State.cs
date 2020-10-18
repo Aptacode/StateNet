@@ -5,9 +5,8 @@ using Newtonsoft.Json;
 
 namespace Aptacode.StateNet.Network
 {
-    public sealed class State : IEquatable<State>
+    public class State : IEquatable<State>
     {
-        private readonly List<Connection> _outputConnections = new List<Connection>();
 
         /// <summary>
         ///     Represents a single state in the network and all of the output connections it has
@@ -29,21 +28,25 @@ namespace Aptacode.StateNet.Network
 
         #region Connections
 
-        [JsonIgnore] public IEnumerable<Connection> Connections => _outputConnections;
+        private readonly List<Connection> _outputConnections = new List<Connection>();
 
-        public void Remove(Connection connection)
+        [JsonIgnore] 
+        public IEnumerable<Connection> Connections => _outputConnections;
+
+        public State Remove(Connection connection)
         {
             _outputConnections.Remove(connection);
+            return this;
         }
 
-        public void Add(Connection connection)
+        public State Add(Connection connection)
         {
-            if (!connection.Source.Equals(this))
+            if (connection.Source.Equals(this))
             {
-                return;
+                _outputConnections.Add(connection);
             }
 
-            _outputConnections.Add(connection);
+            return this;
         }
 
         public bool IsEnd() => _outputConnections.Count == 0;
@@ -59,5 +62,15 @@ namespace Aptacode.StateNet.Network
         public bool Equals(State other) => other != null && Name.Equals(other.Name);
 
         #endregion Equality
+    }
+
+    public sealed class NullState : State
+    {
+        public NullState() : base(string.Empty)
+        {
+                
+        }
+
+        public static NullState Instance { get; } = new NullState();
     }
 }

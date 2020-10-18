@@ -16,11 +16,11 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1.10</Version>
-    <AssemblyVersion>1.1.1.10</AssemblyVersion>
+    <Version>1.1.1.11</Version>
+    <AssemblyVersion>1.1.1.11</AssemblyVersion>
     <LangVersion>7.3</LangVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
-    <FileVersion>1.1.1.10</FileVersion>
+    <FileVersion>1.1.1.11</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

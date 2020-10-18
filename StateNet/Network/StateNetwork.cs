@@ -15,8 +15,8 @@ namespace Aptacode.StateNet.Network
     [JsonConverter(typeof(StateNetworkJsonConverter))]
     public class StateNetwork : IStateNetwork
     {
-        private readonly HashSet<Input> Inputs = new HashSet<Input>();
-        private readonly HashSet<State> States = new HashSet<State>();
+        private readonly HashSet<Input> _inputs = new HashSet<Input>();
+        private readonly HashSet<State> _states = new HashSet<State>();
 
         public StateNetwork()
         {
@@ -93,13 +93,12 @@ namespace Aptacode.StateNet.Network
         /// <returns></returns>
         public State GetState(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (_states.TryGetValue(new State(name), out var state))
             {
-                return null;
+                return state;
             }
 
-            States.TryGetValue(new State(name), out var state);
-            return state;
+            return NullState.Instance;
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newState = new State(name);
-            States.Add(newState);
+            _states.Add(newState);
             return newState;
         }
 
@@ -138,9 +137,9 @@ namespace Aptacode.StateNet.Network
             }
 
             var state = new State(name);
-            if (States.Contains(state))
+            if (_states.Contains(state))
             {
-                States.Remove(state);
+                _states.Remove(state);
             }
 
             var connections = Connections
@@ -192,12 +191,12 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<State> GetEndStates()
         {
-            return States.Where(state => state.IsEnd());
+            return _states.Where(state => state.IsEnd());
         }
 
         public IEnumerable<State> GetStates()
         {
-            return States.OrderBy(state => state.Name);
+            return _states.OrderBy(state => state.Name);
         }
 
         #endregion
@@ -206,7 +205,7 @@ namespace Aptacode.StateNet.Network
 
         public IEnumerable<Input> GetInputs()
         {
-            return Inputs.OrderBy(input => input.Name);
+            return _inputs.OrderBy(input => input.Name);
         }
 
         public IEnumerable<Input> GetInputs(string state)
@@ -223,7 +222,7 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            Inputs.TryGetValue(new Input(name), out var input);
+            _inputs.TryGetValue(new Input(name), out var input);
             return input;
         }
 
@@ -235,9 +234,9 @@ namespace Aptacode.StateNet.Network
             }
 
             var input = new Input(name);
-            if (Inputs.Contains(input))
+            if (_inputs.Contains(input))
             {
-                Inputs.Remove(input);
+                _inputs.Remove(input);
             }
 
             var connections = Connections.Where(connection => connection.Input.Name.Equals(input)).ToList();
@@ -258,7 +257,7 @@ namespace Aptacode.StateNet.Network
             }
 
             newInput = new Input(name);
-            Inputs.Add(newInput);
+            _inputs.Add(newInput);
             return newInput;
         }
 
@@ -267,7 +266,7 @@ namespace Aptacode.StateNet.Network
         #region Connections
 
         public IEnumerable<Connection> Connections =>
-            States.Select(state => state.Connections).SelectMany(list => list);
+            _states.Select(state => state.Connections).SelectMany(list => list);
 
         public IEnumerable<Connection> GetConnections() => Connections;
 
@@ -369,7 +368,7 @@ namespace Aptacode.StateNet.Network
         }
 
 
-        public override int GetHashCode() => (Connections, States, Inputs, StartState).GetHashCode();
+        public override int GetHashCode() => (Connections, States: _states, Inputs: _inputs, StartState).GetHashCode();
 
         public override bool Equals(object obj) => obj is IStateNetwork other && Equals(other);
 
