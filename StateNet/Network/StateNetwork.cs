@@ -93,12 +93,8 @@ namespace Aptacode.StateNet.Network
         /// <returns></returns>
         public State GetState(string name)
         {
-            if (_states.TryGetValue(new State(name), out var state))
-            {
-                return state;
-            }
-
-            return NullState.Instance;
+            var state = new State(name);
+            return _states.Contains(state) ? state : NullState.Instance;
         }
 
         /// <summary>
@@ -222,8 +218,8 @@ namespace Aptacode.StateNet.Network
                 return null;
             }
 
-            _inputs.TryGetValue(new Input(name), out var input);
-            return input;
+            var input = new Input(name);
+            return _inputs.Contains(input) ? input : null;
         }
 
         public void RemoveInput(string name)
