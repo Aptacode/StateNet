@@ -21,7 +21,7 @@ namespace StateNet.Tests.Engine
             var secondState = engine.Apply("Next");
 
             Assert.Equal("Start", startState);
-            Assert.Equal("A", secondState);
+            Assert.Equal("A", secondState.Transition.Destination);
         }
 
         [Fact]
@@ -39,8 +39,8 @@ namespace StateNet.Tests.Engine
             var thirdState = engine.Apply("Next");
 
             Assert.Equal("A", startState);
-            Assert.Equal("B", secondState);
-            Assert.Equal("A", thirdState);
+            Assert.Equal("B", secondState.Transition.Destination);
+            Assert.Equal("A", thirdState.Transition.Destination);
         }
 
 
@@ -63,7 +63,7 @@ namespace StateNet.Tests.Engine
             var secondState = engine.Apply("Next");
 
             Assert.Equal("A", startState);
-            Assert.Equal("C", secondState);
+            Assert.Equal("C", secondState.Transition.Destination);
         }
 
         [Fact]
@@ -85,10 +85,28 @@ namespace StateNet.Tests.Engine
             var state5 = engine.Apply("Next");
 
             Assert.Equal("A", state1);
-            Assert.Equal("B", state2);
-            Assert.Equal("A", state3);
-            Assert.Equal("C", state4);
-            Assert.Equal("D", state5);
+            Assert.Equal("B", state2.Transition.Destination);
+            Assert.Equal("A", state3.Transition.Destination);
+            Assert.Equal("C", state4.Transition.Destination);
+            Assert.Equal("D", state5.Transition.Destination);
+        }
+
+        [Fact]
+        public void StartStateNotSet()
+        {
+            //Arrange
+            var network = new NetworkBuilder()
+                .AddConnection("A", "Next", "B", _ => 1)
+                .AddConnection("A", "Next", "C", _ => 1)
+              .Build();
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
+
+            //Act
+            var transitionResult = sut.Apply("Next");
+
+            //Assert
+            Assert.False(transitionResult.Success);
+
         }
     }
 }
