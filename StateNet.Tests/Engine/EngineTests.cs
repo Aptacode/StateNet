@@ -92,13 +92,14 @@ namespace StateNet.Tests.Engine
         }
 
         [Fact]
-        public void StartStateNotSet()
+        public void StartStateNotSet_ReturnsFailTransition()
         {
             //Arrange
             var network = new NetworkBuilder()
                 .AddConnection("A", "Next", "B", _ => 1)
                 .AddConnection("A", "Next", "C", _ => 1)
               .Build();
+
             var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             //Act
@@ -106,7 +107,24 @@ namespace StateNet.Tests.Engine
 
             //Assert
             Assert.False(transitionResult.Success);
+        }
 
+        [Fact]
+        public void InputNotDefined_ReturnsFailTransition()
+        {
+            //Arrange
+            var network = new NetworkBuilder()
+                .AddConnection("A", "Next", "B", _ => 1)
+                .AddConnection("A", "Next", "C", _ => 1)
+              .Build();
+
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
+
+            //Act
+            var transitionResult = sut.Apply("Next");
+
+            //Assert
+            Assert.False(transitionResult.Success);
         }
     }
 }

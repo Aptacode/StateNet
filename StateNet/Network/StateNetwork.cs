@@ -14,14 +14,14 @@ namespace Aptacode.StateNet.Network {
 
         public string StartState { get; }
 
-        public IReadOnlyList<Connection>? GetConnections(string state, string input)
+        public IReadOnlyList<Connection> GetConnections(string state, string input)
         {
             if (!_stateDictionary.TryGetValue(state, out var inputs))
             {
-                return null;
+                return new Connection[0];
             }
 
-            return inputs.TryGetValue(input, out var connections) ? connections : null;
+            return inputs.TryGetValue(input, out var connections) ? connections : new Connection[0];
         }
     }
 }
