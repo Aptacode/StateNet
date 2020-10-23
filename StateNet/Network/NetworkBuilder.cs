@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Expressions;
 using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Network
 {
@@ -13,8 +14,10 @@ namespace Aptacode.StateNet.Network
         private readonly HashSet<string> _states;
         private readonly HashSet<string> _inputs;
         private readonly List<(string, string, Connection)> _connections;
+        
+        public static NetworkBuilder New => new NetworkBuilder();
 
-        public NetworkBuilder()
+        protected NetworkBuilder()
         {
             _startState = string.Empty;
             _states = new HashSet<string>();
@@ -120,8 +123,13 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public StateNetwork Build()
+        public StateNetworkResult Build()
         {
+            if (string.IsNullOrEmpty(_startState))
+            {
+                return StateNetworkResult.Fail("Start state was not set.");
+            }
+
             var stateDictionary =
                 new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
 
@@ -140,8 +148,10 @@ namespace Aptacode.StateNet.Network
             }
 
             var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
+
             Reset();
-            return network;
+
+            return StateNetworkResult.Ok(network, "Success.");
         }
 
         public void Reset()

@@ -6,14 +6,15 @@ using Xunit;
 
 namespace StateNet.Tests.Engine
 {
-    public class EngineTests
+    public class Engine_Tests
     {
         [Fact]
         public void EngineSingleTransition()
         {
-            var network = new NetworkBuilder().SetStartState("Start")
+            var network = NetworkBuilder.New.SetStartState("Start")
                 .AddConnection("Start", "Next", "A", _ => 1)
-                .Build();
+                .Build()
+                .Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
@@ -27,10 +28,10 @@ namespace StateNet.Tests.Engine
         [Fact]
         public void EngineReverseTransition()
         {
-            var network = new NetworkBuilder().SetStartState("A")
-                .AddConnection("A", "Next", "B", _ => 1)
-                .AddConnection("B", "Next", "A", _ => 1)
-                .Build();
+            var network = NetworkBuilder.New.SetStartState("A")
+                .AddConnection("A", "Next", "B", 1)
+                .AddConnection("B", "Next", "A", 1)
+                .Build().Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
@@ -47,10 +48,10 @@ namespace StateNet.Tests.Engine
         [Fact]
         public void EngineSimpleConnectionWeightSelection()
         {
-            var network = new NetworkBuilder().SetStartState("A")
+            var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B", _ => 1)
                 .AddConnection("A", "Next", "C", _ => 1)
-                .Build();
+                .Build().Network;
 
             var mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
             mockRandomNumberGenerator
@@ -69,12 +70,12 @@ namespace StateNet.Tests.Engine
         [Fact]
         public void EngineTransitionHistory()
         {
-            var network = new NetworkBuilder().SetStartState("A")
+            var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B", x => x.Transitions.Count == 0 ? 1 : 0)
                 .AddConnection("A", "Next", "C", x => x.Transitions.Count > 0 ? 1 : 0)
                 .AddConnection("B", "Next", "A", _ => 1)
                 .AddConnection("C", "Next", "D", _ => 1)
-                .Build();
+                .Build().Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
@@ -92,33 +93,16 @@ namespace StateNet.Tests.Engine
         }
 
         [Fact]
-        public void StartStateNotSet_ReturnsFailTransition()
-        {
-            //Arrange
-            var network = new NetworkBuilder()
-                .AddConnection("A", "Next", "B", _ => 1)
-                .AddConnection("A", "Next", "C", _ => 1)
-              .Build();
-
-            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
-
-            //Act
-            var transitionResult = sut.Apply("Next");
-
-            //Assert
-            Assert.False(transitionResult.Success);
-        }
-
-        [Fact]
         public void InputNotDefined_ReturnsFailTransition()
         {
             //Arrange
-            var network = new NetworkBuilder()
-                .AddConnection("A", "Next", "B", _ => 1)
-                .AddConnection("A", "Next", "C", _ => 1)
-              .Build();
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start")
+                .AddConnection("A", "Next", "B", 1)
+                .AddConnection("A", "Next", "C", 1)
+              .Build().Network;
 
-            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
             var transitionResult = sut.Apply("Next");
@@ -126,5 +110,38 @@ namespace StateNet.Tests.Engine
             //Assert
             Assert.False(transitionResult.Success);
         }
+
+        //GetAvailableInputs_Returns_EmptyList_WhenNoInputExistsForCurrentState
+        //GetAvailableInputs_Returns_List_WhenInputExistsForCurrentState  
+
+        //GetAvailableConnections_Returns_EmptyList_WhenNoConnectionsExistsForCurrentStateAndInput
+        //GetAvailableConnections_Returns_List_WhenConnectionsExistForCurrentStateAndInput
+
+        //CurrentStateChanges_After_SuccessfulTransition
+        //CurrentStateDoesNotChange_After_FailedTransition  
+
+        //OnTransition_Invoked_After_SuccessfulTransition
+
+        [Fact]
+        public void OnTransition_NotInvoked_After_FailedTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start")
+              .Build().Network;
+
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            var OnTransitionWasCalled = false;
+            sut.OnTransition += (_, __) =>
+            {
+                OnTransitionWasCalled = true;
+            };
+            //Act
+            var transitionResult = sut.Apply("Next");
+
+            //Assert
+            Assert.False(OnTransitionWasCalled);
+        }
+
     }
 }

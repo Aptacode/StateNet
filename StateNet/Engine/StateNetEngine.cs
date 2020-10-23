@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Aptacode.StateNet.Engine.Transitions;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 
 namespace Aptacode.StateNet.Engine {
@@ -22,11 +23,21 @@ namespace Aptacode.StateNet.Engine {
 
         public event EventHandler<Transition>? OnTransition;
 
+        public IReadOnlyList<string> GetAvailableInputs()
+        {
+            return _network.GetInputs(CurrentState);
+        }
+
+        public IReadOnlyList<Connection> GetAvailableConnections(string input)
+        {
+            return _network.GetConnections(CurrentState, input);
+        }
+
         public TransitionResult Apply(string input)
         {
            var connections = _network.GetConnections(CurrentState, input);
 
-            if (connections == null)
+            if (connections.Count == 0)
                 return TransitionResult.Fail($"There are no available connections from {CurrentState} for {input}.");
 
            var weightedConnections = new List<string>();
@@ -57,7 +68,7 @@ namespace Aptacode.StateNet.Engine {
 
             CurrentState = nextState;
 
-           OnTransition?.Invoke(this, transition);
+            OnTransition?.Invoke(this, transition);
 
             return TransitionResult.Ok(transition, "Success.");
         }
