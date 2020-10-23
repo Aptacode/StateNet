@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Network {
-    public class Network
+    public class StateNetwork
     {
         private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> _stateDictionary;
 
-        public Network(IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary, string startState)
+        public StateNetwork(IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary, string startState)
         {
             _stateDictionary = stateDictionary ?? throw new ArgumentNullException(nameof(stateDictionary));
             StartState = startState;

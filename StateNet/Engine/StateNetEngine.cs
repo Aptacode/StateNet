@@ -4,13 +4,13 @@ using System.Linq;
 using Aptacode.StateNet.Random;
 
 namespace Aptacode.StateNet.Engine {
-    public class Engine
+    public class StateNetEngine
     {
-        private readonly Network.Network _network;
+        private readonly Network.StateNetwork _network;
         private readonly TransitionHistory _transitionHistory = new TransitionHistory();
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
-        public Engine(Network.Network network, IRandomNumberGenerator randomNumberGenerator)
+        public StateNetEngine(Network.StateNetwork network, IRandomNumberGenerator randomNumberGenerator)
         {
             _network = network ?? throw new ArgumentNullException(nameof(network));
             _randomNumberGenerator = randomNumberGenerator ?? throw new ArgumentNullException(nameof(randomNumberGenerator));

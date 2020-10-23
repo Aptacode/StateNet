@@ -4,7 +4,7 @@ using Aptacode.StateNet.Random;
 using Moq;
 using Xunit;
 
-namespace StateNet.Tests
+namespace StateNet.Tests.Engine
 {
     public class EngineTests
     {
@@ -15,7 +15,7 @@ namespace StateNet.Tests
                 .AddConnection("Start", "Next", "A", _ => 1)
                 .Build();
 
-            var engine = new Engine(network, new SystemRandomNumberGenerator());
+            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             var startState = engine.CurrentState;
             var secondState = engine.Apply("Next");
@@ -32,7 +32,7 @@ namespace StateNet.Tests
                 .AddConnection("B", "Next", "A", _ => 1)
                 .Build();
 
-            var engine = new Engine(network, new SystemRandomNumberGenerator());
+            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             var startState = engine.CurrentState;
             var secondState = engine.Apply("Next");
@@ -57,7 +57,7 @@ namespace StateNet.Tests
                 .Setup(r => r.Generate(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(1);
 
-            var engine = new Engine(network, mockRandomNumberGenerator.Object);
+            var engine = new StateNetEngine(network, mockRandomNumberGenerator.Object);
 
             var startState = engine.CurrentState;
             var secondState = engine.Apply("Next");
@@ -76,7 +76,7 @@ namespace StateNet.Tests
                 .AddConnection("C", "Next", "D", _ => 1)
                 .Build();
 
-            var engine = new Engine(network, new SystemRandomNumberGenerator());
+            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             var state1 = engine.CurrentState;
             var state2 = engine.Apply("Next");

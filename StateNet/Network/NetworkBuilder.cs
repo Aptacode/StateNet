@@ -115,7 +115,7 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public Network Build()
+        public StateNetwork Build()
         {
             var stateDictionary =
                 new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
@@ -134,7 +134,7 @@ namespace Aptacode.StateNet.Network
                 stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
             }
 
-            var network = new Network(stateDictionary.ToImmutableDictionary(), _startState);
+            var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
             Reset();
             return network;
         }

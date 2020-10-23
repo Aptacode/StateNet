@@ -24,4 +24,9 @@
     <ProjectReference Include="..\StateNet\StateNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Network\" />
+    <Folder Include="Random\" />
+  </ItemGroup>
+
 </Project>
