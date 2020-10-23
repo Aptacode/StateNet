@@ -12,7 +12,7 @@ https://discord.gg/D8MSXJB
 [![NuGet](https://img.shields.io/nuget/v/Aptacode.StateNet.svg?style=flat)](https://www.nuget.org/packages/Aptacode.StateNet/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5615809483d24f93aaaefcca36107299)](https://www.codacy.com/manual/Timmoth/Aptacode.StateNet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Timmoth/Aptacode.StateNet&amp;utm_campaign=Badge_Grade)
 ![last commit](https://img.shields.io/github/last-commit/Timmoth/Aptacode.StateNet?style=flat-square&cacheSeconds=86000)
-
+[![Build Status](https://dev.azure.com/Aptacode/StateNet/_apis/build/status/Aptacode.StateNet?branchName=Development)](https://dev.azure.com/Aptacode/StateNet/_build/latest?definitionId=21&branchName=Development)
 
 ### Overview
 
