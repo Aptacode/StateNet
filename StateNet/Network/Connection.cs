@@ -5,7 +5,7 @@ using Aptacode.StateNet.Engine;
 namespace Aptacode.StateNet.Network {
     public class Connection
     {
-        public Connection(string target, Expression<Func<TransitionHistory, uint>> expression)
+        public Connection(string target, Expression<Func<TransitionHistory, int>> expression)
         {
             Target = target;
             Expression = expression;
@@ -14,11 +14,11 @@ namespace Aptacode.StateNet.Network {
 
         public string Target { get; }
 
-        public Expression<Func<TransitionHistory, uint>> Expression;
+        public Expression<Func<TransitionHistory, int>> Expression;
 
-        private readonly Func<TransitionHistory, uint> _predicate;
+        private readonly Func<TransitionHistory, int> _predicate;
 
-        public uint GetWeight(TransitionHistory entity)
+        public int GetWeight(TransitionHistory entity)
         {
             return _predicate(entity);
         }

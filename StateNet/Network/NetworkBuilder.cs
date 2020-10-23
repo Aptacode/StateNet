@@ -55,7 +55,7 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddConnection(string source, string input, string destination, Expression<Func<TransitionHistory, uint>> expression)
+        public NetworkBuilder AddConnection(string source, string input, string destination, Expression<Func<TransitionHistory, int>> expression)
         {
             AddState(source);
             AddInput(input);
@@ -63,6 +63,11 @@ namespace Aptacode.StateNet.Network
 
             _connections.Add((source, input, new Connection(destination, expression)));
             return this;
+        }
+
+        public NetworkBuilder AddConnection(string source, string input, string destination, int staticWeight)
+        {
+            return AddConnection(source, input, destination, (_) => staticWeight);
         }
 
         public NetworkBuilder ClearConnectionsFromState(string state, string input)
