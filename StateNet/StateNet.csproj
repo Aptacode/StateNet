@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>Aptacode.StateNet</RootNamespace>
     <AssemblyName>Aptacode.StateNet</AssemblyName>
     <Authors>Timothy Jones</Authors>
@@ -16,10 +16,10 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0.1</Version>
-    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <Version>2.0.0.2</Version>
+    <AssemblyVersion>2.0.0.2</AssemblyVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
-    <FileVersion>2.0.0.1</FileVersion>
+    <FileVersion>2.0.0.2</FileVersion>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
