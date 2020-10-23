@@ -16,28 +16,44 @@ https://discord.gg/D8MSXJB
 
 ### Overview
 
-The original goal of StateNet was to create a simple way to define and control the flow through pages of an application. Since its inception the library has grown versatile with many usecases.
+StateNet's primary purpose is to create a simple way to define and control the flow through pages of an application. However, since its inception the library has grown versatile with usecases ranging from X to Y.
 
 ### Usage
 
-StateNet works by defining a network of states interlinked by the inputs that can be applied to them. 
+At its core, StateNet works by defining a network of states, and how those states are connected. Inter-state connections are defined by a pair of 'Triggers' and dynamically-computed probabilities.
+
+For example, consider a network that defines the traffic lights at a pedestrian crossing. The network will have these states:
+ - Red
+ - Yellow
+ - Green
+ - Pending Pedestrians
+
+The network's state will be `Green` until a pedestrian Triggers `Crossing`. An equation will then check if the `Green` state has been active for long enough. If it has, then the odds of moving to `Yellow` are 100%. If it hasn't been long enough, then the probability of transitioning to `Pending Pedestrians` is 100%. Once in either the `Yellow` or `Red` state, a Trigger such as 'timer-check' might fire every second. Every time `timer-check` fires, the state will only change back to `Green` if enough time has passed for pedestrians to have crossed.
 
 #### How to Configure the Network
-List all of the states your application needs and consider the relationship between them to determine the inputs for your system.
-Create a connection by assigning a weight to each input that can be applied to a state.
-There are three approaches to configure the network:
+List all of the states your application needs. Then consider the relationships between those states in order to determine your system's Trigger events. Create a connection by assigning a weight to every way that a Trigger can change a given state.
 
-#### 1) Network Creation Tool
+Weights can be as simple or dynamic as you need. For example, a dice will have 6 states, 1 Trigger (`roll`), and each state-connection (all 36 of them [6X6]) has a hard coded weight of 16.66%. A more complex system might use a lamda equation to load a weight from a file (this latter example is unusual, but not impossible).
+
+There are three approaches you can use to define a network:
+
+##### 1) Network Creation Tool
 Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
-  <img width="632" height="356" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+  <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
 
+Note that this tool is still in an Alpha development state, and subject to serious change.
 
-#### 2) Object oriented
-- Create a class which derives from 'Network'
-- Define each State as a property on the class
-- Use attributes on the State properties to define the relationships between them
+
+##### 2) Object Oriented attributes
+- Create a class which derives from `Network`.
+- Define each State as a *property* of the new class.
+- Use attributes on the State properties to define the relationships between them.
+
+In the below example, `CustomNetwork` has 4 states.
+`StartTestState` (or `Start`) will **unconditionally** transition to `Decision1TestState` or `Decision2TestState`, when either the `Left` or `Right` Trigger is fired (respectively).
+When in `D1` or `D2`, the `Next` event would have to fire for things to change. However, this time, the transitioned-to State depends on what `StateVisitCount("D2")` evaluates to. `StateVisitCount()` would be present elsewhere in the class, and is dynamically compiled at runtime.
 
 ```csharp
   public class CustomNetwork : Network
@@ -63,7 +79,7 @@ Using the built in network creation tool you can graphically create / modify net
   }
 ```
 
-#### 3) Programmatic
+##### 3) Programmatic
 ```csharp
 	IStateNetwork stateNetwork = new StateNetwork();
 	var networkEditor = new StateNetworkEditor(stateNetwork);
