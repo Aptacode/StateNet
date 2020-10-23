@@ -2,6 +2,8 @@ using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 using Moq;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace StateNet.Tests.Engine
@@ -111,17 +113,90 @@ namespace StateNet.Tests.Engine
             Assert.False(transitionResult.Success);
         }
 
-        //GetAvailableInputs_Returns_EmptyList_WhenNoInputExistsForCurrentState
-        //GetAvailableInputs_Returns_List_WhenInputExistsForCurrentState  
+        [Fact]
+        public void GetAvailableInputs_Returns_EmptyList_WhenNoInputExistsForCurrentState()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start")
+                .Build().Network;
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            //Act
+            var inputs = sut.GetAvailableInputs();
+            //Assert
+            Assert.Empty(inputs);
+        }
 
-        //GetAvailableConnections_Returns_EmptyList_WhenNoConnectionsExistsForCurrentStateAndInput
-        //GetAvailableConnections_Returns_List_WhenConnectionsExistForCurrentStateAndInput
+        [Fact]
+        
+        public void GetAvailableInputs_Returns_CorrectList_WhenInputExistsForCurrentState()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start").AddConnection("Start", "Next", "A", 1)
+                .Build().Network;
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            //Act
+            var inputs = sut.GetAvailableInputs();
+            //Assert
+            Assert.Equal("Next", inputs.FirstOrDefault());
+        }
 
-        //CurrentStateChanges_After_SuccessfulTransition
-        //CurrentStateDoesNotChange_After_FailedTransition  
+        [Fact]
+        
+        public void GetAvailableConnections_Returns_EmptyList_WhenNoConnectionsExistsForCurrentStateAndInput()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start")
+                .Build().Network;
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            //Act
+            var connections = sut.GetAvailableConnections("Next");
+            //Assert
+            Assert.Empty(connections);
+        }
 
-        //OnTransition_Invoked_After_SuccessfulTransition
+        [Fact]
 
+        public void GetAvailableConnections_Returns_CorrectList_WhenConnectionsExistForCurrentStateAndInput()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start").AddConnection("Start", "Next", "A", 1)
+                .Build().Network;
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            //Act
+            var connections = sut.GetAvailableConnections("Next");
+            //Assert
+            Assert.Equal("A", connections.FirstOrDefault().Target);
+        }
+
+        //[Fact]
+        
+        //public void CurrentStateChanges_After_SuccessfulTransition()
+        //{
+
+        //}
+        ////CurrentStateDoesNotChange_After_FailedTransition  
+
+        [Fact]
+        public void OnTransition_Invoked_After_SuccessfulTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("Start").AddConnection("Start", "Next", "A", 1)
+                .Build().Network;
+
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+            var OnTransitionWasCalled = false;
+            sut.OnTransition += (_, __) => { OnTransitionWasCalled = true; };
+            //Act
+            var transitionResult = sut.Apply("Next");
+
+            //Assert
+            Assert.True(OnTransitionWasCalled);
+        }
         [Fact]
         public void OnTransition_NotInvoked_After_FailedTransition()
         {
