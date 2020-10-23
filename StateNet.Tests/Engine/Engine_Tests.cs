@@ -12,7 +12,7 @@ namespace StateNet.Tests.Engine
         public void EngineSingleTransition()
         {
             var network = NetworkBuilder.New.SetStartState("Start")
-                .AddConnection("Start", "Next", "A", _ => 1)
+                .AddConnection("Start", "Next", "A", 1)
                 .Build()
                 .Network;
 
@@ -49,8 +49,8 @@ namespace StateNet.Tests.Engine
         public void EngineSimpleConnectionWeightSelection()
         {
             var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", _ => 1)
-                .AddConnection("A", "Next", "C", _ => 1)
+                .AddConnection("A", "Next", "B", 1)
+                .AddConnection("A", "Next", "C", 1)
                 .Build().Network;
 
             var mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
@@ -73,8 +73,8 @@ namespace StateNet.Tests.Engine
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B", x => x.Transitions.Count == 0 ? 1 : 0)
                 .AddConnection("A", "Next", "C", x => x.Transitions.Count > 0 ? 1 : 0)
-                .AddConnection("B", "Next", "A", _ => 1)
-                .AddConnection("C", "Next", "D", _ => 1)
+                .AddConnection("B", "Next", "A", 1)
+                .AddConnection("C", "Next", "D", 1)
                 .Build().Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
