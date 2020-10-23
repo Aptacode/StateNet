@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Aptacode.StateNet.Engine {
+namespace Aptacode.StateNet.Engine.Transitions
+{
     public class TransitionHistory
     {
         private readonly List<Transition> _transitions = new List<Transition>();

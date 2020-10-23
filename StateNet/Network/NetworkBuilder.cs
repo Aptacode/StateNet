@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Expressions;
-using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Network
 {
     public class NetworkBuilder
     {
-        private string _startState;
-        private readonly HashSet<string> _states;
-        private readonly HashSet<string> _inputs;
         private readonly List<(string, string, Connection)> _connections;
-        
-        public static NetworkBuilder New => new NetworkBuilder();
+        private readonly HashSet<string> _inputs;
+        private readonly HashSet<string> _states;
+        private string _startState;
 
         protected NetworkBuilder()
         {
@@ -24,6 +21,8 @@ namespace Aptacode.StateNet.Network
             _inputs = new HashSet<string>();
             _connections = new List<(string, string, Connection)>();
         }
+
+        public static NetworkBuilder New => new NetworkBuilder();
 
         public NetworkBuilder SetStartState(string startState)
         {
@@ -49,8 +48,8 @@ namespace Aptacode.StateNet.Network
         {
             _inputs.Add(input);
             return this;
-        }    
-        
+        }
+
         public NetworkBuilder RemoveInput(string input)
         {
             ClearConnectionsWithInput(input);
@@ -58,7 +57,8 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddConnection(string source, string input, string destination, Expression<Func<TransitionHistory, int>> expression)
+        public NetworkBuilder AddConnection(string source, string input, string destination,
+            Expression<Func<TransitionHistory, int>> expression)
         {
             AddState(source);
             AddInput(input);
@@ -70,7 +70,7 @@ namespace Aptacode.StateNet.Network
 
         public NetworkBuilder AddConnection(string source, string input, string destination, int staticWeight)
         {
-            return AddConnection(source, input, destination, (_) => staticWeight);
+            return AddConnection(source, input, destination, _ => staticWeight);
         }
 
         public NetworkBuilder ClearConnectionsFromState(string state, string input)
@@ -80,6 +80,7 @@ namespace Aptacode.StateNet.Network
             {
                 _connections.Remove(connection);
             }
+
             return this;
         }
 
@@ -90,6 +91,7 @@ namespace Aptacode.StateNet.Network
             {
                 _connections.Remove(connection);
             }
+
             return this;
         }
 
@@ -100,6 +102,7 @@ namespace Aptacode.StateNet.Network
             {
                 _connections.Remove(connection);
             }
+
             return this;
         }
 
@@ -110,6 +113,7 @@ namespace Aptacode.StateNet.Network
             {
                 _connections.Remove(connection);
             }
+
             return this;
         }
 
@@ -120,6 +124,7 @@ namespace Aptacode.StateNet.Network
             {
                 _connections.Remove(connection);
             }
+
             return this;
         }
 
@@ -161,6 +166,5 @@ namespace Aptacode.StateNet.Network
             _inputs.Clear();
             _connections.Clear();
         }
-
     }
 }

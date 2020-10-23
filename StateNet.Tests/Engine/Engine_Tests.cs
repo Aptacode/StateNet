@@ -9,23 +9,6 @@ namespace StateNet.Tests.Engine
     public class Engine_Tests
     {
         [Fact]
-        public void EngineSingleTransition()
-        {
-            var network = NetworkBuilder.New.SetStartState("Start")
-                .AddConnection("Start", "Next", "A", 1)
-                .Build()
-                .Network;
-
-            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
-
-            var startState = engine.CurrentState;
-            var secondState = engine.Apply("Next");
-
-            Assert.Equal("Start", startState);
-            Assert.Equal("A", secondState.Transition.Destination);
-        }
-
-        [Fact]
         public void EngineReverseTransition()
         {
             var network = NetworkBuilder.New.SetStartState("A")
@@ -68,6 +51,23 @@ namespace StateNet.Tests.Engine
         }
 
         [Fact]
+        public void EngineSingleTransition()
+        {
+            var network = NetworkBuilder.New.SetStartState("Start")
+                .AddConnection("Start", "Next", "A", 1)
+                .Build()
+                .Network;
+
+            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
+
+            var startState = engine.CurrentState;
+            var secondState = engine.Apply("Next");
+
+            Assert.Equal("Start", startState);
+            Assert.Equal("A", secondState.Transition.Destination);
+        }
+
+        [Fact]
         public void EngineTransitionHistory()
         {
             var network = NetworkBuilder.New.SetStartState("A")
@@ -100,7 +100,7 @@ namespace StateNet.Tests.Engine
                 .SetStartState("Start")
                 .AddConnection("A", "Next", "B", 1)
                 .AddConnection("A", "Next", "C", 1)
-              .Build().Network;
+                .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
@@ -128,20 +128,16 @@ namespace StateNet.Tests.Engine
             //Arrange
             var networkResponse = NetworkBuilder.New
                 .SetStartState("Start")
-              .Build().Network;
+                .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             var OnTransitionWasCalled = false;
-            sut.OnTransition += (_, __) =>
-            {
-                OnTransitionWasCalled = true;
-            };
+            sut.OnTransition += (_, __) => { OnTransitionWasCalled = true; };
             //Act
             var transitionResult = sut.Apply("Next");
 
             //Assert
             Assert.False(OnTransitionWasCalled);
         }
-
     }
 }

@@ -1,14 +1,25 @@
-﻿using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Network;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Aptacode.StateNet.Network;
 using Xunit;
 
 namespace StateNet.Tests.Network
 {
     public class StateNetwork_Tests
     {
+        [Fact]
+        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsNull()
+        {
+            //Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                //Arrange
+                //Act
+                var sut = new StateNetwork(
+                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>(), "");
+            });
+        }
+
         [Fact]
         public void GetConnections_Returns_EmptyList_WhenNoInputsAreDefined()
         {
@@ -35,17 +46,6 @@ namespace StateNet.Tests.Network
             Assert.Equal(1, connections.Count);
         }
 
-        [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsNull()
-        {
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => {
-                //Arrange
-                //Act
-                var sut = new StateNetwork(new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>(), "");
-            });
-        }
-
         //Constructor_Throws_ArgumentNullException_WhenStartStateIsEmpty
         //Constructor_Throws_ArgumentNullException_WhenStateDictionaryIsEmpty
         //Constructor_Throws_ArgumentNullException_WhenStateDictionaryNull
@@ -55,7 +55,5 @@ namespace StateNet.Tests.Network
 
         //GetConnections_Returns_EmptyList_WhenNoConnectionsExistForStateAndInput
         //GetConnections_Returns_List_WhenConnectionsExistForStateAndInput
-
-
     }
 }

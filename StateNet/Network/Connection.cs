@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Aptacode.StateNet.Engine;
+using Aptacode.StateNet.Engine.Transitions;
 
-namespace Aptacode.StateNet.Network {
+namespace Aptacode.StateNet.Network
+{
     public class Connection
     {
+        private readonly Func<TransitionHistory, int> _predicate;
+
+        public Expression<Func<TransitionHistory, int>> Expression;
+
         public Connection(string target, Expression<Func<TransitionHistory, int>> expression)
         {
             Target = target;
@@ -14,13 +19,6 @@ namespace Aptacode.StateNet.Network {
 
         public string Target { get; }
 
-        public Expression<Func<TransitionHistory, int>> Expression;
-
-        private readonly Func<TransitionHistory, int> _predicate;
-
-        public int GetWeight(TransitionHistory entity)
-        {
-            return _predicate(entity);
-        }
+        public int GetWeight(TransitionHistory entity) => _predicate(entity);
     }
 }
