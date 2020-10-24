@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -10,6 +10,10 @@ namespace Aptacode.StateNet.Engine.Transitions
 
         public TransitionHistory(string startState)
         {
+            if (string.IsNullOrEmpty(startState))
+            {
+                throw new ArgumentNullException(nameof(startState));
+            }
             _historyStringBuilder.Append($"{startState}");
         }
 
@@ -20,10 +24,6 @@ namespace Aptacode.StateNet.Engine.Transitions
 
         public override string ToString() => _historyStringBuilder.ToString();
 
-        public int MatchCount(string pattern)
-        {
-            return Regex.Matches(_historyStringBuilder.ToString(), pattern).Count;
-        }
-
+        public int MatchCount(string pattern) => Regex.Matches(_historyStringBuilder.ToString(), pattern).Count;
     }
 }
