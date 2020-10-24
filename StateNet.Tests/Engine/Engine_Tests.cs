@@ -154,7 +154,7 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start")
+                .SetStartState("A")
                 .AddConnection("A", "Next", "B", 1)
                 .AddConnection("A", "Next", "C", 1)
                 .Build().Network;
@@ -162,7 +162,7 @@ namespace StateNet.Tests.Engine
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            var transitionResult = sut.Apply("Next");
+            var transitionResult = sut.Apply("Back");
 
             //Assert
             Assert.False(transitionResult.Success);

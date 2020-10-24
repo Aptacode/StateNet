@@ -8,7 +8,7 @@ namespace Aptacode.StateNet.Network
     {
         private readonly Func<int, int> _predicate;
 
-        public Expression<Func<int, int>> Expression;
+        public Expression<Func<int, int>> Expression { get; }
 
         public Connection(string target, string pattern, Expression<Func<int, int>> expression)
         {
@@ -22,7 +22,7 @@ namespace Aptacode.StateNet.Network
         {
             Target = target;
             Pattern = string.Empty;
-            Expression = x => staticWeight;
+            Expression = _ => staticWeight;
             _predicate = Expression.Compile();
         }
 

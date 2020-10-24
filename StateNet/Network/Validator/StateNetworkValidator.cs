@@ -38,7 +38,34 @@ namespace Aptacode.StateNet.Network.Validator
                 }
             }
 
+            var visitedStates = new HashSet<string>();
+            GetVisitedStates(network, network.StartState, visitedStates);
+            var unvisitedStates = states.Where(s => !visitedStates.Contains(s));
+
+            if(unvisitedStates.Any())
+            {
+                return StateNetworkValidationResult.Fail("Unreachable states exist in the network.");
+            }
+
             return StateNetworkValidationResult.Ok("Success");
+        }
+
+        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates)
+        {
+            visitedStates.Add(state);
+            var inputs = network.GetInputs(state);
+
+            var connectedStates = new HashSet<string>();
+            foreach (var connection in inputs.SelectMany(i => network.GetConnections(state, i)))
+            {
+                connectedStates.Add(connection.Target);
+            }
+
+            var unvisitedStates = connectedStates.Where(s => !visitedStates.Contains(s));
+            foreach (var unvisitedState in unvisitedStates)
+            {
+                GetVisitedStates(network, unvisitedState, visitedStates);
+            }
         }
 
         private static (IEnumerable<string> states, IEnumerable<string> inputs) GetConnectionDependencies(
