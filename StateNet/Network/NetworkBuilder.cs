@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Expressions;
-using Aptacode.StateNet.Engine.Transitions;
+using Aptacode.StateNet.Network.Validator;
 
 namespace Aptacode.StateNet.Network
 {
@@ -57,20 +57,20 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddConnection(string source, string input, string destination,
-            Expression<Func<TransitionHistory, int>> expression)
+        public NetworkBuilder AddConnection(string source, string input, string destination, string pattern,
+            Expression<Func<int, int>> expression)
         {
             AddState(source);
             AddInput(input);
             AddState(destination);
 
-            _connections.Add((source, input, new Connection(destination, expression)));
+            _connections.Add((source, input, new Connection(destination, pattern, expression)));
             return this;
         }
 
         public NetworkBuilder AddConnection(string source, string input, string destination, int staticWeight)
         {
-            return AddConnection(source, input, destination, _ => staticWeight);
+            return AddConnection(source, input, destination, string.Empty, _ => staticWeight);
         }
 
         public NetworkBuilder ClearConnectionsFromState(string state, string input)
@@ -128,33 +128,55 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public StateNetworkResult Build()
+
+        private StateNetworkResult CreateStateNetwork()
         {
-            if (string.IsNullOrEmpty(_startState))
+            try
             {
-                return StateNetworkResult.Fail("Start state was not set.");
-            }
+                var stateDictionary =
+                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
 
-            var stateDictionary =
-                new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-
-            foreach (var state in _states)
-            {
-                var inputDictionary = new Dictionary<string, IReadOnlyList<Connection>>();
-
-                var connectionsFromState = _connections.Where(c => c.Item1 == state).GroupBy(c => c.Item2);
-                foreach (var connectionGroup in connectionsFromState)
+                foreach (var state in _states)
                 {
-                    var connections = connectionGroup.Select(c => c.Item3).ToImmutableList();
-                    inputDictionary.Add(connectionGroup.Key, connections);
+                    var inputDictionary = new Dictionary<string, IReadOnlyList<Connection>>();
+
+                    var connectionsFromState = _connections.Where(c => c.Item1 == state).GroupBy(c => c.Item2);
+                    foreach (var connectionGroup in connectionsFromState)
+                    {
+                        var connections = connectionGroup.Select(c => c.Item3).ToImmutableList();
+
+                        inputDictionary.Add(connectionGroup.Key, connections);
+                    }
+
+                    stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
                 }
 
-                stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
+                var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
+                return StateNetworkResult.Ok(network, "Success.");
             }
+            catch
+            {
+                return StateNetworkResult.Fail("Could not create network.");
+            }
+        }
 
-            var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
+        public StateNetworkResult Build()
+        {
+            var networkResult = CreateStateNetwork();
+            var network = networkResult.Network;
 
             Reset();
+
+            if (!networkResult.Success || network == null)
+            {
+                return networkResult;
+            }
+
+            var stateNetworkValidationResult = network.IsValid();
+            if (!stateNetworkValidationResult.Success)
+            {
+                return StateNetworkResult.Fail(stateNetworkValidationResult.Message);
+            }
 
             return StateNetworkResult.Ok(network, "Success.");
         }

@@ -72,8 +72,8 @@ namespace StateNet.Tests.Engine
         public void EngineTransitionHistory()
         {
             var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", x => x.MatchCount("B") == 0 ? 1 : 0)
-                .AddConnection("A", "Next", "C", x => x.MatchCount("B") > 0 ? 1 : 0)
+                .AddConnection("A", "Next", "B", "B", x => x == 0 ? 1 : 0)
+                .AddConnection("A", "Next", "C", "B", x => x > 0 ? 1 : 0)
                 .AddConnection("B", "Next", "A", 1)
                 .AddConnection("C", "Next", "D", 1)
                 .Build().Network;

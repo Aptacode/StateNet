@@ -43,5 +43,17 @@ namespace Aptacode.StateNet.Network
 
             return inputs.Keys.ToList();
         }
+
+        public IReadOnlyList<Connection> GetAllConnections()
+        {
+            return _stateDictionary.Values.SelectMany(c => c.Values.SelectMany(c => c)).ToList();
+        }
+
+        public IReadOnlyList<string> GetAllInputs()
+        {
+            return _stateDictionary.Values.SelectMany(c => c.Keys).ToList();
+        }
+
+        public IReadOnlyList<string> GetAllStates() => _stateDictionary.Keys.ToList();
     }
 }
