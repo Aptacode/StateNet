@@ -4,11 +4,7 @@
 
 ## A .Net Standard library used to model complicated State Machines
 
-
-Discord Group for development / help
-
-https://discord.gg/D8MSXJB
-
+[![Discord Server](https://img.shields.io/discord/533275703882547200?logo=discord)](https://discord.gg/D8MSXJB)
 [![NuGet](https://img.shields.io/nuget/v/Aptacode.StateNet.svg?style=flat)](https://www.nuget.org/packages/Aptacode.StateNet/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1d08da0b20b0407682ed6cf71f7bd3a1)](https://www.codacy.com/gh/Aptacode/StateNet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Aptacode/StateNet&amp;utm_campaign=Badge_Grade)
 ![last commit](https://img.shields.io/github/last-commit/Timmoth/Aptacode.StateNet?style=flat-square&cacheSeconds=86000)
@@ -23,10 +19,10 @@ StateNet's primary purpose is to create a simple way to define and control the f
 At its core, StateNet works by defining a network of states, and how those states are connected. Inter-state connections are defined by a pair of 'Triggers' and dynamically-computed probabilities.
 
 For example, consider a network that defines the traffic lights at a pedestrian crossing. The network will have these states:
- - Red
- - Yellow
- - Green
- - Pending Pedestrians
+- Red
+- Yellow
+- Green
+- Pending Pedestrians
 
 The network's state will be `Green` until a pedestrian Triggers `Crossing`. An equation will then check if the `Green` state has been active for long enough. If it has, then the odds of moving to `Yellow` are 100%. If it hasn't been long enough, then the probability of transitioning to `Pending Pedestrians` is 100%. Once in either the `Yellow` or `Red` state, a Trigger such as 'timer-check' might fire every second. Every time `timer-check` fires, the state will only change back to `Green` if enough time has passed for pedestrians to have crossed.
 
@@ -45,11 +41,10 @@ Using the built in network creation tool you can graphically create / modify net
 
 Note that this tool is still in an Alpha development state, and subject to serious change.
 
-
 ##### 2) Object Oriented attributes
-- Create a class which derives from `Network`.
-- Define each State as a *property* of the new class.
-- Use attributes on the State properties to define the relationships between them.
+  - Create a class which derives from `Network`.
+  - Define each State as a *property* of the new class.
+  - Use attributes on the State properties to define the relationships between them.
 
 In the below example, `CustomNetwork` has 4 states.
 `StartTestState` (or `Start`) will **unconditionally** transition to `Decision1TestState` or `Decision2TestState`, when either the `Left` or `Right` Trigger is fired (respectively).
@@ -122,7 +117,6 @@ engine.Apply("Play");
 engine.Apply("Stop");
 
 ```
-
 
 ## License
 
