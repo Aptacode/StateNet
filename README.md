@@ -36,7 +36,7 @@ There are three approaches you can use to define a network:
 ##### 1) Network Creation Tool
 Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
-  <img width="640" height="360" src="https://raw.githubusercontent.com/Aptacode/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+  <img width="640" height="360" src="https://raw.githubusercontent.com/Aptacode/StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
 
 Note that this tool is still in an Alpha development state, and subject to serious change.
