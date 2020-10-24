@@ -39,24 +39,35 @@ namespace Aptacode.StateNet.Network.Validator
             }
 
             var visitedStates = new HashSet<string>();
-            GetVisitedStates(network, network.StartState, visitedStates);
+            var usableInputs = new HashSet<string>();
+            GetVisitedStates(network, network.StartState, visitedStates, usableInputs);
             var unvisitedStates = states.Where(s => !visitedStates.Contains(s));
 
             if(unvisitedStates.Any())
             {
                 return StateNetworkValidationResult.Fail("Unreachable states exist in the network.");
+            }            
+            
+            var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
+            if(unusedInputs.Any())
+            {
+                return StateNetworkValidationResult.Fail("Unusable inputs exist in the network.");
             }
 
             return StateNetworkValidationResult.Ok("Success");
         }
 
-        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates)
+        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates, HashSet<string> usableInputs)
         {
             visitedStates.Add(state);
-            var inputs = network.GetInputs(state);
+            var validInputs = network.GetInputs(state);
+            foreach (var input in validInputs)
+            {
+                usableInputs.Add(input);
+            }
 
             var connectedStates = new HashSet<string>();
-            foreach (var connection in inputs.SelectMany(i => network.GetConnections(state, i)))
+            foreach (var connection in validInputs.SelectMany(i => network.GetConnections(state, i)))
             {
                 connectedStates.Add(connection.Target);
             }
@@ -64,7 +75,7 @@ namespace Aptacode.StateNet.Network.Validator
             var unvisitedStates = connectedStates.Where(s => !visitedStates.Contains(s));
             foreach (var unvisitedState in unvisitedStates)
             {
-                GetVisitedStates(network, unvisitedState, visitedStates);
+                GetVisitedStates(network, unvisitedState, visitedStates, usableInputs);
             }
         }
 
