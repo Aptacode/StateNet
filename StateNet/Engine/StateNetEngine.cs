@@ -43,7 +43,7 @@ namespace Aptacode.StateNet.Engine
             var weightedConnections = new List<string>();
             foreach (var connection in connections)
             {
-                var connectionWeight = connection.GetWeight(_transitionHistory);
+                var connectionWeight = connection.Expression.Interpret(_transitionHistory);
                 if (connectionWeight <= 0)
                 {
                     continue;

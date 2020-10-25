@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
 using Aptacode.StateNet.Network;
 
 namespace StateNet.Tests.Network
@@ -14,7 +15,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", 1)
+                                new Connection("b", new ConstantInteger(1))
                             }
                         }
                     }
@@ -25,7 +26,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", 1)
+                                new Connection("a", new ConstantInteger(1))
                             }
                         }
                     }
@@ -41,7 +42,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", 1)
+                                new Connection("b", new ConstantInteger(1))
                             }
                         }
                     }
@@ -52,7 +53,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", 1)
+                                new Connection("a", new ConstantInteger(1))
                             }
                         }
                     }
@@ -68,7 +69,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("c", 1)
+                                new Connection("c", new ConstantInteger(1))
                             }
                         }
                     }
@@ -79,16 +80,15 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", 1)
+                                new Connection("a", new ConstantInteger(1))
                             }
                         }
                     }
                 }
             }, "a");
 
-        public static StateNetwork Invalid_ConnectionPatternState_Network()
-        {
-            return new StateNetwork(new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+        public static StateNetwork Invalid_ConnectionPatternState_Network() =>
+            new StateNetwork(new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
                     "a", new Dictionary<string, IReadOnlyList<Connection>>
@@ -96,7 +96,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", "s<c>", x => x)
+                                new Connection("b", new TransitionHistoryMatchCount("c"))
                             }
                         }
                     }
@@ -107,17 +107,15 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", 1)
+                                new Connection("a", new ConstantInteger(1))
                             }
                         }
                     }
                 }
             }, "a");
-        }
 
-        public static StateNetwork Invalid_ConnectionPatternInput_Network()
-        {
-            return new StateNetwork(new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+        public static StateNetwork Invalid_ConnectionPatternInput_Network() =>
+            new StateNetwork(new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
                     "a", new Dictionary<string, IReadOnlyList<Connection>>
@@ -125,7 +123,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", "s<b>i<3>", x => x)
+                                new Connection("b", new TransitionHistoryMatchCount("bi"))
                             }
                         }
                     }
@@ -136,12 +134,11 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", 1)
+                                new Connection("a", new ConstantInteger(1))
                             }
                         }
                     }
                 }
             }, "a");
-        }
     }
 }

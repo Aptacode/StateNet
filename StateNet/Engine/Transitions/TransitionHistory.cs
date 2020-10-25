@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Aptacode.StateNet.Engine.Transitions
 {
     public class TransitionHistory
     {
-        public static readonly string StateDelimiter = "s";
-        public static readonly string InputDelimiter = "i";
-
-        private readonly StringBuilder _historyStringBuilder = new StringBuilder();
+        private readonly List<string> _stringTransitionHistory = new List<string>();
+        private readonly List<int> _transitionHistory = new List<int>();
 
         public TransitionHistory(string startState)
         {
@@ -18,16 +15,21 @@ namespace Aptacode.StateNet.Engine.Transitions
                 throw new ArgumentNullException(nameof(startState));
             }
 
-            _historyStringBuilder.Append($"{StateDelimiter}<{startState}>");
+            _transitionHistory.Add(startState.GetHashCode());
+            _stringTransitionHistory.Add(startState);
         }
+
+        public IReadOnlyList<int> GetTransitionHistory() => _transitionHistory.AsReadOnly();
 
         public void Add(string input, string destination)
         {
-            _historyStringBuilder.Append($"{InputDelimiter}<{input}>{StateDelimiter}<{destination}>");
+            _stringTransitionHistory.Add(input);
+            _stringTransitionHistory.Add(destination);
+
+            _transitionHistory.Add(input.GetHashCode());
+            _transitionHistory.Add(destination.GetHashCode());
         }
 
-        public override string ToString() => _historyStringBuilder.ToString();
-
-        public int MatchCount(string pattern) => Regex.Matches(_historyStringBuilder.ToString(), pattern).Count;
+        public override string ToString() => string.Join(",", _stringTransitionHistory);
     }
 }

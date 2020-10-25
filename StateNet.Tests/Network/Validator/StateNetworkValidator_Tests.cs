@@ -1,6 +1,5 @@
 ﻿using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Network.Validator;
-using StateNet.Tests.Engine;
 using Xunit;
 
 namespace StateNet.Tests.Network.Validator

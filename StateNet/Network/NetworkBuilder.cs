@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Linq.Expressions;
+using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
 using Aptacode.StateNet.Network.Validator;
 
 namespace Aptacode.StateNet.Network
@@ -57,20 +56,15 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddConnection(string source, string input, string destination, string pattern,
-            Expression<Func<int, int>> expression)
+        public NetworkBuilder AddConnection(string source, string input, string destination,
+            IIntegerExpression expression)
         {
             AddState(source);
             AddInput(input);
             AddState(destination);
 
-            _connections.Add((source, input, new Connection(destination, pattern, expression)));
+            _connections.Add((source, input, new Connection(destination, expression)));
             return this;
-        }
-
-        public NetworkBuilder AddConnection(string source, string input, string destination, int staticWeight)
-        {
-            return AddConnection(source, input, destination, string.Empty, _ => staticWeight);
         }
 
         public NetworkBuilder ClearConnectionsFromState(string state, string input)

@@ -16,10 +16,10 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0.7</Version>
-    <AssemblyVersion>2.0.0.7</AssemblyVersion>
+    <Version>2.0.0.8</Version>
+    <AssemblyVersion>2.0.0.8</AssemblyVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
-    <FileVersion>2.0.0.7</FileVersion>
+    <FileVersion>2.0.0.8</FileVersion>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
@@ -53,6 +53,10 @@
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Engine\Interpreter\" />
   </ItemGroup>
 
 </Project>

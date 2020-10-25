@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using Aptacode.StateNet.Engine.Transitions.Expressions.Boolean;
+using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
 
 namespace Aptacode.StateNet.Network.Validator
 {
@@ -16,7 +17,7 @@ namespace Aptacode.StateNet.Network.Validator
             var connections = network.GetAllConnections();
             var states = network.GetAllStates();
             var inputs = network.GetAllInputs();
-
+            var allStatesAndInputs = states.Concat(inputs);
             foreach (var connection in connections)
             {
                 if (!states.Contains(connection.Target))
@@ -24,17 +25,13 @@ namespace Aptacode.StateNet.Network.Validator
                     return StateNetworkValidationResult.Fail("Connection target is not a valid state.");
                 }
 
-                var dependencies = GetConnectionDependencies(connection);
-                var validStates = dependencies.states.All(state => states.Contains(state));
-                if (!validStates)
-                {
-                    return StateNetworkValidationResult.Fail("Connection had an invalid state dependency.");
-                }
+                var dependencies = new HashSet<string>();
+                GetTransitionDependencies(connection.Expression, dependencies);
 
-                var validInputs = dependencies.inputs.All(input => inputs.Contains(input));
-                if (!validInputs)
+                var allDependenciesAreValid = dependencies.All(state => allStatesAndInputs.Contains(state));
+                if (!allDependenciesAreValid)
                 {
-                    return StateNetworkValidationResult.Fail("Connection had an invalid input dependency.");
+                    return StateNetworkValidationResult.Fail("Connection had an invalid state or input dependency.");
                 }
             }
 
@@ -43,13 +40,13 @@ namespace Aptacode.StateNet.Network.Validator
             GetVisitedStates(network, network.StartState, visitedStates, usableInputs);
             var unvisitedStates = states.Where(s => !visitedStates.Contains(s));
 
-            if(unvisitedStates.Any())
+            if (unvisitedStates.Any())
             {
                 return StateNetworkValidationResult.Fail("Unreachable states exist in the network.");
-            }            
-            
+            }
+
             var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
-            if(unusedInputs.Any())
+            if (unusedInputs.Any())
             {
                 return StateNetworkValidationResult.Fail("Unusable inputs exist in the network.");
             }
@@ -57,7 +54,8 @@ namespace Aptacode.StateNet.Network.Validator
             return StateNetworkValidationResult.Ok("Success");
         }
 
-        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates, HashSet<string> usableInputs)
+        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,
+            HashSet<string> usableInputs)
         {
             visitedStates.Add(state);
             var validInputs = network.GetInputs(state);
@@ -66,66 +64,57 @@ namespace Aptacode.StateNet.Network.Validator
                 usableInputs.Add(input);
             }
 
-            var connectedStates = new HashSet<string>();
-            foreach (var connection in validInputs.SelectMany(i => network.GetConnections(state, i)))
-            {
-                connectedStates.Add(connection.Target);
-            }
+            var connectedStates = validInputs
+                .SelectMany(i => network.GetConnections(state, i))
+                .Select(c => c.Target);
 
-            var unvisitedStates = connectedStates.Where(s => !visitedStates.Contains(s));
-            foreach (var unvisitedState in unvisitedStates)
+            var unvisitedConnectedStates =
+                connectedStates.Distinct()
+                    .Where(s => !visitedStates.Contains(s));
+
+            foreach (var unvisitedState in unvisitedConnectedStates)
             {
                 GetVisitedStates(network, unvisitedState, visitedStates, usableInputs);
             }
         }
 
-        private static (IEnumerable<string> states, IEnumerable<string> inputs) GetConnectionDependencies(
-            Connection connection)
+        public static void GetTransitionDependencies(IIntegerExpression expression, HashSet<string> dependencies)
         {
-            var states = new List<string>();
-            var inputs = new List<string>();
-
-            var pattern = connection.Pattern;
-
-            if (string.IsNullOrEmpty(pattern))
+            switch (expression)
             {
-                return (states, inputs);
-            }
+                case BinaryIntegerExpression binaryIntegerExpression:
+                    GetTransitionDependencies(binaryIntegerExpression.LHS, dependencies);
+                    GetTransitionDependencies(binaryIntegerExpression.RHS, dependencies);
+                    break;
+                case TernaryIntegerExpression ternaryIntegerExpression:
+                    GetTransitionDependencies(ternaryIntegerExpression.Condition, dependencies);
+                    GetTransitionDependencies(ternaryIntegerExpression.PassExpression, dependencies);
+                    GetTransitionDependencies(ternaryIntegerExpression.FailExpression, dependencies);
+                    break;
+                case BaseTransitionHistoryMatchCount transitionHistoryMatchCount:
+                    foreach (var dependency in transitionHistoryMatchCount.TransitionStringPattern)
+                    {
+                        if (string.IsNullOrEmpty(dependency))
+                        {
+                            continue;
+                        }
 
-            var stateMatches = Regex.Matches(pattern, @"s<(.+?)>");
-            foreach (Match stateMatch in stateMatches)
+                        dependencies.Add(dependency);
+                    }
+
+                    break;
+            }
+        }
+
+        public static void GetTransitionDependencies(IBooleanExpression expression, HashSet<string> dependencies)
+        {
+            switch (expression)
             {
-                var captures = stateMatch.Groups;
-                if (captures.Count < 1)
-                {
-                    continue;
-                }
-
-                var state = captures[1]?.Value;
-
-                if (!string.IsNullOrEmpty(state))
-                {
-                    states.Add(state);
-                }
+                case BinaryBooleanExpression binaryIntegerExpression:
+                    GetTransitionDependencies(binaryIntegerExpression.LHS, dependencies);
+                    GetTransitionDependencies(binaryIntegerExpression.RHS, dependencies);
+                    break;
             }
-
-            var inputMatches = Regex.Matches(pattern, @"i<(.+?)>");
-            foreach (Match inputMatch in inputMatches)
-            {
-                var captures = inputMatch.Groups;
-                if (captures.Count < 1)
-                {
-                    continue;
-                }
-
-                var input = captures[1]?.Value;
-                if (!string.IsNullOrEmpty(input))
-                {
-                    inputs.Add(input);
-                }
-            }
-
-            return (states, inputs);
         }
     }
 }

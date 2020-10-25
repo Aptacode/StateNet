@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
 using Aptacode.StateNet.Network;
 using Xunit;
 
@@ -37,7 +38,8 @@ namespace StateNet.Tests.Network
         public void GetConnections_Returns_List_WhenInputsAreDefined()
         {
             //Arrange
-            var sut = NetworkBuilder.New.SetStartState("Start").AddConnection("Start", "Next", "A", 1).Build().Network;
+            var sut = NetworkBuilder.New.SetStartState("Start")
+                .AddConnection("Start", "Next", "A", new ConstantInteger(1)).Build().Network;
 
             //Act
             var connections = sut.GetConnections("Start", "Next");
