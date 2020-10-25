@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aptacode.Expressions.Bool;
+using Aptacode.Expressions.Bool.Expression;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
 using Aptacode.StateNet.Engine.Transitions;

@@ -1,5 +1,6 @@
 using System.Linq;
 using Aptacode.Expressions.Bool;
+using Aptacode.Expressions.Bool.Comparison;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
