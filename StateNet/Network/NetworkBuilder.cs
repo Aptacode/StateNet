@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
+using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
 using Aptacode.StateNet.Network.Validator;
 
 namespace Aptacode.StateNet.Network

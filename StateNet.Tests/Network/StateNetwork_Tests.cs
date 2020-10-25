@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
+using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
 using Aptacode.StateNet.Network;
 using Xunit;
 

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.Engine.Transitions;
 
-namespace Aptacode.StateNet.Engine.Transitions.Expressions.Integer
+namespace Aptacode.StateNet.Engine.Interpreter.Expressions.Integer
 {
     public abstract class BaseTransitionHistoryMatchCount : IIntegerExpression
     {

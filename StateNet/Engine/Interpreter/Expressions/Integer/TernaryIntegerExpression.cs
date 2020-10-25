@@ -1,6 +1,7 @@
-﻿using Aptacode.StateNet.Engine.Transitions.Expressions.Boolean;
+﻿using Aptacode.StateNet.Engine.Interpreter.Expressions.Boolean;
+using Aptacode.StateNet.Engine.Transitions;
 
-namespace Aptacode.StateNet.Engine.Transitions.Expressions.Integer
+namespace Aptacode.StateNet.Engine.Interpreter.Expressions.Integer
 {
     public abstract class TernaryIntegerExpression : IIntegerExpression
     {

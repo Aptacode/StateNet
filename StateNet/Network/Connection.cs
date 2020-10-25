@@ -1,4 +1,4 @@
-﻿using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
+﻿using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
 
 namespace Aptacode.StateNet.Network
 {

@@ -1,4 +1,6 @@
-﻿namespace Aptacode.StateNet.Engine.Transitions.Expressions.Integer
+﻿using Aptacode.StateNet.Engine.Transitions;
+
+namespace Aptacode.StateNet.Engine.Interpreter.Expressions.Integer
 {
     public class Multiply : BinaryIntegerExpression
     {

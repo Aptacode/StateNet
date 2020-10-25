@@ -1,7 +1,7 @@
 using System.Linq;
 using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Engine.Transitions.Expressions.Boolean;
-using Aptacode.StateNet.Engine.Transitions.Expressions.Integer;
+using Aptacode.StateNet.Engine.Interpreter.Expressions.Boolean;
+using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
 using Moq;
