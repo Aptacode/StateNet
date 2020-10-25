@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
+using Aptacode.Expressions.Integer;
+using Aptacode.StateNet.Engine.Interpreter.Expressions;
+using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 
 namespace StateNet.Tests.Network
@@ -15,7 +17,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new ConstantInteger(1))
+                                new Connection("b", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -26,7 +28,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger(1))
+                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -42,7 +44,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new ConstantInteger(1))
+                                new Connection("b", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -53,7 +55,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger(1))
+                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -69,7 +71,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("c", new ConstantInteger(1))
+                                new Connection("c", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -80,7 +82,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger(1))
+                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -107,7 +109,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger(1))
+                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }
@@ -134,7 +136,7 @@ namespace StateNet.Tests.Network
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger(1))
+                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
                             }
                         }
                     }

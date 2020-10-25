@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Aptacode.Expressions;
 
 namespace Aptacode.StateNet.Engine.Transitions
 {
-    public class TransitionHistory
+    public class TransitionHistory : IContext
     {
         private readonly List<string> _stringTransitionHistory = new List<string>();
         private readonly List<int> _transitionHistory = new List<int>();

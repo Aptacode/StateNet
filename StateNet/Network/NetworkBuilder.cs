@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
+using Aptacode.Expressions.Integer;
+using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network.Validator;
 
 namespace Aptacode.StateNet.Network
@@ -57,7 +58,7 @@ namespace Aptacode.StateNet.Network
         }
 
         public NetworkBuilder AddConnection(string source, string input, string destination,
-            IIntegerExpression expression)
+            IIntegerExpression<TransitionHistory> expression)
         {
             AddState(source);
             AddInput(input);

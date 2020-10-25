@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.StateNet.Engine.Interpreter.Expressions.Boolean;
-using Aptacode.StateNet.Engine.Interpreter.Expressions.Integer;
+using Aptacode.Expressions.Bool;
+using Aptacode.Expressions.Integer;
+using Aptacode.StateNet.Engine.Interpreter.Expressions;
+using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Network.Validator
 {
@@ -78,15 +80,16 @@ namespace Aptacode.StateNet.Network.Validator
             }
         }
 
-        public static void GetTransitionDependencies(IIntegerExpression expression, HashSet<string> dependencies)
+        public static void GetTransitionDependencies(IIntegerExpression<TransitionHistory> expression,
+            HashSet<string> dependencies)
         {
             switch (expression)
             {
-                case BinaryIntegerExpression binaryIntegerExpression:
-                    GetTransitionDependencies(binaryIntegerExpression.LHS, dependencies);
-                    GetTransitionDependencies(binaryIntegerExpression.RHS, dependencies);
+                case BinaryIntegerExpression<TransitionHistory> binaryIntegerExpression:
+                    GetTransitionDependencies(binaryIntegerExpression.Lhs, dependencies);
+                    GetTransitionDependencies(binaryIntegerExpression.Rhs, dependencies);
                     break;
-                case TernaryIntegerExpression ternaryIntegerExpression:
+                case TernaryIntegerExpression<TransitionHistory> ternaryIntegerExpression:
                     GetTransitionDependencies(ternaryIntegerExpression.Condition, dependencies);
                     GetTransitionDependencies(ternaryIntegerExpression.PassExpression, dependencies);
                     GetTransitionDependencies(ternaryIntegerExpression.FailExpression, dependencies);
@@ -106,13 +109,14 @@ namespace Aptacode.StateNet.Network.Validator
             }
         }
 
-        public static void GetTransitionDependencies(IBooleanExpression expression, HashSet<string> dependencies)
+        public static void GetTransitionDependencies(IBooleanExpression<TransitionHistory> expression,
+            HashSet<string> dependencies)
         {
             switch (expression)
             {
-                case BinaryBooleanExpression binaryIntegerExpression:
-                    GetTransitionDependencies(binaryIntegerExpression.LHS, dependencies);
-                    GetTransitionDependencies(binaryIntegerExpression.RHS, dependencies);
+                case BinaryBoolExpression<TransitionHistory> binaryIntegerExpression:
+                    GetTransitionDependencies(binaryIntegerExpression.Lhs, dependencies);
+                    GetTransitionDependencies(binaryIntegerExpression.Rhs, dependencies);
                     break;
             }
         }

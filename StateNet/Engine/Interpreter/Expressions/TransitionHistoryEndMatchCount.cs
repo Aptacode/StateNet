@@ -1,6 +1,6 @@
 ﻿using Aptacode.StateNet.Engine.Transitions;
 
-namespace Aptacode.StateNet.Engine.Interpreter.Expressions.Integer
+namespace Aptacode.StateNet.Engine.Interpreter.Expressions
 {
     public class TransitionHistoryEndMatchCount : BaseTransitionHistoryMatchCount
     {
