@@ -7,7 +7,7 @@
 [![Discord Server](https://img.shields.io/discord/533275703882547200?logo=discord)](https://discord.gg/D8MSXJB)
 [![NuGet](https://img.shields.io/nuget/v/Aptacode.StateNet.svg?style=flat)](https://www.nuget.org/packages/Aptacode.StateNet/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1d08da0b20b0407682ed6cf71f7bd3a1)](https://www.codacy.com/gh/Aptacode/StateNet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Aptacode/StateNet&amp;utm_campaign=Badge_Grade)
-![last commit](https://img.shields.io/github/last-commit/Timmoth/Aptacode.StateNet?style=flat-square&cacheSeconds=86000)
+![last commit](https://img.shields.io/github/last-commit/Aptacode/StateNet?style=flat-square&cacheSeconds=86000)
 [![Build Status](https://dev.azure.com/Aptacode/StateNet/_apis/build/status/Aptacode.StateNet?branchName=Development)](https://dev.azure.com/Aptacode/StateNet/_build/latest?definitionId=21&branchName=Development)
 
 ### Overview
@@ -36,7 +36,7 @@ There are three approaches you can use to define a network:
 ##### 1) Network Creation Tool
 Using the built in network creation tool you can graphically create / modify networks saved as Json files.
 <p align="center">
-  <img width="640" height="360" src="https://raw.githubusercontent.com/Timmoth/Aptacode.StateNet/dev/Resources/Images/Demos/networkcreationtool.jpg">
+  <img width="640" height="360" src="https://raw.githubusercontent.com/Aptacode/StateNet/Development/Resources/Images/Demos/networkcreationtool.jpg">
 </p>
 
 Note that this tool is still in an Alpha development state, and subject to serious change.
