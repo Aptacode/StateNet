@@ -17,17 +17,20 @@ namespace StateNet.Tests.Engine
         [Fact]
         public void EngineReverseTransition()
         {
+            //Arrange
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
                 .AddConnection("B", "Next", "A", new ConstantInteger<TransitionHistory>(1))
                 .Build().Network;
+            
+            //Act
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
-            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
+            var startState = sut.CurrentState;
+            var secondState = sut.Apply("Next");
+            var thirdState = sut.Apply("Next");
 
-            var startState = engine.CurrentState;
-            var secondState = engine.Apply("Next");
-            var thirdState = engine.Apply("Next");
-
+            //Assert
             Assert.Equal("A", startState);
             Assert.Equal("B", secondState.Transition.Destination);
             Assert.Equal("A", thirdState.Transition.Destination);
@@ -37,6 +40,7 @@ namespace StateNet.Tests.Engine
         [Fact]
         public void EngineSimpleConnectionWeightSelection()
         {
+            //Arrange
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
                 .AddConnection("A", "Next", "C", new ConstantInteger<TransitionHistory>(1))
@@ -46,12 +50,13 @@ namespace StateNet.Tests.Engine
             mockRandomNumberGenerator
                 .Setup(r => r.Generate(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(1);
+            //Act
+            var sut = new StateNetEngine(network, mockRandomNumberGenerator.Object);
 
-            var engine = new StateNetEngine(network, mockRandomNumberGenerator.Object);
+            var startState = sut.CurrentState;
+            var secondState = sut.Apply("Next");
 
-            var startState = engine.CurrentState;
-            var secondState = engine.Apply("Next");
-
+            //Assert
             Assert.Equal("A", startState);
             Assert.Equal("C", secondState.Transition.Destination);
         }
@@ -61,13 +66,12 @@ namespace StateNet.Tests.Engine
         {
             var network = NetworkBuilder.New.SetStartState("Start")
                 .AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
-                .Build()
-                .Network;
+                .Build().Network;
 
-            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
-            var startState = engine.CurrentState;
-            var secondState = engine.Apply("Next");
+            var startState = sut.CurrentState;
+            var secondState = sut.Apply("Next");
 
             Assert.Equal("Start", startState);
             Assert.Equal("A", secondState.Transition.Destination);
@@ -95,13 +99,13 @@ namespace StateNet.Tests.Engine
                 .AddConnection("C", "Next", "D", new ConstantInteger<TransitionHistory>(1))
                 .Build().Network;
 
-            var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
-            var state1 = engine.CurrentState;
-            var state2 = engine.Apply("Next");
-            var state3 = engine.Apply("Next");
-            var state4 = engine.Apply("Next");
-            var state5 = engine.Apply("Next");
+            var state1 = sut.CurrentState;
+            var state2 = sut.Apply("Next");
+            var state3 = sut.Apply("Next");
+            var state4 = sut.Apply("Next");
+            var state5 = sut.Apply("Next");
 
             Assert.Equal("A", state1);
             Assert.Equal("B", state2.Transition.Destination);
@@ -115,7 +119,8 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .SetStartState("Start")
+                .AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
                 .Build().Network;
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             //Act
@@ -143,7 +148,8 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .SetStartState("Start")
+                .AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
                 .Build().Network;
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             //Act
@@ -192,7 +198,8 @@ namespace StateNet.Tests.Engine
             //Arrange
             var networkResponse = NetworkBuilder.New
                 .SetStartState("A")
-                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1)).Build().Network;
+                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
+                .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
