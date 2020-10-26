@@ -1,4 +1,5 @@
-﻿using Aptacode.StateNet.Engine.Transitions;
+﻿using System.Linq;
+using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Engine.Interpreter.Expressions
 {
@@ -6,7 +7,7 @@ namespace Aptacode.StateNet.Engine.Interpreter.Expressions
     {
         public TransitionHistoryMatchCount(params string?[] transitionPattern) : base(-1, transitionPattern) { }
 
-        public override int Interpret(TransitionHistory context) =>
-            context.GetTransitionHistory().MatchCount(TransitionPattern);
+
+        public override int Interpret(TransitionHistory context) => context.GetMatches(TransitionPattern).Count();
     }
 }

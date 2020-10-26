@@ -19,7 +19,7 @@ namespace Aptacode.StateNet.Engine
             _randomNumberGenerator =
                 randomNumberGenerator ?? throw new ArgumentNullException(nameof(randomNumberGenerator));
             CurrentState = _network.StartState;
-            _transitionHistory = new TransitionHistory(_network.StartState);
+            _transitionHistory = new TransitionHistory(_network);
         }
 
         public string CurrentState { get; private set; }
