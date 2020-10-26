@@ -14,24 +14,33 @@ namespace Aptacode.StateNet.Engine.Transitions
         public int CurrentMatchIndex { get; private set; }
         public List<int> MatchTransitionIndexes { get; } = new List<int>();
 
-        public bool TryMatch(int transitionIndex, int hashCode)
+        public void Add(int transitionIndex, int hashCode)
         {
-            var patternElement1 = Pattern.ElementAt(CurrentMatchIndex++);
-            if (patternElement1.HasValue && patternElement1 != hashCode)
+            if (!IsNextInPattern(hashCode))
             {
                 CurrentMatchIndex = 0;
-                return false;
+                return;
             }
 
-            if (CurrentMatchIndex < Pattern.Length)
+            if (++CurrentMatchIndex < Pattern.Length)
             {
-                return false;
+                return;
             }
 
             CurrentMatchIndex = 0;
             MatchTransitionIndexes.Add(transitionIndex);
+        }
 
-            return true;
+        private bool IsNextInPattern(int hashCode)
+        {
+            var patternElement1 = Pattern.ElementAt(CurrentMatchIndex);
+            if (!patternElement1.HasValue || patternElement1 == hashCode)
+            {
+                return true;
+            }
+
+            CurrentMatchIndex = 0;
+            return false;
         }
     }
 }

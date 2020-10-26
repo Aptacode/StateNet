@@ -50,12 +50,9 @@ namespace Aptacode.StateNet.Network.Validator
             }
 
             var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
-            if (unusedInputs.Any())
-            {
-                return StateNetworkValidationResult.Fail("Unusable inputs exist in the network.");
-            }
-
-            return StateNetworkValidationResult.Ok("Success");
+            return unusedInputs.Any()
+                ? StateNetworkValidationResult.Fail("Unusable inputs exist in the network.")
+                : StateNetworkValidationResult.Ok("Success");
         }
 
         public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,

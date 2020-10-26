@@ -8,35 +8,41 @@ namespace Aptacode.StateNet.Engine.Transitions
 {
     public class TransitionHistory : IContext
     {
+        private readonly StateNetwork _network;
         private readonly Dictionary<int?[], MatchTracker> _patternMatches = new Dictionary<int?[], MatchTracker>();
         private readonly List<string> _stringTransitionHistory = new List<string>();
         private readonly List<int> _transitionHistory = new List<int>();
 
         public TransitionHistory(StateNetwork network)
         {
+            _network = network;
+
             if (string.IsNullOrEmpty(network?.StartState))
             {
                 throw new ArgumentNullException(nameof(network));
             }
 
             _transitionHistory.Add(network.StartState.GetHashCode());
+            _stringTransitionHistory.Add(network.StartState);
+            CreateMatchTrackers();
+        }
 
-            foreach (var connection in network.GetAllConnections())
+        public int TransitionCount { get; private set; }
+
+        private void CreateMatchTrackers()
+        {
+            foreach (var connection in _network.GetAllConnections())
             {
                 var patterns = new HashSet<int?[]>();
                 connection.Expression.GetPatterns(patterns);
                 foreach (var pattern in patterns)
                 {
                     var matchTracker = new MatchTracker(pattern);
-                    matchTracker.TryMatch(0, network.StartState.GetHashCode());
+                    matchTracker.Add(0, _network.StartState.GetHashCode());
                     _patternMatches.Add(pattern, matchTracker);
                 }
             }
-
-            _stringTransitionHistory.Add(network.StartState);
         }
-
-        public int TransitionCount { get; private set; }
 
         public IReadOnlyList<int> GetTransitionHistory() => _transitionHistory.AsReadOnly();
 
@@ -61,11 +67,10 @@ namespace Aptacode.StateNet.Engine.Transitions
 
             TransitionCount++;
 
-            //Increment pattern
             foreach (var matchTracker in _patternMatches)
             {
-                matchTracker.Value.TryMatch(TransitionCount, inputHashCode);
-                matchTracker.Value.TryMatch(TransitionCount, destinationHashCode);
+                matchTracker.Value.Add(TransitionCount, inputHashCode);
+                matchTracker.Value.Add(TransitionCount, destinationHashCode);
             }
         }
 
