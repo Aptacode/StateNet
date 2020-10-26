@@ -185,13 +185,42 @@ namespace StateNet.Tests.Engine
             Assert.False(transitionResult.Success);
         }
 
-        //[Fact]
+        [Fact]
 
-        //public void CurrentStateChanges_After_SuccessfulTransition()
-        //{
+        public void CurrentStateChanges_After_SuccessfulTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("A")
+                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1)).Build().Network;
 
-        //}
-        ////CurrentStateDoesNotChange_After_FailedTransition  
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+
+            //Act
+            var successfulTransition = sut.Apply("Next");
+
+            //Assert
+            Assert.Equal("B", sut.CurrentState);
+        }
+
+        [Fact]
+
+        public void CurrentStateDoesNotChange_After_FailedTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("A")
+                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1)).Build().Network;
+
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+
+            //Act
+            var failedTransition = sut.Apply("Back");
+
+            //Assert
+            Assert.Equal("A", sut.CurrentState);
+        }
+         
 
         [Fact]
         public void OnTransition_Invoked_After_SuccessfulTransition()
