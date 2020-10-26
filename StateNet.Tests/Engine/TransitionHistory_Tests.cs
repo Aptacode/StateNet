@@ -1,5 +1,6 @@
 ﻿using System;
 using Aptacode.StateNet.Engine.Transitions;
+using StateNet.Tests.Network;
 using Xunit;
 
 namespace StateNet.Tests.Engine
@@ -14,7 +15,7 @@ namespace StateNet.Tests.Engine
             {
                 //Arrange
                 //Act
-                var sut = new TransitionHistory("");
+                var sut = new TransitionHistory(null);
             });
         }
 
@@ -22,7 +23,7 @@ namespace StateNet.Tests.Engine
         public void ToString_Returns_CorrectHistory_WithMultipleTransitions()
         {
             //Arrange
-            var sut = new TransitionHistory("a");
+            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network());
             sut.Add("1", "b");
             sut.Add("2", "c");
             //Act
@@ -36,25 +37,25 @@ namespace StateNet.Tests.Engine
         public void ToString_Returns_CorrectHistory_WithOneTransition()
         {
             //Arrange
-            var sut = new TransitionHistory("A");
-            sut.Add("Next", "B");
+            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network());
+            sut.Add("next", "b");
             //Act
             var actualResult = sut.ToString();
 
             //Assert
-            Assert.Equal("A,Next,B", actualResult);
+            Assert.Equal("a,next,b", actualResult);
         }
 
         [Fact]
         public void ToString_Returns_StartState_WhenNoTransition()
         {
             //Arrange
-            var sut = new TransitionHistory("A");
+            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network());
             //Act
             var actualResult = sut.ToString();
 
             //Assert
-            Assert.Equal("A", actualResult);
+            Assert.Equal("a", actualResult);
         }
     }
 }

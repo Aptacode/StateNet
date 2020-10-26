@@ -8,7 +8,9 @@ namespace Aptacode.StateNet.Engine.Interpreter.Expressions
         public TransitionHistoryStartMatchCount(int transitionCount, params string?[] transitionPattern) : base(
             transitionCount, transitionPattern) { }
 
-        public override int Interpret(TransitionHistory context) => context.GetTransitionHistory()
-            .Take(TransitionElementCount).MatchCount(TransitionPattern);
+        public override int Interpret(TransitionHistory context)
+        {
+            return context.GetMatches(TransitionPattern).Count(i => i <= TransitionCount);
+        }
     }
 }

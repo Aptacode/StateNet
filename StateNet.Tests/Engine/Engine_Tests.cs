@@ -77,13 +77,14 @@ namespace StateNet.Tests.Engine
         public void EngineTransitionHistory()
         {
             var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", new Conditional<TransitionHistory>(
-                    new LessThan<TransitionHistory>(
-                        new TransitionHistoryMatchCount("B"),
-                        new ConstantInteger<TransitionHistory>(1)),
-                    new ConstantInteger<TransitionHistory>(1),
-                    new ConstantInteger<TransitionHistory>(0)
-                ))
+                .AddConnection("A", "Next", "B",
+                    new Conditional<TransitionHistory>(
+                        new LessThan<TransitionHistory>(
+                            new TransitionHistoryMatchCount("B"),
+                            new ConstantInteger<TransitionHistory>(1)),
+                        new ConstantInteger<TransitionHistory>(1),
+                        new ConstantInteger<TransitionHistory>(0)
+                    ))
                 .AddConnection("A", "Next", "C", new Conditional<TransitionHistory>(
                     new GreaterThanOrEqualTo<TransitionHistory>(
                         new TransitionHistoryMatchCount("B"),

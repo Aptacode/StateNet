@@ -9,13 +9,13 @@ namespace Aptacode.StateNet.Engine.Interpreter.Expressions
     {
         protected BaseTransitionHistoryMatchCount(int transitionCount, params string?[] transitionPattern)
         {
-            TransitionPattern = transitionPattern.Select(x => x?.GetHashCode());
+            TransitionPattern = transitionPattern.Select(x => x?.GetHashCode()).ToArray();
             TransitionStringPattern = transitionPattern;
             TransitionCount = transitionCount;
             TransitionElementCount = transitionCount * 2;
         }
 
-        public IEnumerable<int?> TransitionPattern { get; }
+        public int?[] TransitionPattern { get; }
         public IEnumerable<string?> TransitionStringPattern { get; }
         public int TransitionCount { get; }
         public int TransitionElementCount { get; }
