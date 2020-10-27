@@ -1,7 +1,5 @@
 using System.Linq;
-using Aptacode.Expressions.Bool;
-using Aptacode.Expressions.Bool.Comparison;
-using Aptacode.Expressions.Integer;
+using Aptacode.Expressions;
 using Aptacode.StateNet.Engine;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
@@ -14,12 +12,15 @@ namespace StateNet.Tests.Engine
 {
     public class Engine_Tests
     {
+        private readonly ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
+
+
         [Fact]
         public void EngineReverseTransition()
         {
             var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
-                .AddConnection("B", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .AddConnection("A", "Next", "B", _expressions.Int(1))
+                .AddConnection("B", "Next", "A", _expressions.Int(1))
                 .Build().Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
@@ -38,8 +39,8 @@ namespace StateNet.Tests.Engine
         public void EngineSimpleConnectionWeightSelection()
         {
             var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
-                .AddConnection("A", "Next", "C", new ConstantInteger<TransitionHistory>(1))
+                .AddConnection("A", "Next", "B", _expressions.Int(1))
+                .AddConnection("A", "Next", "C", _expressions.Int(1))
                 .Build().Network;
 
             var mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
@@ -60,7 +61,7 @@ namespace StateNet.Tests.Engine
         public void EngineSingleTransition()
         {
             var network = NetworkBuilder.New.SetStartState("Start")
-                .AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .AddConnection("Start", "Next", "A", _expressions.Int(1))
                 .Build()
                 .Network;
 
@@ -78,22 +79,23 @@ namespace StateNet.Tests.Engine
         {
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B",
-                    new Conditional<TransitionHistory>(
-                        new LessThan<TransitionHistory>(
-                            new TransitionHistoryMatchCount("B"),
-                            new ConstantInteger<TransitionHistory>(1)),
-                        new ConstantInteger<TransitionHistory>(1),
-                        new ConstantInteger<TransitionHistory>(0)
-                    ))
-                .AddConnection("A", "Next", "C", new Conditional<TransitionHistory>(
-                    new GreaterThanOrEqualTo<TransitionHistory>(
-                        new TransitionHistoryMatchCount("B"),
-                        new ConstantInteger<TransitionHistory>(1)),
-                    new ConstantInteger<TransitionHistory>(1),
-                    new ConstantInteger<TransitionHistory>(0)
-                ))
-                .AddConnection("B", "Next", "A", new ConstantInteger<TransitionHistory>(1))
-                .AddConnection("C", "Next", "D", new ConstantInteger<TransitionHistory>(1))
+                    _expressions.Conditional(
+                        _expressions.LessThan(
+                            new TransitionHistoryMatchCount("B"), 
+                            _expressions.Int(1)), 
+                        _expressions.Int(1), 
+                        _expressions.Int(0)))
+
+                .AddConnection("A", "Next", "C", 
+                    _expressions.Conditional(
+                    _expressions.GreaterThanOrEqualTo(
+                        new TransitionHistoryMatchCount("B"), 
+                        _expressions.Int(1)), 
+                    _expressions.Int(1), 
+                    _expressions.Int(0)))
+
+                .AddConnection("B", "Next", "A", _expressions.Int(1))
+                .AddConnection("C", "Next", "D", _expressions.Int(1))
                 .Build().Network;
 
             var engine = new StateNetEngine(network, new SystemRandomNumberGenerator());
@@ -116,7 +118,7 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .SetStartState("Start").AddConnection("Start", "Next", "A", _expressions.Int(1))
                 .Build().Network;
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             //Act
@@ -144,7 +146,7 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .SetStartState("Start").AddConnection("Start", "Next", "A", _expressions.Int(1))
                 .Build().Network;
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             //Act
@@ -173,8 +175,8 @@ namespace StateNet.Tests.Engine
             //Arrange
             var networkResponse = NetworkBuilder.New
                 .SetStartState("A")
-                .AddConnection("A", "Next", "B", new ConstantInteger<TransitionHistory>(1))
-                .AddConnection("A", "Next", "C", new ConstantInteger<TransitionHistory>(1))
+                .AddConnection("A", "Next", "B", _expressions.Int(1))
+                .AddConnection("A", "Next", "C", _expressions.Int(1))
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
@@ -199,7 +201,7 @@ namespace StateNet.Tests.Engine
         {
             //Arrange
             var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1))
+                .SetStartState("Start").AddConnection("Start", "Next", "A", _expressions.Int(1))
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
