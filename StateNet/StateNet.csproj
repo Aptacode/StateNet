@@ -16,10 +16,10 @@
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0.12</Version>
-    <AssemblyVersion>2.0.0.12</AssemblyVersion>
+    <Version>2.0.0.13</Version>
+    <AssemblyVersion>2.0.0.13</AssemblyVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
-    <FileVersion>2.0.0.12</FileVersion>
+    <FileVersion>2.0.0.13</FileVersion>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
