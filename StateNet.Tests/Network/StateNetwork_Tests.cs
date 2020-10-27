@@ -9,20 +9,16 @@ namespace StateNet.Tests.Network
 {
     public class StateNetwork_Tests
     {
-
-        [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsNull()
+        [Theory]
+        [ClassData(typeof(StateNetwork_Constructor_TestData))]
+        public void Constructor_Throws_Exception_Tests(Type exception, IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> networkDictionary, string start)
         {
             //Assert
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws(exception, () =>
             {
-                //Arrange
-                var nonemptyStateDictionary = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                nonemptyStateDictionary.Add("A", new Dictionary<string, IReadOnlyList<Connection>>());
-
                 //Act
                 var sut = new StateNetwork(
-                    nonemptyStateDictionary, null);
+                    networkDictionary, start);
             });
         }
         
