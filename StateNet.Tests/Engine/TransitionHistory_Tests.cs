@@ -1,6 +1,6 @@
 ﻿using System;
 using Aptacode.StateNet.Engine.Transitions;
-using StateNet.Tests.Network;
+using StateNet.Tests.Network.Helpers;
 using Xunit;
 
 namespace StateNet.Tests.Engine

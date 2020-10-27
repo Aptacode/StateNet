@@ -14,6 +14,41 @@ namespace StateNet.Tests.Engine
     {
         private readonly ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
 
+        [Fact]
+        public void CurrentStateChanges_After_SuccessfulTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("A")
+                .AddConnection("A", "Next", "B", _expressions.Int(1))
+                .Build().Network;
+
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+
+            //Act
+            var successfulTransition = sut.Apply("Next");
+
+            //Assert
+            Assert.Equal("B", sut.CurrentState);
+        }
+
+        [Fact]
+        public void CurrentStateDoesNotChange_After_FailedTransition()
+        {
+            //Arrange
+            var networkResponse = NetworkBuilder.New
+                .SetStartState("A")
+                .AddConnection("A", "Next", "B", _expressions.Int(1)).Build().Network;
+
+            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
+
+            //Act
+            var failedTransition = sut.Apply("Back");
+
+            //Assert
+            Assert.Equal("A", sut.CurrentState);
+        }
+
 
         [Fact]
         public void EngineReverseTransition()
@@ -23,7 +58,7 @@ namespace StateNet.Tests.Engine
                 .AddConnection("A", "Next", "B", _expressions.Int(1))
                 .AddConnection("B", "Next", "A", _expressions.Int(1))
                 .Build().Network;
-            
+
             //Act
             var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
@@ -86,19 +121,17 @@ namespace StateNet.Tests.Engine
                 .AddConnection("A", "Next", "B",
                     _expressions.Conditional(
                         _expressions.LessThan(
-                            new TransitionHistoryMatchCount("B"), 
-                            _expressions.Int(1)), 
-                        _expressions.Int(1), 
+                            new TransitionHistoryMatchCount("B"),
+                            _expressions.Int(1)),
+                        _expressions.Int(1),
                         _expressions.Int(0)))
-
-                .AddConnection("A", "Next", "C", 
+                .AddConnection("A", "Next", "C",
                     _expressions.Conditional(
-                    _expressions.GreaterThanOrEqualTo(
-                        new TransitionHistoryMatchCount("B"), 
-                        _expressions.Int(1)), 
-                    _expressions.Int(1), 
-                    _expressions.Int(0)))
-
+                        _expressions.GreaterThanOrEqualTo(
+                            new TransitionHistoryMatchCount("B"),
+                            _expressions.Int(1)),
+                        _expressions.Int(1),
+                        _expressions.Int(0)))
                 .AddConnection("B", "Next", "A", _expressions.Int(1))
                 .AddConnection("C", "Next", "D", _expressions.Int(1))
                 .Build().Network;
@@ -194,43 +227,6 @@ namespace StateNet.Tests.Engine
             Assert.False(transitionResult.Success);
         }
 
-        [Fact]
-
-        public void CurrentStateChanges_After_SuccessfulTransition()
-        {
-            //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1))
-                .Build().Network;
-
-            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
-
-            //Act
-            var successfulTransition = sut.Apply("Next");
-
-            //Assert
-            Assert.Equal("B", sut.CurrentState);
-        }
-
-        [Fact]
-
-        public void CurrentStateDoesNotChange_After_FailedTransition()
-        {
-            //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1)).Build().Network;
-
-            var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
-
-            //Act
-            var failedTransition = sut.Apply("Back");
-
-            //Assert
-            Assert.Equal("A", sut.CurrentState);
-        }
-         
 
         [Fact]
         public void OnTransition_Invoked_After_SuccessfulTransition()

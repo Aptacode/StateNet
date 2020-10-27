@@ -1,10 +1,9 @@
 ﻿using Aptacode.StateNet.Network;
 
-namespace StateNet.Tests.Network
+namespace StateNet.Tests.Network.Helpers
 {
     public static class StateNetwork_Helpers
     {
-     
         public static StateNetwork Valid_StaticWeight_Network =>
             new StateNetwork(StateNetworkDictionary_Helpers.Valid_StaticWeight_NetworkDictionary, "a");
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
+using StateNet.Tests.Network.Data;
 using Xunit;
 
 namespace StateNet.Tests.Network
@@ -11,7 +12,9 @@ namespace StateNet.Tests.Network
     {
         [Theory]
         [ClassData(typeof(StateNetwork_Constructor_TestData))]
-        public void Constructor_Throws_Exception_Tests(Type exception, IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> networkDictionary, string start)
+        public void Constructor_Throws_Exception_Tests(Type exception,
+            IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> networkDictionary,
+            string start)
         {
             //Assert
             Assert.Throws(exception, () =>
@@ -21,23 +24,7 @@ namespace StateNet.Tests.Network
                     networkDictionary, start);
             });
         }
-        
-        [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsEmpty()
-        {
-            //Assert
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                //Arrange
-                var nonemptyStateDictionary = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                nonemptyStateDictionary.Add("A", new Dictionary<string, IReadOnlyList<Connection>>());
 
-                //Act
-                var sut = new StateNetwork(
-                    nonemptyStateDictionary, "");
-            });
-        }       
-        
         [Fact]
         public void Constructor_Throws_ArgumentException_WhenStateDictionaryIsEmpty()
         {
@@ -45,14 +32,31 @@ namespace StateNet.Tests.Network
             Assert.Throws<ArgumentException>(() =>
             {
                 //Arrange
-                var emptyStateDictionary = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
+                var emptyStateDictionary =
+                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
                 //Act
                 var sut = new StateNetwork(
                     emptyStateDictionary, "A");
             });
         }
 
-        
+        [Fact]
+        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsEmpty()
+        {
+            //Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                //Arrange
+                var nonemptyStateDictionary =
+                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
+                nonemptyStateDictionary.Add("A", new Dictionary<string, IReadOnlyList<Connection>>());
+
+                //Act
+                var sut = new StateNetwork(
+                    nonemptyStateDictionary, "");
+            });
+        }
+
 
         [Fact]
         public void GetConnections_Returns_EmptyList_WhenNoInputsAreDefined()

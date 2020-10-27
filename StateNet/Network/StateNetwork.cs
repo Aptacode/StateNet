@@ -23,7 +23,9 @@ namespace Aptacode.StateNet.Network
             if (!_stateDictionary.Keys.Any())
             {
                 throw new ArgumentException(nameof(stateDictionary));
-            };
+            }
+
+            ;
 
             StartState = startState;
         }

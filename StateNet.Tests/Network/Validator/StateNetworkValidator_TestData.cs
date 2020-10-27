@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using StateNet.Tests.Network.Helpers;
 
 namespace StateNet.Tests.Network.Validator
 {
