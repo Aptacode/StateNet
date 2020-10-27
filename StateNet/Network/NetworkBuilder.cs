@@ -27,6 +27,7 @@ namespace Aptacode.StateNet.Network
         public NetworkBuilder SetStartState(string startState)
         {
             _startState = startState;
+            _states.Add(_startState);
             return this;
         }
 

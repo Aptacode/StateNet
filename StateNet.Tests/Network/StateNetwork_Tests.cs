@@ -4,17 +4,12 @@ using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using Xunit;
-using Moq;
 
 namespace StateNet.Tests.Network
 {
     public class StateNetwork_Tests
     {
-        private IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> _emptyDictionary;
-        public StateNetwork_Tests()
-        {
-            _emptyDictionary = new Mock<IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>>().Object;
-        }
+
         [Fact]
         public void Constructor_Throws_ArgumentNullException_WhenStartStateIsNull()
         {
@@ -48,15 +43,16 @@ namespace StateNet.Tests.Network
         }       
         
         [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStateDictionaryIsEmpty()
+        public void Constructor_Throws_ArgumentException_WhenStateDictionaryIsEmpty()
         {
             //Assert
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 //Arrange
+                var emptyStateDictionary = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
                 //Act
                 var sut = new StateNetwork(
-                    _emptyDictionary, "A");
+                    emptyStateDictionary, "A");
             });
         }
 

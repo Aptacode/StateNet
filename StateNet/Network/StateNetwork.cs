@@ -13,11 +13,17 @@ namespace Aptacode.StateNet.Network
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary,
             string startState)
         {
-            _stateDictionary = stateDictionary ?? throw new ArgumentNullException(nameof(stateDictionary));
             if (string.IsNullOrEmpty(startState))
             {
                 throw new ArgumentNullException(nameof(startState));
             }
+
+            _stateDictionary = stateDictionary ?? throw new ArgumentNullException(nameof(stateDictionary));
+
+            if (!_stateDictionary.Keys.Any())
+            {
+                throw new ArgumentException(nameof(stateDictionary));
+            };
 
             StartState = startState;
         }
