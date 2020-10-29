@@ -37,7 +37,7 @@ namespace StateNet.Tests.Network.Helpers
             };
 
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
-            Invalid_Detached_StartState_Network_NetworkDictionary =>
+            Minimal_Valid_Connected_NetworkDictionary =>
             new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
@@ -93,7 +93,7 @@ namespace StateNet.Tests.Network.Helpers
             };
 
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
-            Invalid_ConnectionPatternState_Network =>
+            Invalid_ConnectionPatternState_NetworkDictionary =>
             new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
@@ -150,6 +150,19 @@ namespace StateNet.Tests.Network.Helpers
 
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             Invalid_NetworkDictionary_NoConnections =>
+            new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();        
+            
+        public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+            Empty_NetworkDictionary =>
             new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
+
+        public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+            SingleState_NetworkDictionary =>
+            new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>()
+            {
+                {
+                    "a", new Dictionary<string, IReadOnlyList<Connection>>()
+                }
+            };
     }
 }

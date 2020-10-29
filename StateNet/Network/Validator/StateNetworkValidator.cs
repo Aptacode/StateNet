@@ -20,6 +20,12 @@ namespace Aptacode.StateNet.Network.Validator
 
             var connections = network.GetAllConnections();
             var states = network.GetAllStates();
+
+            if (!states.Contains(network.StartState))
+            {
+                return StateNetworkValidationResult.Fail("Start state was set to invalid state.");
+            }
+
             var inputs = network.GetAllInputs();
             var allStatesAndInputs = states.Concat(inputs);
             foreach (var connection in connections)
@@ -52,7 +58,7 @@ namespace Aptacode.StateNet.Network.Validator
             var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
             return unusedInputs.Any()
                 ? StateNetworkValidationResult.Fail("Unusable inputs exist in the network.")
-                : StateNetworkValidationResult.Ok("Success");
+                : StateNetworkValidationResult.Ok("Success.");
         }
 
         public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,

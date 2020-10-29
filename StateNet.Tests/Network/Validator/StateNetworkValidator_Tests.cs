@@ -8,14 +8,15 @@ namespace StateNet.Tests.Network.Validator
     {
         [Theory]
         [ClassData(typeof(StateNetworkValidator_TestData))]
-        public void Builder_Returns_FailedTransition_WhenStartStateIsNotSet(StateNetwork stateNetwork, bool isValid)
+        public void StateNetworkValidator_IsValidTests(StateNetwork stateNetwork, string message, bool isValid)
         {
             //Arrange
             //Act
-            var stateNetworkResult = stateNetwork.IsValid();
+            var stateNetworkValidationResult = stateNetwork.IsValid();
 
             //Assert
-            Assert.Equal(isValid, stateNetworkResult.Success);
+            Assert.Equal(isValid, stateNetworkValidationResult.Success);
+            Assert.Equal(message, stateNetworkValidationResult.Message);
         }
     }
 }

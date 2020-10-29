@@ -9,19 +9,19 @@ namespace StateNet.Tests.Network.Data
     {
         private readonly List<object[]> _data = new List<object[]>
         {
-            new object[] {typeof(ArgumentNullException), null, "A"},
+            new object[] {typeof(ArgumentNullException), null, "A"}, //Constructor throws ArgumentNullException when StateDictionary is null.
             new object[]
             {
-                typeof(ArgumentException), StateNetworkDictionary_Helpers.Invalid_NetworkDictionary_NoConnections, "A"
-            },
+                typeof(ArgumentException), StateNetworkDictionary_Helpers.Empty_NetworkDictionary, "A"
+            }, //Constructor throws ArgumentException when StateDictionary is empty.
             new object[]
             {
-                typeof(ArgumentNullException), StateNetworkDictionary_Helpers.Valid_StaticWeight_NetworkDictionary, ""
-            },
+                typeof(ArgumentNullException), StateNetworkDictionary_Helpers.SingleState_NetworkDictionary, ""
+            }, //Constructor throws ArgumentNullException when the StartState is empty
             new object[]
             {
-                typeof(ArgumentNullException), StateNetworkDictionary_Helpers.Valid_StaticWeight_NetworkDictionary, null
-            }
+                typeof(ArgumentNullException), StateNetworkDictionary_Helpers.SingleState_NetworkDictionary, null
+            } //Constructor throws ArgumentNullException when the StartState is null
         };
 
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
