@@ -30,7 +30,7 @@ namespace Aptacode.StateNet.Network
             StartState = startState;
         }
 
-        public string StartState { get; }
+        public string StartState { get; set; }
 
         public IReadOnlyList<Connection> GetConnections(string state, string input)
         {

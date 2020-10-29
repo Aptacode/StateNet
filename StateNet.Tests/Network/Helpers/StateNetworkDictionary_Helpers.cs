@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Aptacode.Expressions;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
@@ -6,10 +7,13 @@ using Aptacode.StateNet.Network;
 
 namespace StateNet.Tests.Network.Helpers
 {
+    
     public static class StateNetworkDictionary_Helpers
     {
+        private static ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
+
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
-            Valid_StaticWeight_NetworkDictionary =>
+            Minimal_Valid_Connected_StaticWeight_NetworkDictionary =>
             new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
@@ -18,7 +22,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("b", _expressions.Int(1))
                             }
                         }
                     }
@@ -29,15 +33,14 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("a", _expressions.Int(1))
                             }
                         }
                     }
                 }
             };
-
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
-            Minimal_Valid_Connected_NetworkDictionary =>
+            Invalid_UnusableInput_NetworkDictionary =>
             new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             {
                 {
@@ -46,7 +49,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("b", _expressions.Int(1))
                             }
                         }
                     }
@@ -57,8 +60,47 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("a", _expressions.Int(1))
                             }
+                        },
+                        {
+                            "2", new List<Connection>()
+                        }
+                    }
+                },
+            };
+        
+        public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+            Invalid_Unreachable_State_NetworkDictionary =>
+            new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
+            {
+                {
+                    "a", new Dictionary<string, IReadOnlyList<Connection>>
+                    {
+                        {
+                            "1", new List<Connection>
+                            {
+                                new Connection("b", _expressions.Int(1))
+                            }
+                        }
+                    }
+                },
+                {
+                    "b", new Dictionary<string, IReadOnlyList<Connection>>
+                    {
+                        {
+                            "1", new List<Connection>
+                            {
+                                new Connection("a", _expressions.Int(1))
+                            }
+                        }
+                    }
+                },
+                {
+                    "c", new Dictionary<string, IReadOnlyList<Connection>>
+                    {
+                        {
+                            "1", new List<Connection>()
                         }
                     }
                 }
@@ -74,7 +116,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("c", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("c", _expressions.Int(1))
                             }
                         }
                     }
@@ -85,7 +127,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("a", _expressions.Int(1))
                             }
                         }
                     }
@@ -113,7 +155,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("a", _expressions.Int(1))
                             }
                         }
                     }
@@ -141,16 +183,12 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("a", new ConstantInteger<TransitionHistory>(1))
+                                new Connection("a", _expressions.Int(1))
                             }
                         }
                     }
                 }
-            };
-
-        public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
-            Invalid_NetworkDictionary_NoConnections =>
-            new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();        
+            };     
             
         public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             Empty_NetworkDictionary =>

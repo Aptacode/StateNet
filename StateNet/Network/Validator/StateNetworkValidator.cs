@@ -15,7 +15,7 @@ namespace Aptacode.StateNet.Network.Validator
         {
             if (string.IsNullOrEmpty(network.StartState))
             {
-                return StateNetworkValidationResult.Fail("Start state was not set");
+                return StateNetworkValidationResult.Fail("Start state was not set.");
             }
 
             var connections = network.GetAllConnections();
@@ -65,13 +65,17 @@ namespace Aptacode.StateNet.Network.Validator
             HashSet<string> usableInputs)
         {
             visitedStates.Add(state);
-            var validInputs = network.GetInputs(state);
-            foreach (var input in validInputs)
+            var inputs = network.GetInputs(state);
+            foreach (var input in inputs)
             {
-                usableInputs.Add(input);
+                var inputConnections = network.GetConnections(state, input);
+                if (inputConnections.Any())
+                {
+                    usableInputs.Add(input); //something simlar to below here...
+                }
             }
 
-            var connectedStates = validInputs
+            var connectedStates = inputs
                 .SelectMany(i => network.GetConnections(state, i))
                 .Select(c => c.Target);
 

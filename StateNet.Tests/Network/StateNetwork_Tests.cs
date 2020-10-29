@@ -14,7 +14,7 @@ namespace StateNet.Tests.Network
         [ClassData(typeof(StateNetwork_Constructor_TestData))]
         public void Constructor_Throws_Exception_Tests(Type exception,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> networkDictionary,
-            string start)
+            string start) //Tests for each of the 4 cases in which an exception should be thrown by StateNetwork's constructor 
         {
             //Assert
             Assert.Throws(exception, () =>
@@ -24,39 +24,6 @@ namespace StateNet.Tests.Network
                     networkDictionary, start);
             });
         }
-
-        [Fact]
-        public void Constructor_Throws_ArgumentException_WhenStateDictionaryIsEmpty()
-        {
-            //Assert
-            Assert.Throws<ArgumentException>(() =>
-            {
-                //Arrange
-                var emptyStateDictionary =
-                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                //Act
-                var sut = new StateNetwork(
-                    emptyStateDictionary, "A");
-            });
-        }
-
-        [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsEmpty()
-        {
-            //Assert
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                //Arrange
-                var nonemptyStateDictionary =
-                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                nonemptyStateDictionary.Add("A", new Dictionary<string, IReadOnlyList<Connection>>());
-
-                //Act
-                var sut = new StateNetwork(
-                    nonemptyStateDictionary, "");
-            });
-        }
-
 
         [Fact]
         public void GetConnections_Returns_EmptyList_WhenNoInputsAreDefined()
