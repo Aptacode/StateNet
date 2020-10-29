@@ -25,8 +25,6 @@ namespace Aptacode.StateNet.Network
                 throw new ArgumentException(nameof(stateDictionary));
             }
 
-            ;
-
             StartState = startState;
         }
 

@@ -62,16 +62,16 @@ namespace Aptacode.StateNet.Network.Validator
         }
 
         public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,
-            HashSet<string> usableInputs)
+            HashSet<string> usableInputs) //This is quite big and could maybe be separated out?
         {
             visitedStates.Add(state);
             var inputs = network.GetInputs(state);
-            foreach (var input in inputs)
+            foreach (var input in inputs) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
             {
                 var inputConnections = network.GetConnections(state, input);
                 if (inputConnections.Any())
                 {
-                    usableInputs.Add(input); //something simlar to below here...
+                    usableInputs.Add(input); 
                 }
             }
 
