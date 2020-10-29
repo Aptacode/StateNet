@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Aptacode.Expressions;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using StateNet.Tests.Network.Data;
+using StateNet.Tests.Network.Helpers;
 using Xunit;
 
 namespace StateNet.Tests.Network
-{
+{ 
     public class StateNetwork_Tests
     {
+        private readonly ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
+        
         [Theory]
         [ClassData(typeof(StateNetwork_Constructor_TestData))]
         public void Constructor_Throws_Exception_Tests(Type exception,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> networkDictionary,
-            string start)
+            string start) //Tests for each of the 4 cases in which an exception should be thrown by StateNetwork's constructor 
         {
             //Assert
             Assert.Throws(exception, () =>
@@ -26,46 +31,13 @@ namespace StateNet.Tests.Network
         }
 
         [Fact]
-        public void Constructor_Throws_ArgumentException_WhenStateDictionaryIsEmpty()
-        {
-            //Assert
-            Assert.Throws<ArgumentException>(() =>
-            {
-                //Arrange
-                var emptyStateDictionary =
-                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                //Act
-                var sut = new StateNetwork(
-                    emptyStateDictionary, "A");
-            });
-        }
-
-        [Fact]
-        public void Constructor_Throws_ArgumentNullException_WhenStartStateIsEmpty()
-        {
-            //Assert
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                //Arrange
-                var nonemptyStateDictionary =
-                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
-                nonemptyStateDictionary.Add("A", new Dictionary<string, IReadOnlyList<Connection>>());
-
-                //Act
-                var sut = new StateNetwork(
-                    nonemptyStateDictionary, "");
-            });
-        }
-
-
-        [Fact]
-        public void GetConnections_Returns_EmptyList_WhenNoInputsAreDefined()
+        public void GetConnections_Returns_EmptyList_WhenInputIsNotDefinedForState()
         {
             //Arrange
-            var sut = NetworkBuilder.New.SetStartState("Start").Build().Network;
+            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
 
             //Act
-            var connections = sut.GetConnections("Start", "Next");
+            var connections = sut.GetConnections("a", "2");
 
             //Assert
             Assert.Empty(connections);
@@ -75,24 +47,67 @@ namespace StateNet.Tests.Network
         public void GetConnections_Returns_List_WhenInputsAreDefined()
         {
             //Arrange
-            var sut = NetworkBuilder.New.SetStartState("Start")
-                .AddConnection("Start", "Next", "A", new ConstantInteger<TransitionHistory>(1)).Build().Network;
+            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
 
             //Act
-            var connections = sut.GetConnections("Start", "Next");
+            var connections = sut.GetConnections("a", "1");
 
             //Assert
             Assert.Equal(1, connections.Count);
         }
 
-        //
-        //
-        //Constructor_Throws_ArgumentNullException_WhenStateDictionaryNull
 
-        //GetInputs_Returns_EmptyList_WhenStateDoesNotExist
-        //GetInputs_Returns_List_WhenStateDoesExist
+        [Fact]
 
-        //GetConnections_Returns_EmptyList_WhenNoConnectionsExistForStateAndInput
-        //GetConnections_Returns_List_WhenConnectionsExistForStateAndInput
+        public void GetInputs_Returns_EmptyList_WhenStateDoesNotExist()
+        {
+            //Arrange
+            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
+
+            //Act
+            var inputs = sut.GetInputs("c");
+
+            //Assert
+            Assert.Empty(inputs);
+        }
+        [Fact]
+
+        public void GetInputs_Returns_List_WhenStateDoesExist()
+        {
+            //Arrange
+            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
+            //Act
+            var inputs = sut.GetInputs("a");
+
+            //Assert
+            Assert.Equal(1, inputs.Count);
+        }
+
+
+        [Fact]
+
+        public void GetConnections_Returns_EmptyList_WhenNoConnectionsExistForStateAndInput()
+        {
+            //Arrange
+            var sut = StateNetwork_Helpers.Invalid_UnusableInput_Network;
+
+            //Act
+            var connections = sut.GetConnections("b", "2");
+
+            //Assert
+            Assert.Empty(connections);
+        }
+        [Fact]
+        
+        public void GetConnections_Returns_List_WhenConnectionsExistForStateAndInput()
+        {
+            //Arrange
+            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
+            //Act
+            var connections = sut.GetConnections("a", "1");
+
+            //Assert
+            Assert.Equal(1, connections.Count);
+        }
     }
 }

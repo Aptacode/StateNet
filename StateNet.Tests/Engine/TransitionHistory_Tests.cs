@@ -23,7 +23,7 @@ namespace StateNet.Tests.Engine
         public void ToString_Returns_CorrectHistory_WithMultipleTransitions()
         {
             //Arrange
-            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network);
+            var sut = new TransitionHistory(StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network);
             sut.Add("1", "b");
             sut.Add("2", "c");
             //Act
@@ -37,7 +37,7 @@ namespace StateNet.Tests.Engine
         public void ToString_Returns_CorrectHistory_WithOneTransition()
         {
             //Arrange
-            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network);
+            var sut = new TransitionHistory(StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network);
             sut.Add("next", "b");
             //Act
             var actualResult = sut.ToString();
@@ -50,7 +50,7 @@ namespace StateNet.Tests.Engine
         public void ToString_Returns_StartState_WhenNoTransition()
         {
             //Arrange
-            var sut = new TransitionHistory(StateNetwork_Helpers.Valid_StaticWeight_Network);
+            var sut = new TransitionHistory(StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network);
             //Act
             var actualResult = sut.ToString();
 

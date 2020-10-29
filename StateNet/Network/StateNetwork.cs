@@ -25,12 +25,10 @@ namespace Aptacode.StateNet.Network
                 throw new ArgumentException(nameof(stateDictionary));
             }
 
-            ;
-
             StartState = startState;
         }
 
-        public string StartState { get; }
+        public string StartState { get; set; }
 
         public IReadOnlyList<Connection> GetConnections(string state, string input)
         {

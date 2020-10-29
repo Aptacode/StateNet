@@ -15,11 +15,17 @@ namespace Aptacode.StateNet.Network.Validator
         {
             if (string.IsNullOrEmpty(network.StartState))
             {
-                return StateNetworkValidationResult.Fail("Start state was not set");
+                return StateNetworkValidationResult.Fail("Start state was not set.");
             }
 
             var connections = network.GetAllConnections();
             var states = network.GetAllStates();
+
+            if (!states.Contains(network.StartState))
+            {
+                return StateNetworkValidationResult.Fail("Start state was set to invalid state.");
+            }
+
             var inputs = network.GetAllInputs();
             var allStatesAndInputs = states.Concat(inputs);
             foreach (var connection in connections)
@@ -52,20 +58,24 @@ namespace Aptacode.StateNet.Network.Validator
             var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
             return unusedInputs.Any()
                 ? StateNetworkValidationResult.Fail("Unusable inputs exist in the network.")
-                : StateNetworkValidationResult.Ok("Success");
+                : StateNetworkValidationResult.Ok("Success.");
         }
 
         public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,
-            HashSet<string> usableInputs)
+            HashSet<string> usableInputs) //This is quite big and could maybe be separated out?
         {
             visitedStates.Add(state);
-            var validInputs = network.GetInputs(state);
-            foreach (var input in validInputs)
+            var inputs = network.GetInputs(state);
+            foreach (var input in inputs) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
             {
-                usableInputs.Add(input);
+                var inputConnections = network.GetConnections(state, input);
+                if (inputConnections.Any())
+                {
+                    usableInputs.Add(input); 
+                }
             }
 
-            var connectedStates = validInputs
+            var connectedStates = inputs
                 .SelectMany(i => network.GetConnections(state, i))
                 .Select(c => c.Target);
 
