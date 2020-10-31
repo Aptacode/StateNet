@@ -12,7 +12,7 @@
         public string Message { get; }
         public bool Success { get; }
         public StateNetwork? Network { get; }
-        public static StateNetworkResult Fail(string message) => new StateNetworkResult(message, false, null);
+        public static StateNetworkResult Fail(StateNetwork? network, string message) => new StateNetworkResult(message, false, network);
 
         public static StateNetworkResult Ok(StateNetwork network, string message) =>
             new StateNetworkResult(message, true, network);
