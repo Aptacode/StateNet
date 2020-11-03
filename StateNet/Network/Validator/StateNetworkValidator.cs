@@ -15,7 +15,7 @@ namespace Aptacode.StateNet.Network.Validator
         {
             if (string.IsNullOrEmpty(network.StartState))
             {
-                return StateNetworkValidationResult.Fail("Start state was not set.");
+                return StateNetworkValidationResult.Fail(Resources.UNSET_START_STATE);
             }
 
             var connections = network.GetAllConnections();
@@ -23,7 +23,7 @@ namespace Aptacode.StateNet.Network.Validator
 
             if (!states.Contains(network.StartState))
             {
-                return StateNetworkValidationResult.Fail("Start state was set to invalid state.");
+                return StateNetworkValidationResult.Fail(Resources.INVALID_START_STATE);
             }
 
             var inputs = network.GetAllInputs();
@@ -32,7 +32,7 @@ namespace Aptacode.StateNet.Network.Validator
             {
                 if (!states.Contains(connection.Target))
                 {
-                    return StateNetworkValidationResult.Fail("Connection target is not a valid state.");
+                    return StateNetworkValidationResult.Fail(Resources.INVALID_CONNECTION_TARGET);
                 }
 
                 var dependencies = new HashSet<string>();
@@ -41,38 +41,50 @@ namespace Aptacode.StateNet.Network.Validator
                 var allDependenciesAreValid = dependencies.All(state => allStatesAndInputs.Contains(state));
                 if (!allDependenciesAreValid)
                 {
-                    return StateNetworkValidationResult.Fail("Connection had an invalid state or input dependency.");
+                    return StateNetworkValidationResult.Fail(Resources.INVALID_DEPENDENCY);
                 }
             }
 
             var visitedStates = new HashSet<string>();
             var usableInputs = new HashSet<string>();
-            GetVisitedStates(network, network.StartState, visitedStates, usableInputs);
+            GetVisitedStatesAndUsableInputs(network, network.StartState, visitedStates, usableInputs);
             var unvisitedStates = states.Where(s => !visitedStates.Contains(s));
 
             if (unvisitedStates.Any())
             {
-                return StateNetworkValidationResult.Fail("Unreachable states exist in the network.");
+                return StateNetworkValidationResult.Fail(Resources.UNREACHABLE_STATES);
             }
 
             var unusedInputs = inputs.Where(s => !usableInputs.Contains(s));
             return unusedInputs.Any()
-                ? StateNetworkValidationResult.Fail("Unusable inputs exist in the network.")
-                : StateNetworkValidationResult.Ok("Success.");
+                ? StateNetworkValidationResult.Fail(Resources.UNUSABLE_INPUTS)
+                : StateNetworkValidationResult.Ok(Resources.SUCCESS);
         }
 
-        public static void GetVisitedStates(StateNetwork network, string state, HashSet<string> visitedStates,
-            HashSet<string> usableInputs) //This is quite big and could maybe be separated out?
+        private static IEnumerable<string> GetUsableInputs(StateNetwork network, string state,
+            IReadOnlyList<string> inputs)
         {
-            visitedStates.Add(state);
-            var inputs = network.GetInputs(state);
-            foreach (var input in inputs) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
+            foreach (var input in inputs
+            ) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
             {
                 var inputConnections = network.GetConnections(state, input);
                 if (inputConnections.Any())
                 {
-                    usableInputs.Add(input); 
+                    yield return input;
                 }
+            }
+        }
+
+        public static void GetVisitedStatesAndUsableInputs(StateNetwork network, string state,
+            HashSet<string> visitedStates,
+            HashSet<string> usableInputs) //This is quite big and could maybe be separated out?
+        {
+            visitedStates.Add(state);
+            var inputs = network.GetInputs(state);
+            foreach (var input in GetUsableInputs(network, state, inputs)
+            ) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
+            {
+                usableInputs.Add(input);
             }
 
             var connectedStates = inputs
@@ -85,7 +97,7 @@ namespace Aptacode.StateNet.Network.Validator
 
             foreach (var unvisitedState in unvisitedConnectedStates)
             {
-                GetVisitedStates(network, unvisitedState, visitedStates, usableInputs);
+                GetVisitedStatesAndUsableInputs(network, unvisitedState, visitedStates, usableInputs);
             }
         }
 

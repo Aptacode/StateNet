@@ -15,14 +15,14 @@ namespace Aptacode.StateNet.Network
         {
             if (string.IsNullOrEmpty(startState))
             {
-                throw new ArgumentNullException(nameof(startState));
+                throw new ArgumentNullException(Resources.INVALID_START_STATE);
             }
 
-            _stateDictionary = stateDictionary ?? throw new ArgumentNullException(nameof(stateDictionary));
+            _stateDictionary = stateDictionary ?? throw new ArgumentNullException(Resources.NO_STATES);
 
             if (!_stateDictionary.Keys.Any())
             {
-                throw new ArgumentException(nameof(stateDictionary));
+                throw new ArgumentException(Resources.NO_STATES);
             }
 
             StartState = startState;
@@ -38,6 +38,16 @@ namespace Aptacode.StateNet.Network
             }
 
             return inputs.TryGetValue(input, out var connections) ? connections : new Connection[0];
+        }
+
+        public IReadOnlyList<Connection> GetConnections(string state)
+        {
+            if (!_stateDictionary.TryGetValue(state, out var inputs))
+            {
+                return new Connection[0];
+            }
+
+            return inputs.Values.SelectMany(c => c).ToArray();
         }
 
         public IReadOnlyList<string> GetInputs(string state)

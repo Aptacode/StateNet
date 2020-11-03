@@ -37,7 +37,7 @@ namespace Aptacode.StateNet.Engine
 
             if (connections.Count == 0)
             {
-                return TransitionResult.Fail($"There are no available connections from {CurrentState} for {input}.");
+                return TransitionResult.Fail(Resources.NO_AVAILABLE_CONNECTION(CurrentState, input));
             }
 
             var weightedConnections = new List<string>();
@@ -57,8 +57,7 @@ namespace Aptacode.StateNet.Engine
 
             if (weightedConnections.Count == 0)
             {
-                return TransitionResult.Fail(
-                    $"There are no connections with a positive weight {CurrentState} for {input}.");
+                return TransitionResult.Fail(Resources.NO_AVAILABLE_CONNECTION(CurrentState, input));
             }
 
             var connectionIndex = _randomNumberGenerator.Generate(0, weightedConnections.Count);
@@ -70,7 +69,7 @@ namespace Aptacode.StateNet.Engine
 
             OnTransition?.Invoke(this, transition);
 
-            return TransitionResult.Ok(transition, "Success.");
+            return TransitionResult.Ok(transition, Resources.SUCCESS);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace StateNet.Tests.Engine
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            var successfulTransition = sut.Apply("Next");
+            sut.Apply("Next");
 
             //Assert
             Assert.Equal("B", sut.CurrentState);
@@ -43,7 +43,7 @@ namespace StateNet.Tests.Engine
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            var failedTransition = sut.Apply("Back");
+            sut.Apply("Back");
 
             //Assert
             Assert.Equal("A", sut.CurrentState);
@@ -237,13 +237,13 @@ namespace StateNet.Tests.Engine
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
-            var OnTransitionWasCalled = false;
-            sut.OnTransition += (_, __) => { OnTransitionWasCalled = true; };
+            var onTransitionWasCalled = false;
+            sut.OnTransition += (_, __) => { onTransitionWasCalled = true; };
             //Act
-            var transitionResult = sut.Apply("Next");
+            sut.Apply("Next");
 
             //Assert
-            Assert.True(OnTransitionWasCalled);
+            Assert.True(onTransitionWasCalled);
         }
 
         [Fact]
@@ -255,13 +255,13 @@ namespace StateNet.Tests.Engine
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
-            var OnTransitionWasCalled = false;
-            sut.OnTransition += (_, __) => { OnTransitionWasCalled = true; };
+            var onTransitionWasCalled = false;
+            sut.OnTransition += (_, __) => { onTransitionWasCalled = true; };
             //Act
-            var transitionResult = sut.Apply("Next");
+            sut.Apply("Next");
 
             //Assert
-            Assert.False(OnTransitionWasCalled);
+            Assert.False(onTransitionWasCalled);
         }
     }
 }

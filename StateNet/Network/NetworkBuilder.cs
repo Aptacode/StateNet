@@ -46,11 +46,7 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddInput(string input)
-        {
-            _inputs.Add(input);
-            return this;
-        }
+        private NetworkBuilder AddInput(string input) => this;
 
         public NetworkBuilder RemoveInputOnState(string input, string state)
         {
@@ -117,12 +113,10 @@ namespace Aptacode.StateNet.Network
 
         private StateNetworkResult CreateStateNetwork()
         {
-
-            
             try
             {
                 var stateDictionary =
-                new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
+                    new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>();
 
                 foreach (var state in _states)
                 {
@@ -130,8 +124,10 @@ namespace Aptacode.StateNet.Network
 
                     foreach (var input in _inputs)
                     {
-                        inputDictionary.Add(input, new List<Connection>()); //This requires every input to have at least an empty connection associated to it
+                        inputDictionary.Add(input,
+                            new List<Connection>()); //This requires every input to have at least an empty connection associated to it
                     }
+
                     var connectionsFromState = _connections.Where(c => c.Item1 == state).GroupBy(c => c.Item2);
                     foreach (var connectionGroup in connectionsFromState)
                     {
@@ -144,11 +140,11 @@ namespace Aptacode.StateNet.Network
                 }
 
                 var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
-                return StateNetworkResult.Ok(network, "Success.");
+                return StateNetworkResult.Ok(network, Resources.SUCCESS);
             }
-            catch
+            catch (Exception ex)
             {
-                return StateNetworkResult.Fail(null, "Could not create network.");
+                return StateNetworkResult.Fail(ex.Message);
             }
         }
 
@@ -167,10 +163,10 @@ namespace Aptacode.StateNet.Network
             var stateNetworkValidationResult = network.IsValid();
             if (!stateNetworkValidationResult.Success)
             {
-                return StateNetworkResult.Fail(network, stateNetworkValidationResult.Message); //Builder can now return invalid networks
+                return StateNetworkResult.Fail(stateNetworkValidationResult.Message);
             }
 
-            return StateNetworkResult.Ok(network, "Success.");
+            return StateNetworkResult.Ok(network, Resources.SUCCESS);
         }
 
         public void Reset()

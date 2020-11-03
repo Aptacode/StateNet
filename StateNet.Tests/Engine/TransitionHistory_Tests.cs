@@ -15,7 +15,7 @@ namespace StateNet.Tests.Engine
             {
                 //Arrange
                 //Act
-                var sut = new TransitionHistory(null);
+                new TransitionHistory(null);
             });
         }
 

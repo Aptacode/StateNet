@@ -9,7 +9,10 @@ namespace StateNet.Tests.Network.Data
     {
         private readonly List<object[]> _data = new List<object[]>
         {
-            new object[] {typeof(ArgumentNullException), null, "A"}, //Constructor throws ArgumentNullException when StateDictionary is null.
+            new object[]
+            {
+                typeof(ArgumentNullException), null, "A"
+            }, //Constructor throws ArgumentNullException when StateDictionary is null.
             new object[]
             {
                 typeof(ArgumentException), StateNetworkDictionary_Helpers.Empty_NetworkDictionary, "A"
