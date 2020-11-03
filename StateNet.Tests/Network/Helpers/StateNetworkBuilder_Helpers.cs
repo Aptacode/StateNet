@@ -14,8 +14,8 @@ namespace StateNet.Tests.Network.Helpers
 
         public static NetworkBuilder Minimal_Valid_Connected_StaticWeight_NetworkBuilder =>
             NetworkBuilder.New.SetStartState("a")
-            .AddState("b")
-            .AddConnection("a", "1", "b", _expressions.Int(1))
+            //.AddState("b")
+            //.AddConnection("a", "1", "b", _expressions.Int(1))
             .AddConnection("a", "1", "b", _expressions.Int(1));
 
         public static NetworkBuilder Empty_NetworkBuilder =>

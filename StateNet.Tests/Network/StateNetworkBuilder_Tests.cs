@@ -1,10 +1,7 @@
 ﻿using Aptacode.Expressions;
-using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
-using Moq;
 using StateNet.Tests.Network.Helpers;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -12,7 +9,7 @@ namespace StateNet.Tests.Network
 {
     public class StateNetworkBuilder_Tests
     {
-        private static ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
+        private static readonly ExpressionFactory<TransitionHistory> _expressions = new ExpressionFactory<TransitionHistory>();
 
         private readonly TransitionHistory _context;
 
@@ -20,9 +17,8 @@ namespace StateNet.Tests.Network
         public void Builder_Returns_FailMessage_WhenStartStateIsNotSet()
         {
             //Arrange
-            var networkBuilder = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
-            var sut = networkBuilder.Build();
+            var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder.Build();
 
             //Assert
             Assert.False(sut.Success);
@@ -82,7 +78,75 @@ namespace StateNet.Tests.Network
             //
         }
 
-        //[Fact]
-        //public void
+        [Fact]
+        public void ClearConnectionsFromState_OfGivenInput_SuccessfullyClearsConnection_AfterBuild()
+        {
+            //Arrance
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.ClearConnectionsFromState("a", "1").Build();
+            //Assert
+            Assert.Empty(sut.Network.GetAllConnections());
+        }
+
+        [Fact]
+        public void ClearConnectionsFromState_SuccessfullyClearsConnection_AfterBuild()
+        {
+            //Arrance
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.ClearConnectionsFromState("a").Build();
+            //Assert
+            Assert.Empty(sut.Network.GetAllConnections());
+        }
+
+        [Fact]
+        public void ClearConnectionsToState_OfGivenInput_SuccessfullyClearsConnection_AfterBuild()
+        {
+            //Arrance
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.ClearConnectionsToState("b", "1").Build();
+            //Assert
+            Assert.Empty(sut.Network.GetAllConnections());
+        }
+
+        [Fact]
+        public void ClearConnectionsToState_SuccessfullyClearsConnection_AfterBuild()
+        {
+            //Arrance
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.ClearConnectionsToState("b").Build();
+            //Assert
+            Assert.Empty(sut.Network.GetAllConnections());
+        }
+
+        [Fact]
+
+        public void RemoveState_SuccesfullyRemovesState_AfterBuild()
+        {
+            //Arrange
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.RemoveState("b").Build();
+
+            //Assert
+            Assert.DoesNotContain("b", sut.Network.GetAllStates());
+        }
+
+        [Fact]
+
+        public void RemoveInput_SuccesfullyRemovesInput_AfterBuild()
+        {
+            //Arrange
+            var networkBuilder = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder;
+            //Act
+            var sut = networkBuilder.AddConnection("b", "1", "c", _expressions.Int(1)).RemoveInputOnState("1", "a").Build();
+
+            //Assert
+            Assert.DoesNotContain("1", sut.Network.GetInputs("a"));
+            Assert.Contains("1", sut.Network.GetInputs("b"));
+        }
     }
 }

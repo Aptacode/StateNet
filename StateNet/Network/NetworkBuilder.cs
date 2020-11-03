@@ -52,9 +52,9 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder RemoveInput(string input)
+        public NetworkBuilder RemoveInputOnState(string input, string state)
         {
-            ClearConnectionsWithInput(input);
+            ClearConnectionsFromState(state, input);
             _inputs.Remove(input);
             return this;
         }
@@ -73,7 +73,7 @@ namespace Aptacode.StateNet.Network
         public NetworkBuilder ClearConnectionsFromState(string state, string input)
         {
             var connectionToRemove = _connections.Where(c => c.Item1 == state && c.Item2 == input);
-            foreach (var connection in connectionToRemove)
+            foreach (var connection in connectionToRemove.ToList())
             {
                 _connections.Remove(connection);
             }
@@ -84,7 +84,7 @@ namespace Aptacode.StateNet.Network
         public NetworkBuilder ClearConnectionsFromState(string state)
         {
             var connectionToRemove = _connections.Where(c => c.Item1 == state);
-            foreach (var connection in connectionToRemove)
+            foreach (var connection in connectionToRemove.ToList())
             {
                 _connections.Remove(connection);
             }
@@ -95,7 +95,7 @@ namespace Aptacode.StateNet.Network
         public NetworkBuilder ClearConnectionsToState(string state, string input)
         {
             var connectionToRemove = _connections.Where(c => c.Item2 == input && c.Item3.Target == state);
-            foreach (var connection in connectionToRemove)
+            foreach (var connection in connectionToRemove.ToList())
             {
                 _connections.Remove(connection);
             }
@@ -106,18 +106,7 @@ namespace Aptacode.StateNet.Network
         public NetworkBuilder ClearConnectionsToState(string state)
         {
             var connectionToRemove = _connections.Where(c => c.Item3.Target == state);
-            foreach (var connection in connectionToRemove)
-            {
-                _connections.Remove(connection);
-            }
-
-            return this;
-        }
-
-        public NetworkBuilder ClearConnectionsWithInput(string input)
-        {
-            var connectionToRemove = _connections.Where(c => c.Item2 == input);
-            foreach (var connection in connectionToRemove)
+            foreach (var connection in connectionToRemove.ToList())
             {
                 _connections.Remove(connection);
             }
@@ -148,7 +137,6 @@ namespace Aptacode.StateNet.Network
                     {
                         var connections = connectionGroup.Select(c => c.Item3).ToImmutableList();
                         inputDictionary[connectionGroup.Key] = connections;
-                        //inputDictionary.Add(connectionGroup.Key, connections);
                     }
 
 
