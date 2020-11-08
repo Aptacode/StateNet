@@ -31,16 +31,11 @@ namespace Aptacode.StateNet.Engine.Transitions
 
         private void CreateMatchTrackers()
         {
-            foreach (var connection in _network.GetAllConnections())
+            foreach (var pattern in _network.Patterns)
             {
-                var patterns = new HashSet<int?[]>();
-                connection.Expression.GetPatterns(patterns);
-                foreach (var pattern in patterns)
-                {
-                    var matchTracker = new MatchTracker(pattern);
-                    matchTracker.Add(0, _network.StartState.GetHashCode());
-                    _patternMatches.Add(pattern, matchTracker);
-                }
+                var matchTracker = new MatchTracker(pattern);
+                matchTracker.Add(0, _network.StartState.GetHashCode());
+                _patternMatches.Add(pattern, matchTracker);
             }
         }
 

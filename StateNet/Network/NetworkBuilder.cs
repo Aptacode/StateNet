@@ -13,6 +13,7 @@ namespace Aptacode.StateNet.Network
         private readonly List<(string, string, Connection)> _connections;
         private readonly HashSet<string> _inputs;
         private readonly HashSet<string> _states;
+        private readonly HashSet<int?[]> _patterns;
         private string _startState;
 
         protected NetworkBuilder()
@@ -20,6 +21,7 @@ namespace Aptacode.StateNet.Network
             _startState = string.Empty;
             _states = new HashSet<string>();
             _inputs = new HashSet<string>();
+            _patterns = new HashSet<int?[]>();
             _connections = new List<(string, string, Connection)>();
         }
 
@@ -110,6 +112,19 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
+        public NetworkBuilder AddPattern(params int?[] pattern)
+        {
+            _patterns.Add(pattern);
+            
+            return this;
+        }
+
+        public NetworkBuilder RemovePattern(params int?[] pattern)
+        {
+            _patterns.Remove(pattern);
+            return this;
+        }
+
 
         private StateNetworkResult CreateStateNetwork()
         {
@@ -133,13 +148,20 @@ namespace Aptacode.StateNet.Network
                     {
                         var connections = connectionGroup.Select(c => c.Item3).ToImmutableList();
                         inputDictionary[connectionGroup.Key] = connections;
+
+                        foreach (var connection in connections)
+                        {
+                            connection.Expression.GetPatterns(_patterns);
+                        }
                     }
 
 
                     stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
                 }
 
-                var network = new StateNetwork(stateDictionary.ToImmutableDictionary(), _startState);
+
+
+                var network = new StateNetwork(_startState, stateDictionary.ToImmutableDictionary(), _patterns.ToImmutableArray());
                 return StateNetworkResult.Ok(network, Resources.SUCCESS);
             }
             catch (Exception ex)
@@ -175,6 +197,7 @@ namespace Aptacode.StateNet.Network
             _states.Clear();
             _inputs.Clear();
             _connections.Clear();
+            _patterns.Clear();
         }
     }
 }

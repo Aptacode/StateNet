@@ -23,8 +23,8 @@ namespace StateNet.Tests.Network
             Assert.Throws(exception, () =>
             {
                 //Act
-                var sut = new StateNetwork(
-                    networkDictionary, start);
+                var sut = new StateNetwork(start,
+                    networkDictionary, new int?[0][]);
             });
         }
 

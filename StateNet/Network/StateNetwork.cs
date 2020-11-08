@@ -9,9 +9,11 @@ namespace Aptacode.StateNet.Network
         private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             _stateDictionary;
 
-        public StateNetwork(
+        public IReadOnlyList<int?[]> Patterns { get; }
+
+        public StateNetwork(string startState,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary,
-            string startState)
+            IReadOnlyList<int?[]> patterns)
         {
             if (string.IsNullOrEmpty(startState))
             {
@@ -25,6 +27,7 @@ namespace Aptacode.StateNet.Network
                 throw new ArgumentException(Resources.NO_STATES);
             }
 
+            Patterns = patterns;
             StartState = startState;
         }
 
