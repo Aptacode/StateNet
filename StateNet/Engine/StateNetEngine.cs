@@ -11,7 +11,6 @@ namespace Aptacode.StateNet.Engine
     {
         private readonly StateNetwork _network;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
-        private readonly TransitionHistory _transitionHistory;
 
         public StateNetEngine(StateNetwork network, IRandomNumberGenerator randomNumberGenerator)
         {
@@ -19,8 +18,10 @@ namespace Aptacode.StateNet.Engine
             _randomNumberGenerator =
                 randomNumberGenerator ?? throw new ArgumentNullException(nameof(randomNumberGenerator));
             CurrentState = _network.StartState;
-            _transitionHistory = new TransitionHistory(_network);
+            TransitionHistory = new TransitionHistory(_network);
         }
+
+        public TransitionHistory TransitionHistory { get; }
 
         public string CurrentState { get; private set; }
 
@@ -43,7 +44,7 @@ namespace Aptacode.StateNet.Engine
             var weightedConnections = new List<string>();
             foreach (var connection in connections)
             {
-                var connectionWeight = connection.Expression.Interpret(_transitionHistory);
+                var connectionWeight = connection.Expression.Interpret(TransitionHistory);
                 if (connectionWeight <= 0)
                 {
                     continue;
@@ -63,7 +64,7 @@ namespace Aptacode.StateNet.Engine
             var connectionIndex = _randomNumberGenerator.Generate(0, weightedConnections.Count);
             var nextState = weightedConnections.ElementAt(connectionIndex);
             var transition = new Transition(CurrentState, input, nextState);
-            _transitionHistory.Add(transition.Input, transition.Destination);
+            TransitionHistory.Add(transition.Input, transition.Destination);
 
             CurrentState = nextState;
 
