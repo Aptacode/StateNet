@@ -4,6 +4,7 @@ using Aptacode.Expressions.Bool;
 using Aptacode.Expressions.Bool.Comparison;
 using Aptacode.Expressions.Bool.Expression;
 using Aptacode.Expressions.Integer;
+using Aptacode.Expressions.List;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 
@@ -115,16 +116,17 @@ namespace Aptacode.StateNet.Network.Validator
                     ternaryIntegerExpression.PassExpression.GetTransitionDependencies(dependencies);
                     ternaryIntegerExpression.FailExpression.GetTransitionDependencies(dependencies);
                     break;
-                case BaseTransitionHistoryMatchCount transitionHistoryMatchCount:
-                    foreach (var dependency in transitionHistoryMatchCount.TransitionStringPattern)
-                    {
-                        if (string.IsNullOrEmpty(dependency))
-                        {
-                            continue;
-                        }
+                case Count<TransitionHistory> count:
+                    count.ListExpression.GetTransitionDependencies(dependencies);
+                    break;
+                case First<TransitionHistory> first:
+                    first.Expression.GetTransitionDependencies(dependencies);
+                    break;
+                case Last<TransitionHistory> last:
+                    last.Expression.GetTransitionDependencies(dependencies);
+                    break;
 
-                        dependencies.Add(dependency);
-                    }
+                case Matches matches:
 
                     break;
             }
@@ -139,9 +141,52 @@ namespace Aptacode.StateNet.Network.Validator
                     binaryIntegerExpression.Lhs.GetTransitionDependencies(dependencies);
                     binaryIntegerExpression.Rhs.GetTransitionDependencies(dependencies);
                     break;
+                case BinaryBoolComparison<TransitionHistory> binaryBoolComparison:
+                    binaryBoolComparison.Lhs.GetTransitionDependencies(dependencies);
+                    binaryBoolComparison.Rhs.GetTransitionDependencies(dependencies);
+                    break;
+
             }
         }
 
+        public static void GetTransitionDependencies(this IListExpression<TransitionHistory> expression,
+            HashSet<string> dependencies)
+        {
+            switch (expression)
+            {
+                case Matches matches:
+                    foreach (var dependency in matches.TransitionStringPattern)
+                    {
+                        if (string.IsNullOrEmpty(dependency))
+                        {
+                            continue;
+                        }
+
+                        dependencies.Add(dependency);
+                    }
+                    break;
+                case TakeFirst<TransitionHistory> takeFirst:
+                    takeFirst.Expression.GetTransitionDependencies(dependencies);
+                    takeFirst.CountExpression.GetTransitionDependencies(dependencies);
+                    break;
+                case TakeLast<TransitionHistory> takeLast:
+                    takeLast.Expression.GetTransitionDependencies(dependencies);
+                    takeLast.CountExpression.GetTransitionDependencies(dependencies);
+                    break;
+                case UnaryListExpression<TransitionHistory> unaryExpression:
+                    unaryExpression.Expression.GetTransitionDependencies(dependencies);
+                    break;
+                case BinaryListExpression<TransitionHistory> binaryExpression:
+                    binaryExpression.Lhs.GetTransitionDependencies(dependencies);
+                    binaryExpression.Rhs.GetTransitionDependencies(dependencies);
+                    break;
+                case TernaryIntegerExpression<TransitionHistory> ternaryIntegerExpression:
+                    ternaryIntegerExpression.Condition.GetTransitionDependencies(dependencies);
+                    ternaryIntegerExpression.PassExpression.GetTransitionDependencies(dependencies);
+                    ternaryIntegerExpression.FailExpression.GetTransitionDependencies(dependencies);
+                    break;
+            }
+        }
         public static void GetPatterns(this IIntegerExpression<TransitionHistory> expression,
             HashSet<int?[]> dependencies)
         {
@@ -156,8 +201,45 @@ namespace Aptacode.StateNet.Network.Validator
                     ternaryIntegerExpression.PassExpression.GetPatterns(dependencies);
                     ternaryIntegerExpression.FailExpression.GetPatterns(dependencies);
                     break;
-                case BaseTransitionHistoryMatchCount transitionHistoryMatchCount:
-                    dependencies.Add(transitionHistoryMatchCount.TransitionPattern);
+                case Count<TransitionHistory> count:
+                    count.ListExpression.GetPatterns(dependencies);
+                    break;         
+                case First<TransitionHistory> first:
+                    first.Expression.GetPatterns(dependencies);
+                    break;        
+                case Last<TransitionHistory> last:
+                    last.Expression.GetPatterns(dependencies);
+                    break;
+            }
+        }
+
+        public static void GetPatterns(this IListExpression<TransitionHistory> expression,
+    HashSet<int?[]> dependencies)
+        {
+            switch (expression)
+            {
+                case Matches matches:
+                    dependencies.Add(matches.TransitionPattern);
+                    break;
+                case TakeFirst<TransitionHistory> takeFirst:
+                    takeFirst.Expression.GetPatterns(dependencies);
+                    takeFirst.CountExpression.GetPatterns(dependencies);
+                    break;          
+                case TakeLast< TransitionHistory> takeLast:
+                    takeLast.Expression.GetPatterns(dependencies);
+                    takeLast.CountExpression.GetPatterns(dependencies);
+                    break;
+                case UnaryListExpression<TransitionHistory> unaryExpression:
+                    unaryExpression.Expression.GetPatterns(dependencies);
+                    break;
+                case BinaryListExpression<TransitionHistory> binaryExpression:
+                    binaryExpression.Lhs.GetPatterns(dependencies);
+                    binaryExpression.Rhs.GetPatterns(dependencies);
+                    break;
+                case TernaryIntegerExpression<TransitionHistory> ternaryIntegerExpression:
+                    ternaryIntegerExpression.Condition.GetPatterns(dependencies);
+                    ternaryIntegerExpression.PassExpression.GetPatterns(dependencies);
+                    ternaryIntegerExpression.FailExpression.GetPatterns(dependencies);
                     break;
             }
         }

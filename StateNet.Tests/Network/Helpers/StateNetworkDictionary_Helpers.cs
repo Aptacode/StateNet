@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aptacode.Expressions;
+using Aptacode.Expressions.List;
 using Aptacode.StateNet.Engine.Interpreter.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
@@ -144,7 +145,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new TransitionHistoryMatchCount("c"))
+                                new Connection("b", new Count<TransitionHistory>(new Matches("c")))
                             }
                         }
                     }
@@ -172,7 +173,7 @@ namespace StateNet.Tests.Network.Helpers
                         {
                             "1", new List<Connection>
                             {
-                                new Connection("b", new TransitionHistoryMatchCount("bi"))
+                                new Connection("b", new Count<TransitionHistory>(new Matches("bi")))
                             }
                         }
                     }

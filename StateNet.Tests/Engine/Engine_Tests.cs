@@ -120,15 +120,15 @@ namespace StateNet.Tests.Engine
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B",
                     _expressions.Conditional(
-                        _expressions.LessThan(
-                            new TransitionHistoryMatchCount("B"),
+                        _expressions.LessThan(_expressions.Count(new Matches("B"))
+                            ,
                             _expressions.Int(1)),
                         _expressions.Int(1),
                         _expressions.Int(0)))
                 .AddConnection("A", "Next", "C",
                     _expressions.Conditional(
                         _expressions.GreaterThanOrEqualTo(
-                            new TransitionHistoryMatchCount("B"),
+                            _expressions.Count(new Matches("B")), 
                             _expressions.Int(1)),
                         _expressions.Int(1),
                         _expressions.Int(0)))

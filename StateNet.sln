@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateNet", "StateNet\StateNet.csproj", "{E77792B2-6683-4F76-95FB-3AA79F0BF1A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateNet.Tests", "StateNet.Tests\StateNet.Tests.csproj", "{3424B55B-9FB2-43E6-825B-671F4DE3F1E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateNet.Tests", "StateNet.Tests\StateNet.Tests.csproj", "{3424B55B-9FB2-43E6-825B-671F4DE3F1E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
