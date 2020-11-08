@@ -112,16 +112,22 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddPattern(params int?[] pattern)
+        public NetworkBuilder AddPattern(params int?[][] patterns)
         {
-            _patterns.Add(pattern);
-            
+            foreach (var pattern in patterns)
+            {
+                _patterns.Add(pattern);
+            }
+
             return this;
         }
 
-        public NetworkBuilder RemovePattern(params int?[] pattern)
+        public NetworkBuilder RemovePattern(params int?[][] patterns)
         {
-            _patterns.Remove(pattern);
+            foreach (var pattern in patterns)
+            {
+                _patterns.Remove(pattern);
+            }
             return this;
         }
 
