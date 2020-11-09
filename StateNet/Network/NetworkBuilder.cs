@@ -12,8 +12,8 @@ namespace Aptacode.StateNet.Network
     {
         private readonly List<(string, string, Connection)> _connections;
         private readonly HashSet<string> _inputs;
-        private readonly HashSet<string> _states;
         private readonly HashSet<int?[]> _patterns;
+        private readonly HashSet<string> _states;
         private string _startState;
 
         protected NetworkBuilder()
@@ -128,6 +128,7 @@ namespace Aptacode.StateNet.Network
             {
                 _patterns.Remove(pattern);
             }
+
             return this;
         }
 
@@ -166,8 +167,8 @@ namespace Aptacode.StateNet.Network
                 }
 
 
-
-                var network = new StateNetwork(_startState, stateDictionary.ToImmutableDictionary(), _patterns.ToImmutableArray());
+                var network = new StateNetwork(_startState, stateDictionary.ToImmutableDictionary(),
+                    _patterns.ToImmutableArray());
                 return StateNetworkResult.Ok(network, Resources.SUCCESS);
             }
             catch (Exception ex)
@@ -189,12 +190,7 @@ namespace Aptacode.StateNet.Network
             }
 
             var stateNetworkValidationResult = network.IsValid();
-            if (!stateNetworkValidationResult.Success)
-            {
-                return StateNetworkResult.Fail(stateNetworkValidationResult.Message);
-            }
-
-            return StateNetworkResult.Ok(network, Resources.SUCCESS);
+            return !stateNetworkValidationResult.Success ? StateNetworkResult.Fail(stateNetworkValidationResult.Message) : StateNetworkResult.Ok(network, Resources.SUCCESS);
         }
 
         public void Reset()

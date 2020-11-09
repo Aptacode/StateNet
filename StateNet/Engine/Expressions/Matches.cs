@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.Expressions.Integer;
 using Aptacode.Expressions.List;
 using Aptacode.StateNet.Engine.Transitions;
 
-namespace Aptacode.StateNet.Engine.Interpreter.Expressions
+namespace Aptacode.StateNet.Engine.Expressions
 {
     public class Matches : IListExpression<TransitionHistory>
     {

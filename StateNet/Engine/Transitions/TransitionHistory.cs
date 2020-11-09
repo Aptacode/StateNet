@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Network;
-using Aptacode.StateNet.Network.Validator;
 
 namespace Aptacode.StateNet.Engine.Transitions
 {
     public class TransitionHistory : IContext
     {
         private readonly StateNetwork _network;
-        private readonly Dictionary<int?[], MatchTracker> _patternMatches = new Dictionary<int?[], MatchTracker>();
+        private readonly Dictionary<int?[], PatternMatcher> _patternMatches = new Dictionary<int?[], PatternMatcher>();
         private readonly List<string> _stringTransitionHistory = new List<string>();
         private readonly List<int> _transitionHistory = new List<int>();
 
@@ -33,7 +32,7 @@ namespace Aptacode.StateNet.Engine.Transitions
         {
             foreach (var pattern in _network.Patterns)
             {
-                var matchTracker = new MatchTracker(pattern);
+                var matchTracker = new PatternMatcher(pattern);
                 matchTracker.Add(0, _network.StartState.GetHashCode());
                 _patternMatches.Add(pattern, matchTracker);
             }
@@ -45,7 +44,7 @@ namespace Aptacode.StateNet.Engine.Transitions
         {
             if (_patternMatches.TryGetValue(pattern, out var matchTracker))
             {
-                return matchTracker.MatchTransitionIndexes;
+                return matchTracker.MatchList;
             }
 
             return new int[0];

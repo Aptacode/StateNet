@@ -1,7 +1,7 @@
 using System.Linq;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Engine.Interpreter.Expressions;
+using Aptacode.StateNet.Engine.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.Random;
@@ -128,7 +128,7 @@ namespace StateNet.Tests.Engine
                 .AddConnection("A", "Next", "C",
                     _expressions.Conditional(
                         _expressions.GreaterThanOrEqualTo(
-                            _expressions.Count(new Matches("B")), 
+                            _expressions.Count(new Matches("B")),
                             _expressions.Int(1)),
                         _expressions.Int(1),
                         _expressions.Int(0)))

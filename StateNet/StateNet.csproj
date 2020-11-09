@@ -9,17 +9,17 @@
     <Description>A small .Net Standard library used to model simple State Machines</Description>
     <Copyright>MIT</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Timmoth/Aptacode.StateNet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Aptacode/StateNet</PackageProjectUrl>
     <PackageIcon>StateNetLogo.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/Timmoth/Aptacode.StateNet</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Aptacode/StateNet</RepositoryUrl>
     <RepositoryType />
     <PackageTags>Aptacode Probabilistic State Machine</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0.18</Version>
-    <AssemblyVersion>2.0.0.18</AssemblyVersion>
+    <Version>2.0.0.19</Version>
+    <AssemblyVersion>2.0.0.19</AssemblyVersion>
     <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
-    <FileVersion>2.0.0.18</FileVersion>
+    <FileVersion>2.0.0.19</FileVersion>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>

@@ -9,8 +9,6 @@ namespace Aptacode.StateNet.Network
         private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             _stateDictionary;
 
-        public IReadOnlyList<int?[]> Patterns { get; }
-
         public StateNetwork(string startState,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary,
             IReadOnlyList<int?[]> patterns)
@@ -31,6 +29,8 @@ namespace Aptacode.StateNet.Network
             StartState = startState;
         }
 
+        public IReadOnlyList<int?[]> Patterns { get; }
+
         public string StartState { get; set; }
 
         public IReadOnlyList<Connection> GetConnections(string state, string input)
@@ -45,12 +45,7 @@ namespace Aptacode.StateNet.Network
 
         public IReadOnlyList<Connection> GetConnections(string state)
         {
-            if (!_stateDictionary.TryGetValue(state, out var inputs))
-            {
-                return new Connection[0];
-            }
-
-            return inputs.Values.SelectMany(c => c).ToArray();
+            return !_stateDictionary.TryGetValue(state, out var inputs) ? new Connection[0] : inputs.Values.SelectMany(c => c).ToArray();
         }
 
         public IReadOnlyList<string> GetInputs(string state)

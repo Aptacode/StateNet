@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Aptacode.Expressions;
 using Aptacode.Expressions.List;
-using Aptacode.StateNet.Engine.Interpreter.Expressions;
+using Aptacode.StateNet.Engine.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 

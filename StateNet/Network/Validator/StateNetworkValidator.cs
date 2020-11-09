@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aptacode.Expressions.Bool;
-using Aptacode.Expressions.Bool.Comparison;
-using Aptacode.Expressions.Bool.Expression;
 using Aptacode.Expressions.Integer;
 using Aptacode.Expressions.List;
-using Aptacode.StateNet.Engine.Interpreter.Expressions;
+using Aptacode.StateNet.Engine.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Network.Validator
@@ -65,15 +63,7 @@ namespace Aptacode.StateNet.Network.Validator
         private static IEnumerable<string> GetUsableInputs(StateNetwork network, string state,
             IReadOnlyList<string> inputs)
         {
-            foreach (var input in inputs
-            ) //This defines a valid input as one which has connections, not sure if this is a strong enough definition.
-            {
-                var inputConnections = network.GetConnections(state, input);
-                if (inputConnections.Any())
-                {
-                    yield return input;
-                }
-            }
+            return inputs.Where(input => network.GetConnections(state, input).Any());
         }
 
         public static void GetVisitedStatesAndUsableInputs(StateNetwork network, string state,
@@ -145,7 +135,6 @@ namespace Aptacode.StateNet.Network.Validator
                     binaryBoolComparison.Lhs.GetTransitionDependencies(dependencies);
                     binaryBoolComparison.Rhs.GetTransitionDependencies(dependencies);
                     break;
-
             }
         }
 
@@ -164,6 +153,7 @@ namespace Aptacode.StateNet.Network.Validator
 
                         dependencies.Add(dependency);
                     }
+
                     break;
                 case TakeFirst<TransitionHistory> takeFirst:
                     takeFirst.Expression.GetTransitionDependencies(dependencies);
@@ -187,6 +177,7 @@ namespace Aptacode.StateNet.Network.Validator
                     break;
             }
         }
+
         public static void GetPatterns(this IIntegerExpression<TransitionHistory> expression,
             HashSet<int?[]> dependencies)
         {
@@ -203,10 +194,10 @@ namespace Aptacode.StateNet.Network.Validator
                     break;
                 case Count<TransitionHistory> count:
                     count.ListExpression.GetPatterns(dependencies);
-                    break;         
+                    break;
                 case First<TransitionHistory> first:
                     first.Expression.GetPatterns(dependencies);
-                    break;        
+                    break;
                 case Last<TransitionHistory> last:
                     last.Expression.GetPatterns(dependencies);
                     break;
@@ -214,7 +205,7 @@ namespace Aptacode.StateNet.Network.Validator
         }
 
         public static void GetPatterns(this IListExpression<TransitionHistory> expression,
-    HashSet<int?[]> dependencies)
+            HashSet<int?[]> dependencies)
         {
             switch (expression)
             {
@@ -224,8 +215,8 @@ namespace Aptacode.StateNet.Network.Validator
                 case TakeFirst<TransitionHistory> takeFirst:
                     takeFirst.Expression.GetPatterns(dependencies);
                     takeFirst.CountExpression.GetPatterns(dependencies);
-                    break;          
-                case TakeLast< TransitionHistory> takeLast:
+                    break;
+                case TakeLast<TransitionHistory> takeLast:
                     takeLast.Expression.GetPatterns(dependencies);
                     takeLast.CountExpression.GetPatterns(dependencies);
                     break;
