@@ -14,15 +14,15 @@ namespace Aptacode.StateNet.Engine.Transitions
 
         public TransitionHistory(StateNetwork network)
         {
-            _network = network;
+            _network = network ?? throw new ArgumentNullException(nameof(network));
 
             if (string.IsNullOrEmpty(network?.StartState))
             {
                 throw new ArgumentNullException(nameof(network));
             }
 
-            _transitionHistory.Add(network.StartState.GetHashCode());
-            _stringTransitionHistory.Add(network.StartState);
+            _transitionHistory.Add(_network.StartState.GetHashCode());
+            _stringTransitionHistory.Add(_network.StartState);
             CreateMatchTrackers();
         }
 

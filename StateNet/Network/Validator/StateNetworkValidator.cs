@@ -115,10 +115,6 @@ namespace Aptacode.StateNet.Network.Validator
                 case Last<TransitionHistory> last:
                     last.Expression.GetTransitionDependencies(dependencies);
                     break;
-
-                case Matches matches:
-
-                    break;
             }
         }
 
@@ -144,7 +140,7 @@ namespace Aptacode.StateNet.Network.Validator
             switch (expression)
             {
                 case Matches matches:
-                    foreach (var dependency in matches.TransitionStringPattern)
+                    foreach (var dependency in matches.StringPattern)
                     {
                         if (string.IsNullOrEmpty(dependency))
                         {
@@ -210,7 +206,7 @@ namespace Aptacode.StateNet.Network.Validator
             switch (expression)
             {
                 case Matches matches:
-                    dependencies.Add(matches.TransitionPattern);
+                    dependencies.Add(matches.Pattern);
                     break;
                 case TakeFirst<TransitionHistory> takeFirst:
                     takeFirst.Expression.GetPatterns(dependencies);

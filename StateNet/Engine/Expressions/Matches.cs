@@ -7,15 +7,15 @@ namespace Aptacode.StateNet.Engine.Expressions
 {
     public class Matches : IListExpression<TransitionHistory>
     {
-        public Matches(params string?[] transitionPattern)
+        public Matches(params string?[] pattern)
         {
-            TransitionPattern = transitionPattern.Select(x => x?.GetHashCode()).ToArray();
-            TransitionStringPattern = transitionPattern;
+            StringPattern = pattern;
+            Pattern = pattern.Select(x => x?.GetHashCode()).ToArray();
         }
 
-        public int?[] TransitionPattern { get; }
-        public IEnumerable<string?> TransitionStringPattern { get; }
+        public int?[] Pattern { get; }
+        public IEnumerable<string?> StringPattern { get; }
 
-        public int[] Interpret(TransitionHistory context) => context.GetMatches(TransitionPattern).ToArray();
+        public int[] Interpret(TransitionHistory context) => context.GetMatches(Pattern).ToArray();
     }
 }
