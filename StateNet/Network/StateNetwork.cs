@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aptacode.StateNet.PatternMatching;
 
 namespace Aptacode.StateNet.Network
 {
@@ -11,7 +12,7 @@ namespace Aptacode.StateNet.Network
 
         public StateNetwork(string startState,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary,
-            IReadOnlyList<int?[]> patterns)
+            IReadOnlyList<Pattern> patterns)
         {
             if (string.IsNullOrEmpty(startState))
             {
@@ -29,7 +30,7 @@ namespace Aptacode.StateNet.Network
             StartState = startState;
         }
 
-        public IReadOnlyList<int?[]> Patterns { get; }
+        public IReadOnlyList<Pattern> Patterns { get; }
 
         public string StartState { get; set; }
 
@@ -45,7 +46,9 @@ namespace Aptacode.StateNet.Network
 
         public IReadOnlyList<Connection> GetConnections(string state)
         {
-            return !_stateDictionary.TryGetValue(state, out var inputs) ? new Connection[0] : inputs.Values.SelectMany(c => c).ToArray();
+            return !_stateDictionary.TryGetValue(state, out var inputs)
+                ? new Connection[0]
+                : inputs.Values.SelectMany(c => c).ToArray();
         }
 
         public IReadOnlyList<string> GetInputs(string state)

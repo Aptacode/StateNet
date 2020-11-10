@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Aptacode.StateNet.Engine.Transitions;
+using Aptacode.StateNet.PatternMatching;
 using StateNet.Tests.Network.Helpers;
 using Xunit;
 
@@ -24,14 +25,16 @@ namespace StateNet.Tests.Engine
         public void GetMatches_Returns_CorrectMatches_SingleMatch()
         {
             //Arrange
-            var sut = new TransitionHistory(StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network_WithPattern);
+            var sut = new TransitionHistory(StateNetwork_Helpers
+                .Minimal_Valid_Connected_StaticWeight_Network_WithPattern);
             sut.Add("1", "b");
             //Act
-            var pattern = new int?[] { StateNetwork_Helpers.stateB.GetHashCode() };
+            var pattern = new Pattern(StateNetwork_Helpers.StateB);
             var matches = sut.GetMatches(pattern);
             //Assert
             Assert.Equal("1", matches.First().ToString());
         }
+
         //GetMatchesTest
         //AddTest
         [Fact]

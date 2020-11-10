@@ -5,6 +5,7 @@ using System.Linq;
 using Aptacode.Expressions.Integer;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network.Validator;
+using Aptacode.StateNet.PatternMatching;
 
 namespace Aptacode.StateNet.Network
 {
@@ -12,7 +13,7 @@ namespace Aptacode.StateNet.Network
     {
         private readonly List<(string, string, Connection)> _connections;
         private readonly HashSet<string> _inputs;
-        private readonly HashSet<int?[]> _patterns;
+        private readonly HashSet<Pattern> _patterns;
         private readonly HashSet<string> _states;
         private string _startState;
 
@@ -21,7 +22,7 @@ namespace Aptacode.StateNet.Network
             _startState = string.Empty;
             _states = new HashSet<string>();
             _inputs = new HashSet<string>();
-            _patterns = new HashSet<int?[]>();
+            _patterns = new HashSet<Pattern>();
             _connections = new List<(string, string, Connection)>();
         }
 
@@ -112,7 +113,7 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder AddPattern(params int?[][] patterns)
+        public NetworkBuilder AddPattern(params Pattern[] patterns)
         {
             foreach (var pattern in patterns)
             {
@@ -122,7 +123,7 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        public NetworkBuilder RemovePattern(params int?[][] patterns)
+        public NetworkBuilder RemovePattern(params Pattern[] patterns)
         {
             foreach (var pattern in patterns)
             {
@@ -190,7 +191,9 @@ namespace Aptacode.StateNet.Network
             }
 
             var stateNetworkValidationResult = network.IsValid();
-            return !stateNetworkValidationResult.Success ? StateNetworkResult.Fail(stateNetworkValidationResult.Message) : StateNetworkResult.Ok(network, Resources.SUCCESS);
+            return !stateNetworkValidationResult.Success
+                ? StateNetworkResult.Fail(stateNetworkValidationResult.Message)
+                : StateNetworkResult.Ok(network, Resources.SUCCESS);
         }
 
         public void Reset()

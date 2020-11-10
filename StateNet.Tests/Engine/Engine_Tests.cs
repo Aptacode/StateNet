@@ -1,9 +1,10 @@
 using System.Linq;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Engine;
-using Aptacode.StateNet.Engine.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.PatternMatching;
+using Aptacode.StateNet.PatternMatching.Expressions;
 using Aptacode.StateNet.Random;
 using Moq;
 using Xunit;
@@ -120,7 +121,7 @@ namespace StateNet.Tests.Engine
             var network = NetworkBuilder.New.SetStartState("A")
                 .AddConnection("A", "Next", "B",
                     _expressions.Conditional(
-                        _expressions.LessThan(_expressions.Count(new Matches("B"))
+                        _expressions.LessThan(_expressions.Count(new Matches(new Pattern("B")))
                             ,
                             _expressions.Int(1)),
                         _expressions.Int(1),
@@ -128,7 +129,7 @@ namespace StateNet.Tests.Engine
                 .AddConnection("A", "Next", "C",
                     _expressions.Conditional(
                         _expressions.GreaterThanOrEqualTo(
-                            _expressions.Count(new Matches("B")),
+                            _expressions.Count(new Matches(new Pattern("B"))),
                             _expressions.Int(1)),
                         _expressions.Int(1),
                         _expressions.Int(0)))

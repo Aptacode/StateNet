@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Aptacode.StateNet.Engine.Transitions
+namespace Aptacode.StateNet.PatternMatching
 {
     public class PatternMatcher
     {
-        public PatternMatcher(int?[] pattern)
+        public PatternMatcher(Pattern pattern)
         {
             Pattern = pattern;
         }
 
-        public int?[] Pattern { get; }
+        public Pattern Pattern { get; }
         public int PatternIndex { get; private set; }
         public List<int> MatchList { get; } = new List<int>();
 

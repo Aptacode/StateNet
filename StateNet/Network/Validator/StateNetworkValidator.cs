@@ -3,8 +3,9 @@ using System.Linq;
 using Aptacode.Expressions.Bool;
 using Aptacode.Expressions.Integer;
 using Aptacode.Expressions.List;
-using Aptacode.StateNet.Engine.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
+using Aptacode.StateNet.PatternMatching;
+using Aptacode.StateNet.PatternMatching.Expressions;
 
 namespace Aptacode.StateNet.Network.Validator
 {
@@ -140,7 +141,7 @@ namespace Aptacode.StateNet.Network.Validator
             switch (expression)
             {
                 case Matches matches:
-                    foreach (var dependency in matches.StringPattern)
+                    foreach (var dependency in matches.Pattern.Elements)
                     {
                         if (string.IsNullOrEmpty(dependency))
                         {
@@ -175,7 +176,7 @@ namespace Aptacode.StateNet.Network.Validator
         }
 
         public static void GetPatterns(this IIntegerExpression<TransitionHistory> expression,
-            HashSet<int?[]> dependencies)
+            HashSet<Pattern> dependencies)
         {
             switch (expression)
             {
@@ -201,7 +202,7 @@ namespace Aptacode.StateNet.Network.Validator
         }
 
         public static void GetPatterns(this IListExpression<TransitionHistory> expression,
-            HashSet<int?[]> dependencies)
+            HashSet<Pattern> dependencies)
         {
             switch (expression)
             {
@@ -232,7 +233,7 @@ namespace Aptacode.StateNet.Network.Validator
         }
 
         public static void GetPatterns(this IBooleanExpression<TransitionHistory> expression,
-            HashSet<int?[]> dependencies)
+            HashSet<Pattern> dependencies)
         {
             switch (expression)
             {

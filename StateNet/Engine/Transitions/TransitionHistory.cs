@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.PatternMatching;
 
 namespace Aptacode.StateNet.Engine.Transitions
 {
     public class TransitionHistory : IContext
     {
         private readonly StateNetwork _network;
-        private readonly Dictionary<int?[], PatternMatcher> _patternMatches = new Dictionary<int?[], PatternMatcher>();
+
+        private readonly Dictionary<Pattern, PatternMatcher>
+            _patternMatches = new Dictionary<Pattern, PatternMatcher>();
+
         private readonly List<string> _stringTransitionHistory = new List<string>();
         private readonly List<int> _transitionHistory = new List<int>();
 
@@ -21,7 +25,7 @@ namespace Aptacode.StateNet.Engine.Transitions
                 throw new ArgumentNullException(nameof(network));
             }
 
-            _transitionHistory.Add(_network.StartState.GetHashCode());
+            _transitionHistory.Add(_network.StartState.GetDeterministicHashCode());
             _stringTransitionHistory.Add(_network.StartState);
             CreateMatchTrackers();
         }
@@ -33,14 +37,14 @@ namespace Aptacode.StateNet.Engine.Transitions
             foreach (var pattern in _network.Patterns)
             {
                 var matchTracker = new PatternMatcher(pattern);
-                matchTracker.Add(0, _network.StartState.GetHashCode());
+                matchTracker.Add(0, _network.StartState.GetDeterministicHashCode());
                 _patternMatches.Add(pattern, matchTracker);
             }
         }
 
         public IReadOnlyList<int> GetTransitionHistory() => _transitionHistory.AsReadOnly();
 
-        public IEnumerable<int> GetMatches(int?[] pattern)
+        public IEnumerable<int> GetMatches(Pattern pattern)
         {
             if (_patternMatches.TryGetValue(pattern, out var matchTracker))
             {
@@ -52,8 +56,8 @@ namespace Aptacode.StateNet.Engine.Transitions
 
         public void Add(string input, string destination)
         {
-            var inputHashCode = input.GetHashCode();
-            var destinationHashCode = destination.GetHashCode();
+            var inputHashCode = input.GetDeterministicHashCode();
+            var destinationHashCode = destination.GetDeterministicHashCode();
             _stringTransitionHistory.Add(input);
             _stringTransitionHistory.Add(destination);
             _transitionHistory.Add(inputHashCode);
@@ -61,10 +65,10 @@ namespace Aptacode.StateNet.Engine.Transitions
 
             TransitionCount++;
 
-            foreach (var matchTracker in _patternMatches)
+            foreach (var patternMatcher in _patternMatches)
             {
-                matchTracker.Value.Add(TransitionCount, inputHashCode);
-                matchTracker.Value.Add(TransitionCount, destinationHashCode);
+               patternMatcher.Value.Add(TransitionCount, inputHashCode);
+               patternMatcher.Value.Add(TransitionCount, destinationHashCode);
             }
         }
 

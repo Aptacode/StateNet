@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
+using Aptacode.StateNet.PatternMatching;
 using StateNet.Tests.Network.Data;
 using StateNet.Tests.Network.Helpers;
 using Xunit;
@@ -24,7 +25,7 @@ namespace StateNet.Tests.Network
             {
                 //Act
                 var sut = new StateNetwork(start,
-                    networkDictionary, new int?[0][]);
+                    networkDictionary, new Pattern[0]);
             });
         }
 
