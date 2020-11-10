@@ -8,6 +8,12 @@ namespace StateNet.Tests.Network.Helpers
             new StateNetwork("a", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
                 new int?[0][]);
 
+        public static readonly string stateB = "b";
+
+        public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network_WithPattern =>
+            new StateNetwork("a", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
+                 new int?[1][] { new int?[] { stateB.GetHashCode() } });
+
         public static StateNetwork Invalid_StartState_Network =>
             new StateNetwork("c", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
                 new int?[0][]); //Takes a state dictionary with states connected 'a' <-> 'b', sets start state to 'c'

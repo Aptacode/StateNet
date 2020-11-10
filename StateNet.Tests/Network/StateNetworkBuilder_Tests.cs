@@ -159,5 +159,8 @@ namespace StateNet.Tests.Network
             //Assert
             Assert.Equal("A", sut.Network.StartState);
         }
+
+        //[Fact]
+        //public void 
     }
 }
