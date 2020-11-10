@@ -4,7 +4,7 @@ using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
-    public class Matches : IListExpression<TransitionHistory>
+    public class Matches : TerminalListExpression<TransitionHistory>
     {
         public Matches(Pattern pattern)
         {
@@ -13,6 +13,6 @@ namespace Aptacode.StateNet.PatternMatching.Expressions
 
         public Pattern Pattern { get; }
 
-        public int[] Interpret(TransitionHistory context) => context.GetMatches(Pattern).ToArray();
+        public override int[] Interpret(TransitionHistory context) => context.GetMatches(Pattern).ToArray();
     }
 }

@@ -159,7 +159,13 @@ namespace Aptacode.StateNet.Network
 
                         foreach (var connection in connections)
                         {
-                            connection.Expression.GetPatterns(_patterns);
+                            var matchesVisitor = new MatchesVisitor();
+
+                            matchesVisitor.Schedule(connection.Expression);
+                            foreach (var matchesVisitorPattern in matchesVisitor.Patterns)
+                            {
+                                _patterns.Add(matchesVisitorPattern);
+                            }
                         }
                     }
 
