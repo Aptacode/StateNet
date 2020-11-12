@@ -28,7 +28,8 @@ namespace StateNet.Tests.Network
             Assert.True(_expressions
                 .EqualTo(sut.Network.GetAllConnections().FirstOrDefault().Expression, _expressions.Int(1))
                 .Interpret(_context));
-            //
+           // Assert.Contains(new Connection("b", _expressions.Int(1)), sut.Network.GetAllConnections(),);
+            
         }
 
         [Fact]
@@ -161,6 +162,6 @@ namespace StateNet.Tests.Network
         }
 
         //[Fact]
-        //public void 
+        //public void AddPatterns_Successfully_Adds
     }
 }

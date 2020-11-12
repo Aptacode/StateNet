@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
@@ -86,25 +87,38 @@ namespace StateNet.Tests.Network
         public void GetInputs_Returns_EmptyList_WhenStateDoesNotExist()
         {
             //Arrange
-            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
+            var network = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
 
             //Act
-            var inputs = sut.GetInputs("c");
+            var sut = network.GetInputs("c");
 
             //Assert
-            Assert.Empty(inputs);
+            Assert.Empty(sut);
         }
 
         [Fact]
         public void GetInputs_Returns_List_WhenStateDoesExist()
         {
             //Arrange
-            var sut = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
+            var network = StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network;
             //Act
-            var inputs = sut.GetInputs("a");
+            var sut = network.GetInputs("a");
 
             //Assert
-            Assert.Equal(1, inputs.Count);
+            Assert.Contains("1", sut);
+        }
+
+        [Fact]
+
+        public void GetAllInputs_Successfully_Returns_ListOfInputs()
+        {
+            //Arrange
+            var network = StateNetwork_Helpers.State_WithMultiple_Inputs_Network;
+            //Act
+            var sut = network.GetAllInputs();
+            //Assert
+            Assert.Contains("1", sut);
+            Assert.Contains("2", sut);
         }
     }
 }

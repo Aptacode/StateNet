@@ -1,4 +1,6 @@
-﻿using Aptacode.StateNet.Network;
+﻿using Aptacode.Expressions;
+using Aptacode.StateNet.Engine.Transitions;
+using Aptacode.StateNet.Network;
 using Aptacode.StateNet.PatternMatching;
 
 namespace StateNet.Tests.Network.Helpers
@@ -7,9 +9,23 @@ namespace StateNet.Tests.Network.Helpers
     {
         public static readonly string StateB = "b";
 
-        public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network =>
-            new StateNetwork("a", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
-                new Pattern[0]);
+        private static readonly ExpressionFactory<TransitionHistory> Expressions =
+             new ExpressionFactory<TransitionHistory>();
+
+        public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network =>  //Make valid networks with the builder.
+            NetworkBuilder.New.
+            SetStartState("a").
+            AddConnection("a", "1", "b", Expressions.Int(1)).
+            AddConnection("b", "1", "a", Expressions.Int(1))
+            .Build().Network;
+
+
+        public static StateNetwork State_WithMultiple_Inputs_Network =>
+            NetworkBuilder.New.
+            SetStartState("a").
+            AddConnection("a", "1", "b", Expressions.Int(1)).
+            AddConnection("b", "2", "a", Expressions.Int(1))
+            .Build().Network;
 
         public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network_WithPattern =>
             new StateNetwork("a", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
