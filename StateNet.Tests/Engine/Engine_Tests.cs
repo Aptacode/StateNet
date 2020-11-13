@@ -7,6 +7,7 @@ using Aptacode.StateNet.PatternMatching;
 using Aptacode.StateNet.PatternMatching.Expressions;
 using Aptacode.StateNet.Random;
 using Moq;
+using StateNet.Tests.Network.Helpers;
 using Xunit;
 
 namespace StateNet.Tests.Engine
@@ -19,35 +20,31 @@ namespace StateNet.Tests.Engine
         public void CurrentStateChanges_After_SuccessfulTransition()
         {
             //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1))
+            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            sut.Apply("Next");
+            sut.Apply("1");
 
             //Assert
-            Assert.Equal("B", sut.CurrentState);
+            Assert.Equal("b", sut.CurrentState);
         }
 
         [Fact]
         public void CurrentStateDoesNotChange_After_FailedTransition()
         {
             //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1)).Build().Network;
+            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder.Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            sut.Apply("Back");
+            sut.Apply("2");
 
             //Assert
-            Assert.Equal("A", sut.CurrentState);
+            Assert.Equal("a", sut.CurrentState);
         }
 
 
@@ -55,32 +52,30 @@ namespace StateNet.Tests.Engine
         public void EngineReverseTransition()
         {
             //Arrange
-            var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1))
-                .AddConnection("B", "Next", "A", _expressions.Int(1))
+            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
+                .AddConnection("b", "1", "a", _expressions.Int(1))
                 .Build().Network;
 
             //Act
             var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             var startState = sut.CurrentState;
-            var secondState = sut.Apply("Next");
-            var thirdState = sut.Apply("Next");
+            var secondState = sut.Apply("1");
+            var thirdState = sut.Apply("1");
 
             //Assert
-            Assert.Equal("A", startState);
-            Assert.Equal("B", secondState.Transition.Destination);
-            Assert.Equal("A", thirdState.Transition.Destination);
+            Assert.Equal("a", startState);
+            Assert.Equal("b", secondState.Transition.Destination);
+            Assert.Equal("a", thirdState.Transition.Destination);
         }
 
 
         [Fact]
-        public void EngineSimpleConnectionWeightSelection()
+        public void Engine_Chooses_CorrectConnection_GivenWeights()
         {
             //Arrange
-            var network = NetworkBuilder.New.SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1))
-                .AddConnection("A", "Next", "C", _expressions.Int(1))
+            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
+                .AddConnection("a", "1", "c", _expressions.Int(1))
                 .Build().Network;
 
             var mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
@@ -91,28 +86,54 @@ namespace StateNet.Tests.Engine
             var sut = new StateNetEngine(network, mockRandomNumberGenerator.Object);
 
             var startState = sut.CurrentState;
-            var secondState = sut.Apply("Next");
+            var secondState = sut.Apply("1");
 
             //Assert
-            Assert.Equal("A", startState);
-            Assert.Equal("C", secondState.Transition.Destination);
+            Assert.Equal("a", startState);
+            Assert.Equal("c", secondState.Transition.Destination);
+        }        
+        
+        [Fact]
+        public void Engine_Chooses_CorrectConnection_GivenWeights_NetworkWithMultipleBranches()
+        {
+            //Arrange
+            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
+                .AddConnection("a", "1", "c", _expressions.Int(1))
+                .AddConnection("c", "1", "a", _expressions.Int(1))
+                .AddConnection("c", "1", "b", _expressions.Int(1))
+                .Build().Network;
+
+            var mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
+            mockRandomNumberGenerator
+                .Setup(r => r.Generate(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(1);
+            //Act
+            var sut = new StateNetEngine(network, mockRandomNumberGenerator.Object);
+
+            var startState = sut.CurrentState;
+            var secondState = sut.Apply("1");
+            var thirdState = sut.Apply("1");
+
+            //Assert
+            Assert.Equal("a", startState);
+            Assert.Equal("c", secondState.Transition.Destination);
+            Assert.Equal("b", thirdState.Transition.Destination);
         }
 
         [Fact]
         public void EngineSingleTransition()
         {
-            var network = NetworkBuilder.New.SetStartState("Start")
-                .AddConnection("Start", "Next", "A", _expressions.Int(1))
+            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
                 .Build()
                 .Network;
 
             var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
 
             var startState = sut.CurrentState;
-            var secondState = sut.Apply("Next");
+            var secondState = sut.Apply("1");
 
-            Assert.Equal("Start", startState);
-            Assert.Equal("A", secondState.Transition.Destination);
+            Assert.Equal("a", startState);
+            Assert.Equal("b", secondState.Transition.Destination);
         }
 
         [Fact]
@@ -213,16 +234,13 @@ namespace StateNet.Tests.Engine
         public void InputNotDefined_ReturnsFailTransition()
         {
             //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("A")
-                .AddConnection("A", "Next", "B", _expressions.Int(1))
-                .AddConnection("A", "Next", "C", _expressions.Int(1))
+            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
             //Act
-            var transitionResult = sut.Apply("Back");
+            var transitionResult = sut.Apply("2");
 
             //Assert
             Assert.False(transitionResult.Success);
@@ -233,15 +251,14 @@ namespace StateNet.Tests.Engine
         public void OnTransition_Invoked_After_SuccessfulTransition()
         {
             //Arrange
-            var networkResponse = NetworkBuilder.New
-                .SetStartState("Start").AddConnection("Start", "Next", "A", _expressions.Int(1))
+            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
                 .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
             var onTransitionWasCalled = false;
             sut.OnTransition += (_, __) => { onTransitionWasCalled = true; };
             //Act
-            sut.Apply("Next");
+            sut.Apply("1");
 
             //Assert
             Assert.True(onTransitionWasCalled);
