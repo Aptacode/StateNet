@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.Expressions" Version="1.0.0.18" />
+    <PackageReference Include="Aptacode.Expressions" Version="1.0.0.20" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
     <PackageReference Include="Moq" Version="4.15.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="PatternMatching\Expressions\" />
     <Folder Include="Random\" />
   </ItemGroup>
 

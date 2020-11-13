@@ -7,20 +7,14 @@ using Aptacode.StateNet.PatternMatching.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Aptacode.Expressions.List.Extensions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
     public class StateCountStart : UnaryIntegerExpression<TransitionHistory>
     {
         public StateCountStart(string state, int takeFirst) : base(
-            new Count<TransitionHistory>(
-                new TakeFirst<TransitionHistory>(
-                    new Matches(
-                        new Pattern(state)
-                        ),
-                    new ConstantInteger<TransitionHistory>(takeFirst)
-                    )
-                )
+            new Matches(new Pattern(state)).TakeFirst(new ConstantInteger<TransitionHistory>(takeFirst)).Count()
             )
         { }
         public override int Interpret(TransitionHistory context)
