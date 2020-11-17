@@ -6,7 +6,7 @@ using Aptacode.StateNet.PatternMatching;
 
 namespace Aptacode.StateNet.Engine.Transitions
 {
-    public class TransitionHistory : IContext
+    public class TransitionHistory
     {
         private readonly StateNetwork _network;
 
@@ -72,6 +72,6 @@ namespace Aptacode.StateNet.Engine.Transitions
             }
         }
 
-        public override string ToString() => string.Join(",", _stringTransitionHistory);
+        public string ToString() => string.Join(",", _stringTransitionHistory);
     }
 }

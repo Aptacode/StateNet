@@ -14,7 +14,8 @@ namespace Aptacode.StateNet.Network.Validator
         private readonly HashSet<string?> _dependencies = new HashSet<string?>();
         private readonly HashSet<Pattern> _patterns = new HashSet<Pattern>();
 
-        public override void Visit(TerminalListExpression<TransitionHistory> expression)
+
+        public override void Visit<TType>(TerminalListExpression<TType, TransitionHistory> expression)
         {
             if (expression is Matches matches)
             {
@@ -30,8 +31,6 @@ namespace Aptacode.StateNet.Network.Validator
                     _dependencies.Add(dependency);
                 }
             }
-        
-
             base.Visit(expression);
         }
 

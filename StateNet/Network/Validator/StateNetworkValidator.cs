@@ -2,7 +2,6 @@
 using System.Linq;
 using Aptacode.Expressions.Bool;
 using Aptacode.Expressions.Integer;
-using Aptacode.Expressions.Integer.List;
 using Aptacode.Expressions.List;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.PatternMatching;
