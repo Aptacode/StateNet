@@ -5,6 +5,7 @@ using Aptacode.StateNet.Engine.Transitions;
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
     public class Matches : TerminalListExpression<int,TransitionHistory>
+
     {
         public Matches(Pattern pattern)
         {

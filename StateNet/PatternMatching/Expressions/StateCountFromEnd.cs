@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Text;
 using Aptacode.Expressions.List.Extensions;
 using Aptacode.Expressions.Numeric;
+using Aptacode.Expressions.GenericExpressions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
-    public class StateCountFromEnd : UnaryNumericExpression<int, TransitionHistory>
+    public class StateCountFromEnd : UnaryExpression<int, TransitionHistory>
     {
         public StateCountFromEnd(string state, int takeLast) : base(
                 new Matches(new Pattern(state)).TakeLast(new ConstantInteger<TransitionHistory>(takeLast)).Count())

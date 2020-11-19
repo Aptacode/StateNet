@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Text;
 using Aptacode.Expressions.List.Extensions;
 using Aptacode.Expressions.Numeric;
+using Aptacode.Expressions.GenericExpressions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
-    public class StateCount : UnaryNumericExpression<int, TransitionHistory>
+    public class StateCount : UnaryExpression<int, TransitionHistory>
     {
         public StateCount(string state) : base(
                     new Matches(

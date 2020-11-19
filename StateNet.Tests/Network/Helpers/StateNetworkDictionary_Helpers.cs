@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Aptacode.Expressions;
-using Aptacode.Expressions.Numeric.List;
+using Aptacode.Expressions.List;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.PatternMatching;
