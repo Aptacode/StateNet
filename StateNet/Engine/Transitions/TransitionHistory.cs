@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aptacode.Expressions;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.PatternMatching;
 
@@ -67,11 +66,11 @@ namespace Aptacode.StateNet.Engine.Transitions
 
             foreach (var patternMatcher in _patternMatches)
             {
-               patternMatcher.Value.Add(TransitionCount, inputHashCode);
-               patternMatcher.Value.Add(TransitionCount, destinationHashCode);
+                patternMatcher.Value.Add(TransitionCount, inputHashCode);
+                patternMatcher.Value.Add(TransitionCount, destinationHashCode);
             }
         }
 
-        public string ToString() => string.Join(",", _stringTransitionHistory);
+        public override string ToString() => string.Join(",", _stringTransitionHistory);
     }
 }

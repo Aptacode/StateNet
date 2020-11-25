@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Aptacode.Expressions.List;
 using Aptacode.Expressions.Visitor;
 using Aptacode.StateNet.Engine.Transitions;
@@ -13,6 +12,9 @@ namespace Aptacode.StateNet.Network.Validator
     {
         private readonly HashSet<string?> _dependencies = new HashSet<string?>();
         private readonly HashSet<Pattern> _patterns = new HashSet<Pattern>();
+
+        public IReadOnlyList<string?> Dependencies => _dependencies.ToList();
+        public IReadOnlyList<Pattern> Patterns => _patterns.ToList();
 
 
         public override void Visit<TType>(TerminalListExpression<TType, TransitionHistory> expression)
@@ -31,10 +33,8 @@ namespace Aptacode.StateNet.Network.Validator
                     _dependencies.Add(dependency);
                 }
             }
+
             base.Visit(expression);
         }
-
-        public IReadOnlyList<string?> Dependencies => _dependencies.ToList();
-        public IReadOnlyList<Pattern> Patterns => _patterns.ToList();
     }
 }

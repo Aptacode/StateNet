@@ -26,7 +26,6 @@ namespace StateNet.Tests.Network.Validator
             },
             new object[]
                 {StateNetwork_Helpers.Invalid_StartState_Network, Resources.INVALID_START_STATE, false},
-            new object[] {StateNetwork_Helpers.StartState_NotSet_Network, Resources.UNSET_START_STATE, false},
             new object[] {StateNetwork_Helpers.Minimal_Valid_Connected_StaticWeight_Network, Resources.SUCCESS, true},
             new object[]
             {

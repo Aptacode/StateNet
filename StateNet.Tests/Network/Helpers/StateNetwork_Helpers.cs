@@ -10,22 +10,19 @@ namespace StateNet.Tests.Network.Helpers
         public static readonly string StateB = "b";
 
         private static readonly ExpressionFactory<TransitionHistory> Expressions =
-             new ExpressionFactory<TransitionHistory>();
+            new ExpressionFactory<TransitionHistory>();
 
-        public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network =>  //Make valid networks with the builder.
-            NetworkBuilder.New.
-            SetStartState("a").
-            AddConnection("a", "1", "b", Expressions.Int(1)).
-            AddConnection("b", "1", "a", Expressions.Int(1))
-            .Build().Network;
+        public static StateNetwork
+            Minimal_Valid_Connected_StaticWeight_Network => //Make valid networks with the builder.
+            NetworkBuilder.New.SetStartState("a").AddConnection("a", "1", "b", Expressions.Int(1))
+                .AddConnection("b", "1", "a", Expressions.Int(1))
+                .Build().Network;
 
 
         public static StateNetwork State_WithMultiple_Inputs_Network =>
-            NetworkBuilder.New.
-            SetStartState("a").
-            AddConnection("a", "1", "b", Expressions.Int(1)).
-            AddConnection("b", "2", "a", Expressions.Int(1))
-            .Build().Network;
+            NetworkBuilder.New.SetStartState("a").AddConnection("a", "1", "b", Expressions.Int(1))
+                .AddConnection("b", "2", "a", Expressions.Int(1))
+                .Build().Network;
 
         public static StateNetwork Minimal_Valid_Connected_StaticWeight_Network_WithPattern =>
             new StateNetwork("a", StateNetworkDictionary_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkDictionary,
@@ -46,10 +43,6 @@ namespace StateNet.Tests.Network.Helpers
         public static StateNetwork Invalid_ConnectionPatternInput_Network =>
             new StateNetwork("a", StateNetworkDictionary_Helpers.Invalid_ConnectionPatternInput_NetworkDictionary,
                 new Pattern[0]);
-
-        public static StateNetwork StartState_NotSet_Network =>
-            new StateNetwork("a", StateNetworkDictionary_Helpers.SingleState_NetworkDictionary, new Pattern[0])
-                {StartState = ""};
 
         //To make this test even a thing I made StateNetwork.StartState settable, might not be the correct idea if the exception is thrown beforehand in the constructor anyway.
         public static StateNetwork Empty_Network =>

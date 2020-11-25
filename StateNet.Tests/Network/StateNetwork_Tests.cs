@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Aptacode.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
@@ -28,6 +27,18 @@ namespace StateNet.Tests.Network
                 var sut = new StateNetwork(start,
                     networkDictionary, new Pattern[0]);
             });
+        }
+
+        [Fact]
+        public void GetAllInputs_Successfully_Returns_ListOfInputs()
+        {
+            //Arrange
+            var network = StateNetwork_Helpers.State_WithMultiple_Inputs_Network;
+            //Act
+            var sut = network.GetAllInputs();
+            //Assert
+            Assert.Contains("1", sut);
+            Assert.Contains("2", sut);
         }
 
         [Fact]
@@ -106,19 +117,6 @@ namespace StateNet.Tests.Network
 
             //Assert
             Assert.Contains("1", sut);
-        }
-
-        [Fact]
-
-        public void GetAllInputs_Successfully_Returns_ListOfInputs()
-        {
-            //Arrange
-            var network = StateNetwork_Helpers.State_WithMultiple_Inputs_Network;
-            //Act
-            var sut = network.GetAllInputs();
-            //Assert
-            Assert.Contains("1", sut);
-            Assert.Contains("2", sut);
         }
     }
 }

@@ -1,11 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aptacode.Expressions.Bool;
-using Aptacode.Expressions.Integer;
-using Aptacode.Expressions.List;
-using Aptacode.StateNet.Engine.Transitions;
-using Aptacode.StateNet.PatternMatching;
-using Aptacode.StateNet.PatternMatching.Expressions;
 
 namespace Aptacode.StateNet.Network.Validator
 {
@@ -38,7 +32,8 @@ namespace Aptacode.StateNet.Network.Validator
                 var matchesVisitor = new MatchesVisitor();
                 matchesVisitor.Schedule(connection.Expression);
 
-                var allDependenciesAreValid = matchesVisitor.Dependencies.All(state => allStatesAndInputs.Contains(state));
+                var allDependenciesAreValid =
+                    matchesVisitor.Dependencies.All(state => allStatesAndInputs.Contains(state));
                 if (!allDependenciesAreValid)
                 {
                     return StateNetworkValidationResult.Fail(Resources.INVALID_DEPENDENCY);

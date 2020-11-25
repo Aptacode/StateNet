@@ -2,6 +2,10 @@
 {
     public class TransitionResult
     {
+        public readonly string Message;
+        public readonly bool Success;
+        public readonly Transition? Transition;
+
         private TransitionResult(string message, bool success, Transition? transition)
         {
             Message = message;
@@ -9,9 +13,6 @@
             Transition = transition;
         }
 
-        public string Message { get; }
-        public bool Success { get; }
-        public Transition? Transition { get; }
         public static TransitionResult Fail(string message) => new TransitionResult(message, false, null);
 
         public static TransitionResult Ok(Transition transition, string message) =>

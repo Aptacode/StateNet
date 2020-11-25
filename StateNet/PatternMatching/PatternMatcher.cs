@@ -5,14 +5,16 @@ namespace Aptacode.StateNet.PatternMatching
 {
     public class PatternMatcher
     {
+        public readonly List<int> MatchList = new List<int>();
+
+        public readonly Pattern Pattern;
+
         public PatternMatcher(Pattern pattern)
         {
             Pattern = pattern;
         }
 
-        public Pattern Pattern { get; }
         public int PatternIndex { get; private set; }
-        public List<int> MatchList { get; } = new List<int>();
 
         public void Add(int index, int hashCode)
         {

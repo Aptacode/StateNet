@@ -10,6 +10,10 @@ namespace Aptacode.StateNet.Network
         private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>>
             _stateDictionary;
 
+        public readonly IReadOnlyList<Pattern> Patterns;
+
+        public readonly string StartState;
+
         public StateNetwork(string startState,
             IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<Connection>>> stateDictionary,
             IReadOnlyList<Pattern> patterns)
@@ -29,10 +33,6 @@ namespace Aptacode.StateNet.Network
             Patterns = patterns;
             StartState = startState;
         }
-
-        public IReadOnlyList<Pattern> Patterns { get; }
-
-        public string StartState { get; set; }
 
         public IReadOnlyList<Connection> GetConnections(string state, string input)
         {

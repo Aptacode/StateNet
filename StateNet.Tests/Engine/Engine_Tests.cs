@@ -36,7 +36,8 @@ namespace StateNet.Tests.Engine
         public void CurrentStateDoesNotChange_After_FailedTransition()
         {
             //Arrange
-            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder.Build().Network;
+            var networkResponse = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
+                .Build().Network;
 
             var sut = new StateNetEngine(networkResponse, new SystemRandomNumberGenerator());
 
@@ -45,28 +46,6 @@ namespace StateNet.Tests.Engine
 
             //Assert
             Assert.Equal("a", sut.CurrentState);
-        }
-
-
-        [Fact]
-        public void EngineReverseTransition()
-        {
-            //Arrange
-            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
-                .AddConnection("b", "1", "a", _expressions.Int(1))
-                .Build().Network;
-
-            //Act
-            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
-
-            var startState = sut.CurrentState;
-            var secondState = sut.Apply("1");
-            var thirdState = sut.Apply("1");
-
-            //Assert
-            Assert.Equal("a", startState);
-            Assert.Equal("b", secondState.Transition.Destination);
-            Assert.Equal("a", thirdState.Transition.Destination);
         }
 
 
@@ -91,8 +70,8 @@ namespace StateNet.Tests.Engine
             //Assert
             Assert.Equal("a", startState);
             Assert.Equal("c", secondState.Transition.Destination);
-        }        
-        
+        }
+
         [Fact]
         public void Engine_Chooses_CorrectConnection_GivenWeights_NetworkWithMultipleBranches()
         {
@@ -118,6 +97,28 @@ namespace StateNet.Tests.Engine
             Assert.Equal("a", startState);
             Assert.Equal("c", secondState.Transition.Destination);
             Assert.Equal("b", thirdState.Transition.Destination);
+        }
+
+
+        [Fact]
+        public void EngineReverseTransition()
+        {
+            //Arrange
+            var network = StateNetworkBuilder_Helpers.Minimal_Valid_Connected_StaticWeight_NetworkBuilder
+                .AddConnection("b", "1", "a", _expressions.Int(1))
+                .Build().Network;
+
+            //Act
+            var sut = new StateNetEngine(network, new SystemRandomNumberGenerator());
+
+            var startState = sut.CurrentState;
+            var secondState = sut.Apply("1");
+            var thirdState = sut.Apply("1");
+
+            //Assert
+            Assert.Equal("a", startState);
+            Assert.Equal("b", secondState.Transition.Destination);
+            Assert.Equal("a", thirdState.Transition.Destination);
         }
 
         [Fact]

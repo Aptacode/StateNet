@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Aptacode.Expressions;
+﻿using Aptacode.Expressions;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using StateNet.Tests.Network.Helpers;
@@ -9,7 +8,7 @@ namespace StateNet.Tests.Network
 {
     public class StateNetworkBuilder_Tests
     {
-        private static readonly ExpressionFactory<TransitionHistory> _expressions =
+        private static readonly ExpressionFactory<TransitionHistory> Expressions =
             new ExpressionFactory<TransitionHistory>();
 
         private readonly TransitionHistory _context;
@@ -21,15 +20,14 @@ namespace StateNet.Tests.Network
             //Arrange
             var networkBuilder = StateNetworkBuilder_Helpers.SingleState_NetworkBuilder;
             //Act
-            var sut = networkBuilder.AddConnection("a", "1", "b", _expressions.Int(1)).Build();
+            var sut = networkBuilder.AddConnection("a", "1", "b", Expressions.Int(1)).Build();
             //Assert
-            Assert.True(sut.Network.GetAllConnections().FirstOrDefault().Target ==
-                        new Connection("b", _expressions.Int(1)).Target);
-            Assert.True(_expressions
-                .EqualTo(sut.Network.GetAllConnections().FirstOrDefault().Expression, _expressions.Int(1))
+            Assert.True(sut.Network.GetAllConnections()[0].Target ==
+                        new Connection("b", Expressions.Int(1)).Target);
+            Assert.True(Expressions
+                .EqualTo(sut.Network.GetAllConnections()[0].Expression, Expressions.Int(1))
                 .Interpret(_context));
-           // Assert.Contains(new Connection("b", _expressions.Int(1)), sut.Network.GetAllConnections(),);
-            
+            // Assert.Contains(new Connection("b", _expressions.Int(1)), sut.Network.GetAllConnections(),);
         }
 
         [Fact]
@@ -50,8 +48,8 @@ namespace StateNet.Tests.Network
             var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
             sut.SetStartState("a");
-            sut.AddConnection("a", "1", "b", _expressions.Int(1));
-            sut.AddConnection("a", "2", "b", _expressions.Int(1));
+            sut.AddConnection("a", "1", "b", Expressions.Int(1));
+            sut.AddConnection("a", "2", "b", Expressions.Int(1));
             sut.ClearConnectionsFromState("a", "1");
             var result = sut.Build();
 
@@ -66,10 +64,10 @@ namespace StateNet.Tests.Network
             var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
             sut.SetStartState("a");
-            sut.AddConnection("a", "1", "b", _expressions.Int(1));
-            sut.AddConnection("a", "2", "b", _expressions.Int(1));
+            sut.AddConnection("a", "1", "b", Expressions.Int(1));
+            sut.AddConnection("a", "2", "b", Expressions.Int(1));
             sut.ClearConnectionsFromState("a");
-            sut.AddConnection("a", "3", "b", _expressions.Int(1));
+            sut.AddConnection("a", "3", "b", Expressions.Int(1));
             var result = sut.Build();
 
             //Asset
@@ -86,10 +84,10 @@ namespace StateNet.Tests.Network
             var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
             sut.SetStartState("a");
-            sut.AddConnection("a", "1", "b", _expressions.Int(1));
-            sut.AddConnection("a", "2", "b", _expressions.Int(1));
+            sut.AddConnection("a", "1", "b", Expressions.Int(1));
+            sut.AddConnection("a", "2", "b", Expressions.Int(1));
             sut.ClearConnectionsToState("b", "1");
-            sut.AddConnection("a", "3", "b", _expressions.Int(1));
+            sut.AddConnection("a", "3", "b", Expressions.Int(1));
             var result = sut.Build();
 
             //Asset
@@ -106,10 +104,10 @@ namespace StateNet.Tests.Network
             var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
             sut.SetStartState("a");
-            sut.AddConnection("a", "1", "b", _expressions.Int(1));
-            sut.AddConnection("a", "2", "b", _expressions.Int(1));
+            sut.AddConnection("a", "1", "b", Expressions.Int(1));
+            sut.AddConnection("a", "2", "b", Expressions.Int(1));
             sut.ClearConnectionsToState("b");
-            sut.AddConnection("a", "3", "b", _expressions.Int(1));
+            sut.AddConnection("a", "3", "b", Expressions.Int(1));
             var result = sut.Build();
 
             //Asset
@@ -126,8 +124,8 @@ namespace StateNet.Tests.Network
             var sut = StateNetworkBuilder_Helpers.Empty_NetworkBuilder;
             //Act
             sut.SetStartState("a");
-            sut.AddConnection("a", "1", "b", _expressions.Int(1));
-            sut.AddConnection("a", "2", "b", _expressions.Int(1));
+            sut.AddConnection("a", "1", "b", Expressions.Int(1));
+            sut.AddConnection("a", "2", "b", Expressions.Int(1));
             sut.RemoveInputOnState("1", "a");
             var result = sut.Build();
 

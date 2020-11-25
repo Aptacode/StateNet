@@ -2,15 +2,16 @@
 {
     public class Transition
     {
+        public readonly string Destination;
+        public readonly string Input;
+
+        public readonly string Source;
+
         public Transition(string source, string input, string destination)
         {
             Source = source;
             Input = input;
             Destination = destination;
         }
-
-        public string Source { get; }
-        public string Input { get; }
-        public string Destination { get; }
     }
 }

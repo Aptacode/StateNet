@@ -12,6 +12,8 @@ namespace Aptacode.StateNet.Engine
         private readonly StateNetwork _network;
         private readonly IRandomNumberGenerator _randomNumberGenerator;
 
+        public readonly TransitionHistory TransitionHistory;
+
         public StateNetEngine(StateNetwork network, IRandomNumberGenerator randomNumberGenerator)
         {
             _network = network ?? throw new ArgumentNullException(nameof(network));
@@ -20,8 +22,6 @@ namespace Aptacode.StateNet.Engine
             CurrentState = _network.StartState;
             TransitionHistory = new TransitionHistory(_network);
         }
-
-        public TransitionHistory TransitionHistory { get; }
 
         public string CurrentState { get; private set; }
 

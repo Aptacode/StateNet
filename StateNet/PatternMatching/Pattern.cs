@@ -8,6 +8,10 @@ namespace Aptacode.StateNet.PatternMatching
     public class Pattern : IEnumerable<int?>, IEquatable<Pattern>
     {
         public static readonly Pattern Empty = new Pattern();
+        public readonly string?[] Elements;
+
+        public readonly int?[] HashedElements;
+        public readonly int Length;
 
         public Pattern(params string[] elements)
         {
@@ -20,10 +24,6 @@ namespace Aptacode.StateNet.PatternMatching
             HashedElements = elements.Select(x => x?.GetDeterministicHashCode()).ToArray();
             Length = elements.Length;
         }
-
-        public int?[] HashedElements { get; }
-        public int Length { get; }
-        public string?[] Elements { get; }
 
         public IEnumerator<int?> GetEnumerator() => HashedElements.ToList().GetEnumerator();
 
@@ -49,12 +49,7 @@ namespace Aptacode.StateNet.PatternMatching
                 return false;
             }
 
-            if (lhs?.Length == null)
-            {
-                return true;
-            }
-
-            return lhs.HashedElements.SequenceEqual(rhs.HashedElements);
+            return lhs?.Length == null || lhs.HashedElements.SequenceEqual(rhs?.HashedElements);
         }
 
         public static bool operator !=(Pattern lhs, Pattern rhs) => !(lhs == rhs);

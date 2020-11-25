@@ -2,6 +2,10 @@
 {
     public class StateNetworkResult
     {
+        public readonly string Message;
+        public readonly StateNetwork? Network;
+        public readonly bool Success;
+
         private StateNetworkResult(string message, bool success, StateNetwork? network)
         {
             Message = message;
@@ -9,9 +13,6 @@
             Network = network;
         }
 
-        public string Message { get; }
-        public bool Success { get; }
-        public StateNetwork? Network { get; }
         public static StateNetworkResult Fail(string message) => new StateNetworkResult(message, false, null);
 
         public static StateNetworkResult Ok(StateNetwork network, string message) =>

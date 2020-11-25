@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Aptacode.Expressions;
-using Aptacode.Expressions.Integer;
-using Aptacode.Expressions.Numeric;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network.Validator;
 using Aptacode.StateNet.PatternMatching;
@@ -51,7 +49,11 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-        private NetworkBuilder AddInput(string input) => this;
+        private NetworkBuilder AddInput(string input)
+        {
+            _inputs.Add(input);
+            return this;
+        }
 
         public NetworkBuilder RemoveInputOnState(string input, string state)
         {
@@ -171,6 +173,11 @@ namespace Aptacode.StateNet.Network
                         }
                     }
 
+                    var emptyInputs = inputDictionary.Where(i => i.Value.Count == 0).Select(i => i.Key);
+                    foreach (var emptyInput in emptyInputs)
+                    {
+                        inputDictionary.Remove(emptyInput);
+                    }
 
                     stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
                 }
