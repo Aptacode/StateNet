@@ -9,6 +9,7 @@ using System.Text;
 using Aptacode.Expressions.GenericExpressions;
 using Aptacode.Expressions.List.Extensions;
 using Aptacode.Expressions.Numeric;
+using Aptacode.Expressions.GenericExpressions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
