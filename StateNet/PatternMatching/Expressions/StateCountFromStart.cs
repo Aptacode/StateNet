@@ -6,12 +6,13 @@ using Aptacode.StateNet.PatternMatching.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Aptacode.Expressions.GenericExpressions;
 using Aptacode.Expressions.List.Extensions;
 using Aptacode.Expressions.Numeric;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions
 {
-    public class StateCountStart : UnaryNumericExpression<int, TransitionHistory>
+    public class StateCountStart : UnaryExpression<int, TransitionHistory>
     {
         public StateCountStart(string state, int takeFirst) : base(
             new Matches(new Pattern(state)).TakeFirst(new ConstantInteger<TransitionHistory>(takeFirst)).Count()
