@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "Aptacode.Expressions": {
         "type": "Direct",
-        "requested": "[1.0.2-CI-20201125-182904, )",
-        "resolved": "1.0.2-CI-20201125-182904",
-        "contentHash": "GP8nrtjiZx4O9xOCC9AiBHANmPv3ER/K7D5j+q/OK/bFrzEGMkeXv/1FrIwgi4Y0wlrycYXlXJPggv9YCs0D2w==",
+        "requested": "[1.0.2-CI-20201125-191502, )",
+        "resolved": "1.0.2-CI-20201125-191502",
+        "contentHash": "yi8uqNRV1nOnyy/UQiGpUSwBdkXhOlg83MSihwCJf0/xJB9nkq8DTOs5W1vgsd/aiqIiP5U+afIjE7be78tzsg==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "System.Drawing.Common": "4.7.0"
@@ -55,9 +55,9 @@
     ".NETFramework,Version=v4.5": {
       "Aptacode.Expressions": {
         "type": "Direct",
-        "requested": "[1.0.2-CI-20201125-182904, )",
-        "resolved": "1.0.2-CI-20201125-182904",
-        "contentHash": "GP8nrtjiZx4O9xOCC9AiBHANmPv3ER/K7D5j+q/OK/bFrzEGMkeXv/1FrIwgi4Y0wlrycYXlXJPggv9YCs0D2w==",
+        "requested": "[1.0.2-CI-20201125-191502, )",
+        "resolved": "1.0.2-CI-20201125-191502",
+        "contentHash": "yi8uqNRV1nOnyy/UQiGpUSwBdkXhOlg83MSihwCJf0/xJB9nkq8DTOs5W1vgsd/aiqIiP5U+afIjE7be78tzsg==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0"
         }
@@ -83,9 +83,9 @@
     ".NETStandard,Version=v2.0": {
       "Aptacode.Expressions": {
         "type": "Direct",
-        "requested": "[1.0.2-CI-20201125-182904, )",
-        "resolved": "1.0.2-CI-20201125-182904",
-        "contentHash": "GP8nrtjiZx4O9xOCC9AiBHANmPv3ER/K7D5j+q/OK/bFrzEGMkeXv/1FrIwgi4Y0wlrycYXlXJPggv9YCs0D2w==",
+        "requested": "[1.0.2-CI-20201125-191502, )",
+        "resolved": "1.0.2-CI-20201125-191502",
+        "contentHash": "yi8uqNRV1nOnyy/UQiGpUSwBdkXhOlg83MSihwCJf0/xJB9nkq8DTOs5W1vgsd/aiqIiP5U+afIjE7be78tzsg==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "System.Drawing.Common": "4.7.0"

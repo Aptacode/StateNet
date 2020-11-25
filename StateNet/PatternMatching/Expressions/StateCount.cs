@@ -1,5 +1,5 @@
 ﻿using Aptacode.Expressions.GenericExpressions;
-using Aptacode.Expressions.List.Extensions;
+using Aptacode.Expressions.List.IntegerListOperators.Extensions;
 using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.PatternMatching.Expressions

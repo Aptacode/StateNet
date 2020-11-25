@@ -137,7 +137,6 @@ namespace Aptacode.StateNet.Network
             return this;
         }
 
-
         private StateNetworkResult CreateStateNetwork()
         {
             try
@@ -181,7 +180,6 @@ namespace Aptacode.StateNet.Network
 
                     stateDictionary.Add(state, inputDictionary.ToImmutableDictionary());
                 }
-
 
                 var network = new StateNetwork(_startState, stateDictionary.ToImmutableDictionary(),
                     _patterns.ToImmutableArray());

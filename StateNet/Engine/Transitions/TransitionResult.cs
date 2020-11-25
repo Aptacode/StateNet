@@ -1,6 +1,6 @@
 ﻿namespace Aptacode.StateNet.Engine.Transitions
 {
-    public class TransitionResult
+    public sealed class TransitionResult
     {
         public readonly string Message;
         public readonly bool Success;

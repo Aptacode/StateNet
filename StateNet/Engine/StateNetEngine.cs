@@ -62,7 +62,7 @@ namespace Aptacode.StateNet.Engine
             }
 
             var connectionIndex = _randomNumberGenerator.Generate(0, weightedConnections.Count);
-            var nextState = weightedConnections.ElementAt(connectionIndex);
+            var nextState = weightedConnections[connectionIndex];
             var transition = new Transition(CurrentState, input, nextState);
             TransitionHistory.Add(transition.Input, transition.Destination);
 

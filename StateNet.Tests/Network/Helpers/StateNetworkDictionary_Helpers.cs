@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Aptacode.Expressions;
 using Aptacode.Expressions.List;
+using Aptacode.Expressions.List.IntegerListOperators;
 using Aptacode.StateNet.Engine.Transitions;
 using Aptacode.StateNet.Network;
 using Aptacode.StateNet.PatternMatching;

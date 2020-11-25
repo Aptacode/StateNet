@@ -4,12 +4,11 @@
     ".NETCoreApp,Version=v5.0": {
       "Aptacode.Expressions": {
         "type": "Direct",
-        "requested": "[1.0.2-CI-20201125-182904, )",
-        "resolved": "1.0.2-CI-20201125-182904",
-        "contentHash": "GP8nrtjiZx4O9xOCC9AiBHANmPv3ER/K7D5j+q/OK/bFrzEGMkeXv/1FrIwgi4Y0wlrycYXlXJPggv9YCs0D2w==",
+        "requested": "[1.0.2-CI-20201125-191502, )",
+        "resolved": "1.0.2-CI-20201125-191502",
+        "contentHash": "yi8uqNRV1nOnyy/UQiGpUSwBdkXhOlg83MSihwCJf0/xJB9nkq8DTOs5W1vgsd/aiqIiP5U+afIjE7be78tzsg==",
         "dependencies": {
-          "Microsoft.CSharp": "4.7.0",
-          "System.Drawing.Common": "4.7.0"
+          "Microsoft.CSharp": "4.7.0"
         }
       },
       "coverlet.collector": {
@@ -84,8 +83,8 @@
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w=="
+        "resolved": "1.1.0",
+        "contentHash": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A=="
       },
       "Microsoft.NETCore.Targets": {
         "type": "Transitive",
@@ -117,14 +116,6 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
-        }
-      },
-      "Microsoft.Win32.SystemEvents": {
-        "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "mtVirZr++rq+XCDITMUdnETD59XoeMxSpLRIII7JRI6Yj0LEDiO1pPn0ktlnIj12Ix8bfvQqQDMMIF9wC98oCA==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0"
         }
       },
       "NETStandard.Library": {
@@ -506,15 +497,6 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
-        }
-      },
-      "System.Drawing.Common": {
-        "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "v+XbyYHaZjDfn0ENmJEV1VYLgGgCTx1gnfOBcppowbpOAriglYgGCvFCPr2EEZyBvXlpxbEsTwkOlInl107ahA==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0",
-          "Microsoft.Win32.SystemEvents": "4.7.0"
         }
       },
       "System.Dynamic.Runtime": {
@@ -1231,7 +1213,7 @@
       "Aptacode.StateNet": {
         "type": "Project",
         "dependencies": {
-          "Aptacode.Expressions": "1.0.2-CI-20201125-182904",
+          "Aptacode.Expressions": "1.0.2-CI-20201125-191502",
           "System.Collections.Immutable": "5.0.0",
           "System.ValueTuple": "4.5.0"
         }

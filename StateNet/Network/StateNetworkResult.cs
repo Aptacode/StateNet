@@ -1,6 +1,6 @@
 ﻿namespace Aptacode.StateNet.Network
 {
-    public class StateNetworkResult
+    public sealed class StateNetworkResult
     {
         public readonly string Message;
         public readonly StateNetwork? Network;

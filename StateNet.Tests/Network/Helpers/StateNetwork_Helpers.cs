@@ -18,7 +18,6 @@ namespace StateNet.Tests.Network.Helpers
                 .AddConnection("b", "1", "a", Expressions.Int(1))
                 .Build().Network;
 
-
         public static StateNetwork State_WithMultiple_Inputs_Network =>
             NetworkBuilder.New.SetStartState("a").AddConnection("a", "1", "b", Expressions.Int(1))
                 .AddConnection("b", "2", "a", Expressions.Int(1))
