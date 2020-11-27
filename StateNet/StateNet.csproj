@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.Expressions" Version="1.0.2-CI-20201127-065846" />
+    <PackageReference Include="Aptacode.Expressions" Version="1.0.2-CI-20201127-091455" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
