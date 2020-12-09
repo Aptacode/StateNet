@@ -1,18 +1,7 @@
 ﻿namespace Aptacode.StateNet.Engine.Transitions
 {
-    public sealed class TransitionResult
+    public record TransitionResult(string Message, bool Success, Transition? Transition)
     {
-        public readonly string Message;
-        public readonly bool Success;
-        public readonly Transition? Transition;
-
-        private TransitionResult(string message, bool success, Transition? transition)
-        {
-            Message = message;
-            Success = success;
-            Transition = transition;
-        }
-
         public static TransitionResult Fail(string message) => new TransitionResult(message, false, null);
 
         public static TransitionResult Ok(Transition transition, string message) =>

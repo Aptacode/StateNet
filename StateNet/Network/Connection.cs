@@ -3,16 +3,5 @@ using Aptacode.StateNet.Engine.Transitions;
 
 namespace Aptacode.StateNet.Network
 {
-    public class Connection
-    {
-        public readonly IExpression<int, TransitionHistory> Expression;
-
-        public readonly string Target;
-
-        public Connection(string target, IExpression<int, TransitionHistory> expression)
-        {
-            Target = target;
-            Expression = expression;
-        }
-    }
+    public record Connection(string Target, IExpression<int, TransitionHistory> Expression);
 }
