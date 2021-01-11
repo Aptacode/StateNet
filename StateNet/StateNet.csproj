@@ -12,7 +12,7 @@
     <Copyright>MIT</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Aptacode/StateNet</PackageProjectUrl>
-    <PackageIcon>StateNetLogo.png</PackageIcon>
+    <PackageIcon>Logo.png</PackageIcon>
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/Aptacode/StateNet</RepositoryUrl>
     <RepositoryType />
@@ -20,7 +20,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.0.2</Version>
     <AssemblyVersion>2.0.2</AssemblyVersion>
-    <ApplicationIcon>StateNetLogo.ico</ApplicationIcon>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
     <FileVersion>2.0.2</FileVersion>
   </PropertyGroup>
 
@@ -44,7 +44,7 @@
     <EmbeddedResource Remove="Resources\**" />
     <None Remove="Persistence\**" />
     <None Remove="Resources\**" />
-    <None Include="..\Resources\Images\StateNetLogo.png">
+    <None Include="..\Resources\Images\Logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
